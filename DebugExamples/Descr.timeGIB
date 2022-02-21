@@ -1,0 +1,7 @@
+generate   10000
+produce    200
+#title " Checking GIB Timing 200 Hands Two tricks Call  "
+#condition dummy
+
+action  average "  GIB WEST CLUBS TRICKS= " tricks(west, club),
+	average "GIB SOUTH HEARTS TRICKS= " tricks(south, heart)

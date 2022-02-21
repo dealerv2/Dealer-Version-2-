@@ -1,0 +1,8 @@
+generate 100
+produce 4
+condition
+   hcp(south) >= 10
+
+action csvrpt ( deal, trix(deal)  )
+
+

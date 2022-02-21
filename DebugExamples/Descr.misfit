@@ -1,0 +1,15 @@
+produce 4
+nshcp = hcp(north) + hcp(south)
+(nshcp >= 22) && (nshcp <=28)
+clen = clubs(north) + clubs(south)
+dlen = diamonds(north) + diamonds(south)
+hlen = hearts(north) + hearts(south)
+slen = (spades(north) + spades(south))
+condition (slen <=7 && hlen <= 7 && dlen <=7 && clen <= 7
+&& nshcp >= 22 && nshcp <=28
+&& ((spades(north) >=5) || (hearts(north) >= 5))
+&& ((diamonds(south) >=5) || clubs(south) >=5)
+)
+action printall
+#  -------------------------------------------------------------------
+

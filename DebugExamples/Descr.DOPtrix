@@ -1,0 +1,12 @@
+generate   10000
+produce    1000
+title "DOP query for Tricks  "
+# run this with -M1 
+
+opener west
+
+condition ( (spades(west)+spades(east) >= 8) && (hcp(west) + hcp(east) >= 23) )
+action
+    average "hcpEW=     " hcp(east)+hcp(west),
+    average "opcEW=     " opc(EW),
+    average "DDS Spades=" dds(west,spades)

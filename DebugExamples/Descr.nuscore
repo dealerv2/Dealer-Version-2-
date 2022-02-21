@@ -1,0 +1,32 @@
+generate   10000
+produce    1
+# Mods from earlier to use z[1-7][CDHSN]xx form of contracts
+title " Checking syntax. Dont care what hands get generated - added dummy "
+
+dummy = (hearts(north) <= hearts(east)) && (hcp(north, clubs) != 0 )
+
+
+myscore1u = score(vul, z6D, 12)
+
+myscore1d = score(vul, z6Dx, 12)
+
+myscore1r = score(vul, z6Dxx, 12)
+
+
+myscore2 = score(nv, z3Sx, 10)
+theylose2= imps((-50 - myscore2))
+
+myscore3 = score(vul, z5Dxx, 8)
+theyscore= score(vul, x3D, 10)
+
+
+condition dummy
+
+action  printes("vul 6D=  ",myscore1u, \n),
+        printes("vul 6Dx= ",myscore1d, \n),
+        printes("vul 6Dxx=",myscore1r, \n),
+
+        printes("nv  3Sx =",myscore2, \n),
+        printes("vul 5Dxx -3= ",myscore3," vul 3D +1= ",theyscore, \n),
+
+        printall

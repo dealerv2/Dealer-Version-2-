@@ -1,0 +1,14 @@
+# File Descr.GIB1x_slower by JGM 
+ 
+
+title "GIB with tricks clause at START of condition only 1 call per hand"
+generate 100000
+produce 20
+
+condition (tricks(north,notrump) > 6) &&
+	shape(north, any 4333 + any 4432 + any 5332) and
+		hcp(north)>=15 and hcp(north)<=18 and hcp(south) <= 12 
+	
+action 	printes("TrixNorth=", hcp(north), \n)  
+
+

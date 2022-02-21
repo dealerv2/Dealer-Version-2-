@@ -1,0 +1,16 @@
+# File Descr.GIBTrixCond by JGM 
+title " GIB DD Condition only "
+
+generate 100000
+produce 10 
+#GWtr3 = tricks(west,spades)
+#GNtr4 = tricks(north, notrump)
+
+condition  tricks(north, notrump) >= 5 || shape(north, any 4432) 
+action printes("GIB West Spades =", tricks(west,spades),  "::  " ) ,
+		 printoneline 
+
+# printes("GIB West Spades=", GWtr3,  "::  " ) ,
+# shape(north, any 4432) && tricks(north, notrump) >= 5
+
+

@@ -1,0 +1,41 @@
+generate   10000
+produce    3
+# Mods from earlier to use z[1-7][CDHSN]xx form of contracts
+title " Checking syntax. Dont care what hands get generated - added dummy "
+dotnum = 5.25
+spartans = 300
+dummy = (hearts(north) <= hearts(east)) && (hcp(north, clubs) != 0 ) and ( spartans <= dotnum )
+dn01 = .01
+dn1  = .1
+dn11 = .11
+dn1_ = 1.
+dn12_= 12.
+dn10_05=10.05
+dn10_51=10.51
+dn10_6=10.6
+
+myscore1u = score(vul, z6D, 12)
+theylose1u = imps(-750)
+myscore1d = score(vul, z6Dx, 12)
+theylose1d = imps(-1900)
+myscore1r = score(vul, z6Dxx, 12)
+theylose1r = imps(-200)
+
+myscore2 = score(nv, z3Sx, 10)
+theylose2= imps((-50 - myscore2))
+
+myscore3 = score(vul, z5Dxx, 8)
+theyscore= score(vul, x3D, 10)
+theywin3 = imps(theyscore - myscore3)
+
+condition dummy
+
+action  printes("vul 6D=  ",myscore1u," imps --750= ", theylose1u, \n),
+        printes("vul 6Dx= ",myscore1d," imps -1500= ", theylose1d, \n),
+        printes("vul 6Dxx=",myscore1r," imps -2000= ", theylose1r, \n),
+
+        printes("nv  3Sx =",myscore2," imps -210= ", theylose2, \n),
+        printes("vul 5Dxx -3= ",myscore3," vul 3D +1= ",theyscore," imps them= ",theywin3,\n),
+        printes("Spartans: ",spartans, " <= dotnum= ",dotnum, \n),
+printes(dn01," , ", dn1," , ", dn11," , ", dn1_," , ", dn12_," , ", dn10_05," , ", dn10_51," , ", dn10_6," , ", \n),
+        printall

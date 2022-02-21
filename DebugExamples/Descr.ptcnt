@@ -1,0 +1,39 @@
+generate   10000
+produce    1
+#title " Checking syntax. Dont care what hands get generated - added dummy "
+#condition dummy
+
+
+#next one should just zero the pointcount array
+#pointcount 
+
+#this one should just zero the Queens array but maybe it zeros the tens array.
+#altcount 2
+
+#this one should redefine the C13 array?
+#altcount 9 13 9 5 2 1 0 0 0 0 0 0 0 0
+
+# redefine the HCP array.... see if just doing the non zero is good enough
+pointcount 45 30 15 5 2      
+
+#predeal something so we can see what effect we had
+predeal north SAK432,HQJT,DKT9,CA2
+ctlSN = controls(north, spades)
+TenN = ten(north) 
+QueenN = queen(north)
+C13N = pt9(north)
+NHtop5 = top5(north, heart)
+hcpCN = hcp(north, club)
+hcpN = hcp(north)
+N9C = pt9(north,club)
+N9D = pt9(north, diamond)
+N9H = pt9(north, heart)
+N9S = pt9(north, spade)
+N9tot=pt9(north)
+NLoserD = loser(north, diamonds) 
+NLoserTot =loser(north)
+
+action  printes(" hcpN=",hcpN," hcpCN=",hcpCN," QueenN=",QueenN," TenN=",TenN," NHtop5=",NHtop5," C13N/pt9=",C13N," CtlSN=",ctlSN, \n),
+		printes(" N9C:D:H:S:T=",N9C,": ",N9D, ": ",N9H, ": ",N9S, ": ",N9tot, \n),
+		printes("LosersN:D:tot",  NLoserD ,": ", NLoserTot, \n), 
+        printall

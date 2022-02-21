@@ -1,0 +1,24 @@
+generate   10000
+produce   3
+title "Debugging Various Action and Print Routine Mods   "
+
+
+condition ( ltc(north) >= 6.50 or ltc(east) == 300 )
+#condition (hcp(north) > 12 ) or (hcp(south,club) > 3 )
+
+action  printes(ltc(north),\n) ,
+		printns, printew,
+		average "HCP NORTH" hcp(north),
+		average "LTC North" (ltc(north)) 
+
+#		printside NS , printside EW ,
+# the printside actions above work fine. 
+# They are identical to the shorter printns and printew
+
+#		average "LTC North" (ltc(north)/100) 
+# the average action above does integer div on each hand, not on total,
+# so you lose some of the precision of the ltc 
+# if the total ltc for the hand includes 1/2 a loser, that precision 
+# will be lost if you div by 100. So leave without div by 100
+# and mentally divide the printed number by 100 after the run.
+

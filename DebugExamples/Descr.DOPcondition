@@ -1,0 +1,12 @@
+generate   10000
+produce    20
+title "DOP as a condition  "
+# in future add opc(NS, spades) for example
+opener west
+
+
+EW_Spades = dds(west,spades)
+condition ( opc(EW, notrump) == 28.5 && spades(west)+spades(east) == 8 )
+
+action export ( EW ),
+        printoneline

@@ -1,0 +1,7 @@
+generate 100000
+produce 10
+
+action
+printoneline,
+average $2 controls(west)
+

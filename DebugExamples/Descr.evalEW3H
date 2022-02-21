@@ -1,0 +1,15 @@
+generate   100000
+produce    1000
+# Mods from earlier to use z[1-7][CDHSN]xx form of contracts
+title " Eval Contract EW 3Hx with 8-10 hearts and 13 - 23 hcp "
+condition ( (hcp(east)+hcp(west)) >= 17 && (hcp(east)+hcp(west)) <= 23 ) &&
+          ( (hearts(west)+hearts(east) >=8 ) && (hearts(west)+hearts(east) <=10) )
+# evalcontract calls dds(west, ... ) for EW contracts, and dds(south, ....) for NS contracts.
+# Therefor to take advantage of caching we use the same compass direction in this next call as what evalcontract will use.
+TrixEW=dds(west , hearts)
+
+action
+         evalcontract ( EW , z3Hx , vul  ),
+         average "EW Tricks in Hearts " TrixEW,
+         average "EW HCP " hcp(east)+hcp(west)
+

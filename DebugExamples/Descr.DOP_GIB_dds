@@ -1,0 +1,18 @@
+generate   10000
+produce    10
+title "Testing GIB vs DDS SolveOneBoard "
+# in future add opc(NS, spades) for example
+opener north
+
+opcNS = opc(NS)
+NS_Spades = dds(north,spades)
+GIB_sp    = tricks(north, spades)
+
+condition ( opcNS > 20.5 )
+
+#action  printes("opcNS= ", opcNS , " GIB_sp=", GIB_sp,  "  SpadeTrix NS=",NS_Spades, \n),
+#        printoneline
+
+action  printes("opcNS= ", opcNS , " GIB_sp=", GIB_sp,  "  SpadeTrix NS=",NS_Spades, \n),
+        frequency "Gib vs DDS Tricks" (GIB_sp,1,12,NS_Spades,1,12),
+        average "OPC NS " opcNS

@@ -1,0 +1,31 @@
+generate   10000
+produce    10
+# Run this with -M2 since there are several calls to dds on the same deal.
+# Mods from earlier to use z[1-7][CDHSN]xx form of contracts
+
+# NOTE ****** only one eval contract per side per run ********
+
+title " Eval Contract, Par, Freq2D, Tricks, Score NS 21-24hcp"
+condition ( (hcp(north)+hcp(south)) >= 21 && (hcp(north)+hcp(south)) <= 24 )
+#          && ( (hearts(west)+hearts(east) >=8 ) && (hearts(west)+hearts(east) <=10) )
+#V3Dxx=score ( vul , z3Dxx , TrixEW_D )
+#V3Hx=score  ( vul , z3Hx  , TrixEW_H )
+#TrixEW_H=dds(east , hearts)
+#TrixEW_D=dds(east , diamonds)
+DDSNS=dds(south,notrump)
+ScoreNS_2NTx=score(vul, z2Nx, DDSNS )
+ScoreNS_1NT=score(vul, z1N,  DDSNS )
+Par_NS = par (NS )
+
+
+# NOTE ****** only one eval contract per side per run ********
+
+action
+         evalcontract ( NS , z2Nx , vul ),
+         evalcontract ( EW , z3Hx , nv  ),
+         average "Par NS      = " Par_NS,
+         average "ScoreNS_2NTx= " ScoreNS_2NTx,
+         average "ScoreNS_1NT = " ScoreNS_1NT,
+
+         frequency "HCP Vs Tricks" (hcp(north)+hcp(south), 20, 25, DDSNS, 5, 11)
+

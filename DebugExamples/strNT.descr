@@ -1,0 +1,5 @@
+produce 2
+generate 1000
+hcpw = hcp(west)
+condition shape(west, any 4333 + any 4423) and hcpw >= 15
+action printoneline, printall 

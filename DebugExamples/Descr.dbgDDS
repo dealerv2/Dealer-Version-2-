@@ -1,0 +1,41 @@
+# File Descr.dbgDDS by JGM 
+title " DDS 20 Results. No Par. "
+
+generate 100000
+produce 100
+
+Ntr4 = dds(north, notrumps)
+Ntr3 = dds(north, spades)
+Ntr2 = dds(north, hearts)
+Ntr1 = dds(north, diamonds)
+Ntr0 = dds(north, clubs ) 
+Str4 = dds(north, notrumps)
+Str3 = dds(north, spades)
+Str2 = dds(north, hearts)
+Str1 = dds(north, diamonds)
+Str0 = dds(north, clubs )
+Etr4 = dds(north, notrumps)
+Etr3 = dds(north, spades)
+Etr2 = dds(north, hearts)
+Etr1 = dds(north, diamonds)
+Etr0 = dds(north, clubs ) 
+Wtr4 = dds(north, notrumps)
+Wtr3 = dds(north, spades)
+Wtr2 = dds(north, hearts)
+Wtr1 = dds(north, diamonds)
+Wtr0 = dds(north, clubs ) 
+
+
+condition
+	shape(north, any 4333 + any 4432 + 5332) and
+		hcp(north)>=13 and hcp(north)<=18 and hcp(south) >= 10
+	
+action average"North DDS Tricks "  Ntr4+Ntr3+Ntr2+Ntr1+Ntr0,
+		 average"South DDS Tricks "  Str4+Str3+Str2+Str1+Str0,
+		 average"East  DDS Tricks "  Etr4+Etr3+Etr2+Etr1+Etr0,
+       average"West  DDS Tricks "  Wtr4+Wtr3+Wtr2+Wtr1+Wtr0
+	
+
+# printes("HCP_NS=",hcp(north)+hcp(south), " Trix NT=", nNtrix, "  Trix Spades=", nStrix, "  Par North=", nPar, \n)  
+
+

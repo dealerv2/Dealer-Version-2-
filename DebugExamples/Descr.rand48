@@ -1,0 +1,4 @@
+generate 10000000
+randval = rnd ( 100 )
+action average "Average randval 0 .. 100 over 10 Million hands using srand48/rand48 " randval
+

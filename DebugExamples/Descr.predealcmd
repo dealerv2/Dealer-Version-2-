@@ -1,0 +1,7 @@
+generate   10000
+produce    2
+title "Testing Cmd Line Predeals."
+
+predeal    south SAQ542, HKJ87, D32, CAK north SK3,CQ32
+
+action     printall

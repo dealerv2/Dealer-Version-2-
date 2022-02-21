@@ -1,0 +1,7 @@
+generate 100
+produce 2
+condition
+   hcp(south) >= 10
+
+action csvrpt(deal),csvrpt(NS),csvrpt(west)
+

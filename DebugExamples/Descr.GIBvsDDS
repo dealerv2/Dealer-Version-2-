@@ -1,0 +1,22 @@
+# File Descr.GIBvsDDS by JGM 
+title " GIB vs DDS 1 hand NT & Spades "
+
+generate 100000
+produce 10
+
+
+GWtr4 = tricks(north, notrump)
+DWtr4 = dds(north, notrump ) 
+GWtr3 = tricks(north, spades)
+DWtr3 = dds(north, spades ) 
+
+condition (DWtr4 < 6 ) ||
+	shape(north, any 4333 + any 4432 + 5332) and
+		hcp(north)>=13 and hcp(north)<=18 and hcp(south) >= 10
+
+action printes("GIB NT=", GWtr4," Sp= ",GWtr3,  "  DDS NT=", DWtr4," Sp= ", DWtr3,  "::  " ) ,
+		 printoneline, 
+		 average "GIB NT " GWtr4, average "GIB Spades " GWtr3,
+		 average "DDS NT " DWtr4, average "DDS Spades " DWtr3
+
+

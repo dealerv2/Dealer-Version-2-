@@ -1,0 +1,70 @@
+greg19@Trojan:~/.../src$ ./dealerjgm -s113 -m ../DebugExamples/Descr.dbgDDS
+9.487                                 
+Sample Mean=9.487, Variance=2.98482, Standard Dev=1.72766 
+8.842
+Sample Mean=8.842, Variance=4.13517, Standard Dev=2.03351 
+501.72
+Sample Mean=501.72, Variance=117496, Standard Dev=342.776 
+
+ DDS for North in Spades and NT; No Vul Specified for Par 1000 hands generated
+Generated 33831 hands
+Produced 1000 hands
+Initial random seed 113
+Time needed 5479.455 sec
+-----------------------------------------------------------
+./dealerjgm -s113 -m ../DebugExamples/Descr.dbgGIB2
+North GIB Tricks : 44.38              
+Sample Mean=44.38, Variance=46.4602, Standard Dev=6.81617 
+South GIB Tricks : 44.38
+Sample Mean=44.38, Variance=46.4602, Standard Dev=6.81617 
+East  GIB Tricks : 44.38
+Sample Mean=44.38, Variance=46.4602, Standard Dev=6.81617 
+West  GIB Tricks : 44.38
+Sample Mean=44.38, Variance=46.4602, Standard Dev=6.81617 
+
+ GIB 20 Results  
+Generated 3113 hands
+Produced 100 hands
+Initial random seed 113
+Time needed   38.873 sec
+greg19@Trojan:~/.../src$ 
+--------------------------------------------------------
+./dealerjgm -s113 -m ../DebugExamples/Descr.GIBvsDDS
+GIB=9  DDS=9::  n K9.KT86.KQ3.A942 e 762.J9542.J2.KJ6 s AQ85.Q3.9764.Q85 w JT43.A7.AT85.T73 
+GIB=12  DDS=12::  n A742.K762.KJ.A97 e Q953.QT8.974.K42 s KT86.A53.AQ83.QJ w J.J94.T652.T8653 
+GIB=11  DDS=11::  n K93.J96.KQ95.KQT e AT85.Q43.72.J954 s 4.KT72.AJ86.A732 w QJ762.A85.T43.86 
+GIB=7  DDS=7::  n Q63.KT64.A2.AQ52 e K752.J95.J8653.T s AT984.A7.K7.KJ93 w J.Q832.QT94.8764 
+GIB=11  DDS=11::  n Q852.JT4.KT4.AK7 e J63.63.953.JT965 s A.Q98752.AQJ76.2 w KT974.AK.82.Q843 
+GIB=8  DDS=8::  n J732.AK92.A8.JT4 e AT864.JT8.T6.753 s K.Q6.Q7543.KQ862 w Q95.7543.KJ92.A9 
+GIB=12  DDS=12::  n AT7.T62.AK82.AT5 e KQJ9854.7.7.Q976 s 6.AQ4.QJT64.KJ83 w 32.KJ9853.953.42 
+GIB=11  DDS=11::  n JT63.AQJ7.A97.A6 e A9842.T98.543.75 s K7.K54.KQT86.T93 w Q5.632.J2.KQJ842 
+GIB=11  DDS=11::  n AJ942.A87.AJ9.K5 e KQT853.J653.82.4 s 6.QT4.KQT65.AJ93 w 7.K92.743.QT8762 
+GIB=6  DDS=6::  n AK83.Q8.AJ97.943 e .T97653.QT52.QJ7 s QT7542.AK2..KT52 w J96.J4.K8643.A86 
+                                      
+ GIB vs DDS 1 hand 1 strain 
+Generated 241 hands
+Produced 10 hands
+Initial random seed 113
+Time needed   35.723 sec
+------------------------------------------------------------------
+
+<SNIP> hands are the same, since seed is the same
+GIB NT=11 Sp= 8  DDS NT=11 Sp= 8::  n AJ942.A87.AJ9.K5 e KQT853.J653.82.4 s 6.QT4.KQT65.AJ93 w 7.K92.743.QT8762 
+GIB NT=10 Sp= 11  DDS NT=10 Sp= 11::  n AK83.Q8.AJ97.943 e .T97653.QT52.QJ7 s QT7542.AK2..KT52 w J96.J4.K8643.A86 
+GIB NT : 10                           
+Sample Mean=10, Variance=3.77778, Standard Dev=1.94365 
+GIB Spades : 8.6
+Sample Mean=8.6, Variance=6.71111, Standard Dev=2.59058 
+DDS NT : 10
+Sample Mean=10, Variance=3.77778, Standard Dev=1.94365 
+DDS Spades : 8.6
+Sample Mean=8.6, Variance=6.71111, Standard Dev=2.59058 
+
+ GIB vs DDS 1 hand NT & Spades 
+Generated 241 hands
+Produced 10 hands
+Initial random seed 113
+Time needed   36.729 sec
+-----------------------------------------------------------------------
+
+

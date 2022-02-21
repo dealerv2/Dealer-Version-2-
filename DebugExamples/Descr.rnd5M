@@ -1,0 +1,5 @@
+
+generate    1000000 action     average " Rnd Test " rnd ( 100 )
+
+
+

@@ -1,0 +1,9 @@
+generate 100
+produce 2
+condition
+   hcp(south) >= 10
+
+action csvrpt("South HCP",hcp(south),
+         "North HCP", hcp(north),"N+S HCP", hcp(south)+hcp(north),
+          "Tricks S NT= ", dds(south,notrump),"N S Hands:", NS )
+

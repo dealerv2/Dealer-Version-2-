@@ -1,0 +1,112 @@
+../dealdbg Descr.DDS_slow -M2 -s17 -D2
+DDS with tricks clause at start of condition -- Mode 2
+Generated 395 hands
+Produced 20 hands
+Initial random seed 17
+Time needed  100.382 sec
+Tot Calls to DDS =  7100, DDS Solve Calls=   396
+Tot Calls to GIB =     0, GIB Solve Calls=     0
+Tot Calls to OPC =     0, OPC Calc  Calls=     0
+------------------------------------------------------
+../dealdbg Descr.DDS_slow -M1 -s17 -D2
+DDS with tricks clause at start of condition -- Mode 1
+Generated 395 hands
+Produced 20 hands
+Initial random seed 17
+Time needed   51.637 sec
+Tot Calls to DDS =  7100, DDS Solve Calls=  1980
+Tot Calls to GIB =     0, GIB Solve Calls=     0
+Tot Calls to OPC =     0, OPC Calc  Calls=     0
+------------------------------------------------------
+../dealdbg Descr.DDS_quick -M2 -s17 -D2
+
+DDS with tricks clause at end of condition -- Mode 2
+Generated 395 hands
+Produced 20 hands
+Initial random seed 17
+Time needed    6.198 sec
+Tot Calls to DDS =   402, DDS Solve Calls=    22
+Tot Calls to GIB =     0, GIB Solve Calls=     0
+Tot Calls to OPC =     0, OPC Calc  Calls=     0
+-------------------------------------------------------------
+../dealdbg Descr.DDS_quick -M1 -s17 -D2
+DDS with tricks clause at end of condition -- Mode 1
+Generated 395 hands
+Produced 20 hands
+Initial random seed 17
+Time needed    3.030 sec
+Tot Calls to DDS =   402, DDS Solve Calls=   110
+Tot Calls to GIB =     0, GIB Solve Calls=     0
+Tot Calls to OPC =     0, OPC Calc  Calls=     0
+--------------------------------------------------------------
+../dealdbg Descr.GIB_quick  -s17 -D2 -p20
+Tricks clause at end of condition statement; 5 calls to GIB when needed
+Generated 395 hands
+Produced 20 hands
+Initial random seed 17
+Time needed    8.109 sec
+Tot Calls to DDS =     0, DDS Solve Calls=     0
+Tot Calls to GIB =   402, GIB Solve Calls=   110
+Tot Calls to OPC =     0, OPC Calc  Calls=     0
+---------------------------------------------------------------
+../dealdbg Descr.GIB_slower  -s17 -D2 -p20
+Tricks clause at Start of condition statement; 5 calls to GIB on each hand
+Generated 395 hands
+Produced 20 hands
+Initial random seed 17
+Time needed  152.405 sec
+Tot Calls to DDS =     0, DDS Solve Calls=     0
+Tot Calls to GIB =  7100, GIB Solve Calls=  1980
+Tot Calls to OPC =     0, OPC Calc  Calls=     0
+-----------------------------------------------------------------------------
+greg19@Trojan:~/.../DebugExamples$ ../dealdbg Descr.DDS1x_slow -M1 -s17 -D2
+DDS with tricks clause at START of condition only 1 call per hand
+Generated 362 hands
+Produced 20 hands
+Initial random seed 17
+Time needed    8.016 sec
+Tot Calls to DDS =   363, DDS Solve Calls=   363
+Tot Calls to GIB =     0, GIB Solve Calls=     0
+Tot Calls to OPC =     0, OPC Calc  Calls=     0
+------------------------------------------------------------------------------
+greg19@Trojan:~/.../DebugExamples$ ../dealdbg Descr.GIB1x_slower  -s17 -D2 -p20
+GIB with tricks clause at START of condition only 1 call per hand
+Generated 362 hands
+Produced 20 hands
+Initial random seed 17
+Time needed   30.054 sec
+Tot Calls to DDS =     0, DDS Solve Calls=     0
+Tot Calls to GIB =   363, GIB Solve Calls=   363
+Tot Calls to OPC =     0, OPC Calc  Calls=     0
+------------------------------------------------------------------------------
+================================================================
+Conclusion:
+1. Avoid calling a double dummy solver on EACH hand, whether DDS or GIB
+2. Caching makes a big difference especially when there are many calls using the same value of tricks.
+3. DDS mode 1 is 3-4 times faster than GIB for 'ordinary' use. i.e. 1-5 double dummy calls per hand.
+4. DDS mode 2 is quicker than GIB by about 30% when there are 5 calls to GIB per hand.  When there are only one or two calls it is slower.
+5. GIB consistently takes about 0.08 seconds per call. DDS mode 1 about 0.0017 seconds
+========================================================================================
+The condition statement used in the 5x tests
+# These next statements calculate the maximum number of tricks North can take in any strain.
+# The five calls per deal that populate the cache
+nNtrix = tricks(north, notrumps) 
+nStrix = tricks(north, spades)
+nHtrix = tricks(north, hearts)
+nDtrix = tricks(north, diamonds)
+nCtrix = tricks(north, clubs)
+
+# the IF statements that generate the extra calls to the DD solver.
+ntrixM = nStrix > nHtrix ? nStrix : nHtrix
+ntrixm = nDtrix > nCtrix ? nDtrix : nCtrix
+ntrixT = ntrixM > ntrixm ? ntrixM : ntrixm
+ntrix  = ntrixT > nNtrix ? ntrixT : nNtrix
+
+condition  
+	shape(north, any 4333 + any 4432 + any 5332) and
+		hcp(north)>=15 and hcp(north)<=18 and hcp(south) <= 12 && (ntrix > 6)
+# The ntrix>6 clause is moved to the beginning of the condition statement for the 'slow' runs, and to the end for the 'quick' runs.
+***********************************************************************************************************************************
+
+
+

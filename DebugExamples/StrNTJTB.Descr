@@ -1,0 +1,28 @@
+# G Morse : ctljtb.txt
+# North: 1 NT Openings 
+# South: JTB responses
+#
+#
+produce 40
+stayman = ( (spades(south) == 4) or (hearts(south) == 4) )
+mss = ( (diamonds(south) >= 4) and (clubs(south) >= 4) and (diamonds(south)+clubs(south) >= 9) )
+texas = ( (spades(south) >= 6) or (hearts(south) >= 6) )
+majjtb = ( (spades(south) >= 5 and hearts(south) < 4) or (hearts(south) >=5 and spades(south) <4) )
+minjtb = (not mss and ( (diamonds(south) >=6 ) or (clubs(south) >=6) ) )
+jtb = majjtb or minjtb
+
+1ntopen = ( (15 <= hcp(north) and hcp(north) <= 17) and shape(north - any 0xxx - any 1xxx - any 7xxx) and
+          (hearts(north) < 5) and (spades(north) < 5) )
+
+
+1suitopen = (12<=hcp(north) && hcp(north)<=20) and not 1ntopen 
+
+wkresp = (5 <= hcp(south) and hcp(south) <= 9)
+Invresp = (9 <= hcp(south) and hcp(south) <= 12)
+gfresp = hcp(south) >=13
+
+condition
+  1ntopen and jtb and hcp(south) < 10
+action 
+  print(north,south)
+

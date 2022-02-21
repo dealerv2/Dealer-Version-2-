@@ -1,0 +1,23 @@
+generate   10000
+produce    10
+# Mods from earlier to use z[1-7][CDHSN]xx form of contracts
+title " Eval Contract EW and NS DBL RDBL"
+condition ( (hcp(north)+hcp(south)) >= 22 && (hcp(north)+hcp(south)) <= 24 )
+#          && ( (hearts(west)+hearts(east) >=8 ) && (hearts(west)+hearts(east) <=10) )
+#V3Dx=score ( vul , z3Dxx , 7 )
+#V3Hx=score ( vul , z3H , 10)
+TrixNS=tricks(south,notrump)
+DDSNS=dds(south,notrump)
+ScoreNS_NT=score(vul, z2Nx, TrixNS )
+#TrixEW=tricks(east , hearts)
+
+action   printall,
+         printes ("NS in NT GIB= ",TrixNS, "  DDS=", DDSNS, " Score NS 2NxV=",ScoreNS_NT, \n ),
+         evalcontract ( NS , z2Nx , vul ),
+         evalcontract ( EW , z3Hxx , nv  )
+#         printes ("NS in NT= ",TrixNS, " EW in Hearts= ", TrixEW , \n ),
+#        average "HCP N + S " hcp(north)+hcp(south),
+#        average "HCP W + E " hcp(west)+hcp(east)
+# evalcontract ( EW , z3H , nv  ),
+# evalcontract ( NS , z2N , vul ),
+# printes ("V3Dx 7 tricks = ",V3Dx," V3Hx 10 tricks= ",V3Hx, \n ),

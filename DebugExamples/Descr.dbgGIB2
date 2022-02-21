@@ -1,0 +1,26 @@
+# File Descr.dbgDDS by JGM
+title " GIB 20 Results  "
+
+generate 100000
+produce 100
+
+Ntr4 = tricks(north, notrumps)
+Str3 = tricks(south, spades)
+Etr2 = tricks(east, hearts)
+Wtr1 = tricks(west, diamonds)
+
+
+condition
+   shape(north, any 4333 + any 4432 + 5332) and
+      hcp(north)>=13 and hcp(north)<=18 and hcp(south) >= 10
+
+
+action average "North GIB Tricks "  Ntr4,
+       average "South GIB Tricks "  Str3,
+       average "East  GIB Tricks "  Etr2,
+       average "West  GIB Tricks "  Wtr1
+
+
+# printes("HCP_NS=",hcp(north)+hcp(south), " Trix NT=", nNtrix, "  Trix Spades=", nStrix,  \n)
+
+

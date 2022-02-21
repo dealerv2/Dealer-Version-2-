@@ -1,0 +1,5 @@
+Avg Random Number (0..100) over 10 million deals using rand : 49.48
+Generated 10000000 hands
+Produced 10000000 hands
+Initial random seed 1638254747
+Time needed    5.152 sec
