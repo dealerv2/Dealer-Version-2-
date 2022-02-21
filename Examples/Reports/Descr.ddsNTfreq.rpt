@@ -1,0 +1,36 @@
+Frequency North 1NT Opener dds any strain:
+    5	       4
+    6	      10
+    7	      47
+    8	      93
+    9	     116
+   10	     129
+   11	      77
+High	      24
+Frequency Tricks(across) Vs HCP(down):
+        Low      5      6      7      8      9     10     11   High    Sum
+Low       0      4      6     17     15      7      0      2      0     51
+  20      0      0      4     11      8      9      3      1      0     36
+  21      0      0      0      6     20     12      6      1      0     45
+  22      0      0      0      7     16     13     11      5      0     52
+  23      0      0      0      6     21     16     13      3      0     59
+  24      0      0      0      0     11     22     30      9      3     75
+  25      0      0      0      0      0     24     23     12      2     61
+  26      0      0      0      0      2      9     22     12      4     49
+  27      0      0      0      0      0      4     14     18      7     43
+  28      0      0      0      0      0      0      5     10      3     18
+  29      0      0      0      0      0      0      2      4      4     10
+  30      0      0      0      0      0      0      0      0      1      1
+High      0      0      0      0      0      0      0      0      0      0
+Sum       0      4     10     47     93    116    129     77     24    500
+
+
+1000 1NT openers by North with DDS analysis.  
+Generated 9846 hands
+Produced  500 hands
+Initial random seed 199052139228856
+Time needed   59.249 sec
+Tot Calls to DDS = 17064, DDS Solve Calls=   500
+Tot Calls to GIB =     0, GIB Solve Calls=     0
+Tot Calls to OPC =     0, OPC Calc  Calls=     0
+

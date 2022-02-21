@@ -1,0 +1,49 @@
+./TimeOneBoard -h
+Usage_S0: TimeOneBoard [-c Compass list] [-n Number of Deals] [-o outputfile] -[s Strains list]
+ [-D debug level] [-h] -R threads -S seed for RNG
+
+./TimeOneBoard -S13 -n20 -o /tmp/timeDemo.rpt
+Showing Options with Verbosity = 1
+    c:compass list=[NESW]
+    n:number of deals=[20]
+    o:output filename=[/tmp/timeDemo.rpt]
+    s:srains list=[CDHSN]
+    D:Debug Level =[2]
+    R:Number of Threads:RamMB=[2:320]
+    S:Seed for RNG =[13]
+Version II Calling DO MAIN LOOP start seconds= [1645400097]
+Done: 20 Deals 400 Oneboard solutions with Threads=2   Time needed    2.958 sec
+Done: 20 Deals 400 Oneboard solutions with Threads=2   Time needed    2.979 sec (with printed output)
+
+cat /tmp/timeDemo.rpt
+Solve Count=1, Returns Tricks=[8] for Seat[0] Strain[0]
+Solve Count=2, Returns Tricks=[6] for Seat[1] Strain[0]
+Solve Count=3, Returns Tricks=[8] for Seat[2] Strain[0]
+Solve Count=4, Returns Tricks=[6] for Seat[3] Strain[0]
+Solve Count=5, Returns Tricks=[8] for Seat[0] Strain[1]
+Solve Count=6, Returns Tricks=[5] for Seat[1] Strain[1]
+Solve Count=7, Returns Tricks=[8] for Seat[2] Strain[1]
+Solve Count=8, Returns Tricks=[5] for Seat[3] Strain[1]
+Solve Count=9, Returns Tricks=[4] for Seat[0] Strain[2]
+Solve Count=10, Returns Tricks=[9] for Seat[1] Strain[2]
+Solve Count=11, Returns Tricks=[4] for Seat[2] Strain[2]
+Solve Count=12, Returns Tricks=[9] for Seat[3] Strain[2]
+Solve Count=13, Returns Tricks=[7] for Seat[0] Strain[3]
+Solve Count=14, Returns Tricks=[6] for Seat[1] Strain[3]
+Solve Count=15, Returns Tricks=[7] for Seat[2] Strain[3]
+Solve Count=16, Returns Tricks=[6] for Seat[3] Strain[3]
+Solve Count=17, Returns Tricks=[6] for Seat[0] Strain[4]
+Solve Count=18, Returns Tricks=[7] for Seat[1] Strain[4]
+Solve Count=19, Returns Tricks=[6] for Seat[2] Strain[4]
+Solve Count=20, Returns Tricks=[7] for Seat[3] Strain[4]
+Solve Count=21, Returns Tricks=[7] for Seat[0] Strain[0]
+<snip>
+Solve Count=395, Returns Tricks=[13] for Seat[2] Strain[3]
+Solve Count=396, Returns Tricks=[0] for Seat[3] Strain[3]
+Solve Count=397, Returns Tricks=[12] for Seat[0] Strain[4]
+Solve Count=398, Returns Tricks=[1] for Seat[1] Strain[4]
+Solve Count=399, Returns Tricks=[12] for Seat[2] Strain[4]
+Solve Count=400, Returns Tricks=[1] for Seat[3] Strain[4]
+
+
+

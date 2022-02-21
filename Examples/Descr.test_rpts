@@ -1,0 +1,18 @@
+generate 10000
+produce 8
+title "Example of Reports  "
+
+nNtrix = dds(north, spades)
+NS_hcp = hcp(north) + hcp(south)
+condition
+    shape(north, any 4333 + any 4432 + any 5332) and
+        hcp(north) + hcp(south) > 23
+
+action  printes( "North Tricks in Spades ", nNtrix, ",  NS HCP= ", hcp(north)+hcp(south), \n )
+
+#action printoneline (dds(north, spades) )
+#action printcompact (dds(north, spades) )
+#action printside( NS )
+#action printall
+#
+

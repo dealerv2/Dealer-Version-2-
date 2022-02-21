@@ -1,0 +1,14 @@
+generate   10000
+produce    8
+title "Bidding Practice National Teams Session 1  "
+ctlsN  = controls(north)
+ctlsEH = control(east, hearts)
+loserW = losers(west)
+loserSC= loser(south, clubs)
+
+condition ctlsN < 4 and ctlsEH != 2 and loserW < 8 and loserSC == 1
+
+#asked for hands are always printed as follows: all the north, all the east, all the south then all the west.
+# no matter what order you spec in the print statement. So this next statement prints all the north, then all south
+
+action print (south, north, west, east )

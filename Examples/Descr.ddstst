@@ -1,0 +1,26 @@
+generate 10000
+produce 40
+title "Descr.ddstst -- lots of dds stmnts, if then variables, normal condition, complex action statement "
+
+nNtrix = dds(north, notrumps)
+nStrix = dds(north, spades)
+nHtrix = dds(north, hearts)
+nDtrix = dds(north, diamonds)
+nCtrix = dds(north, clubs)
+
+ntrixM = nStrix > nHtrix ? nStrix : nHtrix
+ntrixm = nDtrix > nCtrix ? nDtrix : nCtrix
+ntrixT = ntrixM > ntrixm ? ntrixM : ntrixm
+ntrix  = ntrixT > nNtrix ? ntrixT : nNtrix
+
+NS_hcp = hcp(north) + hcp(south)
+
+condition
+    shape(north, any 4333 + any 4432 + any 5332) and
+        hcp(north) + hcp(south) > 23
+
+action  printes("Nhcp=", hcp(north), ",Shcp=", hcp(south)," || ",  ntrix, "::", nNtrix, ",", nStrix,",", nHtrix,",", nDtrix,",", nCtrix, \n) ,
+        printoneline, printes("---",\n),
+        frequency "North-South 23+ hcp Tricks" (ntrix, 5,11),
+        average "AVG North South Hcp" NS_hcp
+

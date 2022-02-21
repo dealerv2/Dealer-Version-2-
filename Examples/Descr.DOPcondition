@@ -1,0 +1,13 @@
+generate   10000
+produce    20
+title "DOP as a condition  "
+
+opener west
+
+
+EW_Spades = dds(west,spades)
+condition  (spades(west) + spades(east) == 8 )
+ &&  opc(EW) >= 28.5 
+
+action export ( EW ),
+        printoneline

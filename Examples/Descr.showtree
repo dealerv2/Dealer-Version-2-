@@ -1,0 +1,6 @@
+generate 1
+produce 1
+title "Minimal File to illustrate a typical decision tree"
+# run this with the Debug version of Dealerv2 (dealdbg in the Debug directory) and -D3 on the cmd line
+condition ( (hcp(west) + hcp(east) ) > 25 && (hearts(west)+hearts(east) >= 9 ) && shape(west, - any 7xxx ) &&
+          dds(west, hearts) < 10 )

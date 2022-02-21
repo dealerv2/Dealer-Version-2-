@@ -1,0 +1,34 @@
+
+East hands:
+
+   1.                  2.                  3.                  4.               
+8 7 4               A Q 8 7 6           Q 9 4               T 4 
+A J 9 5 4           9 7                 K Q 8 4 3           A K 8 5 3 
+9 8 3               A 8 5               A 4 3               8 2 
+Q 5                 K Q 2               J 8                 Q 9 7 2 
+
+   5.                  6.                  7.                  8.               
+A 3                 A K 9 7 4           A T 5 3 2           K 9 6 3 
+Q 8 5 4 3           K 4                 8 5 3               Q 9 8 7 5 
+A 8 7 3             9 8 6 5             J 6 5               K Q 
+A 8                 9 5                 A 3                 T 6 
+
+
+West hands:
+
+   1.                  2.                  3.                  4.               
+T 9 5               K T 5 2             A 2                 Q 9 3 
+Q 7 3 2             Q T 8 4             J 6 2               J T 9 
+T 2                 J 4                 J 5 2               K T 9 5 
+A K J 9             A J 6               K T 9 7 6           A T 8 
+
+   5.                  6.                  7.                  8.               
+Q T 9               Q 6 2               K 9                 A 5 4 
+K 7                 5 2                 K J 4               4 2 
+Q J 9 4             A K 3 2             T 9 2               A T 8 3 
+K 6 3 2             7 6 4 2             Q J 7 6 4           9 7 3 2 
+
+Generated 802 hands
+Produced  8 hands
+Initial random seed 13
+Time needed    0.013 sec

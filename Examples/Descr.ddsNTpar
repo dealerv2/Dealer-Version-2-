@@ -1,0 +1,19 @@
+# File Descr.ddsNTpar by JGM
+# This example calculates the Average Par Result for a 1NT north facing a 0-12 hcp south
+# Note DDS can calculate 20 results using Mode 2 in about the same time GIB calcs 2 results.
+# Make sure you specify -M2 on the command line when running this or it will take 3-5 times as long.
+
+
+
+title "1NT openers by North Par Results  "
+generate 1000000
+produce 1000           /* 1000 is a commonly used adequate sample size in stats based on the Central Limit Theorem */
+#allow 5 card majors
+
+condition
+   shape(north, any 4333 + any 4432 + any 5332) and
+      hcp(north)>=15 and hcp(north)<=18 and hcp(south) <= 12
+
+action
+    average "Par North Strong NT, South <=12 hcp = " par(NS)
+

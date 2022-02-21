@@ -1,0 +1,16 @@
+east_notrump =
+	shape(east, any 4333 + any 4432 + any 5332 - 5xxx - x5xx)
+	&& hcp(east)>=23 && hcp(east)<25
+
+west_stayman = hcp(west)>3 && (hearts(west)==4 || spades(west)==4)
+
+west_jacoby = hearts(west)>4 || spades(west)>4
+
+condition
+	east_notrump && (west_stayman || west_jacoby)
+
+produce 
+	10
+
+action
+        printall

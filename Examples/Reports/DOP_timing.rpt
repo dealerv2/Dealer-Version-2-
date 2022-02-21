@@ -1,0 +1,11 @@
+EOOPC NS : Mean= 2538.6000, Std Dev=  616.4577, Var=380020.0802, Sample Size=500 
+
+Testing DOP Timing: 1 val in cond, 1 val in action 
+Generated 531 hands
+Produced  500 hands
+Initial random seed 161169393106665
+Time needed   19.503 sec
+Tot Calls to DDS =     0, DDS Solve Calls=     0
+Tot Calls to GIB =     0, GIB Solve Calls=     0
+Tot Calls to OPC =  1031, OPC Calc  Calls=   531
+
