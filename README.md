@@ -1,4 +1,4 @@
-# Dealer-Version-2-
+# Dealer-Version-2
 Expanded Functionality for Bridge Dealer Program (Dealer Vers 1 used by BBO)
 
 See the README.pdf or README.odt file in the docs folder for a more complete description 
