@@ -7,4 +7,5 @@
 "M={dds_Mode: 1=single solution, 2=20x solutions} R={Resources/Threads(1..9)}\n" \
 "P={vulnerability for Par computation: 0=NoneVul, 1=NS, 2=EW, 3=Both}\n"  \
 "T={Title in quotes} X={Filename to open for eXporting predeal holdings} \n" \
-"D={Debug verbosity level 0-9; (minimal effect in production version)}\n"
+"D={Debug verbosity level 0-9; (minimal effect in production version)}\n" \
+"-0 to -9={one word or string in double quotes to set $0 thru $9 script parms in Input File}\n"
