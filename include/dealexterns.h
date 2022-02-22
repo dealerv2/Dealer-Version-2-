@@ -18,7 +18,7 @@
  extern int     swapping, swapindex ;
  extern long    seed, seed_provided ;
  extern int     quiet ;
- extern char    title[MAXTITLE] ;   /* set from cmd line or from input file directly from dealflex.l */
+ extern char    title[MAXTITLESIZE] ;   /* set from cmd line or from input file directly from dealflex.l */
  extern size_t  title_len;
  extern int     Opener;     /* Dealer uses COMPASS_NORTH etc which is an int */
  extern char    opc_opener;         /* opc uses characters W, N , E, S */
