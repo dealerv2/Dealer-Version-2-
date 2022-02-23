@@ -1,0 +1,8 @@
+generate   10000
+produce    20
+#title " Demo DDS Par "
+#condition dummy
+condition shape(south, x5xx + x6xx +x7xx) && shape(north, x3xx + x4xx ) && hcp(south)+hcp(north) >=24
+
+action printrpt(NS, par(NS), hcp(north)+hcp(south) ),
+    average "Par NS = " par(NS)

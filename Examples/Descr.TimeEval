@@ -1,0 +1,9 @@
+generate   20000
+produce    1000
+title " Eval NS in 2NTx vul and EW in 3Hxx nv"
+condition ( hcp(north)+hcp(south)>=17 && hcp(north)+hcp(south)<=23  &&
+			   hearts(east)+hearts(west)>=9 && (hcp(east)+hcp(west))>=17 && (hcp(east)+hcp(west))<=23  )
+action   
+         evalcontract ( NS , z2Nx , vul ),
+         evalcontract ( EW , z3Hxx , nv  )
+

@@ -1,0 +1,38 @@
+./OneBoard -i tst_TablesPBN.dat -o /tmp/demo1.out -l /tmp/demo1.log -D0
+
+cat /tmp/demo1.out
+OUTFILE OK
+N:QJ6.K652.J85.T98 873.J97.AT764.Q4 K5.T83.KQ9.A7652 AT942.AQ4.32.KJ3:7777,5858,7777,6868,8686
+E:QJT5432.T.6.QJ82 .J97543.K7532.94 87.A62.QJT4.AT75 AK96.KQ8.A98.K63:A4A4,4949,B3B3,A5A5,6767
+N:73.QJT.AQ54.T752 QT6.876.KJ9.AQ84 5.A95432.7632.K6 AKJ9842.K.T8.J93:5959,3A3A,9494,9595,4A4A
+N:QT985.J652.52.65 74.AK94.AKT.QJ98 KJ32.T3.87643.74 A6.Q87.QJ9.AKT32:0D0D,6767,0D0D,3B3B,0D0D
+N:7632.98643.J72.J KQ9.T7.AKQ.AK543 A5.J52.86543.976 JT84.AKQ.T9.QT82:1C1C,2C2C,3A3A,3A3A,1C1C
+N:92.2.K742.Q98743 AJ8.QT73.J965.A5 T7654.J9654.83.T KQ3.AK8.AQT.KJ62:1C1C,3A3A,2B2B,1C1C,4949
+N:72.632.98532.T92 T43.A87.AKQ7.843 QJ9865.Q54.T.J75 AK.KJT9.J64.AKQ6:0D0D,4949,0D0D,0D0D,0D0D
+N:9754.T832.K52.76 QJ2.Q6.A873.KQ83 63.K54.J964.T542 AKT8.AJ97.QT.AJ9:1C1C,1D1D,2B2B,2B2B,1C1C
+N:QJT64.8432.T74.J 75.AJ5.KJ5.AK542 K9.T96.9832.T873 A832.KQ7.AQ6.Q96:1C1C,4949,2B2B,2B2B,1C1C
+N:9532.76.Q6532.T4 K64.AKQ8.KT.AQ83 JT87.9532.9.KJ95 AQ.JT4.AJ874.762:2C1C,4949,2B2B,2C1C,3A3A
+N:J987.J9763.A9.52 AQ65.KQT8.87.KJ6 T32.4.J543.T9873 K4.A52.KQT62.AQ4:1C1C,2B2B,2C2C,2B2B,3A3A
+N:J8.32.T98764.952 Q753.KJ6.QJ2.AKQ K962.Q985.53.876 AT4.AT74.AK.JT43:1C1C,2B2B,1C1C,3A3A,1C1C
+N:832.T763.J42.K72 AKJ6.A984.Q6.Q43 T4.Q52.T8753.T65 Q975.KJ.AK9.AJ98:1C1C,1C1C,1C2C,3A3A,1C1C
+
+
+cat /tmp/demo1.log
+OneBoard Test. Infile=[tst_TablesPBN.dat], Outfile=[/tmp/demo1a.out], Logfile=[/tmp/demo1.log]
+Total Lines from infile[1.], Solved 20 deals,  Wrote[1] lines, skipped[0], SolveErrs=0
+Total Lines from infile[2.], Solved 40 deals,  Wrote[2] lines, skipped[0], SolveErrs=0
+Total Lines from infile[3.], Solved 60 deals,  Wrote[3] lines, skipped[0], SolveErrs=0
+Total Lines from infile[4.], Solved 80 deals,  Wrote[4] lines, skipped[0], SolveErrs=0
+Total Lines from infile[5.], Solved 100 deals,  Wrote[5] lines, skipped[0], SolveErrs=0
+Total Lines from infile[6.], Solved 120 deals,  Wrote[6] lines, skipped[0], SolveErrs=0
+Total Lines from infile[7.], Solved 140 deals,  Wrote[7] lines, skipped[0], SolveErrs=0
+Total Lines from infile[8.], Solved 160 deals,  Wrote[8] lines, skipped[0], SolveErrs=0
+Total Lines from infile[9.], Solved 180 deals,  Wrote[9] lines, skipped[0], SolveErrs=0
+Total Lines from infile[10.], Solved 200 deals,  Wrote[10] lines, skipped[0], SolveErrs=0
+Total Lines from infile[11.], Solved 220 deals,  Wrote[11] lines, skipped[0], SolveErrs=0
+Total Lines from infile[12.], Solved 240 deals,  Wrote[12] lines, skipped[0], SolveErrs=0
+Total Lines from infile[13.], Solved 260 deals,  Wrote[13] lines, skipped[0], SolveErrs=0
+Read 13 lines, solved [260] deals wrote [13] lines to  [/tmp/demo1a.out] Skipped 0 Input lines
+ ***** NORMAL END OF RUN *****
+
+

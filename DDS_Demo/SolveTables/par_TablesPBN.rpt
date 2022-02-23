@@ -1,0 +1,26 @@
+    1. NS: NS -110:: list:NS:EW 2S
+       EW: EW 110:: list:EW:EW 2S
+    2. NS: NS 100:: list:NS:EW 4Sx
+       EW: EW -100:: list:EW:EW 4Sx
+    3. NS: NS -300:: list:NS:NS 5Hx
+       EW: EW 300:: list:EW:NS 5Hx
+    4. NS: NS -1520:: list:NS:EW 7N
+       EW: EW 1520:: list:EW:EW 7N
+    5. NS: NS -990:: list:NS:EW 6N
+       EW: EW 990:: list:EW:EW 6N
+    6. NS: NS -990:: list:NS:EW 6N
+       EW: EW 990:: list:EW:EW 6N
+    7. NS: NS -1520:: list:NS:EW 7N
+       EW: EW 1520:: list:EW:EW 7N
+    8. NS: NS -990:: list:NS:EW 6N
+       EW: EW 990:: list:EW:EW 6N
+    9. NS: NS -990:: list:NS:EW 6N
+       EW: EW 990:: list:EW:EW 6N
+   10. NS: NS -990:: list:NS:E 6N
+       EW: EW 990:: list:EW:E 6N
+   11. NS: NS -990:: list:NS:EW 6N
+       EW: EW 990:: list:EW:EW 6N
+   12. NS: NS -990:: list:NS:EW 6N
+       EW: EW 990:: list:EW:EW 6N
+   13. NS: NS -990:: list:NS:EW 6N
+       EW: EW 990:: list:EW:EW 6N

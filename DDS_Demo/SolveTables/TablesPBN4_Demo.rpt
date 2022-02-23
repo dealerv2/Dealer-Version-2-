@@ -1,0 +1,53 @@
+./TablesPBN4 -h
+Usage_V4: TablesPBN4 [-i inputfile] [-o outputfile] [-l logfile] [-p ParResults file]
+[-f trump_filter SHDCN ] [-v vuln for par results: -1 no Par, 0=None, 1=Both, 2=NS, 3=EW] [-D debug level] [-h]
+
+./TablesPBN4 -i tst_TablesPBN.dat -o /tmp/demo4_out.rpt -p /tmp/par4.rpt -v 1
+PBN4 Test. Infile=[tst_TablesPBN.dat], Outfile=[/tmp/demo4_out.rpt], Parfile=[/tmp/par4.rpt], Logfile=[stderr] TrumpFilter=[None Given]
+Total Lines from infile[10.], Solved 10 total deals, wrote 10 Par Results
+Total Lines from infile[13.], Solved 13 total deals, wrote 13 Par Results
+Read 13 lines, Wrote 13 solved deals to [/tmp/demo4_out.rpt] wrote 13 Par Results to [/tmp/par4.rpt] Skipped 0 Input lines
+ ***** NORMAL END OF RUN *****
+
+cat /tmp/demo4_out.rpt /tmp/par4.rpt
+N:QJ6.K652.J85.T98 873.J97.AT764.Q4 K5.T83.KQ9.A7652 AT942.AQ4.32.KJ3:56576,86756,56576,86756
+E:QJT5432.T.6.QJ82 .J97543.K7532.94 87.A62.QJT4.AT75 AK96.KQ8.A98.K63:4A869,92373,4A869,92373
+N:73.QJT.AQ54.T752 QT6.876.KJ9.AQ84 5.A95432.7632.K6 AKJ9842.K.T8.J93:39834,A4498,39834,A4498
+N:QT985.J652.52.65 74.AK94.AKT.QJ98 KJ32.T3.87643.74 A6.Q87.QJ9.AKT32:60200,7DADD,60200,7DADD
+N:7632.98643.J72.J KQ9.T7.AKQ.AK543 A5.J52.86543.976 JT84.AKQ.T9.QT82:13311,BAACC,13311,BAACC
+N:92.2.K742.Q98743 AJ8.QT73.J965.A5 T7654.J9654.83.T KQ3.AK8.AQT.KJ62:32141,ABC9C,32141,ABC9C
+N:72.632.98532.T92 T43.A87.AKQ7.843 QJ9865.Q54.T.J75 AK.KJT9.J64.AKQ6:40000,9DDDD,40000,9DDDD
+N:9754.T832.K52.76 QJ2.Q6.A873.KQ83 63.K54.J964.T542 AKT8.AJ97.QT.AJ9:02211,CBBCC,02211,CBBCC
+N:QJT64.8432.T74.J 75.AJ5.KJ5.AK542 K9.T96.9832.T873 A832.KQ7.AQ6.Q96:42211,9BBCC,42211,9BBCC
+N:9532.76.Q6532.T4 K64.AKQ8.KT.AQ83 JT87.9532.9.KJ95 AQ.JT4.AJ874.762:42131,9BCAC,42131,9BBAB
+N:J987.J9763.A9.52 AQ65.KQT8.87.KJ6 T32.4.J543.T9873 K4.A52.KQT62.AQ4:21231,BBBAC,21231,BBBAC
+N:J8.32.T98764.952 Q753.KJ6.QJ2.AKQ K962.Q985.53.876 AT4.AT74.AK.JT43:21311,BCACC,21311,BCACC
+N:832.T763.J42.K72 AKJ6.A984.Q6.Q43 T4.Q52.T8753.T65 Q975.KJ.AK9.AJ98:11311,CBACC,11311,CCACC
+
+
+    1. NS: NS -110:: list:NS:EW 2S
+       EW: EW 110:: list:EW:EW 2S
+    2. NS: NS 100:: list:NS:EW 4Sx
+       EW: EW -100:: list:EW:EW 4Sx
+    3. NS: NS -300:: list:NS:NS 5Hx
+       EW: EW 300:: list:EW:NS 5Hx
+    4. NS: NS -1520:: list:NS:EW 7N
+       EW: EW 1520:: list:EW:EW 7N
+    5. NS: NS -990:: list:NS:EW 6N
+       EW: EW 990:: list:EW:EW 6N
+    6. NS: NS -990:: list:NS:EW 6N
+       EW: EW 990:: list:EW:EW 6N
+    7. NS: NS -1520:: list:NS:EW 7N
+       EW: EW 1520:: list:EW:EW 7N
+    8. NS: NS -990:: list:NS:EW 6N
+       EW: EW 990:: list:EW:EW 6N
+    9. NS: NS -990:: list:NS:EW 6N
+       EW: EW 990:: list:EW:EW 6N
+   10. NS: NS -990:: list:NS:E 6N
+       EW: EW 990:: list:EW:E 6N
+   11. NS: NS -990:: list:NS:EW 6N
+       EW: EW 990:: list:EW:EW 6N
+   12. NS: NS -990:: list:NS:EW 6N
+       EW: EW 990:: list:EW:EW 6N
+   13. NS: NS -990:: list:NS:EW 6N
+       EW: EW 990:: list:EW:EW 6N
