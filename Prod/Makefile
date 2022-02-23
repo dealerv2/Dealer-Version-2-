@@ -13,13 +13,6 @@ LDFLAGS = -L../lib -lm -ldds
 DESTDIR = ../Prod
 PROGRAM  = dealerv2
 
-ifdef JGMDBG
-CFLAGS   += -DJGMDBG
-CXXFLAGS += -DJGMDBG
-DESTDIR = ../Debug
-PROGRAM  = dealdbg
-endif
-
 FLEX    = flex
 YACC    = bison -d
 
