@@ -1,6 +1,7 @@
 # JGM Makefile for deal_v3  2022/01/01 DEBUG directory
 # Note MUST use g++ as the linker stage because DDS library created with g++
-
+# This is the Debug directory Makefile so set the JGMDBG variable. Type 'make showme' to verify its effect.
+JGMDBG := 1
 CC      = gcc
 CFLAGS = -std=gnu17 -mtune=corei7 -flto -fopenmp -pthread -Wall -pedantic -g -Og -I../include
 #Note CPP and CPPFLAGS are for the C PreProcessor. Use CXX and CXXFLAGS for C++ aka g++
@@ -9,7 +10,7 @@ CXXFLAGS = -std=gnu++17 -mtune=corei7 -flto -fopenmp -pthread  -g -Og -I../inclu
 #can add --verbose to this next one to debug linker problems
 LDFLAGS = -L../lib -lm -ldds
 DESTDIR = ../Prod
-PROGRAM  = dealjgm
+PROGRAM  = dealerv2
 
 ifdef JGMDBG
 CFLAGS   += -DJGMDBG
@@ -72,7 +73,7 @@ $(YOBJ) : $(YSRC) $(HDR)
 # File dependencies
 #
 
-dealerv2.o : ../src/dealerv2.c ../src/mainsubs.c $(HDR) ../src/UsageMsg.h
+dealdbg.o : ../src/dealerv2.c ../src/mainsubs.c $(HDR) ../src/UsageMsg.h
 	$(CC) $(CFLAGS) -o $@ -c $<
 dealflex.o : dealflex.c $(HDR)
 	$(CC) $(CFLAGS) -o $@ -c $<

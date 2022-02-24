@@ -12,7 +12,7 @@
   #define _GNU_SOURCE
 #endif
 
-#define VERSION "2.7A"
+#define VERSION "2.0.8"
 
 #ifndef UNUSED
   #define UNUSED(x) ((void)(true ? 0 : ((x), void(), 0)))
