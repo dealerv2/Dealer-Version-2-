@@ -1,0 +1,9 @@
+JUNK/*
+JUNK
+junk/*
+Test/*
+Scratchpad/*
+*.o
+a.out
+MSDOS/*
+.~lock*

@@ -1,0 +1,23 @@
+# Generate hands for practicing bidding after 1NT, then print them in the
+# 1 line/deal format and on separate sheets with only the East and West
+# hands.
+
+east_notrump =
+	shape(east, any 4333 + any 4432 + any 5332 - 5xxx - x5xx)
+	&& hcp(east)>=15 && hcp(east)<=17
+
+#
+# West gets either 7-9 hcp or 13-18
+#
+west_interesting_low = hcp(west)>=7 and hcp(west)<=9 
+west_interesting_high = hcp(west)>=13 and hcp(west)<=18
+
+condition
+	east_notrump and ( west_interesting_low or west_interesting_high)
+
+produce 
+	100
+
+action
+        printoneline,
+	print(east, west)
