@@ -1,18 +1,12 @@
 # Showing: a) use of the rnd undocumented feature of dealer. Don't know what it's used for.
-#          b) the way to have multiple actions 
-#title Random Number Generator Test 0..100
+#          b) the way to have multiple actions
+title "Random Number Generator Test 0..100"
 generate
-	10000000
-	
-	rndnum = rnd ( 100 )
-# This is line 8
-#
+   10000000
+seed 147511705225677
+   rndnum = rnd ( 100 )
 action
-#       printes("rndnum:" , rndnum, \n ) ,
-	average "Avg Random Number (0..100) over 10 million deals using rand " rndnum
-	
-		
-#action  printes("Nhcp=", hcp(north), ",Shcp=", hcp(south)," || ",  ntrix, "::", nNtrix, ",", nStrix,",", nHtrix,",", nDtrix,",", nCtrix, \n) , 
-#	  	printoneline, printes("---",\n),
+   average "Avg Random Number (0..100) using GNU rand48 " rndnum
+
 
 

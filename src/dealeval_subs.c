@@ -213,14 +213,28 @@ void initprogram ( struct options_st *opt_ptr) {
          opt_ptr->opc_opener = seat_id[Opener] ;
          opc_opener = opt_ptr->opc_opener;
     }
-    /* opt_ptr->title, opt_ptr->title_len,  title, and title_len all set at the time the -T option processed in get_opts */
-
-      #ifdef JGMDBG
-           if (jgmDebug >= 4 ) {
+     /* need to check the title stuff here, since yyparse() may have set it also */
+    if( opt_ptr->title_len > 0 ) {
+       title_len = opt_ptr->title_len  ;
+       strncpy( title, opt_ptr->title, 79 );
+    }
+    #ifdef JGMDBG
+        if (jgmDebug >= 4 ) {
                fprintf(stderr, "NewTitle=[%s], NewTitleLen=[%ld]\nCmdlineTitle=[%s],CmdLineTitleLen=[%ld]\n",
                         title, title_len, opt_ptr->title, opt_ptr->title_len ) ;
-            }
-        #endif
+        }
+    #endif
+     /* need to check the seed stuff here, since yyparse() may have set it also */
+    if( opt_ptr->seed_provided > 0 ) {
+       seed_provided = opt_ptr->seed_provided  ;
+       seed = opt_ptr->seed;
+    }
+    #ifdef JGMDBG
+        if (jgmDebug >= 4 ) {
+               fprintf(stderr, "NewTitle=[%s], NewTitleLen=[%ld]\nCmdlineTitle=[%s],CmdLineTitleLen=[%ld]\n",
+                        title, title_len, opt_ptr->title, opt_ptr->title_len ) ;
+        }
+    #endif
 
     /* Next we allow user to over-ride any predeal statements in the input file via cmd line switches */
     /* Undo any predealing yyparse has done */
@@ -699,8 +713,7 @@ int evaltree (struct tree *t) {                 /* walk thru the user's request 
     case TRT_IMPS:
       return imps (evaltree (t->tr_leaf1));
     case TRT_RND:
-      
-      return (int) ( RANDOM( (double)evaltree (t->tr_leaf1) )  ); /* ret rand int between 0 .. (expr in leaf1) */
+      return (int) (  RANDOM( (double)evaltree (t->tr_leaf1) ) ); /* ret rand int between 0 .. (expr in leaf1) */
                                                     /* JGM redefined RANDOM to use std lib call drand48 */
     case TRT_DECNUM:
       return t->tr_int1 ;  /* Lexer will already Mult x100; cant do here bec tree's only hold ints */

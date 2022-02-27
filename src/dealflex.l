@@ -94,6 +94,7 @@
 
  /* Define Exclusive states to handle text processed within Flex */
 %x COMMENT
+%x SETSEED
 %x MAXPROD
 %x MAXGEN
 %x MAXDEAL
@@ -174,6 +175,15 @@ csvrpt          return(CSVRPT);
     * e.g. generate on a different line from the value e.g. 1000000
     * Rather than define a pattern that can span multiple lines we use the exclusive states feature of Flex
     */
+seed({ws}|{nl}) { BEGIN(SETSEED);   }
+<SETSEED>{nl}  ;                 /* do nothing if {nl} found. flex will track yylineno */
+<SETSEED>{ws}  ;
+<SETSEED>{digits}   { strncpy(buff, yytext, yyleng) ; buff[yyleng]='\0';
+                       seed = atol(buff) ; /* no need to set yylval since not returning to yyparse() */
+                       seed_provided = 1L ;
+                       BEGIN(INITIAL) ;
+                     }
+
 vulnerable({ws}|{nl}) { BEGIN(MAXVUL);   }
 <MAXVUL>{nl}  ;                 /* do nothing if {nl} found. flex will track yylineno */
 <MAXVUL>{ws}  ;
@@ -199,16 +209,19 @@ produce({ws}|{nl})   { BEGIN(MAXPROD);   }
                         yylval.y_int = maxproduce ;
                         BEGIN(INITIAL) ;
                   }
-title({ws}|{nl}) { BEGIN(TITLE);  }
-<TITLE>{nl}   ;                /* do nothing if {nl} found. flex will track yylineno */
-<TITLE>{ws}   ;
+title({ws}|{nl})   { BEGIN(TITLE) ; }
 <TITLE>{qstring}  {
-                    strncpy(title, yytext+1, (yyleng-2) ) ;
-                    title[yyleng-2] = '\0';
+                    if( (yyleng - 2) < ( MAXTITLE ) ) {
+                        strncpy(title, yytext+1, (yyleng-2) ) ;
+                        title[yyleng-2] = '\0';
+                     }
+                     else {
+                        strncpy(title, yytext+1, MAXTITLE ) ;
+                        title[MAXTITLE]='\0';
+                     }
                     title_len = strlen(title) ;
                     BEGIN(INITIAL) ;
                   }
-
 dealer({ws}|{nl})  { BEGIN(MAXDEAL); }
 <MAXDEAL>{nl}  ;                /* do nothing if {nl} found. flex will track yylineno */
 <MAXDEAL>{ws}  ;

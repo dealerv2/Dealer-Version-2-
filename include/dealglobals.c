@@ -37,8 +37,8 @@ int Opener = COMPASS_WEST;     /* -O: */  /* flex action clause  0=north (or eas
 char opc_opener = 'W' ;                   /* define one so that extern will be happy. Dont want to extern a struct memb*/
 int maxproduce = 0     ;       /* -p: */  /* flex action clause */
 int quiet;                     /* -q */
-long seed ;                    /* -s: */
-long seed_provided ;
+long seed  = 0 ;               /* -s: */ /* seed can now be set in Input File */
+long seed_provided = 0  ;
 int uppercase = 0 ;            /* -u */
 int verbose = 1;               /* -v */
 int errflg;

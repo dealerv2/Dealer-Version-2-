@@ -7,6 +7,7 @@
 //         2.0.6  Introduced code to run DOP perl pgm and save results in dealer struct
 //         2.0.7  Export code added. -X option processing.
 //         2.0.8  CSVRPT code added. -C option processing.
+//         2.0.9  seed in input file code added.
 //
 #ifndef _GNU_SOURCE
   #define _GNU_SOURCE
@@ -73,11 +74,17 @@ int main (int argc, char **argv) {
   gettimeofday (&tvstart, (void *) 0);
   fexp = stdout ; // FILE *fexp Will be opened by getopts if there is a -X option
   fcsv = stdout ; // FILE *fcsv Will be opened by getopts if there is a -C option
+
  /* process cmd line options. Save them for later after parsing done */
   get_options( argc, argv, opts) ;
-    #ifdef JGMDBG
+   #ifdef JGMDBG
         if(jgmDebug > 0 ) {  fprintf(stderr, "JGMDBG DEFINED= %d in main \n",JGMDBG ); }
         if(jgmDebug >= 2) {  fprintf(stderr, "--------HELLO FROM VERSION %s ---------- \n", VERSION); }
+        #ifdef YYDEBUG
+             if(jgmDebug > 0 ) {  fprintf(stderr, "YYDEBUG DEFINED yydebug== %d BISON DBG Active.  \n",yydebug ); }
+        #else
+            if(jgmDebug > 0 ) {  fprintf(stderr, "YYDEBUG NOT Defined.  BISON DBG IN_Active.  \n" ); }
+        #endif
     #endif
 
   extern void show_options     ( struct options_st *opts , int v ) ;
@@ -109,6 +116,8 @@ int main (int argc, char **argv) {
 #ifdef JGMDBG
      if (jgmDebug >= 3) { fprintf(stderr, "Calling yyparse from file[%s] at line [%d]\n",__FILE__,__LINE__); }
 #endif
+
+/* ===============> YYPARSE HERE <=============== */
   yyparse ();   /* build the list of conditions to evaluate and the list of actions to do */
 
   /* ----------------- Parsing of User Specs done. Decision Tree built. Action list built. -------------------*/
@@ -126,6 +135,10 @@ int main (int argc, char **argv) {
     fprintf(stderr, "\n-----------------------\n");
   } /* end if jgmDebug */
 #endif
+  /* Vers 2.0.9 -- the seed could come from input file or from cmd line -- move initprogram to before RNG init */
+
+  initprogram(opts);  /* here we will over-ride yyparse if reqd from cmd line and do other stuff. */
+
   /*Using glibc standard lib routines rand48 and srand48.*/
   /* If no seed provided, use function init_rand48 which uses kernel as seed source*/
   if (jgmDebug >= 3 ) { DBGPRT("Initializing RNG. Seed_providedx10000 + seed",(seed_provided*10000+seed)," in main "); }
@@ -138,7 +151,7 @@ int main (int argc, char **argv) {
   if (jgmDebug >= 3 ) { DBGPRT("Seed val=",seed,"Calling Init prog now"); }
   //SetMaxThreads(9);
   SetResources(opts->maxRamMB, opts->nThreads) ; /* 160MB/Thread max; 9,12,16 threads all equal and 25% faster than 6 Threads*/
-  initprogram(opts);  /* here we will over-ride yyparse if reqd from cmd line and do other stuff. */
+
   if (maxgenerate == 0) maxgenerate = 10000000;
   if (maxproduce == 0)  maxproduce = ((actionlist == &defaultaction) || will_print) ? 40 : maxgenerate;
 #ifdef JGMDBG

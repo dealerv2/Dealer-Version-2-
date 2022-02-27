@@ -3,6 +3,7 @@ JUNK
 junk/*
 Test/*
 Scratchpad/*
+Debug/Scratchpad/*
 *.o
 a.out
 MSDOS/*

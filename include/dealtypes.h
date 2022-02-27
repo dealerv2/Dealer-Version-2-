@@ -246,7 +246,7 @@ struct options_st {         /* struct for storing cmd line option switches */
   long int  seed;                   // -s:
   long int  seed_provided;
   /* these next ones are by JGM.  */
-  char      title[MAXTITLE];        // -T:   descriptive title for the set of hands.(MAXTITLE=100)
+  char      title[MAXTITLESIZE];    // -T:   descriptive title for the set of hands.(MAXTITLE=100)
   size_t    title_len ;
   char      preDeal[4][32] ;        // Predeal Holdings in Dealer fmt Sxxxx,Hxxxxx, etc. -N, -E, -S, -W options
   int       preDeal_len[4] ;        // length of preDeal strings on cmd line.
