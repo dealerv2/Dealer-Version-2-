@@ -20,7 +20,7 @@
  extern int     quiet ;
  extern char    title[MAXTITLESIZE] ;   /* set from cmd line or from input file directly from dealflex.l */
  extern size_t  title_len;
- extern int     Opener;     /* Dealer uses COMPASS_NORTH etc which is an int */
+ extern int     Opener;             /* Dealer uses COMPASS_NORTH etc which is an int */
  extern char    opc_opener;         /* opc uses characters W, N , E, S */
  extern int     jgmDebug ;          /* cmd line as opposed to #define Debug flag. 0 = None. 9=verbose */
  extern char   *input_file;
@@ -28,7 +28,7 @@
  extern int     par_vuln;
  extern int     computing_mode;
  extern int     progressmeter;
- extern int     nThreads;       /* -R 0..10 MaxRam = 160 * nThreads */
+ extern int     nThreads;           /* -R 0..10 MaxRam = 160 * nThreads */
  extern int     MaxRamMB ;
  extern int     csv_firsthand;
  extern char    csv_trixbuff[64] ; // room for 20 * (2digits + comma) and a bit extra
@@ -36,9 +36,9 @@
  extern FILE   *fexp ;
  extern FILE   *fcsv ;
   /* used by yyparse in its action clauses or directly by Flex*/
- extern int     maxdealer;  /* Flex */
- extern int     maxvuln;    /* Flex */
- extern char   *crlf ; /* either \r\n for Windows or \n for Linux/Unix. MacOS=? */
+ extern int     maxdealer;        /* Flex */
+ extern int     maxvuln;          /* Flex */
+ extern char   *crlf ;            /* either \r\n for Windows or \n for Linux/Unix. MacOS=? */
  extern char    card_id[13];
  extern char    strain_id[6];
  extern char    seat_id[4];
@@ -64,13 +64,10 @@
  extern int use_compass[NSEATS];  /* Global var: 1 means this seat's hand needs to be analyzed */
  extern int use_side[2] ;         /* Global var: 1 means we need both hands for this side and the side also */
 
- extern int will_print;     /* Is there a print action? */
- extern int predeal_compass;  /* yyparse sets bits in this int to say which compass have predeals ??*/
+ extern int will_print;                 /* Is there a print action? if yes default produce = 40 */
+ extern int predeal_compass;            /* global var for predeal communication */
  extern struct contract_st contract;
- extern struct param_st parm ;
-//   char script_var[10][128] ;         // Two more than PARAM_SIZE bec Flex needs two string terminators.
-//   size_t script_var_len[10];         //
- /* Add other cmd line options here? parm1, parm2, parm3, parm4, title, .... */
+ extern struct param_st parm ;         /* for script parameters $0 thru $9 */
 
  extern struct tree    defaulttree ;
  extern struct tree   *decisiontree ;

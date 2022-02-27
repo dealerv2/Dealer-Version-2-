@@ -127,12 +127,12 @@ struct action  defaultaction = {   /* next-ptr     type       expr1            e
 struct action *actionlist = &defaultaction;
 struct var    *vars = 0 ;
 
-        /* Vars used by code in parser action statements */
-int will_print;
-int maxdealer;
-int maxvuln;
-int predeal_compass;         /* global variable for predeal communication */
-int shapeno ;
+        /* Vars used by code in parser action statements init them for safety */
+int will_print = 0;
+int maxdealer = 0;
+int maxvuln = -1;
+int predeal_compass = -1 ;   /* global variable for predeal communication */
+int shapeno = 0;
 int use_compass[NSEATS] = {0,0,0,0};
 int use_vulnerable[NVULS] ;
 int use_side[2] = {0,0};     /* for opc so we dont call DOP for both sides if only one side needed */
