@@ -131,8 +131,8 @@ struct var    *vars = 0 ;
 int will_print = 0;
 int maxdealer = 0;
 int maxvuln = -1;
-int predeal_compass = -1 ;   /* global variable for predeal communication */
-int shapeno = 0;
+int predeal_compass = -1 ;    /* global variable for predeal communication */
+int shapeno = 0;              /* Count number of shape statements. 0-31. Defines bit in bit mask */
 int use_compass[NSEATS] = {0,0,0,0};
 int use_vulnerable[NVULS] ;
 int use_side[2] = {0,0};     /* for opc so we dont call DOP for both sides if only one side needed */
