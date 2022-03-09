@@ -34,7 +34,7 @@ allheaders :
 	touch ../include/allheaders.h
 
 clean:
-	rm -f ${OBJS} ${LOBJ} ${YOBJ} *.gch
+	rm -f ${OBJS} ${LOBJ} ${YOBJ} *.gch ../include/*.gch
 
 showme:
 	@echo DestDir = $(DESTDIR) JGMDBG = $(JGMDBG)

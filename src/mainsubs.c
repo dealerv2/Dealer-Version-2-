@@ -1,5 +1,6 @@
 /* File dealmain_subs.c JGM 2022-Feb-17  */
-// 2022-02-07 Expanding Options with -X and -0 thru -9
+/* 2022-02-07 Expanding Options with -X and -0 thru -9 */
+/* 2022-03-07 Fine tune Debug levels */
 /* This file should not be compiled independently. #inlcude it in dealjgm.c */
 #if 1                            /* change to  when not testing */
 #include "../include/std_hdrs.h"  /* all the stdio.h stdlib.h string.h assert.h etc. */
@@ -35,7 +36,7 @@ long int init_rand48( long int seed ) {
     seed48(su.sss) ;   /* ignore seed48 return value of pointer to internal buffer */
     u_seed48 = (long int)su.sss[0] + (long int)su.sss[1]*two16 + (long int)su.sss[2]*two32;
 #ifdef JGMDBG
-     if (jgmDebug > 0 ) {
+     if (jgmDebug >= 1 ) {
          fprintf(stderr, "No Seed Provided. DONE Initializing RNG init_rand48, %d, %d, %d, %ld\n",
                 su.sss[0], su.sss[1], su.sss[2], u_seed48);
      }
@@ -188,7 +189,7 @@ int get_options (int argc, char *argv[], struct options_st *opts) {
         if (opts->title_len > 0  ) { printf("Title: %s\n", opts->title); }
         printf ("Version info....\n");
         printf ("Revision: %s \n", VERSION );
-        printf ("Date: 2022/02/17 \n");
+        printf ("Date: 2022/03/07 \n");
         printf ("$Author: Hans, Henk, JGM $\n");
         #ifdef JGMDBG
           printf("JGMDBG is defined. Debugging printing to stderr is active\n");

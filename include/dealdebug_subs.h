@@ -1,3 +1,5 @@
+#ifndef DEALDBG_SUBS_H
+#define DEALDBG_SUBS_H
 extern void dump_curdeal(deal dl);
 extern void hexdeal_show(deal dlx );
 extern void sr_deal_show(deal dlx );
@@ -8,3 +10,6 @@ extern void showvarlist(struct var *v ) ;
 extern void showdecisiontree(struct tree *t);
 extern void showactionexpr( struct action *acp ) ;
 extern void showactionlist(struct action *a );
+extern void showdistrbits(int ***distrbitmaps[14] ) ;
+#endif
+

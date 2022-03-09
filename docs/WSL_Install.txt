@@ -1,0 +1,28 @@
+I have successfully executed dealerv2 at my windows pc following this process
+
+1: Open a command prompt in administrator mode
+2: Execute wsl --install
+3: Restart computer - after restart windows will install Linux
+4: Enter name and password of your own choice and close that window
+5: Open a command prompt and switch to the directory where you want your input files
+6: Type bash and enter and you will now start Linux
+7: Enter sudo git clone https://github.com/dealerv2/Dealer-Version-2-.git (You will have to enter your password)
+8 Execute command:
+    sudo apt-get install libgomp1
+
+9: switch to the downloaded repository
+
+cd Dealer-Version-2-/Prod
+
+10: type
+./dealerv2
+
+Now enter the input to dealer and end it with a blank line and press Ctrl D
+
+Now you should get the output from dealer
+
+Step 8 is needed but following these instructions you won't need to build the application, and thus won't need the different developer tools
+
+Best regards
+
+Thorvald

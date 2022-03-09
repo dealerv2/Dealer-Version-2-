@@ -8,6 +8,7 @@
 //         2.0.7  Export code added. -X option processing.
 //         2.0.8  CSVRPT code added. -C option processing.
 //         2.0.9  seed in input file code added.
+//         2.1.0  Francois Dellacherie shapes added to Dealer input file. Use external program to exapand
 //
 #ifndef _GNU_SOURCE
   #define _GNU_SOURCE
@@ -131,11 +132,15 @@ int main (int argc, char **argv) {
     /* Expression List is only used by the printes action. Prob Not necessary to show it. */
     showdecisiontree(decisiontree);
     showvarlist(vars);  fprintf(stderr, "\nVARLIST DONE \n");
-    showactionlist(actionlist);
+    showactionlist(actionlist); fprintf(stderr, "\nACTION List DONE \n");
+    if (jgmDebug >= 4) {
+        showdistrbits(distrbitmaps) ; fprintf(stderr, "\nDistr Bit Maps DONE \n");
+    }
     fprintf(stderr, "\n-----------------------\n");
   } /* end if jgmDebug */
 #endif
   /* Vers 2.0.9 -- the seed could come from input file or from cmd line -- move initprogram to before RNG init */
+  /* Vers 2.1.0 -- Added Francois shapes to Descr file. Expanded by his Perl program */
 
   initprogram(opts);  /* here we will over-ride yyparse if reqd from cmd line and do other stuff. */
 
@@ -155,7 +160,7 @@ int main (int argc, char **argv) {
   if (maxgenerate == 0) maxgenerate = 10000000;
   if (maxproduce == 0)  maxproduce = ((actionlist == &defaultaction) || will_print) ? 40 : maxgenerate;
 #ifdef JGMDBG
-  if (jgmDebug > 2) { fprintf(stdout, "Maxgenerate=%d, Maxproduce=%d, Calling setup_action \n", maxgenerate, maxproduce ); }
+  if (jgmDebug >= 2) { fprintf(stderr, "Maxgenerate=%d, Maxproduce=%d, Calling setup_action \n", maxgenerate, maxproduce ); }
 #endif
   setup_action();
 
@@ -165,21 +170,20 @@ int main (int argc, char **argv) {
   /* ----------- Begin the Main Loop ------------*/
   for (ngen = 1, nprod = 0; ngen <= maxgenerate && nprod < maxproduce; ngen++) { /* start ngen at 1; simplifies counting */
       treedepth = 0;
-      if (jgmDebug >= 5)
+      if (jgmDebug >= 8 )
             DBGPRT("In Main Generating Hands: ngen=",ngen," Calling Shuffle");
       shuffle (curdeal);
       #ifdef JGMDBG
-        if (jgmDebug >= 5) {  sr_deal_show(curdeal); }
+        if (jgmDebug >= 9) {  sr_deal_show(curdeal); }
       #endif
-
           analyze (curdeal, hs);  // Collect and save all info that will be needed by eval_tree() aka interesting() */
    #ifdef JGMDBG
-      if (jgmDebug >= 5 ) { fprintf(stderr, "Main.164:: Calling Interesting for ngen=%d \n", ngen);  }
+      if (jgmDebug >= 8 ) { fprintf(stderr, "Main.164:: Calling Interesting for ngen=%d \n", ngen);  }
    #endif
       keephand = interesting() ;  /* will showtree if in DBG mode */
       showtree = 0 ;              /*in debug mode only need to show the tree once; its the same for all hands */
       if (keephand) {             /* evaltree returns TRUE for the condition user specified */
-           if (jgmDebug >= 5 ) { DBGPRT("Interesting returns true at line ", __LINE__ , "Calling Action() now."); }
+           if (jgmDebug >= 8 ) { DBGPRT("Interesting returns true at line ", __LINE__ , "Calling Action() now."); }
           action();                        /* Do action list */
           nprod++;
           if (progressmeter) {
@@ -189,7 +193,7 @@ int main (int argc, char **argv) {
           } /* end progress meter */
       }   /* end keephand */
       #ifdef JGMDBG
-        else { if ( jgmDebug >= 5 ) { fprintf(stderr, "Generated Hand %d is NOT interesting .. skipping actions \n",ngen) ; }
+        else { if ( jgmDebug >= 9) { fprintf(stderr, "Generated Hand %d is NOT interesting .. skipping actions \n",ngen) ; }
         }
       #endif
    }  /* end for ngen */

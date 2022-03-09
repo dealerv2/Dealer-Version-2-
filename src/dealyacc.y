@@ -631,9 +631,9 @@ void insertshape(char s[4], int any, int neg_shape) {
                 if (ccount!=13)
                         yyerror( "wrong number of cards in shape");
                 for (p=0; p<(any? 24 : 1); p++)
-                        setshapebit(s[perm[p][3]]-'0', s[perm[p][2]]-'0',
-                                s[perm[p][1]]-'0', s[perm[p][0]]-'0',
-                                1<<shapeno, neg_shape);
+                   setshapebit(s[perm[p][3]]-'0', s[perm[p][2]]-'0', /* we call setshape with C,D,H,S but s is S,H,D,C */
+                               s[perm[p][1]]-'0', s[perm[p][0]]-'0',
+                               1<<shapeno, neg_shape);
                 break;
         default:
                 if (ccount>13)

@@ -232,3 +232,21 @@ void showactionlist(struct action *a ) {
 
 } /* end showactionlist */
 
+void showdistrbits ( int ***distrbitmaps[14] ) {
+   int c,d,h,s ;
+   int dist_val ;
+   fprintf(stderr, "Max Shapeno =[%d], Max Shapebit=[%08X] \n", (shapeno-1), (1<<(shapeno-1) ) ) ;
+   for (c = 0 ; c <=13 ; c++ ) {
+      for (d = 0 ; d <= 13 - c ; d++ ) {
+         for ( h = 0 ; h <= 13 - d - c ; h++ ) {
+            s = 13 -h - d - c ;
+            dist_val = distrbitmaps[c][d][h][s] ;
+            if ( dist_val != 0 ) {
+               fprintf(stderr, "Shape[%x%x%x%x] => %04x \n",s,h,d,c,dist_val ) ;
+            }
+         } /* end for h */
+      } /* end for d */
+   } /* end for c */
+   return ;
+}  /* end show distrbitmaps */
+

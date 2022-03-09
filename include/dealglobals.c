@@ -1,5 +1,6 @@
 /* This is file dealglobals.c -- defines global vars and allocates storage for them  */
 /* Uses types, tags, and symbolic constants defined in other header files */
+/* 2022-02-27 -- Mods for Francois Dellacherie enhanced shapes */
 #ifndef DEALGLOBALS_C
 #define DEALGLOBALS_C
 #ifndef _GNU_SOURCE
@@ -19,12 +20,17 @@ char suitid[5][3]   = {"C:", "D:", "H:", "S:", "N:"};
 char side_seat[2][2]= { {'N','S'} , {'E','W'} };
 int  side_hand[2][2]= { { 0 , 2 } , { 1 , 3 } } ;
 
-/* Global variables */
+/* JGM Added Global variables */
 struct options_st options = {0};             /* Cmd line will set these. Will override values from input file if set */
 struct param_st parm ;
 int    csv_firsthand = COMPASS_NORTH ;
 char   csv_trixbuff[64] ; // room for 20 * (2digits + comma) and a bit extra
 size_t csv_trixbuff_len ;
+//struct fd_shape_st fd_shapes ;  // Francois Dellacherie shapes
+//char fd_cmd[16] = "./fdp ' ";
+//char fd_cmd_buff[256] = "./fdp ' ";
+
+
 /* for CCCC */
 struct context c;
 /* original cmd line switches -- many also appear in a yyparse action clause. --   would be nicer to put these all in a struct */

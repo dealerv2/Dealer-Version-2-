@@ -1,6 +1,7 @@
 /* File dealeval_subs.c  JGM 2022-Feb-15
  *  2021-11-25 -- Removing refs to library file and Francois, and Microsoft */
 /*  2022-01-10  JGM  Adding code for OPC trees */
+/*  2022-03-07  JGM  Fine tune debug levels */
 #ifndef _GNU_SOURCE
   #define _GNU_SOURCE
 #endif
@@ -82,7 +83,7 @@ int shuffle (deal d) {   /* Algorithm per Knuth */
   card t;
   /* JGM deleted a bunch of code referring to loading from library which was (a) Windows and (b) library not found anymore*/
 #ifdef JGMDBG
-    if (jgmDebug >= 6 ) {
+    if (jgmDebug >= 8 ) {
         fprintf(stderr, "In Shuffle:: Swapping=%d, Swapindex=[%d] \n",swapping, swapindex );
     }
 #endif
@@ -118,7 +119,7 @@ int shuffle (deal d) {   /* Algorithm per Knuth */
 
             r1 = CARD_RANK(d[i]) ; r2 = CARD_RANK(d[j]) ;
             s1 = CARD_SUIT(d[i]) ; s2 = CARD_SUIT(d[j]) ;
-            if (jgmDebug >= 8 ) {
+            if (jgmDebug >= 9 ) {
                 fprintf(stderr, "Shuffle: switch slots %i=[%02x:%c%c] and %i=[%02x:%c%c]\n",
                        i,d[i],strain_id[s1],card_id[r1],j,d[j],strain_id[s2],card_id[r2]);
              }
@@ -133,7 +134,7 @@ int shuffle (deal d) {   /* Algorithm per Knuth */
     if ((swapping == 2 && swapindex > 1) || (swapping == 3 && swapindex > 5))
       swapindex = 0;  /* reset to zero so we gen a new random deal next time */
 #ifdef JGMDBG
-    if (jgmDebug >= 7 ) {
+    if (jgmDebug >= 8 ) {
         fprintf(stderr, "In Shuffle::Done Shuffle or Swap NewSwapindex=[%d] Swapping=%d \n", swapindex, swapping );
     }
 #endif
@@ -231,8 +232,7 @@ void initprogram ( struct options_st *opt_ptr) {
     }
     #ifdef JGMDBG
         if (jgmDebug >= 4 ) {
-               fprintf(stderr, "NewTitle=[%s], NewTitleLen=[%ld]\nCmdlineTitle=[%s],CmdLineTitleLen=[%ld]\n",
-                        title, title_len, opt_ptr->title, opt_ptr->title_len ) ;
+               fprintf(stderr, "New Seed[%ld],Cmdline seed[%ld]\n", seed, opt_ptr->seed ) ;
         }
     #endif
 
@@ -247,7 +247,7 @@ void initprogram ( struct options_st *opt_ptr) {
         }
       } /* end if checking the lengths for predeal */
       #ifdef JGMDBG
-         if (jgmDebug >=5 ) {
+         if (jgmDebug >=4 ) {
             fprintf(stderr, "init_program.244:: Predeal check, FullPack then StackedPack\n");
             sr_deal_show(fullpack);
             sr_deal_show(stacked_pack);
@@ -262,7 +262,7 @@ void initprogram ( struct options_st *opt_ptr) {
 
     ZeroCache(&dds_res_bin) ; /* dds_res_bin is a global struct holding tricks for 20 combos of leader and strain */
 #ifdef JGMDBG
-   if(jgmDebug >= 3) {
+   if(jgmDebug >= 4) {
       fprintf(stderr, "Done initprogram.260 dds_mode=%d, Dbg_Verbosity=%d, vers=%s\n", dds_mode, jgmDebug, VERSION ) ;
    }
 #endif
@@ -278,7 +278,7 @@ void initdistr () {
   int ***p4, **p3, *p2;
   int clubs, diamonds, hearts;
 
-  /* Allocate the four dimensional pointer array */
+  /* Allocate the four dimensional pointer array. calloc will set it to zero. */
 
   for (clubs = 0; clubs <= 13; clubs++) {
     p4 = (int ***) mycalloc ((unsigned) 14 - clubs, sizeof (*p4));
@@ -319,7 +319,7 @@ void upd_topcards(struct handstat *hs, int suit,int  rank) {
   weight = CardAttr_RO[idxLTCwts][rank];
 
 #ifdef JGMDBG
-   if (jgmDebug >= 7 ) {
+   if (jgmDebug >= 9 ) {
     fprintf(stderr, "debug: upd_topcards:: suit=%i  rank=%i  weight=%i  \n", suit, rank, weight);
    }
 #endif
@@ -337,7 +337,7 @@ void upd_topcards(struct handstat *hs, int suit,int  rank) {
   else if (hs->topcards[suit][2] < weight) {hs->topcards[suit][2]= weight; }
 
   #ifdef JGMDBG
-     if (jgmDebug >= 8 ) {
+     if (jgmDebug >= 9 ) {
     fprintf(stderr,"Top Cards Weights=%d, %d, %d\n",hs->topcards[suit][0],hs->topcards[suit][1],hs->topcards[suit][2]);
    }
   #endif
@@ -352,7 +352,7 @@ int countltc( struct handstat *hs) {
   for (s=SUIT_CLUB; s<=SUIT_SPADE; s++) {
     ltc_weight = hs->topcards[s][0] + hs->topcards[s][1] + hs->topcards[s][2];
     #ifdef JGMDBG
-        if (jgmDebug >= 7 ) {
+        if (jgmDebug >= 9 ) {
           fprintf(stderr, "debug: countltc:: SUIT=%i, hs->topcards=%i  %i  %i Tot Weight=%d\n",
                             s, hs->topcards[s][0], hs->topcards[s][1], hs->topcards[s][2], ltc_weight);
         }
@@ -424,7 +424,7 @@ int countltc( struct handstat *hs) {
     hs->hs_loser[s] = losers_suit ;
     hs->hs_totalloser += losers_suit ;
     #ifdef JGMDBG
-      if ( jgmDebug >= 7 ) {
+      if ( jgmDebug >= 9 ) {
         fprintf(stderr, "countltc::  For Suit#[%d]:: suit ltc= %d  totalltc=%i\n",s, ltc_suit, hs->hs_totalltc);
         fprintf(stderr, "countltc::                 Old Losers=%d  TotalLosers=%d\n", losers_suit,  hs->hs_totalloser);
       }
@@ -436,7 +436,7 @@ int countltc( struct handstat *hs) {
 void analyze (deal d, struct handstat *hsbase) {  /* populate the handstat structures for later use by eval routines */
    /* Analyze a hand. Since this function is called on EVERY deal only those aspects of a hand that are:
     * 1) Relatively quick to generate and 2) very likely to be used should be done here.
-    * Metrics that are slow (opc, tricks, dds, ) or infrequently used (maybe ltc?) should not be done here.
+    * Metrics that are slow (opc, tricks, dds, par, evalcontract ) or infrequently used (maybe ltc?) should not be done here.
     */
   /*  Modified by HU to count controls and losers. */
   /* Further mod by AM to count several alternate pointcounts too  */
@@ -447,17 +447,17 @@ void analyze (deal d, struct handstat *hsbase) {  /* populate the handstat struc
   struct handstat *hs;
 
   #ifdef JGMDBG
-    if(jgmDebug >= 5) {    fprintf(stderr, "Analyze.436 Analyzing Current Deal for ngen=%d, jgmDebug=%d\n", ngen, jgmDebug); }
-    if(jgmDebug >= 8) {    dump_curdeal(d); }
+    if(jgmDebug >= 7) {    fprintf(stderr, "Analyze.436 Analyzing Current Deal for ngen=%d, jgmDebug=%d\n", ngen, jgmDebug); }
+    if(jgmDebug >= 9) {    dump_curdeal(d); }
   #endif
 
   /* for each player loop runs from here to line 547*/
   for (player = COMPASS_NORTH; player <= COMPASS_WEST; ++player) {
     /* If the expressions in the input never mention a player we do not calculate his hand statistics. */
-        if(jgmDebug >= 6) { DBGPRT( "Doing Handstat for player=", player, "in analyze before memset stuff "); }
+        if(jgmDebug >= 7) { DBGPRT( "Doing Handstat for player=", player, "in analyze before memset stuff "); }
        //printf( "Doing Handstat for player=%d in analyze before debug memset stuff\n", player);
     if (use_compass[player] == 0) { /* skip players that did not appear in input file */
-                                    /* JGM: if one of NS is need so is the other. Ditto EW */
+                                    /* JGM: some side functions set both players for the side */
         #ifdef JGMDBG
             /* In debug mode, blast the UNUSED handstat, so that we can recognize it */
              /*   as garbage should if we accidently read from it
@@ -466,7 +466,7 @@ void analyze (deal d, struct handstat *hsbase) {  /* populate the handstat struc
             hs = hsbase + player;  /* player is unused here. blasting memory we should not be accessing */
             memset (hs, 0xDF, sizeof (struct handstat));
         #endif /* JGMDBG */
-         if(jgmDebug >= 7) { DBGPRT( "Skipping Unused player=", player, "in analyze after memset stuff"); }
+         if(jgmDebug >= 8) { DBGPRT( "Skipping Unused player=", player, "in analyze after memset stuff"); }
         continue;  /* skip the rest of the "for player" loop lines 440 - 540 */
     } /* end if use_compass */
 
@@ -477,9 +477,9 @@ void analyze (deal d, struct handstat *hsbase) {  /* populate the handstat struc
      /* start from the first card for this player, and walk through them all -
        use the player offset to jump to the first card.  Can't just increment through the deck, because
        we skip those players who are not part of the analysis.
-       JGM has added code so that if side NS is asked for, both compasses set; ditto for EW
+       JGM has added code so that if SIDE  NS is asked for, both compasses set; ditto for EW
     */
-     if(jgmDebug >= 7) { DBGPRT("Analyze.467:Debugging player Number", player, "in Analyze after memset and init_tops"  ); }
+     if(jgmDebug >= 8) { DBGPRT("Analyze.467:Debugging player Number", player, "in Analyze after memset and init_tops"  ); }
     next = 13 * player;
     for (c = 0; c < 13; c++) {  /* 13 cards in player's hand */
       curcard = d[next++];
@@ -526,7 +526,7 @@ void analyze (deal d, struct handstat *hsbase) {  /* populate the handstat struc
     /* finished the card by card totals */
     countltc(hs); /* calculate the ltc and the loser suit and hand totals */
 #ifdef JGMDBG
-     if(jgmDebug >= 7) {
+     if(jgmDebug >= 8) {
             DBGPRT("HCP for hand",hs->hs_totalpoints, player_name[player] );
             DBGPRT("totCounts[idxHcp]=", hs->hs_totalcounts[idxHcp], player_name[player]  );
      }
@@ -537,8 +537,10 @@ void analyze (deal d, struct handstat *hsbase) {  /* populate the handstat struc
                                  [hs->hs_length[SUIT_HEART]]
                                  [hs->hs_length[SUIT_SPADE]];
 #ifdef JGMDBG
-        if(jgmDebug >= 7 ) {
-         fprintf(stderr, "HS Distr Bits = %04X : [%d] \n", hs->hs_bits, hs->hs_bits );
+        if(jgmDebug >= 8 ) {
+         fprintf(stderr, "HS Distr Bits for %c= %04X : [%d] \n", "nesw"[player], hs->hs_bits, hs->hs_bits );
+        }
+        if(jgmDebug >= 9 ) {
          fprintf(stderr, "Losers[C,D,H,S,Tot]:%d, %d, %d, %d, = %d\n",
             hs->hs_loser[0],hs->hs_loser[1],hs->hs_loser[2],hs->hs_loser[3],hs->hs_totalloser);
          fprintf(stderr, "Controls[C,D,H,S, Tot]:%d, %d, %d, %d, = %d\n",
@@ -704,7 +706,7 @@ int evaltree (struct tree *t) {                 /* walk thru the user's request 
       assert (t->tr_int1 >= COMPASS_NORTH && t->tr_int1 <= COMPASS_WEST);
       assert (t->tr_int2 >= SUIT_CLUB && t->tr_int2 <= 1 + SUIT_SPADE);  // could make this SUIT_NT here.
 #ifdef JGMDBG
-      if (jgmDebug >= 5 ) {fprintf(stderr, "evaltree.693 calling GIB dd \n"); }
+      if (jgmDebug >= 7 ) {fprintf(stderr, "evaltree.693 calling GIB dd \n"); }
 #endif
       return dd (curdeal, t->tr_int1, t->tr_int2);
     case TRT_SCORE:      /* vul/non_vul, contract, tricks in leaf1 */
@@ -728,7 +730,7 @@ int evaltree (struct tree *t) {                 /* walk thru the user's request 
       assert (t->tr_int1 >= COMPASS_NORTH && t->tr_int1 <= COMPASS_WEST);
       assert (t->tr_int2 >= SUIT_CLUB && t->tr_int2 <= 1 + SUIT_SPADE);  // could make this SUIT_NT here.
 #ifdef JGMDBG
-      if (jgmDebug >= 5 ) { fprintf(stderr, "evaltree.717 calling DDS dds_tricks; dds_mode=%d \n", dds_mode); }
+      if (jgmDebug >= 7 ) { fprintf(stderr, "evaltree.717 calling DDS dds_tricks; dds_mode=%d \n", dds_mode); }
 #endif
       return dds_tricks (t->tr_int1, t->tr_int2);
     case TRT_PAR:     /* side  */
@@ -750,7 +752,7 @@ int dd (deal d, int l, int c) {        /* l is the compass direction we want tri
     dbg_dd_calls++;
   if (ngen != cached_ngen) {
     #ifdef JGMDBG
-      if (jgmDebug >= 5 ) {fprintf(stderr, "dd calling True DD ngen=%d,, cached_ngen=%d\n",ngen, cached_ngen ) ; }
+      if (jgmDebug >= 8 ) {fprintf(stderr, "dd calling True DD ngen=%d,, cached_ngen=%d\n",ngen, cached_ngen ) ; }
     #endif
       memset (cached_tricks, -1, sizeof (cached_tricks));
       cached_ngen = ngen;
@@ -779,7 +781,7 @@ int true_dd (deal d, int l, int c) {      /* l is the compass direction we want 
     dbg_tdd_calls++;
 
 #ifdef JGMDBG
-    if (jgmDebug >= 6 ) {fprintf(stderr, "IN True DD ngen=%d,tot_TRUE_dd=%d\n",ngen, dbg_tdd_calls ) ; }
+    if (jgmDebug >= 7 ) {fprintf(stderr, "IN True DD ngen=%d,tot_TRUE_dd=%d\n",ngen, dbg_tdd_calls ) ; }
 #endif
 
     tmpnam (tn1);   /* the file we write the deal to, in compact notation 4 lines per deal +1 for leader and strain */
@@ -797,7 +799,7 @@ int true_dd (deal d, int l, int c) {      /* l is the compass direction we want 
     if (f == 0) error ("Can't read output of analysis");
     rc = fscanf (f, "%*[^\n]\n%c", &gib_res);
     #ifdef JGMDBG
-    if (jgmDebug >= 6 )
+    if (jgmDebug >= 7 )
             if ( rc != 0 ) { fprintf(stderr, "rc = %d from fscanf for GIB results\n", rc ) ; }
     #endif
     fclose (f);
@@ -810,7 +812,7 @@ int true_dd (deal d, int l, int c) {      /* l is the compass direction we want 
 
     t = ((l == 1) || (l == 3)) ? 13 - gib_tricks (gib_res) : gib_tricks (gib_res);
    #ifdef JGMDBG
-    if (jgmDebug >= 5 )
+    if (jgmDebug >= 7 )
             fprintf(stderr, "GIB results for hand[%d] strain[%c] Tricks=%d\n", l,"cdhsn"[c],t ) ;
     #endif
     return t ;
@@ -834,7 +836,7 @@ int imps (int scorediff) {
 int undertricks( int utricks, int vul, int dbl_flag) {  // dbl_flag is either 1 (dbled) or 2 (re-dbled)
     int score_res ;
     #ifdef JGMDBG
-    if(jgmDebug >= 5 )
+    if(jgmDebug>= 7 )
         fprintf(stderr, "SCORE_DBL_Undertricks: utricks=%d, vul=%d, dbl_flag=%d\n",utricks, vul, dbl_flag);
     #endif
     if (vul == 1 ) {
@@ -858,7 +860,7 @@ int trickscore(int strain, int tricks ) {  // tricks is total taken; only get pt
   /* NT bonus */
   if (strain == SUIT_NT) score_res += 10;
 #ifdef JGMDBG
-    if(jgmDebug >= 5 )
+    if(jgmDebug >= 7 )
         fprintf(stderr, "SCORE_DBL_trickscore: strain=%d, tricks=%d, score_res=%d\n",strain, tricks, score_res);
 #endif
 
@@ -867,7 +869,7 @@ int trickscore(int strain, int tricks ) {  // tricks is total taken; only get pt
 
 int undbled_score (int vuln, int suit, int level, int tricks) { // handles undertricks, overtricks and just making
 #ifdef JGMDBG
-    if(jgmDebug >= 5 )
+    if(jgmDebug>= 7 )
         fprintf(stderr, "undbled_SCORE: vul=%d,suit=%d,level=%d, tricks=%d\n",vuln, suit, level, tricks);
 #endif
 
@@ -905,7 +907,7 @@ int undbled_score (int vuln, int suit, int level, int tricks) { // handles under
 
 int dbled_making ( int dbl_flag, int vul, int strain, int ctricks) { // score for making  dbled or redbled contract exactly
     #ifdef JGMDBG
-    if(jgmDebug >= 5 )
+    if(jgmDebug >= 7 )
         fprintf(stderr, "SCORE_DBL_making: ctricks=%d, strain=%d, vul=%d, dbl_flag=%d\n",ctricks, strain, vul, dbl_flag);
     #endif
     int t0;
@@ -915,12 +917,12 @@ int dbled_making ( int dbl_flag, int vul, int strain, int ctricks) { // score fo
     if (dbl_flag == 1 ) t0 += t0 ;
     else                t0 = t0 * 4 ; // Redoubled
     score_res = t0 ;
-     if(jgmDebug > 4) { DBGPRT("trick score =  ",score_res, "" ); }
+     if(jgmDebug >= 7) { DBGPRT("trick score =  ",score_res, "" ); }
     // Game and Slam Bonuses do not get x2; and you must bid 6 to get slam
 
     if ( t0 >= 100 ) {  // game bonus
         score_res += 300 + vul*200 ;
-     if(jgmDebug > 4) {    DBGPRT("+game Bonus= ",score_res,"" ); }
+     if(jgmDebug >= 7) {    DBGPRT("+game Bonus= ",score_res,"" ); }
     }
     else {  // part_score bonus
         score_res += 50 ;
@@ -933,7 +935,7 @@ int dbled_making ( int dbl_flag, int vul, int strain, int ctricks) { // score fo
     if ( ctricks == 13 ) { // Grand Slam bonus
         score_res += 1000 + 500*vul ;
      }
-     if(jgmDebug > 4) { DBGPRT("returning  DBL/RDBL making score= ", score_res, "" ); }
+     if(jgmDebug >= 7) { DBGPRT("returning  DBL/RDBL making score= ", score_res, "" ); }
     return score_res ;
 } /* end dbled_making */
 
@@ -948,32 +950,32 @@ int score(int vul, int coded_contract, int tricks ) {
     level  = t0 / 5 ;                // 1 - 7
     ctricks = 6 + level ;           /* number of tricks contracted for */
     #ifdef JGMDBG
-      if(jgmDebug >= 5 )
+      if(jgmDebug >= 7 )
         fprintf(stderr, "NEW_SCORE:: CodedContract=%d, DBLFLG=%d, Strain=%d, Level=%d\n",coded_contract,dbl_flag,strain,level);
     #endif
     if (dbl_flag == 0 ) {   /* undoubled use simple score function */
-        if(jgmDebug > 4) { DBGPRT("SCORE_DBL:: Calling undbled_score-- ctricks =",ctricks,""); }
+        if(jgmDebug >= 7) { DBGPRT("SCORE_DBL:: Calling undbled_score-- ctricks =",ctricks,""); }
        return undbled_score( vul, strain,  level,  tricks) ;
     }
     assert (dbl_flag ==1 || dbl_flag == 2 ) ;
 
     if ( ctricks > tricks ) {  /* contract went down */
        score_res = undertricks( (ctricks - tricks), vul, dbl_flag) ;
-       if(jgmDebug > 4) { DBGPRT("NEW_SCORE_DBL::Returning UnderScore=",score_res,""); }
+       if(jgmDebug >= 7) { DBGPRT("NEW_SCORE_DBL::Returning UnderScore=",score_res,""); }
        return score_res ;
     }
     score_res = dbled_making(dbl_flag, vul, strain, ctricks);  // includes, partscore/game/slam & insult bonus for DBL or RDBL
-    if(jgmDebug > 4) { DBGPRT("NEW_SCORE_DBL:: Making",score_res,""); }
+    if(jgmDebug >= 7) { DBGPRT("NEW_SCORE_DBL:: Making",score_res,""); }
     if ( ctricks == tricks ) { /* contract made; no overtricks */
        return score_res ;
     }
         /* Contract made with overtricks. Add the Overtricks bonus to the making score */
     t1 = tricks - ctricks ;
-    if(jgmDebug > 4) { DBGPRT("SCORE_DBL:: Overtricks= ",t1, ""); }
+    if(jgmDebug >= 7) { DBGPRT("SCORE_DBL:: Overtricks= ",t1, ""); }
     t0 = t1*100*(1+vul); // NV dbled is 100/trick, Vul Dbled is 200/trick
     t0 = t0*dbl_flag ; // RDBL OT are 2x DBL OT.
     score_res += t0 ;
-     if(jgmDebug > 4) { DBGPRT("SCORE_DBL:: Final result for +ve DBLed contract = ",score_res,""); }
+     if(jgmDebug >= 7) { DBGPRT("SCORE_DBL:: Final result for +ve DBLed contract = ",score_res,""); }
     return score_res ;
 } /* end score */
 
@@ -1029,10 +1031,10 @@ char *Hand52_to_buff ( char *buff,  int p, deal dl ) {
            *bp++ = r_ids[card_rank];
            count++; di++;
            #ifdef JGMDBG
-              if (jgmDebug >= 8 ) { fprintf(stderr," Num[%d]=%c%c ", count, "CDHS"[curr_suit], *(bp-1) ) ; }
+              if (jgmDebug >= 9 ) { fprintf(stderr," Num[%d]=%c%c ", count, "CDHS"[curr_suit], *(bp-1) ) ; }
            #endif
         }
-        if (jgmDebug >= 8 ) { fprintf(stderr,"\n"); }
+        if (jgmDebug >= 9 ) { fprintf(stderr,"\n"); }
        *bp++ = suit_sep;
         curr_suit-- ; /* Move to next suit */
     } /* end while count < 13 -- line 957*/
@@ -1067,7 +1069,7 @@ char *fmt_side(char *buff , int side, deal dl ) {
 #ifdef JGMDBG
   if ( jgmDebug >= 7 ) fprintf(stderr,"Format Side:: bp=%p \n", bp ) ;
   if ( jgmDebug >= 8 ) { fprintf( stderr, "fmt_side Hand=%c,%d %p\n", side_hands[side*2], h, bp ) ; }
-  if ( jgmDebug >= 8 ) sr_hand_show(h, dl) ;
+  if ( jgmDebug >= 9 ) sr_hand_show(h, dl) ;
 #endif
   sortHand( (dl + h*13) , 13 ) ;
   bp = Hand52_to_buff(bp, h, dl) ; // [-E xxx/xxxx/xxx/xxx]
@@ -1106,8 +1108,8 @@ char *fmt_opc_cmd_buff( char *buff , int side , deal dl ) {
   *bp++ = '-' ; *bp++ = 'q' ; *bp++ = ' '; *bp = '\0' ;
   // buff = "/usr/local/bin/DOP/dop  -OW -W xxxx/xxx/xxx/xxx  -E xx/xxxxx/xxx/xxx -q "
 #ifdef JGMDBG
-  if (jgmDebug >= 6 ) { fprintf(stderr, "FMT_OPC_CMD::[%s]\n", buff ) ; }
-  if (jgmDebug >= 6 ) { fprintf(stderr, "fmt_cmd_buff bp = %p \n", bp ) ; }
+  if (jgmDebug >= 8 ) { fprintf(stderr, "FMT_OPC_CMD::[%s]\n", buff ) ; }
+  if (jgmDebug >= 8 ) { fprintf(stderr, "fmt_cmd_buff bp = %p \n", bp ) ; }
 #endif
 
   return bp ;  /* bp points to end of buffer, so we can append rest of cmd to it */
@@ -1127,10 +1129,10 @@ int get_opc_vals (struct opc_Vals_st *opcRes, char *cmd_buff ) {
                         &opcRes->DOP[0], &opcRes->DOP[1], &opcRes->DOP[2], &opcRes->DOP[3], &opcRes->DOP[4], &opcRes->DOP_long );
     opcRes->fields += fscanf(fp, " %5f %5f", &opcRes->QL_suit, &opcRes->QL_nt );
 #ifdef JGMDBG
-    if (jgmDebug >= 6 ) {
+    if (jgmDebug >= 7 ) {
         fprintf(stderr, "DOP fscanf Calls return fields=%d\n",opcRes->fields);
     }
-    if (jgmDebug >= 4 ) {
+    if (jgmDebug >= 8 ) {
         int i ;
         fprintf(stderr, "GET_opc_vals:: \n    ");
         for (i=0; i<5 ; i++ ) { fprintf(stderr, "DOP[%d] = %5.2f ", i, opcRes->DOP[i] ) ; }
@@ -1151,14 +1153,14 @@ int opc_value(int side, int strain, struct tree *t ) {
    int s, opcval ;
    dbg_opc_calls++;
    #ifdef JGMDBG
-     if (jgmDebug >= 4 ) {
+     if (jgmDebug >= 7 ) {
          fprintf(stderr, "OPC_VALUE.1141::side=%d,strain=%d,opcCalls=%d,ngen=%d,opc_dealnum=%d\n",
                         side, strain, dbg_opc_calls, ngen, opc_dealnum ) ;
     }
    #endif
    if (opc_dealnum != ngen ) { // the cache for both sides is out of date
    #ifdef JGMDBG
-      if (jgmDebug >= 5 ) {
+      if (jgmDebug >= 8 ) {
          fprintf(stderr, "OPC_VALUE.1147:: cache is out of date. ngen=%d, opcDealnum=%d\n", ngen, opc_dealnum);
       }
    #endif
@@ -1168,7 +1170,7 @@ int opc_value(int side, int strain, struct tree *t ) {
    }
    else if (ss[side].ss_cached == 1 ) {  // the cache for the current side is OK.
    #ifdef JGMDBG
-      if (jgmDebug >= 5 ) {
+      if (jgmDebug >= 8 ) {
          fprintf(stderr, "OPC_VALUE.1158::cache is OK. side=%d,strain=%d, Long=[%d], NT=[%d]\n",
                            side, strain, ss[side].ss_opc_hldf_l,ss[side].ss_opc_hlf_nt ) ;
          for (s=0;s<4;s++){fprintf(stderr, "[%d]=[%d], ",s,ss[side].ss_opc_hldf[s] ) ; } fprintf(stderr, "\n");
@@ -1190,7 +1192,7 @@ int opc_value(int side, int strain, struct tree *t ) {
    fmt_opc_cmd_buff(opc_cmd_buff, side, curdeal ) ;
    get_opc_vals(&opcRes, opc_cmd_buff );
 #ifdef JGMDBG
-   if (jgmDebug >= 4) show_opcRes(&opcRes) ;
+   if (jgmDebug >= 7) show_opcRes(&opcRes) ;
 #endif
    ss[side].ss_quick_losers_suit = (int) (opcRes.QL_suit  * 100 ) ;
    ss[side].ss_quick_losers_nt =   (int) (opcRes.QL_nt    * 100 ) ;
@@ -1206,7 +1208,7 @@ int opc_value(int side, int strain, struct tree *t ) {
    else if ( strain == 4 ) {   opcval= ss[side].ss_opc_hlf_nt       ; }
    else                    {   opcval= ss[side].ss_opc_hldf[strain] ; }
 #ifdef JGMDBG
-   if (jgmDebug >= 4)
+   if (jgmDebug >= 7)
       fprintf(stderr, "opc_val.1196:: Returning opc_val for side=%d, strain=%d, val=%d ", side, strain, opcval );
 #endif
    return opcval ;

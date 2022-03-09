@@ -1,4 +1,5 @@
  /* File dealgbls.h  2021-09-17 ;;;JGM  This file is the extern defs for the stuff in dealglbls.c */
+ /* 2022-02-27 -- Mods for Francois Dellacherie enhanced shapes */
 #ifndef DEALEXTERNS_H
 #define DEALEXTERNS_H
 #ifndef _GNU_SOURCE
@@ -68,6 +69,9 @@
  extern int predeal_compass;            /* global var for predeal communication */
  extern struct contract_st contract;
  extern struct param_st parm ;         /* for script parameters $0 thru $9 */
+ //extern struct fd_shape_st fd_shapes ;  // Francois Dellacherie shapes
+ //extern char fd_cmd[16] ;
+// extern char fd_cmd_buff[256];
 
  extern struct tree    defaulttree ;
  extern struct tree   *decisiontree ;

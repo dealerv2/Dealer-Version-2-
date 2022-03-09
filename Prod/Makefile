@@ -30,6 +30,10 @@ allheaders :
 
 clean:
 	rm -f ${OBJS} ${LOBJ} ${YOBJ} *.gch
+install:
+	if [[  ! -d /usr/local/bin/Dealer  ]] ; then mkdir /usr/local/bin/Dealer ; else echo Dealer exists ; fi
+	cp -pR ../Prod/* /usr/local/bin/Dealer
+	chmod -R 555 /usr/local/bin/Dealer/*
 
 showme:
 	@echo DestDir = $(DESTDIR) JGMDBG = $(JGMDBG) PROGRAM = $(PROGRAM)

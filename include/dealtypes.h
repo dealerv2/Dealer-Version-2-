@@ -1,5 +1,6 @@
 /* File dealtypes.h -- by :JGM:   2021 version Typedefs and Structures Templates*/
 /* 2021-12-28 -- Added some types for IF between dds and dealer */
+/* 2022-02-27 -- Mods for Francois Dellacherie enhanced shapes */
 #ifndef DEALTYPES_H
 #define DEALTYPES_H 1
 #ifndef _GNU_SOURCE
@@ -65,6 +66,12 @@ struct csvterm_st {
       struct csvterm_st     *next;      /* Pointer to next csv_term */
 }; /* end csv_term_st */
 
+#define FD_SHAPE_LEN 2046
+struct fd_shape_st {
+   size_t shape_len ;
+   char fd_shape_str[2048];  // two more than FD_SHAPE_LEN because Flex needs TWO nulls at end of string buffer.
+                             // testing: shape{north, 5+Mxxx:h>=c,h>=d } gives an output of 1173 chars 167 shapes
+} ;
 
 /*
  * Actions to be taken

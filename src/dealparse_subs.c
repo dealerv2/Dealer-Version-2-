@@ -69,7 +69,7 @@ void pointcount (int rank, int value) { /* set the value for an entry in the tbl
 
 void setshapebit (int cl, int di, int ht, int sp, int msk, int excepted) {
   if (excepted)
-    distrbitmaps[cl][di][ht][sp] &= ~msk;
+    distrbitmaps[cl][di][ht][sp] &= ~msk; /*4D array set to zero by calloc */
   else
     distrbitmaps[cl][di][ht][sp] |= msk;
 }

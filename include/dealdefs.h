@@ -12,7 +12,7 @@
   #define _GNU_SOURCE
 #endif
 
-#define VERSION "2.0.9"
+#define VERSION "2.1.0"
 
 #ifndef UNUSED
   #define UNUSED(x) ((void)(true ? 0 : ((x), void(), 0)))
@@ -30,6 +30,8 @@
 /* this next one added because Linux has a BRIDGE utility that refers to ethernet cards */
 /* will have to make sure there is an ln /usr/games/gibcli to /usr/games/bridge */
 #define DD_PGM "/usr/games/gibcli"
+#define OPC_PGM "/usr/local/bin/DOP/dop"
+#define FDP_PGM "/usr/local/bin/Dealer/fdp"
 #define SUCCESS 1
 #define FAILED  0
 #define NIL ((struct tree *) 0)
