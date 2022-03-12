@@ -1,0 +1,12 @@
+# Keys :: d=  O= W=  E=  w=  e=  R= T=  #=     Note that the = signs are MANDATORY even on the # key. It is the K= Combo that is there.
+# 
+d=1 W=AKQJT9,QJT6,QJ,x      E=x,x3,KT65,AKQJT9  R=DD			#=honors, synergy, 9s Q&J stiff; Q&J dblton in a comment
+d=2 W=-,AKJT9,87654,Qxx     E=QTxx,x3,AKQJT9,J  R=SD			T=Honors synergy etc in a text msg 
+d=4 W= Kxx, Kxx, KTx, KT98  E=Q,QT,AQ65,AQJxxx	T= Testing for having 4 Kings and 4 Queens mixed with other adj's
+d=5 W=AQJT9,QJT6,JT,QT      E= Kxxx, xxx, Kx , KTxx			T=3 kings test in East;
+d=6 W=A,K,AJ,Qxxxxxxxx 		E=Kxxxxxxx,Q,KJ,KQ				T=short honors testing
+
+EOF  #Mandatory to get the last deal processed
+
+
+

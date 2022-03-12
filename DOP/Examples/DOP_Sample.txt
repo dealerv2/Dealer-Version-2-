@@ -1,0 +1,48 @@
+Sample Output for one deal:
+./DOP.pl -WAJT23,567,KQ109,7  -EKxxx/a5Q6k10/--/qjXXXXX -RDD -wS,L -eH,D
+chk_hand_valid:: for Hand_E. Sorry, this hand has 17 cards.  Fix and Retry
+STDERR ;; Main:: CMDLINE East hand: [Kxxx/A5Q6KT/---/QJxxxxx] is INVALID. Continuing using West hand only.
+
+[----- DOP Detailed HAND EVALUATION REPORT for Deal# -1   -----]
+Dir  O/R DOP HLD   <------- Hand ------->   H   L   D[*]  Sy   <------- ADJ ------- Tot>  HF  Dm  W
+West O    15.50    AJT23/567/KQT9/7       12.50 1   2    0.00   Sq= 0 A= 0 K= 0 Q= 0   0   0   0  0
+          DOP in NT for West: Declaring[11.5]  Dummy[12.5]
+ Deal   Suit     H    L   D  Sy   HF Dm  W LEN STR
+[-001]  W  C    0.00  0   2 0.00   0  0  0  1 [7            ]
+[-001]  W  D    6.00  0   0 0.00   0  0  0  4 [KQT9         ]
+[-001]  W  H    0.00  0   0 0.00   0  0  0  3 [567          ]
+[-001]  W  S    6.50  1   0 0.00   0  0  0  5 [AJT23        ]
+greg19@Trojan:~/.../DOP$ ./DOP.pl -WAJT23,567,KQ109,7  -EKxxx/a5Q6k10/--/qjX -RDD -wS,L -eH,D
+
+{******* DOP Deal Detail  Report Deal: 0   ****** QK_Losers}
+ Deal# O  HLF_NT NT-D NT-Tx %  LS HLDFl LS-Tx %  [S,NT]<------------------- Hand ------------------>
+[0000] W  35.00 -2,-3 11  40    S 41.00  12  81   1,3   [AJT23/567/KQT9/7 :: Kxxx/A5Q6KT/---/QJx    ]
+[0000] HL[35.00] ADJ[0] HF[1] FN[4] Misfit[ 0] Mirror[ 0] Waste[-5.0] noWASTE[  0]
+   DFit_in: Sp[6], He[6], Di[2], Cl[0]  FNs=> S[ 2] H[ 2] D[ 0] C[ 0]
+
+ Num Decl HLDF  Strain Tricks %  [ H+L+Sy  HF+FN  Dfit  Misfit, Mirror Waste noWaste NT-Ded]
+[0000] W [ 41.00]  S  [ 12][ 81] [  35.00     5     6       0      0   -5.0      0     0 ]
+[0000] W [ 41.00]L-S  [ 12][ 81] [  35.00     5     6       0      0   -5.0      0     0 ]
+[0000] E [ 41.00]  H  [ 12][ 81] [  35.00     5     6       0      0   -5.0      0     0 ]
+[0000] E [ 37.00]  D  [ 12][ 81] [  35.00     5     2       0      0   -5.0      0     0 ]
+
+[----- DOP Detailed HAND EVALUATION REPORT for Deal# 0    -----]
+Dir  O/R DOP HLD   <------- Hand ------->   H   L   D[*]  Sy   <------- ADJ ------- Tot>  HF  Dm  W
+West O    15.50    AJT23/567/KQT9/7       12.50 1   2    0.00   Sq= 0 A= 0 K= 0 Q= 0   0   0   0 -3
+          DOP in NT for West: Declaring[11.5]  Dummy[12.5]
+ Deal   Suit     H    L   D  Sy   HF Dm  W LEN STR
+[0000]  W  C    0.00  0   2 0.00   0  0  0  1 [7            ]
+[0000]  W  D    6.00  0   0 0.00   0  0 -3  4 [KQT9         ]
+[0000]  W  H    0.00  0   0 0.00   0  0  0  3 [567          ]
+[0000]  W  S    6.50  1   0 0.00   0  0  0  5 [AJT23        ]
+
+[----- DOP Detailed HAND EVALUATION REPORT for Deal# 0    -----]
+Dir  O/R DOP HLD   <------- Hand ------->   H   L   D[*]  Sy   <------- ADJ ------- Tot>  HF  Dm  W
+East R    21.50    Kxxx/A5Q6KT/---/QJx    16.50 2   4*   3.00   Sq= 0 A= 0 K= 0 Q= 0   0   1   0 -2
+          DOP in NT for East: Declaring[18.5]  Dummy[19.5]
+ Deal   Suit     H    L   D  Sy   HF Dm  W LEN STR
+[0000]  E  C    3.00  0   0 0.00   0  0 -2  3 [QJx          ]
+[0000]  E  D    0.00  0   4 0.00   0  0  0  0 [             ]
+[0000]  E  H   10.50  2   0 3.00   0  0  0  6 [A5Q6KT       ]
+[0000]  E  S    3.00  0   0 0.00   1  0  0  4 [Kxxx         ]
+

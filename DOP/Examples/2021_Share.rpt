@@ -1,0 +1,113 @@
+
+{******* DOP Deal Summary Report Deal: 1   ****** QK_Losers}
+ Deal# O  HLF_NT NT-D NT-Tx %  LS HLDFl LS-Tx %  [S,NT]<------------------- Hand ------------------>
+[0001] W  36.50 -2,-2 11  55    S 38.50  11  81   3,3   [AKQJT9/QJT6/QJ/x :: x/x3/KT65/AKQJT9       ]
+ Num Decl HLDF  Strain Tricks %  [ H+L+Sy  HF+FN  Dfit  Misfit, Mirror Waste noWaste NT-Ded]
+[0001] W [ 38.50]L-S  [ 11][ 81] [  44.50     0     2      -4      0   -4.0      0     0 ]
+
+[----- DOP Summary HAND EVALUATION REPORT for Deal# 1    -----] 
+Dir  O/R DOP HLD   <------- Hand ------->   H   L   D[*]  Sy   <------- ADJ ------- Tot>  HF  Dm  W
+West O    25.50    AKQJT9/QJT6/QJ/x       18.50 2   2    3.00   Sq= 0 A= 0 K= 0 Q= 0   0   0  -2 -2
+East R    21.00    x/x3/KT65/AKQJT9       16.00 2   2*   3.00   Sq= 0 A= 0 K= 0 Q= 0   0   0  -2 -2
+
+{******* DOP Deal Summary Report Deal: 2   ****** QK_Losers}
+ Deal# O  HLF_NT NT-D NT-Tx %  LS HLDFl LS-Tx %  [S,NT]<------------------- Hand ------------------>
+[0002] W  33.00 -3,-2 10  50    D 39.50  12  81   1,4   [---/AKJT9/87654/Qxx :: QTxx/x3/AKQJT9/J    ]
+ Num Decl HLDF  Strain Tricks %  [ H+L+Sy  HF+FN  Dfit  Misfit, Mirror Waste noWaste NT-Ded]
+[0002] W [ 39.50]L-D  [ 12][ 81] [  35.00     3     6      -1      0   -4.0      0     0 ]
+
+[----- DOP Detailed HAND EVALUATION REPORT for Deal# 2    -----] 
+Dir  O/R DOP HLD   <------- Hand ------->   H   L   D[*]  Sy   <------- ADJ ------- Tot>  HF  Dm  W
+West O    19.00    ---/AKJT9/87654/Qxx    12.00 1   4    2.00   Sq= 0 A= 0 K= 0 Q= 0   0   0   0 -1
+          DOP in NT for West: Declaring[12]  Dummy[13]
+ Deal   Suit     H    L   D  Sy   HF Dm  W LEN STR 
+[0002]  W  C    1.50  0   0 0.00   0  0 -1  3 [Qxx          ]
+[0002]  W  D    0.00  0   0 0.00   0  0  0  5 [87654        ]
+[0002]  W  H   10.50  1   0 2.00   0  0  0  5 [AKJT9        ]
+[0002]  W  S    0.00  0   4 0.00   0  0  0  0 [             ]
+
+[----- DOP Detailed HAND EVALUATION REPORT for Deal# 2    -----] 
+Dir  O/R DOP HLD   <------- Hand ------->   H   L   D[*]  Sy   <------- ADJ ------- Tot>  HF  Dm  W
+East R    20.00    QTxx/x3/AKQJT9/J       15.00 2   2*   3.00   Sq= 0 A= 0 K= 0 Q= 0   0   0  -1 -2
+          DOP in NT for East: Declaring[18]  Dummy[19]
+ Deal   Suit     H    L   D  Sy   HF Dm  W LEN STR 
+[0002]  E  C    0.00  0   2 0.00   0  0  0  1 [J            ]
+[0002]  E  D   12.50  2   0 3.00   0  0  0  6 [AKQJT9       ]
+[0002]  E  H    0.00  0   0 0.00   0 -1  0  2 [x3           ]
+[0002]  E  S    2.50  0   0 0.00   0  0 -2  4 [QTxx         ]
+
+{******* DOP Deal Summary Report Deal: 4   ****** QK_Losers}
+ Deal# O  HLF_NT NT-D NT-Tx %  LS HLDFl LS-Tx %  [S,NT]<------------------- Hand ------------------>
+[0004] W  35.00  0,-2 11  60    C 37.00  11  81   2,2   [Kxx/Kxx/KTx/KT98 :: Q/QT/AQ65/AQJxxx       ]
+ Num Decl HLDF  Strain Tricks %  [ H+L+Sy  HF+FN  Dfit  Misfit, Mirror Waste noWaste NT-Ded]
+[0004] W [ 37.00]L-C  [ 11][ 81] [  33.00     4     2       0      0   -2.0      0     0 ]
+
+[----- DOP Detailed HAND EVALUATION REPORT for Deal# 4    -----] 
+Dir  O/R DOP HLD   <------- Hand ------->   H   L   D[*]  Sy   <------- ADJ ------- Tot>  HF  Dm  W
+West O    13.00    Kxx/Kxx/KTx/KT98       13.00 0   0    0.00   Sq=-1 A=-1 K= 2 Q=-1   0   1   0 -2
+ Deal   Suit     H    L   D  Sy   HF Dm  W LEN STR 
+[0004]  W  C    3.50  0   0 0.00   1  0  0  4 [KT98         ]
+[0004]  W  D    3.50  0   0 0.00   0  0  0  3 [KTx          ]
+[0004]  W  H    3.00  0   0 0.00   0  0  0  3 [Kxx          ]
+[0004]  W  S    3.00  0   0 0.00   0  0 -2  3 [Kxx          ]
+
+[----- DOP Detailed HAND EVALUATION REPORT for Deal# 4    -----] 
+Dir  O/R DOP HLD   <------- Hand ------->   H   L   D[*]  Sy   <------- ADJ ------- Tot>  HF  Dm  W
+East R    20.00    Q/QT/AQ65/AQJxxx       16.00 2   2*   2.00   Sq= 0 A= 0 K=-1 Q= 1   0   0   0  0
+          DOP in NT for East: Declaring[18]  Dummy[19]
+ Deal   Suit     H    L   D  Sy   HF Dm  W LEN STR 
+[0004]  E  C    7.50  2   0 2.00   0  0  0  6 [AQJxxx       ]
+[0004]  E  D    6.50  0   0 0.00   0  0  0  4 [AQ65         ]
+[0004]  E  H    1.50  0   0 0.00   0  0  0  2 [QT           ]
+[0004]  E  S    0.50  0   2 0.00   0  0  0  1 [Q            ]
+
+{******* DOP Deal Summary Report Deal: 5   ****** QK_Losers}
+ Deal# O  HLF_NT NT-D NT-Tx %  LS HLDFl LS-Tx %  [S,NT]<------------------- Hand ------------------>
+[0005] W  30.00  0, 0 10  60    S 32.00  11  55   4,4   [AQJT9/QJT6/JT/QT :: Kxxx/xxx/Kx/KTxx       ]
+ Num Decl HLDF  Strain Tricks %  [ H+L+Sy  HF+FN  Dfit  Misfit, Mirror Waste noWaste NT-Ded]
+[0005] W [ 32.00]L-S  [ 11][ 55] [  27.00     3     2       0      0    0.0      0     0 ]
+
+[----- DOP Detailed HAND EVALUATION REPORT for Deal# 5    -----] 
+Dir  O/R DOP HLD   <------- Hand ------->   H   L   D[*]  Sy   <------- ADJ ------- Tot>  HF  Dm  W
+West O    18.50    AQJT9/QJT6/JT/QT       15.50 1   1    2.00   Sq= 0 A= 0 K=-1 Q= 0  -1   0   0  0
+          DOP in NT for West: Declaring[17.5]  Dummy[17.5]
+ Deal   Suit     H    L   D  Sy   HF Dm  W LEN STR 
+[0005]  W  C    1.50  0   0 0.00   0  0  0  2 [QT           ]
+[0005]  W  D    0.50  0   0 0.00   0  0  0  2 [JT           ]
+[0005]  W  H    4.00  0   0 0.00   0  0  0  4 [QJT6         ]
+[0005]  W  S    9.50  1   0 2.00   0  0  0  5 [AQJT9        ]
+
+[----- DOP Detailed HAND EVALUATION REPORT for Deal# 5    -----] 
+Dir  O/R DOP HLD   <------- Hand ------->   H   L   D[*]  Sy   <------- ADJ ------- Tot>  HF  Dm  W
+East R    9.50     Kxxx/xxx/Kx/KTxx       9.50  0   0*   0.00   Sq= 0 A=-1 K= 1 Q=-1   0   1   0  0
+ Deal   Suit     H    L   D  Sy   HF Dm  W LEN STR 
+[0005]  E  C    3.50  0   0 0.00   0  0  0  4 [KTxx         ]
+[0005]  E  D    3.00  0   0 0.00   0  0  0  2 [Kx           ]
+[0005]  E  H    0.00  0   0 0.00   0  0  0  3 [xxx          ]
+[0005]  E  S    3.00  0   0 0.00   1  0  0  4 [Kxxx         ]
+
+{******* DOP Deal Summary Report Deal: 6   ****** QK_Losers}
+ Deal# O  HLF_NT NT-D NT-Tx %  LS HLDFl LS-Tx %  [S,NT]<------------------- Hand ------------------>
+[0006] W  35.50 -2,-2 11  50    C 38.50  11  81   2,2   [A/K/AJ/Qxxxxxxxx :: Kxxxxxxx/Q/KJ/KQ       ]
+ Num Decl HLDF  Strain Tricks %  [ H+L+Sy  HF+FN  Dfit  Misfit, Mirror Waste noWaste NT-Ded]
+[0006] W [ 38.50]L-C  [ 11][ 81] [  34.00     7     3       0     -1   -4.5      0     0 ]
+
+[----- DOP Detailed HAND EVALUATION REPORT for Deal# 6    -----] 
+Dir  O/R DOP HLD   <------- Hand ------->   H   L   D[*]  Sy   <------- ADJ ------- Tot>  HF  Dm  W
+West O    23.00    A/K/AJ/Qxxxxxxxx       12.00 7   4    0.00   Sq= 0 A= 0 K= 0 Q= 0   0   1   0 -2
+          DOP in NT for West: Declaring[17]  Dummy[18]
+ Deal   Suit     H    L   D  Sy   HF Dm  W LEN STR 
+[0006]  W  C    1.50  7   0 0.00   1  0  0  9 [Qxxxxxxxx    ]
+[0006]  W  D    5.00  0   0 0.00   0  0  0  2 [AJ           ]
+[0006]  W  H    2.00  0   2 0.00   0  0 -2  1 [K            ]
+[0006]  W  S    3.50  0   2 0.00   0  0  0  1 [A            ]
+
+[----- DOP Detailed HAND EVALUATION REPORT for Deal# 6    -----] 
+Dir  O/R DOP HLD   <------- Hand ------->   H   L   D[*]  Sy   <------- ADJ ------- Tot>  HF  Dm  W
+East R    15.00    Kxxxxxxx/Q/KJ/KQ       12.00 2   3*   0.00   Sq= 0 A=-1 K= 1 Q= 0   1   1   0 -2
+          DOP in NT for East: Declaring[13]  Dummy[14]
+ Deal   Suit     H    L   D  Sy   HF Dm  W LEN STR 
+[0006]  E  C    4.50  0   0 0.00   0  0  0  2 [KQ           ]
+[0006]  E  D    4.00  0   0 0.00   0  0  0  2 [KJ           ]
+[0006]  E  H    0.50  0   2 0.00   0  0  0  1 [Q            ]
+[0006]  E  S    3.00  6   0 0.00   1  0 -2  8 [Kxxxxxxx     ]

@@ -1,0 +1,123 @@
+2:DOP_Calculation_Subs_V21.pl:15:sub eval_suit       {         # called with( hnd_ref, suit_num) uses sref->{STR} to calc {DOP_H}, {Has_A}, etc.
+3:DOP_Calculation_Subs_V21.pl:71:sub eval_honors     {         # called with sref. Use for suits >=3 cards. No need to apply short honor adj
+4:DOP_Calculation_Subs_V21.pl:99:sub eval_1crd_suit  {         # set DOP_D = 2 and DOP_H with deduction for short honors. L & Sy = 0
+6:DOP_Calculation_Subs_V21.pl:135:sub eval_2crd_suit  {         # Check for HH, Hx, HT, xx. Deduct from DOP_H as reqd. set DOP_D = 0.5, L & Sy = 0
+7:DOP_Calculation_Subs_V21.pl:165:sub eval_34crd_suit {         # set DOP_H. No short honor deductions. Therefore DOP_D, DOP_L, = 0.
+8:DOP_Calculation_Subs_V21.pl:183:sub eval_5crd_suit  {         # H, L, Sy pts all need doing ... set DOP_D=0
+9:DOP_Calculation_Subs_V21.pl:213:sub eval_long_suit  {         # 6+ suit, H, L, Sy pts all need doing ... set DOP_D=0
+11:DOP_Calculation_Subs_V21.pl:252:sub eval_hand {      # args=hand_href. Eval each suit in turn with eval_suit. Sets hand DOP values in hand hash.
+13:DOP_Calculation_Subs_V21.pl:331:sub set_hand_HLD {            # Called with an array of suit pointers
+15:DOP_Calculation_Subs_V21.pl:343:sub set_Sq {                  # Called with array of suit_ptrs
+16:DOP_Calculation_Subs_V21.pl:351:sub count_hand_Hcards {       # Called with array of suit ptrs for a given hand.
+17:DOP_Calculation_Subs_V21.pl:365:sub show_Hand_HLD {           # $hand_ref, verbosity=0..3, show_hdr=0/1
+18:DOP_Calculation_Subs_V21.pl:420:sub eval_deal {               # Called with refs to %Deal, %Hand_W, and %Hand_E
+25:DOP_Calculation_Subs_V21.pl:714:sub do_waste_dop {               # shortness could be stiff or void. waste_dop could be +ve or -ve
+28:DOP_Calculation_Subs_V21.pl:760:sub Calc_DFit_x2 {
+31:DOP_Calculation_Subs_V21.pl:1008:sub Calc_DFit7 {
+33:DOP_Calculation_Subs_V21.pl:1069:sub DOP_2_Trix {
+36:DOP_Calculation_Subs_V21.pl:1108:sub Count_Quick_Losers { # args whnd_ref, ehnd_ref, Suit|NT ; returns FirstRoundLosers, SecondRoundLosers, @QuickLosers
+38:DOP_Calculation_Subs_V21.pl:1168:sub Calc_nt_ded_tot {
+40:DOP_Calculation_Subs_V21.pl:1188:sub Quick_Losers_1hand { # args hnd_ref, S|N; returns FirstRoundLosers, SecondRoundLosers, @QuickLosers
+
+42:DOP_Competition_Subs_V21.pl:21:sub lone_King_adj { #args: suit_ptr, plain_yn (-1 for lone K in 3 or 4 card suit. KTx or better gets NO adj. )
+44:DOP_Competition_Subs_V21.pl:42:sub lone_Jack_adj { #args: suit_ptr
+46:DOP_Competition_Subs_V21.pl:54:sub KQ_adj { #args: suit_ptr, O|U for KQ_Over or KQ_Under their suit.
+48:DOP_Competition_Subs_V21.pl:67:sub AOC_h_adj { #args : suit_ptr, LHO_suit_let, RHO_suit_let, $lho_over, $rho_over
+50:DOP_Competition_Subs_V21.pl:98:sub AOC_l_adj { #args : suit_ptr, LHO_suit_let, RHO_suit_let, NT_OC_YN
+52:DOP_Competition_Subs_V21.pl:123:sub AOC_DOP_adj { #args: hnd_ref, aoc_hnd_ref, lho_suit, rho_suit
+54:DOP_Competition_Subs_V21.pl:152:sub AOC_DOP_deal_adj { # args: aoc_deal_ref, aoc_whnd_ref, aoc_ehnd_ref, :: updates hash AOC_DOP_DEAL
+56:DOP_Competition_Subs_V21.pl:174:sub aoc_chk_suit {
+58:DOP_Competition_Subs_V21.pl:182:sub aoc_chk_rpt {  # check the -A option for the reporting spec. should be N (None), S (Summary), D (Detail)
+60:DOP_Competition_Subs_V21.pl:189:sub AOC_RPT {  # args: aoc_deal_ref, whnd_ref_aoc, ehnd_ref_aoc,  dl_ref, $whnd_ref, $ehnd_ref  ::
+
+115:DOP_Subs2_V21.pl:5:sub Start_Main {  # populate get_opts hash with defaults, other hashes as req'd, bless hashes for debug , ...
+118:DOP_Subs2_V21.pl:105:sub split_DDS_hand {
+119:DOP_Subs2_V21.pl:119:sub cleanup_DDSHand {        # one hand 16 or so chars
+120:DOP_Subs2_V21.pl:142:sub GIB2DOP {
+122:DOP_Subs2_V21.pl:201:sub split_gib_hand {
+123:DOP_Subs2_V21.pl:219:sub parse_gibline {        # (\%GIB_Deal, $deal_line, $gib_lineno)
+125:DOP_Subs2_V21.pl:290:sub show_suits {
+126:DOP_Subs2_V21.pl:300:sub zero_hash {            # Generic routine to put zeros to scalars and array elements in a hash.
+128:DOP_Subs2_V21.pl:323:sub split_path {
+129:DOP_Subs2_V21.pl:334:sub fname2IDtag {
+131:DOP_Subs2_V21.pl:339:sub drop_sfx { #p is the path string, ch is the suffix marker (usually DOT} and q is the suffix string.
+133:DOP_Subs2_V21.pl:346:sub get_hand_keys {        #uses  @Hand_href setup at compile time with refs to the various %Hand_X hashes.
+134:DOP_Subs2_V21.pl:361:sub Init_hand_hashes {     # define the hand keys and give them defaults. All except SUIT ptrs set at compile time.
+135:DOP_Subs2_V21.pl:373:sub Init_suit_hashes {    # args: list of hand_hashrefs. calls make_suit_keys. Blesses suit Hashes
+136:DOP_Subs2_V21.pl:390:sub zero_suit_keys {       # called with suit href. This hash has no arrays in it. All scalars.
+139:DOP_Subs2_V21.pl:401:sub get_suit_href {           # called with ($hand_ref, $suit). $suit=  C, D, H, S or 0..3
+140:DOP_Subs2_V21.pl:412:sub copy_DOP_hash {
+142:DOP_Subs2_V21.pl:435:sub show_hash_key_types {
+144:DOP_Subs2_V21.pl:447:sub txlate2GIB {
+145:DOP_Subs2_V21.pl:453:sub check_setup {
+147:DOP_Subs2_V21.pl:487:sub setup_FILEIO {         # checks the  %get_opt hash; puts descriptive info in %file_specs
+150:DOP_Subs2_V21.pl:519:sub parse_side  {
+152:DOP_Subs2_V21.pl:583:sub DOP_Reports {
+153:DOP_Subs2_V21.pl:641:sub reInit_DOP_Deal  {  #can be called with either set of Deal and Hand ptrs. using E/W names for convenience.
+154:DOP_Subs2_V21.pl:665:sub reInit_GIB_Results {
+156:DOP_Subs2_V21.pl:679:sub set_trick_results {  #called twice from mainline once for NS once for EW since we have two sets of results for each GIB deal.
+157:DOP_Subs2_V21.pl:716:sub DOP2Results {  #needs only the two hashes ; GIB2Results could fill in the Side.
+159:DOP_Subs2_V21.pl:750:sub GIB2Results {       # Needs to know the Side as gib_href contains results for both sides.
+161:DOP_Subs2_V21.pl:776:sub Rpt_GIB_CSV {
+162:DOP_Subs2_V21.pl:809:sub calc_diffs {  #uses global var @diff_cnt which is a running total
+164:DOP_Subs2_V21.pl:825:sub set_opener {
+165:DOP_Subs2_V21.pl:842:sub Hand2Deal { # deal_href, hand_href
+
+168:DOP_Subs_V21.pl:14:sub tell_myname {       # show which Subs file is loaded.
+169:DOP_Subs_V21.pl:20:sub get_dbg_lvl {       # pass in a ref to the %ENV hash which should have the key DEBUG defined.
+170:DOP_Subs_V21.pl:30:sub init_4suit_hashes {    # args: list of hand_hashrefs. calls make_suit_keys. Blesses suit Hashes
+171:DOP_Subs_V21.pl:51:sub make_suit_keys {       # called with suit href. inits the hash from @suit_keys and @suit_defaults
+172:DOP_Subs_V21.pl:55:sub zero_suit_keys {       # called with suit href. This hash has no arrays in it. All scalars.
+175:DOP_Subs_V21.pl:64:sub reset_hand_hash {      # arg=hand_hashref Uses Global Vars. Resets both Hand_W and Hand_E hashes to init state.
+176:DOP_Subs_V21.pl:102:sub zero_4suit_hashes  {   # Called with a list of hand_hashrefs. Sets to zero. Does not bless or create keys.
+177:DOP_Subs_V21.pl:117:sub zero_deal_hash {       # reset the deal hash to zeros and default strings. calls zero_hash
+179:DOP_Subs_V21.pl:139:sub zero_hash {         # Generic routine to put zeros to scalars and array elements in a hash.
+181:DOP_Subs_V21.pl:161:sub zero_AOC_hash {     # process a list of AOC hash ptrs. Set values of scalars and arrays to 0. Preserve the 'Descriptive' keys.
+183:DOP_Subs_V21.pl:194:sub setup_ds {   # called with E|W , <ds_string>. returns comma separated list of valid ds letters.
+184:DOP_Subs_V21.pl:215:sub setup_opener { # called with opener string; Cleans and validates. Returns single letter either E or W. Caller to save in %Deal.
+188:DOP_Subs_V21.pl:228:sub do_squash { #removes redundant spaces and commas in any combination.
+190:DOP_Subs_V21.pl:241:sub cleanup_hand {   # 1st stage of cleanup. upper case (except x) 10->T, strip spaces, separate with comma, keep only 4 suits etc.
+191:DOP_Subs_V21.pl:259:sub split_hand    {  # Split into suits. Expected input: spades,hearts,diamonds,clubs; should be clean input by now.
+192:DOP_Subs_V21.pl:289:sub chk_hand_valid { # called with a hand_ref. To be valid, a Hand must be exactly 13 cards. And also valid suits.
+193:DOP_Subs_V21.pl:314:sub valid_suit {     # called with suit ref from chk_hand_valid.
+194:DOP_Subs_V21.pl:337:sub get_opts {       #sets some vars, and returns ( cleaned up $h_W, $h_E,  and defaults for: ds_W, ds_E,&  Opener )
+196:DOP_Subs_V21.pl:428:sub set_rpt_spec {   #arg: two letter string SS, SD etc. Returns two letters.
+198:DOP_Subs_V21.pl:449:sub Check_raw_hand_strings {     # returns 0=Both Null, 1=W not Null, 2=E not Null, 3=Both not Null.
+200:DOP_Subs_V21.pl:471:sub get_stdin {            # get deal lines from stdin. return line or "EOF(stdin)"
+202:DOP_Subs_V21.pl:495:sub parse_stdin {    # called with raw input line  parsed Fields returned as a list to caller.
+204:DOP_Subs_V21.pl:536:sub Rpt_Deal {
+207:DOP_Subs_V21.pl:586:sub Rpt_Hand {          # $hand_ref, S/D detail, show_hdr=y/n, show_nt y/n
+209:DOP_Subs_V21.pl:646:sub Rpt_Suits {   # called by Rpt_Hand if hand detail wanted. The FN numbers per suit are in the DEAL hash, since not hand specific
+210:DOP_Subs_V21.pl:668:sub Rpt_Strain {     #args: deal_ref, strains_str, W|E declarer
+213:DOP_Subs_V21.pl:715:sub Terse_Rpt {  #\%Deal, \%Hand_W, \%Hand_E, $get_opts{OPT_A}, $valid_hw ,  $valid_he
+
+215:DOP_Util_Subs_V21.pl:12:sub get_suit_href_W {         # West Hand. called with C, D, H, S or 0..3. No Hand Ref.
+216:DOP_Util_Subs_V21.pl:24:sub get_suit_href_E {         # East Hand. called with C, D, H, S or 0..3. No Hand Ref.
+217:DOP_Util_Subs_V21.pl:37:sub get_sptrs {               # Called with $hand_ref, returns array of suit hashrefs [0] = Clubs, [3]=Spades
+218:DOP_Util_Subs_V21.pl:44:sub show_suit_type {    #called with (suit_ref) returns suit_type. Suit Hashes are blessed.
+220:DOP_Util_Subs_V21.pl:50:sub get_suit_key   {    #called with ($suit_ref, Key_String).  Returns value for that key.
+222:DOP_Util_Subs_V21.pl:58:sub set_suit_key   {    #called with ($suit_ref, Key_String). Sets value for that key.
+225:DOP_Util_Subs_V21.pl:69:sub chk_ref_type {               # called with a reference
+226:DOP_Util_Subs_V21.pl:72:sub max {               # two scalars, returns the max of the two. (signed compare. max (2,-5) returns 2
+227:DOP_Util_Subs_V21.pl:75:sub min {               # two scalars, returns the max of the two. (signed compare. max (2,-5) returns 2
+228:DOP_Util_Subs_V21.pl:79:sub array_max_idx {
+229:DOP_Util_Subs_V21.pl:90:sub array_max {
+230:DOP_Util_Subs_V21.pl:100:sub array_min {
+231:DOP_Util_Subs_V21.pl:110:sub array_sum  {         # arg=array_ref; returns sum of items in array
+232:DOP_Util_Subs_V21.pl:116:sub sum_suit  {         # arg=array_ref; returns sum of items in array; any array not just suits.
+233:DOP_Util_Subs_V21.pl:122:sub find_long_strain {  # arg= $Deal_ref, return suit number 0 .. 3 with the longest fit
+234:DOP_Util_Subs_V21.pl:134:sub set_long_strain {
+236:DOP_Util_Subs_V21.pl:147:sub sort_arr_idxes {       # sort the indexes such that they return array items in increasing order.
+237:DOP_Util_Subs_V21.pl:148:sub byidx { $aref->[$a] <=> $aref->[$b]; }
+239:DOP_Util_Subs_V21.pl:159:sub suit_strlen {       # called with a string like strlen but handles void --- suits
+241:DOP_Util_Subs_V21.pl:167:sub show_Hand_arrays {        # arg=Hand_ref; shows the suit related DOP for this hand.
+243:DOP_Util_Subs_V21.pl:175:sub show_DOP_hash { # passed in a hash descr/name, hashref, prints out sorted keys and values
+247:DOP_Util_Subs_V21.pl:199:sub show_hash_defs {    # prints out only those keys that are defined. ignores existing that are undef.
+249:DOP_Util_Subs_V21.pl:209:sub show_hash {         # passed in a hash descr/name, hashref, prints out sorted keys and values
+251:DOP_Util_Subs_V21.pl:220:sub show_arr  {         # passed an array descr as a scalar string and an array_ref
+253:DOP_Util_Subs_V21.pl:234:sub var_type {
+255:DOP_Util_Subs_V21.pl:247:sub trix_max {
+256:DOP_Util_Subs_V21.pl:255:sub trix_min {       # called with $trix_val = trix_max ( @strain_tricks) ;
+257:DOP_Util_Subs_V21.pl:264:sub usage {             #arg: 0 .. 4 level of verbosity in the help message.
+259:DOP_Util_Subs_V21.pl:442:sub useful_hint {
+

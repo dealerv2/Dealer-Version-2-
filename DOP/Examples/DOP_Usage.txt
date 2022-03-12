@@ -1,0 +1,114 @@
+Hint:  Type ./DOP.pl -Hn where n is a number from 0 to 9 for more verbose help.
+            ./DOP.pl -Zn for explanation of how values calculated (n=0)
+Usage:
+ ./DOP.pl [-h] [-Hn] [-OW|E] [-R<spec>] [-i infile_name ] [-o reportfile_name] -d<deal_num> -D<dbg_level> -R<DS>\
+    [-W<spades>/<hearts>/<diam>/<clubs>] [-E<spades>/<hearts>/<diam>/<clubs>] [-w<list>] [-e<list>] \
+    -A[N|S|D] -l[C|D|H|S] -r[C|D|H|S]
+    The last three (-A, -l, -r) apply only to (adjusted) DOP when they open the bidding.
+If neither W nor E hand is specified on the cmd line, the program attempts to read from stdin.
+Type -H4 to get fmt of stdin file.
+
+In the above cmd line invocation:
+-O defines who opens the bidding, E or W. The default is W.
+    This affects which hand can count shape points before a trump fit is found.
+-R defines the type of report to produce. The Default is SN. Deal=Summary, Hand=None Other Combos SS, SD, DS, DD.
+-W<string> and -E<string> define the cards in the West and East hands.
+    Enter both hands or one hand only. If none is entered the program attempts to read from stdin.
+-w<list> and -e<list> define the strains and declarer for which to produce an evaluation report.
+   The default is nothing. <list> is a series of comma separated letters from the set [C D H S N L]
+   The Strain evaluation gives more detail especially re the DFIT pts, and the number of tricks "expected".
+----------------------------------------------------------------------------------------------------
+In the above cmd line invocation: ...
+-W<spades>/<hearts>/<diamonds>/<clubs> refers to the definition of the corresponding hand:
+   This example : -WAJT23,567,KQ109,7  -EKxxx/a5Q6k10/--/qjXXXXX
+   Demonstrates that:
+   a) the order of the cards in a suit does not matter. It will however look funny in your reports.
+   b) You can use either 10 or T to represent a Ten. 10 is converted to T which is used thereafter.
+   c) You can enter in upper or lower case. Upper X's are converted to x, other lowers are converted to upper.
+   d) you can enter voids with dashes
+   e) you can use either slashes (/) or commas(,) to separate the suits.
+   f) you can enter invalid hands. The program will error check and reject them.
+Aside:
+   g) When giving compass directions, you can enter S(south) as a synonym for W, and N(north) as a synonym for E.
+      But W and E will show in reports.
+      ditto for "s" as a synonym for "w" and "n" as a synonym for "e".
+
+   <list> (in the terms -w<list> or -e<list>) is comma seperated letters chosen from N,S,H,D,C,L
+   These letters represent the strain(s) that you want the program to report details about.
+   Example -wN,L -eN,S,D
+   The above says to evaluate the hands and produce reports for the following:
+   a) East is Declaring NT, b) East is Declaring in Spades, c) East is Declaring in Diamonds
+   d) West is Declaring NT, e) West is Declaring in the E/W Longest fit.
+   If no Strain option is specified then the program defaults to no strain level detail.
+   These Strain details are not crucial:
+   both the Deal Summary, and the Hand Summary provide more detail than you really need,
+   Not to mention the Deal Detail and Hand Detail report.
+R=<spec>
+   <spec> is the level of detail to be reported. It is one of: S|D|SS|SD|DS|DD
+   Giving the level of detail reported for the deal (both hands) and/or Hand(s) individually as:
+   i) S=Deal Summary,  ii) D=Deal Summary and Deal Detail
+   iii) SS=Deal Summary and Hand Summary, iv) SD=Deal Summary and Hand Detail
+   v) DS=Deal Summary and Detail plus Hand Summary  vi) DD=Summary and Detail for both Deal and Hand(s)
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+Entering one or both hands from the cmd line is a quick and easy way to evaluate one deal or hand.
+However if you want to evaluate a series of hands you might want to prepare a file of deals and
+have it redirected to the program's STDIN.
+
+   Example: DOP_eval -eS,H -wL,N -RDS <dealfile.dat >dealfile.rpt
+or you can use the -i and -o options:
+            DOP_eval -eS,H -wL,N -RDS -i dealfile.dat  -o dealfile.rpt
+
+This tells the program to read the hands from: dealfile.dat write the reports to: dealfile.rpt
+Note that if using STDIN you cannot specify ANY deal on the cmd line.
+Options you enter on the cmd line become the default options unless overridden in the detail file.
+The above example sets the default opener to be East (rather than West)
+and the default East strains to be the majors, (rather than nothing), the default Report to be DS
+These defaults can still be overriden on a deal by deal basis from the line in the data file.
+
+********************************************************************************************
+IMPORTANT NOTE: ********* Dealfile must have EOF as the last line in the file.  ************
+if you do not do this the last deal line in the file will not be processed. (Mild Bug?)
+********************************************************************************************
+
+Here is a sample line from a deal data file:
+d=6 W=AJ62,KT,AK963,A5 E=74/QJ984/Q/QJ632 O=W w=C,N e=H, R=DD T=Challenge problem 4.
+
+(Note there are NO minus signs (-) before the 'switches'
+instead the switches are followed by equal signs (=). i.e. d=6 NOT -d6 or -d=6
+
+====================================================================================================
+Analyzing Deals solved by GIB
+As a verification tool for the DOP method, we can refer to a Database of over 100K deals solved by the GIB DD solver.
+We can then see how often DOP's estimated tricks compare to those that are actually possible on the given deal.
+The -G switch gives a filename which contains the deals, and possible tricks, in a GIB/PBN format.
+This gibdeal file is NOT a full blown PBN file; rather it contains one line per deal, this line has a text string
+giving the cards in each hand, and 20 chars at the end of the line that specify how many tricks NS can take
+in each of the five strains.
+#GIB line (87 Chars) = T5.K4.652.A98542 K6.QJT976.QT7.Q6 432.A.AKJ93.JT73 AQJ987.8532.84.K:65658888888843433232
+#                      S   H  D    C     S   H     D   C   S K  D     C     S      H   D C[.NT..Sp..He..Di..Cl.]
+#                      <--- West------>  <--- North ---> <---- East-----> <--- South ---->[leader = s,e,n,w for each]
+# suits separated by DOTs, Compass separated by SPACE , COLON marks end of cards, start of tricks.
+# tricks are given for NS 5 sets of 4 chars [0-9A-D]; 1st set = NT, then S,H,D,C; each set dealer=s,e,n,w
+
+DOP does not care about the leader so this pgm just compares the number of tricks estimated by DOP
+with the highest number in each strain.
+DOP in Competition (They Open): aka Adjusted Optimal Count.
+   To evaluate a hand or pair of hands in competitive auctions you first evaluate the hands normally to come up with the DOP.
+   Then you adjust the DOP for length or shortness and Lone Kings, Lone Jacks, and KQ combos  in their suits,
+   The adjustments for length depend on whether Intervenor intends to intervene with NT OCall, T/O DBL, or suit OCall.
+   You also adjust for Lone Kings and Lone Jacks in 3 or 4 card side suits; i.e. NOT their suits.
+   A lone King or Lone Jack means no card higher than a 9 in that suit; i.e. KT(x) or JT(x) no Adjustment.
+
+   Accordingly we have the extra cmd line arguments:
+   -A[NSD] which specifies No AOP report, Summary AOP report, and Detail AOP report.
+   -r[CDHSN] (RHO) and -l[CDHSN] (LHO) with the strain that they bid.
+   i.e. -rz or -lz which states whether the Opener is on our right (we are behind him)  or left (he is over us).
+   "z" is the strain he opened in: C,D,H,S,N (or c,d,h,s,n). So -rs RHO opened in Spades. -lN LHO opened in NT.
+   It is possible that both RHO and LHO will be bidding different suits as in (1D) - P - (1S) - 2H
+   Our RHO has bid spades and our LHO has bid Diamonds so we enter -rS, -lD on the cmd line.
+
+   In competitive auctions "Opener" for our side is in fact, "Intervenor", but it is not worth going thru the whole program
+   to change this. So in Competitive auctions "Opener" means the first hand to bid for our side.
+   In order to keep the option of allowing any compass direction to be our Opener we don't specify the compass direction
+   for their side; we just specify RHO or LHO relative to our side's first bidder.
+

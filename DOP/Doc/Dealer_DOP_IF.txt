@@ -1,0 +1,27 @@
+#  JGM        21.0      2021/08/28     Begin coding for adding -q (terse) output for dealer
+# 
+#VERS 21 Note:
+#        Dealer will call DOP with:
+#              FILE *fifo ; fifo = popen("/usr/local/bin/DOP/dop -q -Wxxxxxxx -Exxxxxx -Ox","r");
+#              fscanf(fifo, "%5f %5f %5f %5f %5f %5f %5f %5f ", dop_c, dop_d, dop_h, dop_s, dop_n, dop_l, ql_suit, ql_nt );
+#              We will print on stdout the dop for each strain
+#-------------------------------------------------------------------------------------------------
+/usr/local/bin/DOP/dop -q -OW -W Ax.xxx.Kxxxx.AKx  -E xx.AKQx.AQxx.Qxx
+
+FUT the -q switch may have a value giving one of several possibilities:
+a) as above a terse rpt for the deal
+b) compass,suit asking for H + SY + L + D in that suit for that compass. A way to compare say DOP evals to HCP evals.
+c) compass      asking for the sum of the above for all suits.
+d) The terse report will have a 'tag' at the start of the ouput line giving the kind of report it is;
+   so the code to scan the report will be something like
+     fscanf(fifo, " %s ", &rpt_type ) ;  char rpt_type
+     switch (rpt_type) {
+     	case 'd' :  fscanf(fifo, "%5f %5f %5f %5f %5f %5f %5f %5f ", dop_cl, dop_di, dop_he, dop_sp, dop_nt, dop_lng, ql_suit, ql_nt );
+     	case 'h' :  fscanf(fifo, "%5f %5f %5f %5f %5f %5f %5f ", dop_tot, dop_hcp, dop_sy, dop_len, dop_dist, dop_adj, dop_ntm, xx  );
+     	case 's' :  fscanf(fifo, "%5f %5f %5f %5f %5f %5f %5f ", dop_tot, dop_hcp, dop_sy, dop_len, dop_dist, xx, yy, zz  );
+     	}
+     	where 'd' is for the deal, 'h' is for the hand, and 's' is for a suit. If fscanf starts with a new line each time, 
+     	then I can't split up into two statements, but instead must do :
+     	fscanf(fifo, " %c %5f %5f %5f %5f %5f %5f %5f %5f ",&rpt_type, &v[0], ...... &v[7] ) ;
+     	and the terse rpt must ouput 8 fields all the time, padding with zeros or -1.0 if necessary.
+  

@@ -1,0 +1,28 @@
+# bypass this
+d=101 W=AJx/KJx/AKxx/Axx                            R=S       T= pp 10 3NT dwn 1. East Hand=2.5 pts, not 5
+d=001 W=KQxx/x/xxx/AQxxx  E=AJxx/xxxx/xx/Kxx e=S,C  R=S       T= Forward. Versini 1968 East=12*HLD
+d=005 W=Kxxx/Kxx/QJx/ATx  E=AQTx/xxx/Akxxx/x  R=SS      w=N,S O=W T= Forward 12 vs 15
+EOF
+[----- DOP Summary HAND EVALUATION REPORT -----] 
+Dir  O/R  DOP Tot <------- Hand ------->    H   L   D[*]  Sy   <------- Ded -------> ADJ  HF  Dm  W
+West O    19.50    AJx/KJx/AKxx/Axx       21.50 0   0    0.00   Sq=-1 A= 0 K= 0 Q=-1  -2   0   0  0
+
+{************ DOP Deal Summary Report  ***********}
+ ####  O   HLDFn   NT-D NT-Tx %    LS HLDFs LS-Tx %     <-------------------- Hand -------------------->
+[0001] W   26.00  -2, 0   9  50     S 31.00  11  60     [W= KQxx/x/xxx/AQxxx :: E= AJxx/xxxx/xx/Kxx   ]!
+ Num Decl HLDF  Strain Tricks %  [ H+L+Sy  HF+FN  Dfit Waste Misfit, Mirror NT-Ded ] 
+[0001] E [ 31.00]  S  [ 11][ 60] [  21.00      3     5     2      0     0       -1 ] 
+[0001] E [ 29.00]  C  [ 11][ 40] [  21.00      3     3     2      0     0       -1 ] 
+
+{************ DOP Deal Summary Report  ***********}
+ ####  O   HLDFn   NT-D NT-Tx %    LS HLDFs LS-Tx %     <-------------------- Hand -------------------->
+[0005] W   39.50   0,-2  13  75     S 42.50  13  75     [W= Kxxx/Kxx/QJx/ATx :: E= AQTx/xxx/AKxxx/x   ]!
+ Num Decl HLDF  Strain Tricks %  [ H+L+Sy  HF+FN  Dfit Waste Misfit, Mirror NT-Ded ] 
+[0005] E [ 42.50]  S  [ 13][ 75] [  29.50      7     3     3      0     0       -2 ] 
+[0005] E [ 39.50]  C  [ 13][ 75] [  29.50      7     0     3      0     0       -2 ] 
+
+ [----- DOP Summary HAND EVALUATION REPORT -----] 
+Dir  O/R  DOP Tot <------- Hand ------->    H   L   D[*]  Sy   <------- Ded -------> ADJ  HF  Dm  W
+West O    12.50    Kxxx/Kxx/QJx/ATx       13.50 0   0    0.00   Sq=-1 A= 0 K= 0 Q= 0  -1   2   0  1
+East R    16.00    AQTx/xxx/AKxxx/x       15.00 1   2*   0.00   Sq= 0 A= 0 K= 0 Q= 0   0   0   0  0
+
