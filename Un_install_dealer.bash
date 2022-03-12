@@ -7,9 +7,7 @@ if [[ $ANSW == "Y" || $ANSW == "Yes" ]] ; then
 else echo "Safe choice!" ; exit ; fi
 
 #DISTRODIR="$PWD"
-#ROOTDIR="/usr/local/bin"
-ROOTDIR="/tmp/local/bin"
-DISTRODIR="/home/greg19/Programming/Bridge_SW/JGMDealer/Dealer-Version-2-"
+ROOTDIR="/usr/local/bin"
 cd $ROOTDIR
 chmod -R 777 DealerV2/* DOP/*
 echo Removing "$ROOTDIR"/DealerV2 and all its files

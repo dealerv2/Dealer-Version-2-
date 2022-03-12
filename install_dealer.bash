@@ -23,8 +23,8 @@ chown -R $LOGNAME:$LOGNAME "$ROOTDIR"/DealerV2/*
 mv "$ROOTDIR"/DealerV2/DOP/*  "$ROOTDIR"/DOP/
 rmdir  "$ROOTDIR"/DealerV2/DOP
 
-echo Adding /usr/local/bin/Dealer /usr/local/bin/DOP to PATH
-echo "PATH=/usr/local/bin/Dealer:usr/local/bin/DOP:$PATH" >> ~/.bashrc
+echo Adding /usr/local/bin/DealerV2 /usr/local/bin/DOP to PATH
+echo "PATH=/usr/local/bin/DealerV2:usr/local/bin/DOP:$PATH" >> ~/.bashrc
 
 # setup the GIB external program in case there is anyone who still wants to use it.
 cp -p /usr/games/bridge /usr/games/gibcli

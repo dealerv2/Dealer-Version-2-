@@ -75,8 +75,8 @@
  /* Francois vars and functions    */
      /* Francois stuff for processing */
  #define CMDBUFFLEN 254
- char fd_cmd[] = "../lib/fdp ' ";  /* Maybe fdp should be in the same dir as dealer itself ? */
- char fd_cmd_buff[256] = "../lib/fdp ' "; /* Note the single quote. Required to prevent shell from expanding */
+ char fd_cmd[] = "/usr/local/bin/DealerV2/lib/fdp ' ";  /* Note the single quote. Required because FD shapes contain special shell chars */
+ char fd_cmd_buff[256] = "/usr/local/bin/DealerV2/lib/fdp ' ";
  char txt_buff[256] ; /*hold a copy of yytext when Francois shapes being done ? */
  char *fdbp ;   /* pointer to next avail byte in fd_cmd_buff */
  struct fd_shape_st fd_shape_buff ; /* 2K buffer to hold results of Francois expansion, and a length */
