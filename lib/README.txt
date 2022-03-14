@@ -1,4 +1,4 @@
-This folder contains one files that support the functioning of DealerV2 and some 
+This folder contains files that support the functioning of DealerV2 and some 
 files needed for rebuilding from source.
 1) libdds.a is a pre-compiled static library with Bo Haglund's Double Dummy Solver code.
 The binaries of DealerV2 have been linked against this library. Since it is a static 

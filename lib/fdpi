@@ -37,7 +37,8 @@ while(<>) {
     s/\#.*$//;
     $res = $_ ;
     $reslen = length($_) ;
-    $pl = $res =~ tr/+// ; $pl++ ;
+    $pl = $res =~ tr/+// ; 
+    $pl++ ;
     print "[Length:$reslen, patterns: $pl] " ;
     print;
     print STDOUT "?>" ;
