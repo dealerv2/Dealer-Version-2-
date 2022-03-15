@@ -1,7 +1,7 @@
 generate   10000
 produce    1000
 title "DOP query for Tricks  "
-# run this with -M1 
+ 
 
 opener west
 

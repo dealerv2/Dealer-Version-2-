@@ -1,5 +1,6 @@
 #!/bin/bash
 # File UN-install.bash -- JGM -- 2022-03-11
+#set -x
 echo "This will Uninstall DealerV2 and delete all the files in /usr/local/bin/DealerV2 and /usr/local/bin/DOP!!"
 read -rp "Continue? [Yn]" ANSW
 if [[ $ANSW == "Y" || $ANSW == "Yes" ]] ; then

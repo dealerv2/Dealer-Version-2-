@@ -442,7 +442,7 @@ trix        return(TRIX);
 
 shape{wsnl}*[{]  { BEGIN(FD1) ;
                      memset(fd_cmd_buff, ' ' , CMDBUFFLEN );
-                     fdbp = fmt_cmd_buff(fd_cmd_buff, fd_cmd ) ; /*../lib/fdp ' */
+                     fdbp = fmt_cmd_buff(fd_cmd_buff, fd_cmd ) ; /* /usr/local/bin/DealerV2/lib/fdp ' */
                      fdbp = fmt_cmd_buff(fdbp , "shape{ " ) ;
                      show_our_state( 3 , buffptr, "In Francois FD1. Still reading File Buff");
                }  /* end BEGIN FD1 */

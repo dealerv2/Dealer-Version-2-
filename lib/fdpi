@@ -1,34 +1,41 @@
 #!/usr/bin/perl
 #  Mod by JGM to put a prompt for input
-use Dealer::Dist;
+#  Mod by JGM to have Dist loaded from our own location not the system wide Perl5 @INC
+# Changed Dealer::Dist->new to Dist->new
+use lib "/usr/local/bin/DealerV2/lib"; 
+use Dist;
 use strict;
 use Carp;
+our $join_sign ;
 
 sub preshape {
+    my (@to_dealer_res, $top) ;
     my @results;
     my $shapes = shift;
     my @shapes = split(/(\s+[-+]\s+)/, $shapes);
-    my $s = Dealer::Dist->new;
+    # above takes "55xx + 65xx - x[89]xx - xxx0 " and splits it into: (without the single quotes
+    # '55xx' ' + '  '65xx'  ' - '  'x[89]xx'  ' - '  'xxx0'
+    my $s = Dist->new;
 
     unshift @shapes, ' + ' unless $shapes =~ /^\s+([-+])/;
+    $join_sign = ' + ' ;
     while(@shapes) {
-   my $expanded;
-   my $sexp = shift @shapes;
-   my $sign;
+       my $expanded;
+       my $sexp = shift @shapes; #start with a + sign from above Unshift but other signs may occur
+       my $sign;
 
-   $sexp =~ /\s+([-+])/ or die "BUG analysing $shapes";
-   push @results, $sign = " $1 ";
-
-   $s->shape(shift @shapes);
-   $expanded = join $sign, $s->to_dealer;
-   push @results, $expanded;
-    }
-    shift @results;
+       $sexp =~ /\s+([-+])/ or die "BUG analysing $shapes"; #if $sexp is not + or - with ws around error
+       push @results, $sign = " $1 "; # first time this is the unshifted +
+       $s->shape(shift @shapes);  #call a method on the next shape in the list.
+       @to_dealer_res = $s->to_dealer($sign) ;
+       $expanded = join ($sexp, @to_dealer_res) ;
+       push @results, $expanded;
+    } # end while @shapes
+    $top = shift @results;
     return join '', @results;
 }
-# $OUTPUT_AUTOFLUSH = 1 ;
     print STDOUT "?>" ;
-    my ($res,$reslen,$pl);
+    my ($res,$reslen,$signs);
 while(<>) {
     next if m/^#/;
     print "Parsing:: $_";
@@ -37,10 +44,10 @@ while(<>) {
     s/\#.*$//;
     $res = $_ ;
     $reslen = length($_) ;
-    $pl = $res =~ tr/+// ; 
-    $pl++ ;
-    print "[Length:$reslen, patterns: $pl] " ;
+    $signs = $res =~ tr/-+//; ;
+    $signs++ ;
+    print "[Length:$reslen, patterns: $signs] " ;
     print;
-    print STDOUT "?>" ;
+    print STDOUT "\n?>" ;
 }
 
