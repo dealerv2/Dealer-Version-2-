@@ -109,13 +109,13 @@ int dds_tricks(int compass, int strain ) {  //ngen, dds_dealnum, dds_res_bin, dd
 
  #ifdef JGMDBG
     if (jgmDebug >= 5 ) {
-       fprintf(stderr, "IN DDS_TRICKS.103 res_calls=%d ngen=%d dds_dealnum=%d,hand[%c],strain[%c], dds_mode=%d \n",
-                           dbg_dds_res_calls, ngen, dds_dealnum, "nesw"[compass],"cdhsn"[strain], dds_mode ); }
+       fprintf(stderr, "IN DDS_TRICKS.112 res_calls=%d ngen=%d dds_dealnum=%d,hand[%c],strain[%c], dds_mode=%d \n",
+                           dbg_dds_res_calls, ngen, dds_dealnum, "neswSW"[compass],"cdhsN"[strain], dds_mode ); }
  #endif
     CacheState = CheckCache(&dds_res_bin, ngen, dds_dealnum, compass, strain ) ;
  #ifdef JGMDBG
     if (jgmDebug >= 5 ) {
-       fprintf(stderr, "DDS_TRICKS.111: CheckCache returns[%d], ngen=%d,dds_dealnum=%d, trix=%d \n",
+       fprintf(stderr, "DDS_TRICKS.118: CheckCache returns[%d], ngen=%d,dds_dealnum=%d, trix=%d \n",
                         CacheState, ngen, dds_dealnum, dds_res_bin.tricks[compass][strain] );
     }
  #endif
@@ -131,15 +131,23 @@ int dds_tricks(int compass, int strain ) {  //ngen, dds_dealnum, dds_res_bin, dd
            dbg_dds_lib_calls++;
 
 #ifdef JGMDBG
-         if (jgmDebug >= 5 ) {fprintf(stderr, "IN DDS_TRICKS.110 CacheInvalid lib_calls=%d, mode=%d, dds_dealnum=[%d]  \n",
+         if (jgmDebug >= 5 ) {fprintf(stderr, "IN DDS_TRICKS.134 CacheInvalid lib_calls=%d, mode=%d, dds_dealnum=[%d]  \n",
                            dbg_dds_lib_calls, dds_mode, dds_dealnum ); }
- #endif
+#endif
 
         if (dds_mode == DDS_TABLE_MODE ) {
             dds_res_bin = true_CalcTable (curdeal, par_vuln, DDS_TABLE_MODE) ;
         }
         else if (dds_mode == DDS_BOARD_MODE) {
-            dds_res_bin.tricks[compass][strain] = true_SolveBoard(curdeal, compass, strain ) ;
+
+           dds_res_bin.tricks[compass][strain] = true_SolveBoard(curdeal, compass, strain ) ;
+           t1 = dds_res_bin.tricks[compass][strain];
+   #ifdef JGMDBG
+            if (jgmDebug >= 5 ) {
+               fprintf(stderr, "SOLVEBOARD for compass=%c strain=%c, returns %d trix \n",
+                           "neswSW"[compass], "cdhsN"[strain], t1 );
+            }
+   #endif
         }
         else {
             fprintf(stderr, "Cant Happen in dds_tricks. dds_mode=[%d] is Invalid!! Continuing with TableMode\n", dds_mode );
@@ -148,40 +156,28 @@ int dds_tricks(int compass, int strain ) {  //ngen, dds_dealnum, dds_res_bin, dd
         }
     }  /* end if CacheState */
  #ifdef JGMDBG
-    if (jgmDebug >= 6 ) {fprintf(stderr, "IN DDS_TRICKS.118 res_calls=%d ngen=%d dds_dealnum=%d \n",
-                           dbg_dds_res_calls, ngen, dds_dealnum ); }
+    if (jgmDebug >= 6 ) {
+       fprintf(stderr, "IN DDS_TRICKS.155 res_calls=%d ngen=%d dds_dealnum=%d, trix[%d,%d]=%d \n",
+            dbg_dds_res_calls, ngen, dds_dealnum, compass, strain, dds_res_bin.tricks[compass][strain] );
+   }
  #endif
 
     // assert The cache entry for dds_res_bin.tricks[compass][strain] is valid
 
-     /* dds ( SIDE ) is not implemented yet. May never be. */
-     /* If a side is asked for we make two calls to dds to get the best result. */
-     /* 2022-02-13 Above will be too slow. Default to South and West never mind best result */
-
-     if( compass == SIDE_NS ) {
-         // t0 = dds_res_bin.tricks[COMPASS_NORTH][strain] ;
-         t0 = 0 ;
-         t1 = dds_res_bin.tricks[COMPASS_SOUTH][strain] ;
-         return (t0 > t1 ) ? t0 : t1 ;
-     }
-     if( compass == SIDE_EW ) {
-         // t0 = dds_res_bin.tricks[COMPASS_EAST][strain] ;
-         t0 = 0 ;
-         t1 = dds_res_bin.tricks[COMPASS_WEST][strain] ;
-         return (t0 > t1 ) ? t0 : t1 ;
-     }
     /* Just a normal compass, north,east,south,west. */
     /* Then return the relevant result from the cache */
     t0 = dds_res_bin.tricks[compass][strain];
     t1 = dds_res_bin.parScore_NS ;
 #ifdef JGMDBG
     if (jgmDebug >= 6 ) {
-       fprintf(stderr, "Leaving dds_tricks.174 ngen=%d  lib_calls=%d, res_calls=%d tricks=%d, par=%d\n",
+       fprintf(stderr, "Leaving dds_tricks.172 ngen=%d  lib_calls=%d, res_calls=%d tricks=%d, par=%d\n",
                            ngen, dbg_dds_lib_calls, dbg_dds_res_calls, t0, t1 );
+
+       fprintf(stderr,"DDS tricks.174 RETURNS dds_res_bin[%d][%d] = %d ******* \n",
+                        compass, strain, dds_res_bin.tricks[compass][strain] );
     }
 #endif
-
-    return dds_res_bin.tricks[compass][strain];
+       return dds_res_bin.tricks[compass][strain];
 } /* end dds_tricks */
 
 DDSRES_k true_CalcTable(deal dl, int vul, int dds_mode ) {  // Mode should always be DDS_TABLE_MODE here...
@@ -200,7 +196,7 @@ DDSRES_k true_CalcTable(deal dl, int vul, int dds_mode ) {  // Mode should alway
 
 #ifdef JGMDBG
         if (jgmDebug >= 7 ) {
-           fprintf(stderr, "IN trueCalcTable.170 dbg_dds_lib_calls=%d, ngen=%d, dealnum=%d --  jgmDebug=%d, dds_mode=%d\n",
+           fprintf(stderr, "IN trueCalcTable.203 dbg_dds_lib_calls=%d, ngen=%d, dealnum=%d --  jgmDebug=%d, dds_mode=%d\n",
                            dbg_dds_lib_calls, ngen, dds_dealnum, jgmDebug, dds_mode );
         }
 #endif
@@ -256,7 +252,7 @@ DDSRES_k true_CalcTable(deal dl, int vul, int dds_mode ) {  // Mode should alway
 
 #ifdef JGMDBG
         if (jgmDebug >= 7) {
-            fprintf(stderr, "Done trueCalcTable.230 . North Spades Tricks=%d, parScore_NS=%d \n ", t0, t1 );
+            fprintf(stderr, "Done trueCalcTable.259 : North Spades Tricks=%d, parScore_NS=%d \n ", t0, t1 );
         }
 #endif
         return DealerRes ;
@@ -292,14 +288,14 @@ char line[120] ;
 
  #ifdef JGMDBG
     if (jgmDebug >= 7) {
-         fprintf( stderr, "true_SolveBoard.285 init_deal_st done.ngen=%d, trump=[%d], first=[%d], dds_mode=%d\n",
+         fprintf( stderr, "true_SolveBoard.295 dl struct set to zero.ngen=%d, trump=[%d], first=[%d], dds_mode=%d\n",
                      ngen, dl.trump, dl.first, dds_mode ) ;
     }
 #endif
   rc =  Deal52_to_Holding(curdeal, dl.remainCards);
  #ifdef JGMDBG
     if (jgmDebug >= 8) {
-        fprintf(stderr, "true_SolveBoard.292 Deal52_To_Holding Done. Calling dump_Deal\n");
+        fprintf(stderr, "true_SolveBoard.302 Deal52_To_Holding Done. Calling dump_Deal\n");
         dump_Deal(dl)  ;
     }
 #endif
@@ -309,7 +305,8 @@ char line[120] ;
  dl.trump = dds_strain[s] ;
  #ifdef JGMDBG
     if (jgmDebug >= 6) {
-        fprintf(stderr, "true_SolveBoard.300 Calling Solveboard , trump=%d, First=%d,dbg_dds_lib_calls=%d\n", dl.trump, dl.first, dbg_dds_lib_calls );
+        fprintf(stderr, "true_SolveBoard.312 Calling Solveboard ,Dealer[trump=%d, Decl=%d] DDS[ trump=%d, First=%d] ,dbg_dds_lib_calls=%d\n",
+              s,h, dl.trump, dl.first, dbg_dds_lib_calls );
     }
 #endif
  rc = SolveBoard(dl, -1, 1, 0, &fut, 0 ) ;
@@ -323,7 +320,7 @@ char line[120] ;
  trix = 13 - fut.score[0];  /* since we have calc the trix for our LHO our result is 13 - his */
  #ifdef JGMDBG
     if (jgmDebug >= 7) {
-        fprintf(stderr, "true_SolveBoard.316 tricks=[%d , %d], ngen=[%d], dds_dealnum=[%d], dds_lib_calls=[%d], dds_res_calls=[%d]\n",
+        fprintf(stderr, "true_SolveBoard.326 tricks=[%d , %d], ngen=[%d], dds_dealnum=[%d], dds_lib_calls=[%d], dds_res_calls=[%d]\n",
                                        fut.score[0], trix, ngen,dds_dealnum,dbg_dds_lib_calls, dbg_dds_res_calls ) ;
     }
  #endif

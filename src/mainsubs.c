@@ -189,8 +189,8 @@ int get_options (int argc, char *argv[], struct options_st *opts) {
         if (opts->title_len > 0  ) { printf("Title: %s\n", opts->title); }
         printf ("Version info....\n");
         printf ("Revision: %s \n", VERSION );
-        printf ("Date: 2022/03/07 \n");
-        printf ("$Author: Hans, Henk, JGM $\n");
+        printf ("Build Date:[%s] \n", BUILD_DATE );
+        printf ("$Authors: Hans, Henk, JGM $\n");
         #ifdef JGMDBG
           printf("JGMDBG is defined. Debugging printing to stderr is active\n");
         #endif
@@ -215,7 +215,7 @@ int get_options (int argc, char *argv[], struct options_st *opts) {
             opts->options_error = -2 ;
          }
         #ifdef JGMDBG
-               if (jgmDebug >= 4) {fprintf(stderr, "CVSRPT File %s opened in %s Mode\n",opts->csv_fname, opts->csv_fmode ); }
+               if (jgmDebug >= 4) {fprintf(stderr, "CSVRPT File %s opened in %s Mode\n",opts->csv_fname, opts->csv_fmode ); }
          #endif
           break ;
       case 'D':

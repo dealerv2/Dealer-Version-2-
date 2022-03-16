@@ -447,7 +447,7 @@ void analyze (deal d, struct handstat *hsbase) {  /* populate the handstat struc
   struct handstat *hs;
 
   #ifdef JGMDBG
-    if(jgmDebug >= 7) {    fprintf(stderr, "Analyze.436 Analyzing Current Deal for ngen=%d, jgmDebug=%d\n", ngen, jgmDebug); }
+    if(jgmDebug >= 7) {    fprintf(stderr, "Analyze.450 Analyzing Current Deal for ngen=%d, jgmDebug=%d\n", ngen, jgmDebug); }
     if(jgmDebug >= 9) {    dump_curdeal(d); }
   #endif
 
@@ -479,7 +479,7 @@ void analyze (deal d, struct handstat *hsbase) {  /* populate the handstat struc
        we skip those players who are not part of the analysis.
        JGM has added code so that if SIDE  NS is asked for, both compasses set; ditto for EW
     */
-     if(jgmDebug >= 8) { DBGPRT("Analyze.467:Debugging player Number", player, "in Analyze after memset and init_tops"  ); }
+     if(jgmDebug >= 8) { DBGPRT("Analyze.482:Debugging player Number", player, "in Analyze after memset and init_tops"  ); }
     next = 13 * player;
     for (c = 0; c < 13; c++) {  /* 13 cards in player's hand */
       curcard = d[next++];
@@ -730,7 +730,7 @@ int evaltree (struct tree *t) {                 /* walk thru the user's request 
       assert (t->tr_int1 >= COMPASS_NORTH && t->tr_int1 <= COMPASS_WEST);
       assert (t->tr_int2 >= SUIT_CLUB && t->tr_int2 <= 1 + SUIT_SPADE);  // could make this SUIT_NT here.
 #ifdef JGMDBG
-      if (jgmDebug >= 7 ) { fprintf(stderr, "evaltree.717 calling DDS dds_tricks; dds_mode=%d \n", dds_mode); }
+      if (jgmDebug >= 7 ) { fprintf(stderr, "evaltree.733 calling DDS dds_tricks; dds_mode=%d \n", dds_mode); }
 #endif
       return dds_tricks (t->tr_int1, t->tr_int2);
     case TRT_PAR:     /* side  */

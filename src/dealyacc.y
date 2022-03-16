@@ -127,6 +127,7 @@
 %token  DEAL
 %token  CSVRPT
 %token  TRIX
+%token  PRINTRPT
 
 %token <y_int> NUMBER
 %token <y_str> HOLDING
@@ -533,7 +534,11 @@ action                          /* Actions that happen during the run Do not cho
         | CSVRPT '(' csvlist ')'
                 { will_print++;
                   $$=newaction(ACT_CSVRPT,(struct tree*)$3,0,0, NIL); }
-        ;
+        | PRINTRPT '(' csvlist ')'
+                { will_print++ ;
+                  $$=newaction(ACT_PRINTRPT, (struct tree*)$3,0,0, NIL); }
+        ;    /* end of action chain */
+
 optstring        /* optstring is an optional string printed with either the average or frequency action. it can be absent */
         : /* empty */
                 { $$ = (char *) 0; }

@@ -137,7 +137,7 @@
     else if (strchr(s, 'a' ) || strchr(s, 'A') ) { return COMPASS_EAST  ; }
     else if (strchr(s, 'u' ) || strchr(s, 'U') ) { return COMPASS_SOUTH ; }
     else if (strchr(s, 'w' ) || strchr(s, 'W') ) { return COMPASS_WEST  ; }
-    return 0 ;  /* default to north */
+    return COMPASS_NORTH ;  /* default to north */
  } /* end compass2int */
 
  int vul2int(char *s ) {         /* checking for none, NS, EW , all, both */
@@ -156,6 +156,7 @@
     state_stk[++buffptr] = FILE_STATE ;
     yybuff_stk[buffptr] = YY_CURRENT_BUFFER ;
     show_our_state( 3, buffptr,  "Flex: Early Rules Result" );
+    //printf( "Early Print on STDOUT \n");
  }
 
 %}
@@ -209,6 +210,7 @@ FDISTVAR [$][0-9]{ws}*[+]?
    if( !init_done ) {
        setup_my_stack() ;
        init_done = 1 ;
+       // printf("SETUP my stack done on STDOUT \n");
    }
 
 "||"            return(OR2);
@@ -231,9 +233,10 @@ not             return(NOT);
 "?"             return(QUERY);
 ":"             return(COLON);
 "//".*\n        ;                       /* do nothing if C style one line comment */
-"/*"            BEGIN(COMMENT);
-<COMMENT>[^*\n<<EOF>>]*                 /*In Comment State:  eat up non-star, non EOL and non EOF .. */
-<COMMENT>"*"+[^*/\n<<EOF>]*             /*                   eat one or more * if followed by non *, non / non EOL non EOF */
+"/*"            BEGIN(COMMENT);        // slash star comments cannot contain greater than, less than or eof in caps
+
+<COMMENT>[^*\n<<EOF>>]*     ;          /*In Comment State:  eat up non-star, non EOL and non EOF .. */
+<COMMENT>"*"+[^*/\n<<EOF>]* ;          /*                   eat one or more * if followed by non *, non / non EOL non EOF */
 <COMMENT>\n     ;                       /* do nothing if {nl} found. flex will track yylineno */
 <COMMENT><<EOF>> yyerror("EOF found in comment");       /*yyerror prints and then does exit(-1) */
 <COMMENT>"*"+"/" BEGIN(INITIAL);                        /* found one or more * with a slash next to. Exit state COMMENT */
@@ -256,6 +259,7 @@ average         return(AVERAGE);
 frequency       return(FREQUENCY);
 deal            return(DEAL);
 csvrpt          return(CSVRPT);
+printrpt        return(PRINTRPT);
 
    /* now do some direct handling of the cases where yyparse not needed. It simplifies the yyparse() and the grammar */
    /* We do have to allow for the fact that the user might enter the keyword
@@ -523,7 +527,8 @@ shape{wsnl}*[{]  { BEGIN(FD1) ;
             fprintf(stderr, "yywrap:: yylineno=[%d] Flex Exit to main now. No valid curr buffer\n", yylineno);
          }
        #endif
-         return 1 ; /* alldone == 1 */
+       //printf( "YYWRAP returning ALL DONE -- 1 \n");
+       return 1 ; /* alldone == 1 */
    }
    if (state_stk[buffptr] == FILE_STATE ) {  /* End of Input File, means yyparse() is done */
             show_our_state( 4 , buffptr, "yywrap:: End of Input File Quitting now...");
@@ -533,6 +538,7 @@ shape{wsnl}*[{]  { BEGIN(FD1) ;
                                        yylineno, buffptr, state_stk[buffptr], (void *)YY_CURRENT_BUFFER);
          }
        #endif
+       //printf( "YYWRAP returning ALL DONE -- 2 \n");
        return 1 ;      /* yylex is alldone. No more input */
    } /* end file state */
 

@@ -1,4 +1,4 @@
-/* JGM: File dealaction_subs.c 2022-02-15  */
+/* JGM: File dealaction_subs.c 2022-02-18 -- CSVRPT and PRINTRPT  */
 #ifndef _GNU_SOURCE
   #define _GNU_SOURCE
 #endif
@@ -13,7 +13,7 @@
 #include "../include/dealprotos.h"
 #include "../include/dealdebug_subs.h"
 
-/* New Actions by JGM */
+/* Code for New Actions by JGM */
 void printside (deal d, int side ) ;
 void init_export_buff( char *bp , size_t buff_len) ;
 char *fmt_compass_export(char *buff, int p, deal dl ) ;
@@ -26,7 +26,7 @@ char sep ;
 void setup_action () { /* run once right after the parsing done */
   struct action *acp;
      #ifdef JGMDBG
-        if(jgmDebug >= 4) {
+        if(jgmDebug >= 6) {
             fprintf(stderr, "Setup Action Entered\n");
         }
    #endif
@@ -45,11 +45,12 @@ void setup_action () { /* run once right after the parsing done */
       case ACT_PRINTONELINE:
       case ACT_PRINTES:
       case ACT_CSVRPT :
+      case ACT_PRINTRPT :
         break;
       case ACT_PRINT:
         deallist = (deal *) mycalloc (maxproduce, sizeof (deal));
    #ifdef JGMDBG
-        if(jgmDebug >= 4) {
+        if(jgmDebug >= 3) {
             fprintf(stderr, "Setup Action ACT_PRINT maxproduce*52 =%d,  malloc succeeded\n", maxproduce*52 );
         }
    #endif
@@ -62,7 +63,7 @@ void setup_action () { /* run once right after the parsing done */
         acp->ac_u.acuavg.avg = 0.0; // double float pt. qty should be approx 0.5
         acp->ac_u.acuavg.vary= 0.0; // double float pt. qty variance. should be approx 1/sqrt(12) = 0.28867
    #ifdef JGMDBG
-        if(jgmDebug >= 4 ) {
+        if(jgmDebug >= 3 ) {
            fprintf(stderr, "Average Init Done. ac_u.acuavg.sqsum=%ld In setup_action\n",((long int) acp->ac_u.acuavg.sqsum));
         }
    #endif
@@ -96,7 +97,7 @@ void action () {            /* For each 'Interesting' deal, Walk the action_list
   double  dcount, dsum, dsqsum ;
   int actionitem = 0;  /* Debugging tracer var */
       #ifdef JGMDBG
-          if(jgmDebug >= 6) { fprintf(stderr, " .... Just entered Action() actionitem=%d\n",actionitem ); }
+          if(jgmDebug >= 8) { fprintf(stderr, " .... Just entered Action() actionitem=%d\n",actionitem ); }
       #endif
 
   sortDeal(curdeal) ; /* JGM sort each hand, Spade Ace downto Club deuce. Simplifies many actions and hardly costs */
@@ -107,7 +108,7 @@ void action () {            /* For each 'Interesting' deal, Walk the action_list
   for (acp = actionlist; acp != 0; acp = acp->ac_next) {
     actionitem++;
     #ifdef JGMDBG
-        if(jgmDebug >=6 ) { fprintf(stderr, "ActionItem [%3d] of type [%3d] \n", actionitem,acp->ac_type); }
+        if(jgmDebug > 4) { fprintf(stderr, "ActionItem [%3d] of type [%3d] \n", actionitem,acp->ac_type); }
     #endif
     switch (acp->ac_type) {
       default:
@@ -179,7 +180,7 @@ void action () {            /* For each 'Interesting' deal, Walk the action_list
            acp->ac_u.acuavg.vary = dsqsum - dsum*dsum ;
         }
    #ifdef JGMDBG
-        if(jgmDebug >= 6) {
+        if(jgmDebug >= 7) {
           fprintf(stderr, "Action_ptr=%p, Count=[%ld], Average Expr=[%d], Sum=[%ld], Sumsq=[%ld], RunningAvg=[%g]\n",
             (void *)acp, acp->ac_u.acuavg.count, expr, ((long int) acp->ac_u.acuavg.sum), ((long int) acp->ac_u.acuavg.sqsum), dsum/dcount );
           }
@@ -239,14 +240,14 @@ void action () {            /* For each 'Interesting' deal, Walk the action_list
               fprintf (fcsv, "%c%d", sep, expr);          /* dont need quotes around numbers */
               sep = ',';
          #ifdef JGMDBG
-               if (jgmDebug >= 6) {fprintf(stderr, "CVSRPT expr= %d\n", expr ); }
+               if (jgmDebug >= 4) {fprintf(stderr, "CSVRPT expr= %d\n", expr ); }
          #endif
             } // end if expr
             if (csvptr->csv_str) {  /* term is some kind of string. we put single quotes around it in case it has commas */
               fprintf (fcsv, "%c'%s'", sep, csvptr->csv_str); /*put quotes around a string in case it contains commas */
               sep = ',';
          #ifdef JGMDBG
-               if (jgmDebug >= 6) {fprintf(stderr, "CVSRPT Str== %s\n",csvptr->csv_str ); }
+               if (jgmDebug >= 4) {fprintf(stderr, "CSVRPT Str== %s\n",csvptr->csv_str ); }
          #endif
             } // end if string
             if (csvptr->csv_hands) { /* print the requested hands, in gibpbn format ; order is N,E,S,W */
@@ -254,7 +255,7 @@ void action () {            /* For each 'Interesting' deal, Walk the action_list
                printhands_pbn(fcsv, csvptr->csv_hands, curdeal ) ; /* csv_hands is a bit mask of compasses to print */
                sep = ',' ;
          #ifdef JGMDBG
-               if (jgmDebug >= 6) {fprintf(stderr, "CVSRPT Hands= %d\n",csvptr->csv_hands ); }
+               if (jgmDebug >= 4) {fprintf(stderr, "CSVRPT Hands_mask= %d\n",csvptr->csv_hands ); }
          #endif
             }  // end if hands
             if (csvptr->csv_trix) {  /* user wants tricks in all 5 strains for some set of hands */
@@ -266,14 +267,59 @@ void action () {            /* For each 'Interesting' deal, Walk the action_list
             csvptr = csvptr->next;
           } /* end while csvptr -- reached end of csvlist */
          #ifdef JGMDBG
-               if (jgmDebug >= 6) {fprintf(stderr, "CVSRPT end of list printing NewLine\n" ); }
+               if (jgmDebug >= 4) {fprintf(stderr, "CSVRPT end of list printing NewLine\n" ); }
          #endif
          fprintf(fcsv, "\n") ;  /* print a newline after the last item is done */
          sep = ' '; /*re-init for next line in csv report */
       } /* end case ACT_CSVRPT */
         break;
-      } /* end switch acp action_type */
+        /* Next is duplicate of csvrpt but to stdout; allows for both output to file and to screen. */
+     case ACT_PRINTRPT:         /* Re-use csvcode identical except for output file destination  */
+        { struct csvterm_st *csvptr = (struct csvterm_st *) acp->ac_expr1; // ptr to list of csvterms
+          sep = ' ' ; /* precede first item with a space; all susequent ones with commas */
+          while (csvptr) {  /* walk the list of csvterms until we reach end */
+             /* take appropriate action for this kind of csvterm. Only one should be set per term in the list */
+            if (csvptr->csv_tr) {  /* term is some kind of expression */
+              expr = evaltree (csvptr->csv_tr); /* returns int only */
+              fprintf (stdout, "%c%d", sep, expr);          /* dont need quotes around numbers */
+              sep = ',';
+         #ifdef JGMDBG
+               if (jgmDebug >= 4) {fprintf(stderr, "CSVRPT expr= %d\n", expr ); }
+         #endif
+            } // end if expr
+            if (csvptr->csv_str) {  /* term is some kind of string. we put single quotes around it in case it has commas */
+              fprintf (stdout, "%c'%s'", sep, csvptr->csv_str); /*put quotes around a string in case it contains commas */
+              sep = ',';
+         #ifdef JGMDBG
+               if (jgmDebug >= 4) {fprintf(stderr, "CSVRPT Str== %s\n",csvptr->csv_str ); }
+         #endif
+            } // end if string
+            if (csvptr->csv_hands) { /* print the requested hands, in gibpbn format ; order is N,E,S,W */
+               fprintf(stdout, "%c",sep) ; /* leave printhands_pbn as a generic routine; no leading comma or trailing \n*/
+               printhands_pbn(stdout, csvptr->csv_hands, curdeal ) ; /* csv_hands is a bit mask of compasses to print */
+               sep = ',' ;
+         #ifdef JGMDBG
+               if (jgmDebug >= 4) {fprintf(stderr, "CSVRPT Hands_mask= %d\n",csvptr->csv_hands ); }
+         #endif
+            }  // end if hands
+            if (csvptr->csv_trix) {  /* user wants tricks in all 5 strains for some set of hands */
+               csv_trixbuff_len = csv_trix(csv_trixbuff, csvptr->csv_trix) ; //fmt a buff with comma sep trick counts
+               fprintf(stdout,"%c%s",sep, csv_trixbuff) ;
+               sep = ',';
+            }
+            sep = ',';  // this one should replace all the others above
+            csvptr = csvptr->next;
+          } /* end while csvptr -- reached end of prtrpt list of terms */
+         #ifdef JGMDBG
+               if (jgmDebug >= 4) {fprintf(stderr, "CSVRPT end of list printing NewLine\n" ); }
+         #endif
+         fprintf(stdout, "\n") ;  /* print a newline after the last item is done */
+         sep = ' '; /*re-init for next line in csv report */
+      } /* end case ACT_PRINTRPT */
+        break;
+   } /* end switch acp action_type */
     } /* end for acp action list */
+
 } /* end action() i.e. process the action list */
 
 void cleanup_action () {  /* this also does the end-of-run actions like FREQUENCY, AVERAGE, EVALCONTRACT, & PRINT */
@@ -297,6 +343,7 @@ void cleanup_action () {  /* this also does the end-of-run actions like FREQUENC
       case ACT_EXP_SIDE_HLD:
       case ACT_EXP_SEAT_HLD:
       case ACT_CSVRPT :
+      case ACT_PRINTRPT :
         break;
       case ACT_EVALCONTRACT:
         showevalcontract (acp, nprod);
@@ -329,7 +376,7 @@ void cleanup_action () {  /* this also does the end-of-run actions like FREQUENC
               (double)acp->ac_u.acuavg.sum/acp->ac_u.acuavg.count,
               sqrt(d_var), d_var, acp->ac_u.acuavg.count );
    #ifdef JGMDBG
-        if (jgmDebug >= 6 ) {
+        if (jgmDebug >= 4 ) {
          fprintf(stderr, "Original Average=%g\n", (double) acp->ac_int1 / nprod);
          fprintf(stderr, "Running Totals: avg=%10.4f, sqrt(vary)=%10.4f, vary=%10.4f, count=%ld \n",
               acp->ac_u.acuavg.avg, sqrt(acp->ac_u.acuavg.vary), acp->ac_u.acuavg.vary, acp->ac_u.acuavg.count );
@@ -487,7 +534,7 @@ void printside (deal d, int side ) {  /* JGM Replacement for printew to allow NS
   }
   printf ("%4d. %-5s              %-5s\n", (nprod+1), player_name[players[0]], player_name[players[1]] );
   #ifdef JGMDBG
-    if (jgmDebug >= 6 ) {
+    if (jgmDebug > 7 ) {
        fprintf(stderr, "Printing parnership side [%d] players=[%s , %s]\n",
                                      side, player_name[players[0]], player_name[players[1]]);
     }
@@ -548,7 +595,7 @@ int printpbn (int board, deal d) {  /* Rudimentary PBN report primarily to exg w
   printf ("[Site \"-\"]\n");
   /* next two optional tags, not part of PBN Minimal Tag Set -- , added by JGM */
   if (strlen(title) > 0 ) { printf("[Description \"%s\"]\n", title); }
-  printf("[Generator \"Dealer Version %s by Hans, Henk, and JGM\"]\n",VERSION );
+  printf("[Generator \"Dealer Version 2.0 by Hans, Henk, and JGM\"]\n");
 
   /* Today's date */
   timet = time(&timet);
@@ -638,7 +685,7 @@ void showevalcontract (struct action *acp, int nh) {  // print the average score
         score_tot = 0 ;
         success_cnt = 0 ;
         fail_cnt = 0 ;
-        if (jgmDebug >=5 )
+        if (jgmDebug >=4 )
            fprintf(stderr, "SHOWEVALCONTRACT::[%s]nh=%d, L=%d,S=%d,V=%d , Dbl=%d ..\n",
             acp->ac_u.acucontract.c_str, nh, l, s, v, dbl );
     if (0 == dbl ) {
@@ -648,12 +695,12 @@ void showevalcontract (struct action *acp, int nh) {  // print the average score
           score_tot +=  uscore * tricks_cnt ;           /* uscore * number of times it occurred */
           if (uscore > 0 ) { success_cnt += tricks_cnt ; }
           if (uscore < 0 ) { fail_cnt    += tricks_cnt ; }
-          if (jgmDebug >=5 )
+          if (jgmDebug >=4 )
                fprintf(stderr, "SHOWEVALCONTRACT::ddtricks=%d, tricks_cnt=%d, uscore=%d, succ_cnt=%d, fail_cnt=%d  \n",
                                  ddtricks, tricks_cnt, uscore, success_cnt, fail_cnt) ;
 
         }
-        if (jgmDebug >=5 )
+        if (jgmDebug >=4 )
            fprintf(stderr, "SHOWEVALCONTRACT:: Tot_Score=%d, SuccessTot=%d, FailTot=%d, NH=%d \n",
                                                 score_tot, success_cnt, fail_cnt, nh ) ;
     }  /* end undoubled */
@@ -665,7 +712,7 @@ void showevalcontract (struct action *acp, int nh) {  // print the average score
             if (dscore > 0 ) { success_cnt += tricks_cnt ; } // There is no such thing as a score of zero in bridge!
             if (dscore < 0 ) { fail_cnt    += tricks_cnt ; }
         }
-        if (jgmDebug >=5 )
+        if (jgmDebug >=4 )
            fprintf(stderr, "SHOWEVALCONTRACT:: Tot_Score=%d, SuccessTot=%d, FailTot=%d, NH=%d \n",
                                                 score_tot, success_cnt, fail_cnt, nh ) ;
      } /* end doubled or redoubled */
@@ -686,7 +733,7 @@ void evalcontract(int side, int strain ) {
     else ddtricks = dds_tricks( 3, strain ) ; // if EW make W declarer
 
     results[side][strain][ddtricks]++ ; /* add +1 to the number of times ddtricks were taken in strain 's' */
-    if (jgmDebug >= 6 ) show_evalres(side, strain) ;
+    if (jgmDebug >= 4 ) show_evalres(side, strain) ;
     return ;
 } /* end evalcontract */
 
@@ -704,13 +751,13 @@ char *fmt_compass_export(char *buff, int p, deal dl ) {
    char *bp ;
    bp = buff ;
 #ifdef JGMDBG
-   if (jgmDebug >= 7) fprintf(stderr, "Hand52:: bp=%p \n",bp ) ;
+   if (jgmDebug > 8) fprintf(stderr, "Hand52:: bp=%p \n",bp ) ;
 #endif
    di = p*13 ;
    count = 0 ;
    curr_suit = 3 ; // spades
 #ifdef JGMDBG
-   if (jgmDebug >= 7  ) {
+   if (jgmDebug > 6 ) {
        fprintf(stderr, "Hand52_to_buff:: p=%d, di=%d, dl[di]=%02x\n",p,di,dl[di] ) ;
        fprintf(stderr, "buff=%p, bp=%p \n", buff, bp );
        }
@@ -719,7 +766,7 @@ char *fmt_compass_export(char *buff, int p, deal dl ) {
    while (count < 13 ) {
        kard = dl[di] ; card_suit = C_SUIT(kard); card_rank = C_RANK(kard) ;
     #ifdef JGMDBG
-        if (jgmDebug >= 8 ) { fprintf(stderr,"Top Big While::Kard=%02x, card_suit=%d, card_rank=%d, count=%d, curr_suit=%d\n",
+        if (jgmDebug > 7 ) { fprintf(stderr,"Top Big While::Kard=%02x, card_suit=%d, card_rank=%d, count=%d, curr_suit=%d\n",
                                                 kard, card_suit, card_rank, count, curr_suit ) ; }
     #endif
        while( curr_suit != card_suit ) curr_suit-- ;
@@ -728,7 +775,7 @@ char *fmt_compass_export(char *buff, int p, deal dl ) {
         while ( (curr_suit == card_suit) && (count < 13) ) { /* write the cards in this suit */
             kard = dl[di]; card_suit = C_SUIT(kard); card_rank = C_RANK(kard) ;
    #ifdef JGMDBG
-            if (jgmDebug >= 8 ) {
+            if (jgmDebug > 8 ) {
                 fprintf(stderr,"Top Small While::Kard=%02x, card_suit=%d, card_rank=%d, count=%d, curr_suit=%d\n",
                                                 kard, card_suit, card_rank, count, curr_suit ) ;
             }
@@ -737,11 +784,11 @@ char *fmt_compass_export(char *buff, int p, deal dl ) {
            *bp++ = rank_ids[card_rank];
            count++; di++;
    #ifdef JGMDBG
-              if (jgmDebug >= 7 ) { fprintf(stderr," Num[%d]=%c%c ", count, "CDHS"[curr_suit], *(bp-1) ) ; }
+              if (jgmDebug > 7 ) { fprintf(stderr," Num[%d]=%c%c ", count, "CDHS"[curr_suit], *(bp-1) ) ; }
    #endif
         } /* end while curr_suit == card_suit */
    #ifdef JGMDBG
-        if (jgmDebug >= 7 ) { fprintf(stderr,"\n"); }
+        if (jgmDebug > 7 ) { fprintf(stderr,"\n"); }
    #endif
        *bp++ = suit_sep;
         curr_suit-- ; /* Move to next suit */
@@ -785,7 +832,7 @@ char *Hand52_to_pbnbuff (int p, char *dl, char *buff ) {  //pbnbuff has no - for
        kard = dl[di] ; card_suit = C_SUIT(kard); card_rank = C_RANK(kard) ;
        while( curr_suit != card_suit ) { /* write a suit separator for missing suits spades downto first one*/
             *bp++ = suit_sep;
-            if (jgmDebug >= 7 ) { fprintf(stderr, "Wrote Void for suit %d \n",curr_suit ) ; }
+            if (jgmDebug > 6 ) { fprintf(stderr, "Wrote Void for suit %d \n",curr_suit ) ; }
             curr_suit-- ;
         } /* end while curr_suit != card_suit */
         assert(card_suit == curr_suit) ;
@@ -813,16 +860,13 @@ char *Hand52_to_pbnbuff (int p, char *dl, char *buff ) {  //pbnbuff has no - for
         *bp = '\0' ; // terminate the buffer as a string
         return bp  ; /* return pointer to null byte in case we want to append another hand to the buffer */
 } /* end Hand52_to_pbnbuff */
-
-/* JGM Added this next one for csv and prt reports. Not a PBN report but like printoneline */
 void printhands_pbn( FILE *fp, int mask, deal d ) {   // No newline at end of print. Caller to put \n or comma as reqd.
-
 /* print the hands in the same format as printoneline does but option to print 1,2,3,or 4 hands */
 /* Hands are always printed in order of N,E,S,W but some may be omitted e.g. might be only E and S */
 /* also do not print newline at end. */
 /* sample pbnfuff n .AKQJ987.5432.A3 e A5432..JT98.KQJ2 s KQJ.6543.AKQ.T98 w T9876.T2.76.7654 */
 /* note that voids are not shown explicitely with a - sign, but instead can be inferred from the dots. */
-/* A space indicates end of a compass direction. */
+/* A space indicates end of a hand. */
 
   char pt[] = "nesw";
   int  p;
