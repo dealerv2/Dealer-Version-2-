@@ -1,0 +1,128 @@
+
+North hands:
+
+   1.               
+T 3 
+K 8 4 
+6 3 
+K J T 7 4 2 
+
+Losers: Mean=    8.0000, Std Dev=    0.0000, Var=    0.0000, Sample Size=1 
+S : Mean=    2.0000, Std Dev=    0.0000, Var=    0.0000, Sample Size=1 
+H : Mean=    2.0000, Std Dev=    0.0000, Var=    0.0000, Sample Size=1 
+D : Mean=    2.0000, Std Dev=    0.0000, Var=    0.0000, Sample Size=1 
+C : Mean=    2.0000, Std Dev=    0.0000, Var=    0.0000, Sample Size=1 
+HCP: Mean=    7.0000, Std Dev=    0.0000, Var=    0.0000, Sample Size=1 
+S : Mean=    0.0000, Std Dev=    0.0000, Var=    0.0000, Sample Size=1 
+H : Mean=    3.0000, Std Dev=    0.0000, Var=    0.0000, Sample Size=1 
+D : Mean=    0.0000, Std Dev=    0.0000, Var=    0.0000, Sample Size=1 
+C : Mean=    4.0000, Std Dev=    0.0000, Var=    0.0000, Sample Size=1 
+Control: Mean=    2.0000, Std Dev=    0.0000, Var=    0.0000, Sample Size=1 
+S : Mean=    0.0000, Std Dev=    0.0000, Var=    0.0000, Sample Size=1 
+H : Mean=    1.0000, Std Dev=    0.0000, Var=    0.0000, Sample Size=1 
+D : Mean=    0.0000, Std Dev=    0.0000, Var=    0.0000, Sample Size=1 
+C : Mean=    1.0000, Std Dev=    0.0000, Var=    0.0000, Sample Size=1 
+
+North hands:
+
+   1.               
+T 3 
+K 8 4 
+6 3 
+K J T 7 4 2 
+
+C4: Mean=  950.0000, Std Dev=    0.0000, Var=    0.0000, Sample Size=1 
+S : Mean=   10.0000, Std Dev=    0.0000, Var=    0.0000, Sample Size=1 
+H : Mean=   90.0000, Std Dev=    0.0000, Var=    0.0000, Sample Size=1 
+D : Mean=    0.0000, Std Dev=    0.0000, Var=    0.0000, Sample Size=1 
+C : Mean=  300.0000, Std Dev=    0.0000, Var=    0.0000, Sample Size=1 
+tens: Mean=    2.0000, Std Dev=    0.0000, Var=    0.0000, Sample Size=1 
+S : Mean=    1.0000, Std Dev=    0.0000, Var=    0.0000, Sample Size=1 
+H : Mean=    0.0000, Std Dev=    0.0000, Var=    0.0000, Sample Size=1 
+D : Mean=    0.0000, Std Dev=    0.0000, Var=    0.0000, Sample Size=1 
+C : Mean=    1.0000, Std Dev=    0.0000, Var=    0.0000, Sample Size=1 
+jacks: Mean=    1.0000, Std Dev=    0.0000, Var=    0.0000, Sample Size=1 
+S : Mean=    0.0000, Std Dev=    0.0000, Var=    0.0000, Sample Size=1 
+H : Mean=    0.0000, Std Dev=    0.0000, Var=    0.0000, Sample Size=1 
+D : Mean=    0.0000, Std Dev=    0.0000, Var=    0.0000, Sample Size=1 
+C : Mean=    1.0000, Std Dev=    0.0000, Var=    0.0000, Sample Size=1 
+
+North hands:
+
+   1.               
+T 3 
+K 8 4 
+6 3 
+K J T 7 4 2 
+
+queens: Mean=    0.0000, Std Dev=    0.0000, Var=    0.0000, Sample Size=1 
+S : Mean=    0.0000, Std Dev=    0.0000, Var=    0.0000, Sample Size=1 
+H : Mean=    0.0000, Std Dev=    0.0000, Var=    0.0000, Sample Size=1 
+D : Mean=    0.0000, Std Dev=    0.0000, Var=    0.0000, Sample Size=1 
+C : Mean=    0.0000, Std Dev=    0.0000, Var=    0.0000, Sample Size=1 
+kings: Mean=    2.0000, Std Dev=    0.0000, Var=    0.0000, Sample Size=1 
+S : Mean=    0.0000, Std Dev=    0.0000, Var=    0.0000, Sample Size=1 
+H : Mean=    1.0000, Std Dev=    0.0000, Var=    0.0000, Sample Size=1 
+D : Mean=    0.0000, Std Dev=    0.0000, Var=    0.0000, Sample Size=1 
+C : Mean=    1.0000, Std Dev=    0.0000, Var=    0.0000, Sample Size=1 
+aces: Mean=    0.0000, Std Dev=    0.0000, Var=    0.0000, Sample Size=1 
+S : Mean=    0.0000, Std Dev=    0.0000, Var=    0.0000, Sample Size=1 
+H : Mean=    0.0000, Std Dev=    0.0000, Var=    0.0000, Sample Size=1 
+D : Mean=    0.0000, Std Dev=    0.0000, Var=    0.0000, Sample Size=1 
+C : Mean=    0.0000, Std Dev=    0.0000, Var=    0.0000, Sample Size=1 
+
+North hands:
+
+   1.               
+T 3 
+K 8 4 
+6 3 
+K J T 7 4 2 
+
+top2: Mean=    2.0000, Std Dev=    0.0000, Var=    0.0000, Sample Size=1 
+S : Mean=    0.0000, Std Dev=    0.0000, Var=    0.0000, Sample Size=1 
+H : Mean=    1.0000, Std Dev=    0.0000, Var=    0.0000, Sample Size=1 
+D : Mean=    0.0000, Std Dev=    0.0000, Var=    0.0000, Sample Size=1 
+C : Mean=    1.0000, Std Dev=    0.0000, Var=    0.0000, Sample Size=1 
+top3: Mean=    2.0000, Std Dev=    0.0000, Var=    0.0000, Sample Size=1 
+S : Mean=    0.0000, Std Dev=    0.0000, Var=    0.0000, Sample Size=1 
+H : Mean=    1.0000, Std Dev=    0.0000, Var=    0.0000, Sample Size=1 
+D : Mean=    0.0000, Std Dev=    0.0000, Var=    0.0000, Sample Size=1 
+C : Mean=    1.0000, Std Dev=    0.0000, Var=    0.0000, Sample Size=1 
+top4: Mean=    3.0000, Std Dev=    0.0000, Var=    0.0000, Sample Size=1 
+S : Mean=    0.0000, Std Dev=    0.0000, Var=    0.0000, Sample Size=1 
+H : Mean=    1.0000, Std Dev=    0.0000, Var=    0.0000, Sample Size=1 
+D : Mean=    0.0000, Std Dev=    0.0000, Var=    0.0000, Sample Size=1 
+C : Mean=    2.0000, Std Dev=    0.0000, Var=    0.0000, Sample Size=1 
+
+North hands:
+
+   1.               
+T 3 
+K 8 4 
+6 3 
+K J T 7 4 2 
+
+top5: Mean=    5.0000, Std Dev=    0.0000, Var=    0.0000, Sample Size=1 
+S : Mean=    1.0000, Std Dev=    0.0000, Var=    0.0000, Sample Size=1 
+H : Mean=    1.0000, Std Dev=    0.0000, Var=    0.0000, Sample Size=1 
+D : Mean=    0.0000, Std Dev=    0.0000, Var=    0.0000, Sample Size=1 
+C : Mean=    3.0000, Std Dev=    0.0000, Var=    0.0000, Sample Size=1 
+c13: Mean=    9.0000, Std Dev=    0.0000, Var=    0.0000, Sample Size=1 
+S : Mean=    0.0000, Std Dev=    0.0000, Var=    0.0000, Sample Size=1 
+H : Mean=    4.0000, Std Dev=    0.0000, Var=    0.0000, Sample Size=1 
+D : Mean=    0.0000, Std Dev=    0.0000, Var=    0.0000, Sample Size=1 
+C : Mean=    5.0000, Std Dev=    0.0000, Var=    0.0000, Sample Size=1 
+
+North hands:
+
+   1.               
+T 3 
+K 8 4 
+6 3 
+K J T 7 4 2 
+
+Generated 1 hands
+Produced  1 hands
+Initial random seed 18
+Time needed    0.010 sec

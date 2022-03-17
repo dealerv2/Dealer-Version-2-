@@ -1,0 +1,20 @@
+Clubs held by W: Mean=    4.3820, Std Dev=    1.1329, Var=    1.2835, Sample Size=100000 
+Frequency Number of clubs:
+    0	       0
+    1	       0
+    2	    4200
+    3	   16765
+    4	   34624
+    5	   29009
+    6	   12309
+    7	    2673
+    8	     384
+    9	      33
+   10	       3
+   11	       0
+   12	       0
+   13	       0
+Generated 712852 hands
+Produced  100000 hands
+Initial random seed 1
+Time needed    0.908 sec

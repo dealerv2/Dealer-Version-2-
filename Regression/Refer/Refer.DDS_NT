@@ -1,0 +1,15 @@
+Frequency North 1NT Opener Tricks any strain South <= 12 hcp:
+    5	       3
+    6	       2
+    7	      10
+    8	      23
+    9	      18
+   10	      20
+   11	      20
+High	       4
+
+1NT openers by North with DDS analysis for best strain. South has <= than 12hcp. No shape restrictions on South 
+Generated 1935 hands
+Produced  100 hands
+Initial random seed 10
+Time needed   11.212 sec

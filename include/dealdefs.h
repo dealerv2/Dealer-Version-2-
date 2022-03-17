@@ -1,4 +1,4 @@
-  /* File dealdefs.h -- VERSION 2.5  -- Major deletions
+  /* File dealdefs.h -- VERSION 2.1.5 FD shapes, and printrpt ported from deal_v3
    * by ;;JGM   2022 version Collect all dealer symbolic constants and macros in one place.
    * Last Modified: 2022/02/19
    */
@@ -11,8 +11,12 @@
 #ifndef _GNU_SOURCE
   #define _GNU_SOURCE
 #endif
-
-#define VERSION "2.1.0"
+#define BUILD_DATE "2022/03/15"
+#ifndef JGMDBG
+  #define VERSION "2.1.6"
+#else
+  #define VERSION "102.1.6"
+#endif
 
 #ifndef UNUSED
   #define UNUSED(x) ((void)(true ? 0 : ((x), void(), 0)))
@@ -31,7 +35,7 @@
 /* will have to make sure there is an ln /usr/games/gibcli to /usr/games/bridge */
 #define DD_PGM "/usr/games/gibcli"
 #define OPC_PGM "/usr/local/bin/DOP/dop"
-#define FDP_PGM "/usr/local/bin/Dealer/fdp"
+#define FDP_PGM "/usr/local/bin/DealerV2/fdp"
 #define SUCCESS 1
 #define FAILED  0
 #define NIL ((struct tree *) 0)

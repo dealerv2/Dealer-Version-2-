@@ -1,0 +1,10 @@
+# File Descr.LongestSuit by JGM
+title " West - Hearts Longest Suit example   "
+
+generate 1000000
+produce 1000
+seed 13
+action average "Hearts Longest Suite" (hearts(west) > clubs(west) && hearts(west) > diamonds(west) && hearts(west) > spades(west) )
+
+condition
+ shape{west, x4+xx:h>c,h>d} && shape{west, x4+xx:h>s}

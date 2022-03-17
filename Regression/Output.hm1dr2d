@@ -1,0 +1,10 @@
+e3352: Mean=    0.0000, Std Dev=    0.0000, Var=    0.0000, Sample Size=100000 
+Frequency spades:
+    0	    1182
+    1	   16023
+    2	   82795
+    3	       0
+Generated 8249772 hands
+Produced  100000 hands
+Initial random seed 24
+Time needed   12.995 sec

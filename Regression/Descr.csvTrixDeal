@@ -1,0 +1,10 @@
+generate 100
+produce 4
+title "CSV report giving the complete deal, and the tricks in all 5 strains for all 4 Declarers"
+ // use the -C cmd line switch to define a file for the CSV output Specify -M 2 on the cmd line to avoid err msg.
+condition
+   hcp(south) >= 10
+ // Tricks at the end the line are N:[c,d,h,s,nt], E:[c,d,h,s,nt] S:[c,d,h,s,nt] W:[c,d,h,s,nt]
+action csvrpt ( deal, trix(deal)  )
+
+

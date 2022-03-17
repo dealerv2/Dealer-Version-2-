@@ -1,0 +1,37 @@
+# A typical play decision, here is the hand, the bidding and trick one
+#
+#	J x x x x x x
+#	J x
+#	x x
+#	9 5
+#
+#
+#	A
+#	A Q
+#	A
+#	A Q J 10 x x x x x
+#
+#	W	N	E	S
+#	p	p	1D	dbl
+#	1H	2S	3H	4C
+#	p	4S	p	6C
+#	all pass
+#
+# The lead is a small diamond to the K and A, how to play?
+# Two possibilities, play for the drop of the KC or lead the QC,
+# cross to the 9 and take the heart finesse.
+#
+# the inferences from bidding and trick one are encoded below
+predeal
+	north SJ865432, HJ5, D72, C95
+	west DQ5
+	south SA, HAQ, DA, CAQJT87642
+	east DKJ
+generate 
+	1000000
+
+condition
+	hcp(east)>=10 && shape(west, x5xx) && shape(east, x45x + x46x + x47x)
+action
+	average "king drops" shape(west, xxx1),
+	average "finesse" hascard(east, KH)

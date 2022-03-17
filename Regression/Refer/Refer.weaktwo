@@ -1,0 +1,16 @@
+Frequency points:
+    5	    1344
+    6	    1558
+    7	    2248
+    8	    1995
+    9	    2293
+   10	    1927
+   11	    2047
+hearts: Mean=    2.3483, Std Dev=    0.9918, Var=    0.9837, Sample Size=13412 
+Ace of spades: Mean=    0.5528, Std Dev=    0.4972, Var=    0.2472, Sample Size=13412 
+Jack of spades: Mean=    0.4596, Std Dev=    0.4984, Var=    0.2484, Sample Size=13412 
+Heart fit: Mean=    0.1390, Std Dev=    0.3459, Var=    0.1197, Sample Size=13412 
+Generated 1000000 hands
+Produced  13412 hands
+Initial random seed 38
+Time needed    1.451 sec

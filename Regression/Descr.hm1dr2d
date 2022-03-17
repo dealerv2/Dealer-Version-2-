@@ -1,0 +1,144 @@
+generate 50000000
+produce 100000
+eopen = hcp(east)>=10 and hcp(east)<=14 
+e1nt = eopen and hearts(east)>=4 and spades(east)>=4 
+e1h = eopen and (not e1nt) and hearts(east)>=4
+e1s = eopen and (not e1nt) and spades(east)>=4
+e1d = eopen and (not e1nt) and (not e1h) and (not e1s)
+wrele = hcp(west)>=12
+e2d = spades(east)<=2 and clubs(east)<=3
+
+e0094 = shape(east,0094)
+e0184 = shape(east,0184)
+e0193 = shape(east,0193)
+e0274 = shape(east,0274)
+e0283 = shape(east,0283)
+e0292 = shape(east,0292)
+e0364 = shape(east,0364)
+e0373 = shape(east,0373)
+
+e0382 = shape(east,0382)
+e0391 = shape(east,0391)
+e1084 = shape(east,1084)
+e1093 = shape(east,1093)
+e1174 = shape(east,1174)
+e1183 = shape(east,1183)
+e1192 = shape(east,1192)
+e1264 = shape(east,1264)
+
+e1273 = shape(east,1273)
+e1282 = shape(east,1282)
+e1291 = shape(east,1291)
+e1354 = shape(east,1354)
+e1363 = shape(east,1363)
+e1372 = shape(east,1372)
+e1381 = shape(east,1381)
+e1390 = shape(east,1390)
+
+e2074 = shape(east,2074)
+e2083 = shape(east,2083)
+e2092 = shape(east,2092)
+e2164 = shape(east,2164)
+e2173 = shape(east,2173)
+e2182 = shape(east,2182)
+# e2191 = shape(east,2191)
+# e2254 = shape(east,2254)
+
+# e2263 = shape(east,2263)
+# e2272 = shape(east,2272)
+# e2281 = shape(east,2281)
+# e2290 = shape(east,2290)
+# e2344 = shape(east,2344)
+# e2353 = shape(east,2353)
+# e2362 = shape(east,2362)
+# e2371 = shape(east,2371)
+# e2380 = shape(east,2380)
+# e3064 = shape(east,3064)
+# e3073 = shape(east,3073)
+# e3082 = shape(east,3082)
+# e3091 = shape(east,3091)
+# e3154 = shape(east,3154)
+# e3163 = shape(east,3163)
+# e3172 = shape(east,3172)
+# e3181 = shape(east,3181)
+# e3190 = shape(east,3190)
+# e3244 = shape(east,3244)
+# e3253 = shape(east,3253)
+# e3262 = shape(east,3262)
+# e3271 = shape(east,3271)
+# e3280 = shape(east,3280)
+# e3334 = shape(east,3334)
+# e3343 = shape(east,3343)
+e3352 = shape(east,3352)
+# e3361 = shape(east,3361)
+# e3370 = shape(east,3370)
+
+condition	
+ e1d and e2d
+
+action 
+ 
+
+
+
+# average "e0094" e0094,
+# average "e0184" e0184,
+# average "e0193" e0193,
+# average "e0274" e0274,
+# average "e0283" e0283,
+# average "e0292" e0292,
+# average "e0364" e0364,
+# average "e0373" e0373,
+# average "e0382" e0382,
+# average "e0391" e0391,
+# average "e1084" e1084,
+# average "e1093" e1093,
+# average "e1174" e1174,
+# average "e1183" e1183,
+# average "e1192" e1192,
+# average "e1264" e1264,
+# average "e1273" e1273,
+# average "e1282" e1282,
+# average "e1291" e1291,
+# average "e1354" e1354,
+# average "e1363" e1363,
+# average "e1372" e1372,
+# average "e1381" e1381,
+# average "e1390" e1390,
+# average "e2074" e2074,
+# average "e2083" e2083,
+# average "e2092" e2092,
+# average "e2164" e2164,
+# average "e2173" e2173,
+# average "e2182" e2182,
+# average "e2191" e2191,
+# average "e2254" e2254,
+# average "e2263" e2263,
+# average "e2272" e2272,
+# average "e2281" e2281,
+# average "e2290" e2290,
+# average "e2344" e2344,
+# average "e2353" e2353,
+# average "e2362" e2362,
+# average "e2371" e2371,
+# average "e2380" e2380,
+# average "e3064" e3064,
+# average "e3073" e3073,
+# average "e3082" e3082,
+# average "e3091" e3091,
+# average "e3154" e3154,
+# average "e3163" e3163,
+# average "e3172" e3172,
+# average "e3181" e3181,
+# average "e3190" e3190,
+# average "e3244" e3244,
+# average "e3253" e3253,
+# average "e3262" e3262,
+# average "e3271" e3271,
+# average "e3280" e3280,
+# average "e3334" e3334,
+# average "e3343" e3343,
+average "e3352" e3352,
+# average "e3361" e3361,
+# average "e3370" e3370,
+frequency "spades" (spades(east),0,3)

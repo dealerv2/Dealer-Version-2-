@@ -2,7 +2,7 @@
 # This example calculates the Average Par Result for a 1NT north facing a 0-12 hcp south
 # Note DDS can calculate 20 results using Mode 2 in about the same time GIB calcs 2 results.
 # Make sure you specify -M2 on the command line when running this or it will take 3-5 times as long.
-
+# For 1000 hands with Mode=2 it takes     secs on a 3.98GHz Intel core 2 with 8 threads
 
 
 title "1NT openers by North Par Results  "

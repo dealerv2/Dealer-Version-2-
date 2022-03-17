@@ -1,0 +1,12 @@
+#
+# Example to estimate the number of spades in the west hand opposite
+# a given east-hand.
+#
+predeal
+	east ST9854, HK86, DT765, CT
+condition
+	hcp(west) >= 20 && hcp(west)<=22 && shape(west, any 4333 + any 4432 + any 5332)
+generate
+	1000000
+action
+	average spades(west)

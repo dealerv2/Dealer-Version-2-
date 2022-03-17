@@ -1,0 +1,40 @@
+# File Descr.GIB_NT by JGM 
+# This example calculates the frequency of tricks (GIB Style) for a 1NT north facing a 0-12 hcp south
+# Note Gib always returns the tricks for N/S; the dealer program will give the E/W tricks if req'd
+# GIB does take into account the opening leader though so you can compare N/S tricks by S vs N/S tricks by N
+# If you really want to. That is to say that tricks(north, spades) might not be the same as tricks(south, spades).
+# To compare 'right' siding the contract you could do everything below but also find all the tricks for S and compare 
+# each North result to each South result and then find the Best Strain.
+
+# This example is relatively slow: GIB takes its time. 
+#To Produce  100 hands on a 3.5GHz Intel core i7 (8 threads) takes about  46.75 seconds.
+#           1000   "    "     "      "     "        "          "     "   400 seconds.
+
+#IMPORTANT -- The GIB program wants the file *****>"eval.dat"<***** to be in the current ****WORKING**** directory
+# NOT the directory where the dealer binary is, nor where the GIB binary is, nor the directory where the dealer control file is
+# but the current working directory at the time the dealer command is run.
+
+seed 117
+title "100 1NT openers by North with GIB analysis. South has <= than 12hcp. No shape restrictions on South " 
+generate 1000000
+#produce 1000				/* 1000 is a commonly used adequate sample size in stats based on the Central Limit Theorem */
+produce 100					// But we do only 100 here for sake of speed of demo.	
+
+nNtrix = tricks(north, notrumps) 
+nStrix = tricks(north, spades)
+nHtrix = tricks(north, hearts)
+nDtrix = tricks(north, diamonds)
+nCtrix = tricks(north, clubs)
+
+/* this next block determines which strain the max tricks comes from. Just bec North has a NT opener does not mean they play in NT */
+ntrix_Major = nStrix > nHtrix ? nStrix : nHtrix
+ntrix_minor = nDtrix > nCtrix ? nDtrix : nCtrix
+ntrix_suit = ntrix_Major > ntri_xinorm ? ntrix_Major : ntrix_minor
+ntrix  = ntrix_suit > nNtrix ? ntrix_suit : nNtrix
+
+condition
+	shape(north, any 4333 + any 4432 + any 5332) and
+		hcp(north)>=15 and hcp(north)<=18 and hcp(south) <= 12
+	
+action 	frequency "North 1NT Opener Tricks any strain South <= 12 hcp" (ntrix, 5,11)
+

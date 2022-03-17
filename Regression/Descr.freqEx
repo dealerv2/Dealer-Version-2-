@@ -1,0 +1,14 @@
+# File Descr.freqEx by JGM
+title " Frequency Example  "
+
+generate 100000
+produce 100
+
+
+
+action frequency "HCP North Between 15 and 17 " (hcp(north), 15, 17 )
+
+
+# printes("HCP_NS=",hcp(north)+hcp(south), " Trix NT=", nNtrix, "  Trix Spades=", nStrix,  \n)
+
+

@@ -1,0 +1,46 @@
+ 'North Tricks in Spades ',8,',  NS HCP= ',25,n AQ.642.T92.JT832 s KJ762.AQ.J5.AK97 
+ 'North Tricks in Spades ',10,',  NS HCP= ',31,n K76.J8643.AJ.AK5 s A82.AQT75.KQT9.T 
+ 'North Tricks in Spades ',10,',  NS HCP= ',29,n K942.QJ65.A8.KQ9 s AJ5.7.KQ754.A862 
+ 'North Tricks in Spades ',8,',  NS HCP= ',25,n AQ54.QJ9.A982.A7 s J72.A54.JT43.Q94 
+ 'North Tricks in Spades ',8,',  NS HCP= ',24,n KT6.875.J3.A9864 s A93.KQT.A972.QJ2 
+ 'North Tricks in Spades ',9,',  NS HCP= ',24,n KJ97.93.QJ4.QJ82 s A32.A852.K7.KT74 
+ 'North Tricks in Spades ',8,',  NS HCP= ',26,n A9873.82.AT6.AK5 s K6.QJ74.QJ9.QT62 
+ 'North Tricks in Spades ',8,',  NS HCP= ',25,n Q42.AQ6.AQT.AT94 s T86.J954.K62.K82 
+Example of Reports  
+
+East hands:
+
+   1.                  2.                  3.                  4.               
+9 5 4               Q J 5 4 3           T 7 3               T 8 
+T 5 3               K 2                 K T 4 3             K 8 7 6 3 2 
+K 6 3               8 6 3 2             J 6 3 2             K 5 
+Q 6 5 4             7 3                 J 3                 K 8 2 
+
+   5.                  6.                  7.                  8.               
+J 2                 T 8 5 4             Q J 5 2             A 7 5 
+A 9 6 3 2           K Q 4               K T 6               8 7 3 2 
+Q 8 5               T 9 8 2             K 7 5 2             7 3 
+7 5 3               9 6                 J 4                 Q 7 6 5 
+
+Example of Reports  
+
+West hands:
+
+   1.                  2.                  3.                  4.               
+T 8 3               T 9                 Q 8 6               K 9 6 3 
+K J 9 8 7           9                   A 9 8 2             T 
+A Q 8 7 4           7 5 4               T 9                 Q 7 6 
+-                   Q J 9 8 6 4 2       T 7 5 4             J T 6 5 3 
+
+   5.                  6.                  7.                  8.               
+Q 8 7 5 4           Q 6                 T 4                 K J 9 3 
+J 4                 J T 7 6             A 9 5 3             K T 
+K T 6 4             A 6 5 3             8 4 3               J 9 8 5 4 
+K T                 A 5 3               9 8 7 3             J 3 
+
+
+Example of Reports  
+Generated 93 hands
+Produced  8 hands
+Initial random seed 36
+Time needed    0.404 sec

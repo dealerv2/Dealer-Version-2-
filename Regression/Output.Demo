@@ -1,0 +1,31 @@
+                  [Dealer V2 Demo. East 2NT West Stayman or Jacoby]
+   1. West               East 
+     T 9                 K Q 6 5 
+     A T 5 3 2           Q 7 
+     J 5 2               A K 4 
+     8 4 3               A K Q 2 
+
+   2. West               East 
+     A J T 8             K Q 7 4 
+     T 2                 A K Q 8 
+     J T 5 4 3 2         Q 6 
+     5                   A K 2 
+
+   3. West               East 
+     J 9 7 4             A K 8 
+     K 9 7 5 2           A Q J T 
+     K J T               A 9 6 
+     6                   A Q 8 
+
+   4. West               East 
+     K 9 4 3 2           A Q J 7 
+     K 8 6 5             A Q J 
+     J T 3               A Q 8 7 
+     5                   K 6 
+
+
+Dealer V2 Demo. East 2NT West Stayman or Jacoby
+Generated 6029 hands
+Produced  4 hands
+Initial random seed 14
+Time needed    0.021 sec

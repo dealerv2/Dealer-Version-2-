@@ -1,0 +1,32 @@
+# File Descr.DDS_NT by JGM 
+# This example calculates the frequency of tricks (DDS Style) for a 1NT north facing a 0-12 hcp south
+# It should be run with DDS Mode 2 on the cmd line.
+# This example is relatively slow:  USE MODE 2 on cmd line !!!!! 
+
+#To Produce  100 hands on a 3.5GHz Intel core i7 (8 threads) takes about  46.75 seconds.
+#           1000   "    "     "      "     "        "          "     "   400 seconds.
+
+seed 117
+title "1NT openers by North with DDS analysis for best strain. South has <= than 12hcp. No shape restrictions on South " 
+generate 1000000
+#produce 1000				/* 1000 is a commonly used adequate sample size in stats based on the Central Limit Theorem */
+produce 100					// But we do only 100 here for sake of speed of demo.	
+
+nNtrix = dds(north, notrumps) 
+nStrix = dds(north, spades)
+nHtrix = dds(north, hearts)
+nDtrix = dds(north, diamonds)
+nCtrix = dds(north, clubs)
+
+/* this next block determines which strain the max dds comes from. Just bec North has a NT opener does not mean they play in NT */
+ntrix_Major = nStrix > nHtrix ? nStrix : nHtrix
+ntrix_minor = nDtrix > nCtrix ? nDtrix : nCtrix
+ntrix_suit = ntrix_Major > ntrix_minor ? ntrix_Major : ntrix_minor
+ntrix  = ntrix_suit > nNtrix ? ntrix_suit : nNtrix
+
+condition
+	shape(north, any 4333 + any 4432 + any 5332) and
+		hcp(north)>=15 and hcp(north)<=18 and hcp(south) <= 12
+	
+action 	frequency "North 1NT Opener Tricks any strain South <= 12 hcp" (ntrix, 5,11)
+

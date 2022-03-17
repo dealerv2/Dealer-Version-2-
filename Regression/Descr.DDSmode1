@@ -1,0 +1,13 @@
+# File Descr.DDSmode1 by JGM 
+title " DDS Use Mode 1  "
+
+generate 100000
+produce 10 
+
+
+condition  shape(north, any 4432) && ( hcp(north) > 11 ) && (spades(west)>=6)
+
+action
+	printrpt ( "North Heart Trix= ",dds(north, hearts), "West Spade Trix= ", dds(west, spades), north, west ) 
+   
+

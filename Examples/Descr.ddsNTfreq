@@ -34,5 +34,5 @@ condition
       hcp(north)>=15 and hcp(north)<=18 and hcp(south) <= 12
 
 action   frequency "North 1NT Opener dds any strain" (ntrix, 5,11),
-        frequency "Tricks(across) Vs HCP(down)" ( hcp(north)+hcp(south), 20, 30, ntrix,5,11 )
+         frequency "Tricks(across) Vs HCP(down)" ( hcp(north)+hcp(south), 20, 30, ntrix,5,11 )
 
