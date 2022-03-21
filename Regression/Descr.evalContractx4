@@ -1,6 +1,6 @@
 generate   100000
 produce    100
-seed 117
+seed 67  
 # Mods from earlier to use z[1-7][CDHSN]xx form of contracts
 title " Eval 3 strains for EW and One for NS "
 condition ( (hcp(east)+hcp(west)) >= 17 && (hcp(east)+hcp(west)) <= 23 ) &&

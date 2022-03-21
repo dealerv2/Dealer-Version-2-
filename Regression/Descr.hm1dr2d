@@ -1,5 +1,7 @@
 generate 50000000
 produce 100000
+title "Testing various Opening Bid conditions?"
+seed  101
 eopen = hcp(east)>=10 and hcp(east)<=14 
 e1nt = eopen and hearts(east)>=4 and spades(east)>=4 
 e1h = eopen and (not e1nt) and hearts(east)>=4

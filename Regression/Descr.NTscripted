@@ -1,5 +1,7 @@
 generate 100000
 produce 8
+seed 149  
+
 # Ex: To Generate Weak NT hands We run this from the cmd line with -0 west -1 12 and -2 14 -3 east -4 '5xxx + x5xx'
 
 title "Scripting Demo for $1=West with Weak or Strong opener and East with 5cMajor"  

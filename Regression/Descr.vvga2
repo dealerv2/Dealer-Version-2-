@@ -2,6 +2,8 @@
 # Example to estimate the number of spades in the west hand opposite
 # a given east-hand.
 #
+title "Check Predeal estimate number of spades in west, given east 1 Million Hands"
+seed 191  
 predeal
 	east ST9854, HK86, DT765, CT
 condition
@@ -9,4 +11,4 @@ condition
 generate
 	1000000
 action
-	average spades(west)
+	average "1 Million Hands avg spades west" spades(west)

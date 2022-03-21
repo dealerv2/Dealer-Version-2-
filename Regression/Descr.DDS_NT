@@ -6,8 +6,9 @@
 #To Produce  100 hands on a 3.5GHz Intel core i7 (8 threads) takes about  46.75 seconds.
 #           1000   "    "     "      "     "        "          "     "   400 seconds.
 
-seed 117
+seed 37
 title "1NT openers by North with DDS analysis for best strain. South has <= than 12hcp. No shape restrictions on South " 
+
 generate 1000000
 #produce 1000				/* 1000 is a commonly used adequate sample size in stats based on the Central Limit Theorem */
 produce 100					// But we do only 100 here for sake of speed of demo.	

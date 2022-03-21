@@ -1,6 +1,6 @@
 # File Descr.freqEx by JGM
 title " Frequency Example  "
-
+seed 83 
 generate 100000
 produce 100
 

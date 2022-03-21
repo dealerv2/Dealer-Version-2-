@@ -1,6 +1,7 @@
 generate   1000000
 produce   1000 
-#title " Demo DDS Par for NS > 24 HCP and NS hearts >= 8 "
+title " Demo DDS Par for NS > 24 HCP and NS hearts >= 8 "
+seed  43
 #condition dummy
 condition shape(south, x5xx + x6xx +x7xx) && shape(north, x3xx + x4xx ) && hcp(south)+hcp(north) >=24
 

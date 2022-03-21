@@ -1,6 +1,7 @@
 generate   100000
 produce    500
 title "Testing DOP Timing: 1 val in cond, 1 val in action "
+seed 61
 # To see the number of calls to the DOP program and the number of calls to the cache set -D1 on the cmd line
   // ./dealerv2 ../Examples/Descr.DOP_timing -m -D2 
 

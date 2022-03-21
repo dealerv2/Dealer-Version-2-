@@ -1,3 +1,5 @@
+title "Descr.1c"
+seed 3
 # Opening bid is 11+
 westopen = hcp(west) >= 11
 

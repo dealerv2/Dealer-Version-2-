@@ -1,3 +1,5 @@
+title "Check Distribution; pass output to perl script fmt_distribution"
+seed 17
 #
 # This an input file to test dealer.  It generates a million hands without
 # any constraints, then prints the frequency of the various suit lengths

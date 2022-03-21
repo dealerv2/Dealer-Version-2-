@@ -1,6 +1,7 @@
 # calculates some statistics of hands deemed to be weak two's
 # I do not claim this definition of a weak two will satisfy everybody
-
+seed 193  
+title "Stats for a Weak Two in Spades"
 weaktwospades = 
 	shape(north, 6xxx - any 0xxx) and
 	hcp(north) >= 5 and hcp(north) <= 11 and

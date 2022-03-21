@@ -14,7 +14,7 @@
 # NOT the directory where the dealer binary is, nor where the GIB binary is, nor the directory where the dealer control file is
 # but the current working directory at the time the dealer command is run.
 
-seed 117
+seed  97
 title "100 1NT openers by North with GIB analysis. South has <= than 12hcp. No shape restrictions on South " 
 generate 1000000
 #produce 1000				/* 1000 is a commonly used adequate sample size in stats based on the Central Limit Theorem */

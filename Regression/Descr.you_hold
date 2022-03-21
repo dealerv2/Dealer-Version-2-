@@ -1,6 +1,8 @@
 #
 # This is the "you hold ..." problem from the manual.
 #
+seed 199
+title "This is the problem from the User Guide -- inherited from Dealer V1"
 generate   20000
 produce    25
 vulnerable EW

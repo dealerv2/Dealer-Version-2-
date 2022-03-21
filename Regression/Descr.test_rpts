@@ -1,7 +1,7 @@
 generate 10000
 produce 8
 title "Example of Reports  "
-
+seed 181  
 nNtrix = dds(north, spades)
 NS_hcp = hcp(north) + hcp(south)
 condition

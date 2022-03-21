@@ -1,6 +1,7 @@
 # Test script for verifying each of the point count
 # mechanisms; useful for debugging the analyze function
-
+title "Descr.evaluation debug "
+seed 71  
 produce 1
 
 action

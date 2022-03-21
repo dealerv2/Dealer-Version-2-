@@ -1,5 +1,6 @@
 generate 100
 produce 4
+seed 157  
 title "Showing a few different versions of the printrpt / csvrpt features"
 condition
    hcp(south) >= 10

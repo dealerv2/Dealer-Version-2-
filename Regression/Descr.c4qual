@@ -1,3 +1,5 @@
+title "Descr.c4equal"
+seed 13
  // file Descr.c4qual  -- note the single line C style comment works ok so long as not start in col 1
 produce 8
 generate 100

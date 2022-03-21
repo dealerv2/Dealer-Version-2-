@@ -1,6 +1,6 @@
 # File Descr.DDSTrixCond by JGM 
 title " DDS DD Condition only "
-
+seed  47
 generate 100000
 produce 10 
 #DWtr3 = dds(west,spades)

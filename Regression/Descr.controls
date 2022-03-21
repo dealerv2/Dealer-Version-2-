@@ -1,3 +1,5 @@
+title "Controls in a strong balanced hand"
+seed 19
 # This example calculates the frequency of controls (A=2, K=1) in a
 # strong balanced hand
 

@@ -1,8 +1,9 @@
 #
 # This example creates hands in PBN format
 #
+title "Testing pbn format output "
 produce 4
-seed 23
+seed 151  
 #
 # Dealer and Vulnerability of the simulated problem
 #

@@ -4,7 +4,7 @@ This folder, DDS_DEMO, shows a couple of 'scaffolding' programs that use the DDS
 Could be useful as an example for those who want to use DDS in their own projects.
 Could also be useful as an example of how to mix and match the Dealer definitions and the DDS definitions.
 These are usually different !
-Entitiy          Dealer                              DDS
+Entity          Dealer                              DDS
 -------------  -----------------------------     -----------------------------------------------------------------------
 Compass:       N=0,E=1,S=2,W=3                   N=0,E=1,S=2,W=3
 Strain :       C=0,D=1,H=2,S=3,N=4               C=3,D=2,H=1,S=0,N=4

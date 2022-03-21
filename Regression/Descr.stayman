@@ -1,5 +1,5 @@
 generate 1000000
-
+seed 179  
 east_notrump = shape(east, any 4333 + any 4432 + any 5332) and
 			hcp(east) >= 15 and hcp(east) <= 17
 west_stayman = shape(west, 3451 + 4351) and hcp(west) <= 7

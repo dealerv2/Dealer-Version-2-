@@ -1,5 +1,6 @@
 generate 100
 produce 2
+seed 29
 title "CSV report with a mixed bag of strings, expressions, hands, DD results"
  // use the -C cmd line switch to define a file for the CSV output.
 condition

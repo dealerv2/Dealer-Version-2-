@@ -1,4 +1,5 @@
 title "Dealer V2 Demo. East 2NT West Stayman or Jacoby"
+seed  53
 generate 1000000
 produce 4
 east_notrump =

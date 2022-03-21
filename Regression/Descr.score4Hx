@@ -1,6 +1,7 @@
 generate   10000
 produce    10
 title " Check Score 3Hx vul"
+seed 167  
  condition ( hcp(north)+hcp(south) > 23 && hearts(north) + hearts(south) >=8 )
 
 action  printrpt ("Tricks NS=",	dds(south, hearts) ,

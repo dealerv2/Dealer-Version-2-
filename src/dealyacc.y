@@ -400,6 +400,11 @@ expr
                 { $$ = newtree(TRT_LTC,      NIL, NIL, $3, $5 );  }
        | OPC '(' side ')'
                  { $$ = newtree(TRT_OPCSIDE, NIL, NIL, $3,  5);  } // 'strain' = 5 means longest fit
+       | OPC '(' side ',' SUIT ')'
+                 { $$ = newtree(TRT_OPCSIDE, NIL, NIL, $3,  $5);  }
+       | OPC '(' side ',' NOTRUMPS ')'
+                 { $$ = newtree(TRT_OPCSIDE, NIL, NIL, $3,  4);  } // 'strain' = 5 means Notrump
+
        | DDS '(' compass ',' SUIT ')'
                 { $$ = newtree(TRT_DDS, NIL, NIL, $3, $5); ;}
        | DDS '(' compass ',' NOTRUMPS ')'

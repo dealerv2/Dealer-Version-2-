@@ -4,6 +4,8 @@
 # and hcp holdings.  The output can be piped into a perl-script to compare
 # it against the theoretical holdings.  It should give a quick check if
 # the deals you are producing are sort-of random.
+# It also checks to see if each player, has approx 25% chance of holding each card.
+# Pipe (or send) the output to the perl script fmt_distribution.pl
 #
 generate 10000000
 

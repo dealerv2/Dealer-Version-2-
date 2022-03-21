@@ -3,7 +3,7 @@ title " West - Hearts Longest Suit example   "
 
 generate 1000000
 produce 1000
-seed 13
+seed 79  
 action average "Hearts Longest Suite" (hearts(west) > clubs(west) && hearts(west) > diamonds(west) && hearts(west) > spades(west) )
 
 condition
