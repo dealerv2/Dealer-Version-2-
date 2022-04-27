@@ -2,7 +2,7 @@ generate   10000
 produce    100
 # Run this with -M2 since there are several calls to dds on the same deal.
 
-# NOTE ****** only one eval contract per side per run ********
+# NOTE ****** only one eval contract per strain in same side; but can have several contracts per side in different strains.
 
 title " Eval Contract, Par, Freq2D, Tricks, Score NS 21-24hcp"
 condition ( (hcp(north)+hcp(south)) >= 21 && (hcp(north)+hcp(south)) <= 24 )
@@ -13,10 +13,10 @@ ScoreNS_1NT=score(vul, z1N,  DDSNS )
 Par_NS = par (NS )
 
 
-# NOTE ****** only one eval contract per side per run ********
-
 action
          evalcontract ( NS , z2Nx , vul ),
+         evalcontract ( NS , z3Sxx, nv  ),
+         evalcontract ( NS , z3D,   vul ),
          evalcontract ( EW , z3Hx , nv  ),
          average "Par NS      = " Par_NS,
          average "ScoreNS_2NTx= " ScoreNS_2NTx,
