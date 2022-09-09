@@ -95,7 +95,7 @@ deal fullpack;
 deal stacked_pack;
 deal curdeal;
 deal *deallist;
-char dds_pbndeal[80] ;    /* the deal in a format DDS likes. 69 chars; similar to printoneline but not quite */
+char dds_pbndeal[80] ;      /* the deal in a format DDS likes. 69 chars; similar to printoneline but not quite */
 int deal_sorted = 0 ;       /* Future use; Several print actions could benefit from knowing the hands are sorted */
 int hand_sorted[4] = {0,0,0,0};
 

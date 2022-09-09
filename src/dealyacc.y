@@ -401,9 +401,9 @@ expr
        | OPC '(' side ')'
                  { $$ = newtree(TRT_OPCSIDE, NIL, NIL, $3,  5);  } // 'strain' = 5 means longest fit
        | OPC '(' side ',' SUIT ')'
-                 { $$ = newtree(TRT_OPCSIDE, NIL, NIL, $3,  $5);  }
+                 { $$ = newtree(TRT_OPCSIDE, NIL, NIL, $3,  $5);  } // opc pts if strain is the trump suit.
        | OPC '(' side ',' NOTRUMPS ')'
-                 { $$ = newtree(TRT_OPCSIDE, NIL, NIL, $3,  4);  } // 'strain' = 5 means Notrump
+                 { $$ = newtree(TRT_OPCSIDE, NIL, NIL, $3,  4);  } // 'strain' = 4 means Notrump
 
        | DDS '(' compass ',' SUIT ')'
                 { $$ = newtree(TRT_DDS, NIL, NIL, $3, $5); ;}

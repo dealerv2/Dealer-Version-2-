@@ -451,7 +451,7 @@ void analyze (deal d, struct handstat *hsbase) {  /* populate the handstat struc
     if(jgmDebug >= 9) {    dump_curdeal(d); }
   #endif
 
-  /* for each player loop runs from here to line 547*/
+  /* for each player loop runs from here to line 552*/
   for (player = COMPASS_NORTH; player <= COMPASS_WEST; ++player) {
     /* If the expressions in the input never mention a player we do not calculate his hand statistics. */
         if(jgmDebug >= 7) { DBGPRT( "Doing Handstat for player=", player, "in analyze before memset stuff "); }
@@ -459,7 +459,7 @@ void analyze (deal d, struct handstat *hsbase) {  /* populate the handstat struc
     if (use_compass[player] == 0) { /* skip players that did not appear in input file */
                                     /* JGM: some side functions set both players for the side */
         #ifdef JGMDBG
-            /* In debug mode, blast the UNUSED handstat, so that we can recognize it */
+             /* In debug mode, blast the UNUSED handstat, so that we can recognize it */
              /*   as garbage should if we accidently read from it
               *   When sidestat implemented will have to do the same for it
               */
@@ -467,7 +467,7 @@ void analyze (deal d, struct handstat *hsbase) {  /* populate the handstat struc
             memset (hs, 0xDF, sizeof (struct handstat));
         #endif /* JGMDBG */
          if(jgmDebug >= 8) { DBGPRT( "Skipping Unused player=", player, "in analyze after memset stuff"); }
-        continue;  /* skip the rest of the "for player" loop lines 440 - 540 */
+        continue;  /* skip the rest of the "for player" loop lines 470 - 550 */
     } /* end if use_compass */
 
     hs = hsbase + player;  /* player is of interest here. */
@@ -517,14 +517,14 @@ void analyze (deal d, struct handstat *hsbase) {  /* populate the handstat struc
           if (jgmDebug >= 9 )
             fprintf (stderr, "PtcntType=%d, incr= %d Total=%d ", t, tblPointcount[t][r], hs->hs_counts[t][s]);
         #endif /* JGMDBG */
-      } /* end for t line 499*/
+      } /* end for t line 513*/
 
    #ifdef JGMDBG
       if (jgmDebug >= 9 ) fprintf (stderr, "\n"); // finish off the debug printout for the array
    #endif /* JGMDBG */
-    }  /* end for curr card line 470*/
-    /* finished the card by card totals */
-    countltc(hs); /* calculate the ltc and the loser suit and hand totals */
+    }  /* end for curr card line 484*/
+    /* finished the card by card totals All cards in hand accounted for handstat almost complete */
+    countltc(hs); /* calculate the ltc and the losers for each suit and total for hand */
 #ifdef JGMDBG
      if(jgmDebug >= 8) {
             DBGPRT("HCP for hand",hs->hs_totalpoints, player_name[player] );
@@ -549,11 +549,11 @@ void analyze (deal d, struct handstat *hsbase) {  /* populate the handstat struc
             hs->hs_ltc[0],hs->hs_ltc[1],hs->hs_ltc[2],hs->hs_ltc[3], hs->hs_totalltc);
         }
 #endif
-   } /* end for each player (starts at line 441 or so)*/
+   } /* end for each player (starts at line 455 or so)*/
 
 
-} /* end analyze deal starts at line 422 or so*/
-// end analyze deal starts around line 422
+} /* end analyze deal starts at line 436 or so*/
+// end analyze deal starts around line 436
 
 int evaltree (struct tree *t) {                 /* walk thru the user's request and compare to handstat */
    switch (t->tr_type) {
