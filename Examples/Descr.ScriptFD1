@@ -1,0 +1,11 @@
+# File Descr.bigshape by JGM
+title " Scripting Inside and Outside of Francois Shapes  "
+
+generate 2000
+produce 40
+seed 13
+action
+    printoneline
+
+condition
+ shape{$1, $2:d>c or h>s} or shape{$1 , $3 }  // try with -1 west -2 '(55xx)'  -3 '5+M[35]dxx'

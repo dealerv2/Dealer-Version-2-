@@ -1,0 +1,24 @@
+# File Descr.bigshape by JGM
+title " Scripting Inside and Outside of Francois Shapes  "
+
+generate 2000
+produce 40
+seed 13
+action
+    printoneline
+
+condition
+ shape{$1, $2:d>c or h>s} && $0($1) <= $5
+
+/* you can run the above for example with :: dealerv2 -0 pt9 -1 west -2 '(55xx)' -5 20 Descr.ScriptFD
+/* and get hands that look like this: */
+  /*
+  n AQ.QJ9754.T.QJT2 e 87.AK3.AQ5432.93 s JT65.T862.6.K654 w K9432..KJ987.A87
+  n K964.73.T87.Q982 e 2.J54.AK4.AKT643 s JT5.Q62.Q9652.75 w AQ873.AKT98.J3.J
+  n AK64.K6.972.AT32 e 32.Q87.AK8.KJ764 s QT9875.A53.63.98 w J.JT942.QJT54.Q5
+  n J.65.AQ.KJ965432 e AQ86.93.T76.AT87 s 743.AQJ742.K53.Q w KT952.KT8.J9842.
+  n AT3.J98.AQJ75.QJ e QJ98752.KQ.932.T s K64.654.K4.K5432 w .AT732.T86.A9876
+  n .K82.QT762.A7643 e T962.A63.KJ853.5 s AQJ8743.94.A9.K2 w K5.QJT75.4.QJT98
+  */
+
+

@@ -9,6 +9,8 @@
 /* JGM 2022-02-07   Adding the csvlist and CSVRPT mods */
 /* JGM 2022-02-12   Adding the trix function token processing. */
 /* JGM 2022-03-03   Adding SETSEED and <FR1>, <FR2>, <FR3> and buffer switching for Francois shapes -- based on V4. */
+/* JGM 2022-09-11   Cleaned up altcount, pointcount, and defcount processing. Can now do any mix of ints and dotnums in list */
+/* JGM 2022-09-14   Removed defcount. Added bktfreq. */
  #ifndef _GNU_SOURCE
    #define _GNU_SOURCE
  #endif
@@ -51,7 +53,7 @@
 
   int in_str_buff = 0 ;             /* Flag to us that EOF condition was on string buff, not Input File buff */
   int scr_vnum;                     /* Subscript into the script_parm array for scriptvar code*/
-  int scrv_idx = 0;                  /* Subscript into the script_parm array for Francois code*/
+  int scrv_idx = 0;                 /* Subscript into the script_parm array for Francois code*/
 
 
   #ifdef JGMDBG
@@ -149,7 +151,7 @@
     else if (strchr(s, 'w' ) || strchr(s, 'W') ) { return VULNERABLE_EW   ; }
     else if (strchr(s, 'a' ) || strchr(s, 'A') ) { return VULNERABLE_ALL  ; }
     else if (strchr(s, 'b' ) || strchr(s, 'B') ) { return VULNERABLE_NS   ; }
-    return 0 ; /* default to none */
+    return VULNERABLE_NONE ; /* default to none */
  } /* end vul2int*/
 
  void setup_my_stack( void ) {
@@ -197,10 +199,10 @@ scriptvar [$][0-9]
 FTERM  [}]
 FCOMPASS (north|east|south|west){ws}*[,]
 FDIRVAR  [$][0-9]{ws}*[,]
-               /* -  [    ]  \n  */
+                 /* -  [    ]  \n  */
 FPUNC [or+:><=,() \x2d\x5b\x5d\0A]
 FDIST  [cdhsMmx0-9]
-    /* $n is allowed in FDshape, but needs special handling -- might be followed by another shape or not.*/
+    /* $n (a script var) is allowed in FDshape, but needs special handling -- might be followed by another shape or not.*/
 FDISTVAR [$][0-9]{ws}*[+]?
 
  /* Enter Matching Rules section  {bol}pattern   { C code to execute when pattern matches }  */
@@ -260,6 +262,7 @@ frequency       return(FREQUENCY);
 deal            return(DEAL);
 csvrpt          return(CSVRPT);
 printrpt        return(PRINTRPT);
+bktfreq         return(BKTFREQ) ;
 
    /* now do some direct handling of the cases where yyparse not needed. It simplifies the yyparse() and the grammar */
    /* We do have to allow for the fact that the user might enter the keyword
@@ -405,8 +408,11 @@ trix        return(TRIX);
 [a-zA-Z][a-zA-Z0-9_]*   { yylval.y_str = mystrcpy(yytext); return IDENT; }
 
 {dotnum} |          /* numbers of the form .[0-9]{1,2} or [0-9]{1,2}\.[0-9]{0,2} */
-{decnum}        { yylval.y_decnum = (int)(100. * atof(yytext) ) ; /* will handle minus signs */
-                  return DECNUM ;
+{decnum}        { yylval.y_int  = (int)(100. * atof(yytext) ) ; /* will handle minus signs */
+         #ifdef JGMDBG
+               if(jgmDebug >= 3) { fprintf(stderr, "FLEX::Found a dotnum/decnum string= [%s] value=%d\n", yytext, yylval.y_int ) ; }
+         #endif
+                  return NUMBER ; /*?+?*/
                 }
 
 {qstring}      { yylval.y_str = strdup(yytext+1); /* skip open quote */

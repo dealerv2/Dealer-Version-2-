@@ -1,6 +1,10 @@
-/* File dealtypes.h -- by :JGM:   2021 version Typedefs and Structures Templates*/
-/* 2021-12-28 -- Added some types for IF between dds and dealer */
-/* 2022-02-27 -- Mods for Francois Dellacherie enhanced shapes */
+/* File dealtypes.h -- by :JGM Dealer Version 2 Types and Templates. */
+
+/* Date      Version  Author  Description
+* 2021/12/28 1.0.0    JGM     Collect all dealer symbolic constants and macros in one place.
+* 2022/02/09 2.1.5    JGM     FD shapes, and printrpt ported from deal_v3
+* 2022/09/25 2.2.0    JGM     Added constants for Bucket Frequency functionality
+*/
 #ifndef DEALTYPES_H
 #define DEALTYPES_H 1
 #ifndef _GNU_SOURCE
@@ -34,6 +38,7 @@ struct tree {
         int             tr_int3;   // a grep for this thru all source files does not show any hits.
         float           tr_flt1;   // maybe store the dotnums as both decimal_k and float JGM?+?
 };
+typedef struct tree TREE_ST ;
 
 struct expr {                    // for the printes action. a printes term is either a char string or an expr tree ptr */
         struct tree    *ex_tr;
@@ -104,7 +109,27 @@ struct acuft2d{
   long acuf_highbnd_expr2;
   long*acuf_freqs;
 };
-
+ /* JGM Add. 2022-09-14;
+  * Added new functionality to allow freq reporting for quantities that use DOTNUMs such as cccc, quality, dop, and ltc
+  * and hence have ranges typically between 0 and 4000 (i.e between 0 and 40.00  in steps of 50 or 100 typically. )
+  * a bucket size of 1 used by the normal frequency functions is not necessary and uses up a LOT of room for quantities
+  * that are  always zero anyway.
+  * Replaced longs with ints, since ints are now 32 bits on 64 bit machines and we don't need longs to count occurrences */
+struct bucket_st {
+   int Lo, Hi, Sz, Num ;
+   int *Names ;         /* ptr to list of ints giving the lowest value in the bucket.  Used in printout */
+   char Dir   ;         /* put at end so not to mess up alighment */
+} ;
+struct acubf_st {
+  struct bucket_st bkt ; /* struct to hold all the parms that describe a bucket */
+  int *bkt_freqs;       /* ptr to 1D table of counters */
+};
+struct acubf2d_st {
+  struct bucket_st bktd ;   /* Parms describing the buckets in the Down direction   aka the '1' dir in the orig frequency2D funcs*/
+  struct bucket_st bkta ;   /* Parms describing the buckets in the Across direction aka the '2' dir */
+  int *bkt_freqs;  /* ptr to 2D table of counters */
+};
+ /* end of JGM add  for bucket frequency  */
 struct action {
         struct action   *ac_next;
         int              ac_type;
@@ -116,7 +141,9 @@ struct action {
                 struct acuft acu_f;
                 struct acuft2d acu_f2d;
                 struct acuavgt acuavg;
-                struct contract_st acucontract; /* added this so could handle dbled contracts */
+                struct contract_st acucontract; /* JGM added this so could handle dbled contracts */
+                struct acubf_st acu_bf ;        /* JGM added this for 1D bucket frequency */
+                struct acubf2d_st acu_bf2d ;    /* JGM added this for 2D bucket frequency */
         } ac_u;
 };
 
@@ -240,8 +267,8 @@ struct sidestat {          /* OPC related numbers that need both hands of a side
 
 
 struct options_st {         /* struct for storing cmd line option switches */
-  int       options_error;          //  0 = none. 3= Version Info. 1= Invalid option. 2=Fixed Thread. */
-  int       swapping;               // -x 0|2|3 (eXchange) JGM needs 0-9 for parameter passing
+  int       options_error;          //  0 = none. 3= Version Info. 1= Invalid option. 2=Fixed Thread. 4=Usage msg*/
+  int       swapping;               // -x 0|2|3 (eXchange) JGM needs 0-9 for scripting parameter passing
   int       progress_meter;         // -m
   int       quiet;                  // -q
   int       upper_case;             // -u default? toggle?
@@ -267,6 +294,8 @@ struct options_st {         /* struct for storing cmd line option switches */
   char      ex_fname[128] ;         // -X  Filename used for exporting ; opens FILE *fexp global var
   char      csv_fname[128];         // -C  Filename used for CSV report; if w:<fname> opens for write. else for append
   char      csv_fmode[8];
+  int       accross_bkts  ;         // -a   Max buckets accross for the 2D frequency plots. Def = 42 Needed for dotnum values.
+  int       down_bkts     ;         // -d   Max buckets down for the 1D or 2D frequency plots. Def = 42 Needed for dotnum values.
 } ;   /* end options_st */
 #define PARAM_SIZE 126
 struct param_st {

@@ -1,0 +1,49 @@
+#!/usr/bin/perl
+#  Mod by JGM to put a prompt for input
+#  Mod by JGM to change @INC to include DealerV2 path and Dist pkg name
+# This version is not as good as the one that Debian sends out. Fails on mostly same cases, and also on conditionals DO NOT USE
+use lib "." ;
+use Dist2022;
+use strict;
+use Carp;
+
+sub preshape {
+    my @results;
+    my $shapes = shift;
+    my @shapes = split(/(\s+[-+]\s+)/, $shapes);
+    my $s = Dist->new;
+
+    unshift @shapes, ' + ' unless $shapes =~ /^\s+([-+])/;
+    while(@shapes) {
+   my $expanded;
+   my $sexp = shift @shapes;
+   my $sign;
+
+   $sexp =~ /\s+([-+])/ or die "BUG analysing $shapes";
+   push @results, $sign = " $1 ";
+
+   $s->shape(shift @shapes);
+   $expanded = join $sign, $s->to_dealer;
+   push @results, $expanded;
+    }
+    shift @results;
+    return join '', @results;
+}
+# $OUTPUT_AUTOFLUSH = 1 ;
+    print STDOUT "2022?>" ;
+    my ($res,$reslen,$pl);
+while(<>) {
+    next if m/^#/;
+    print "Parsing:: $_";
+    s/(shape\s*\{\s*\w+\s*,)([^\}]+)/"$1".&preshape($2)/ge;
+    s/shape\s*\{([^\}]+)\}/shape($1)/g;
+    s/\#.*$//;
+    $res = $_ ;
+    $reslen = length($_) ;
+    $pl = $res =~ tr/+// ; 
+    $pl++ ;
+    print "[Length:$reslen, patterns: $pl] " ;
+    print;
+    print STDOUT "\n2022?>" ;
+}
+

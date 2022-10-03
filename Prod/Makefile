@@ -1,5 +1,6 @@
-# JGM Makefile for deal_v3  2022/01/01 PROD directory
+# JGM Makefile for deal_v4  2022/10/05 PROD directory
 # Note MUST use g++ as the linker stage because DDS library created with g++
+# 2022/10/05 Added the deal_bktfreq_subs.c to the sources. Also separate compile for globals.c
 
 CC      = gcc
 CFLAGS = -std=gnu17 -mtune=corei7 -flto -fopenmp -pthread -Wall -pedantic -O3  -I../include
@@ -16,9 +17,9 @@ PROGRAM  = dealerv2
 FLEX    = flex
 YACC    = bison -d
 
-SRCS  = ../src/dealaction_subs.c ../src/dealdds_subs.c ../src/dealdebug_subs.c ../src/dealeval_subs.c ../src/dealparse_subs.c
-SRCS += ../src/Dealer_DDS_IF.c ../src/c4.c ../src/dealerv2.c
-OBJS = $(patsubst ../src/%.c,%.o,$(SRCS) ) dealflex.o dealyacc.tab.o
+SRCS  = ../src/dealaction_subs.c ../src/dealdds_subs.c ../src/dealdebug_subs.c ../src/dealeval_subs.c
+SRCS += ../src/dealparse_subs.c ../src/Dealer_DDS_IF.c ../src/c4.c ../src/deal_bktfreq_subs.c ../src/dealerv2.c
+OBJS = $(patsubst ../src/%.c,%.o,$(SRCS) ) dealglobals.o dealflex.o dealyacc.tab.o
 
 HDR  = ../include/allheaders.h
 # Need to link with g++ because libdds library was built with c++
@@ -85,6 +86,7 @@ Dealer_DDS_IF.o : ../src/Dealer_DDS_IF.c $(HDR)
 	$(CC) $(CFLAGS) -o $@ -c $<
 c4.o : ../src/c4.c ../include/c4.h $(HDR)
 	$(CC) $(CFLAGS) -o $@ -c $<
+dealglobals.o : ../include/dealglobals.c $(HDR)
+	$(CC) $(CFLAGS) -o $@ -c $<
 
 objects : $(OBJS)
-# could I make the last two read $(OBJS) : $(SRCS) $(HDR) ?

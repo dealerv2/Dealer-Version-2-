@@ -1,0 +1,8 @@
+generate   100000
+produce    5000
+title " bktfreq for KnR Points  "
+
+action  bktfreq "KnR North" (cccc(north), 15.00,17.00,0.25 ),
+
+
+

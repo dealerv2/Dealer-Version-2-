@@ -43,29 +43,41 @@ void zerocount (int points[13]) {  /* generic zero out of any pointcount array: 
 void clearpointcount () {   /* zero out the HCP array 'points' and the copy tblPointCount[idxHCP] */
   zerocount (tblPointcount[idxHcp]);
   zerocount ( points );
-  countindex = -1 ;         /* this global var keeps track of which pt cnt table we are updating. -1 flags HCP tbl */
+  alt_tbl_idx = -1 ;         /* this global var keeps track of which pt cnt table we are updating. -1 flags HCP tbl */
  }
 
-void clearpointcount_alt (int cin) {      /* cin come from the altcount cin <list> statement */
-  DBGPRT("Clear Alt Count cin=",cin,"");  /* as of Feb 2022 cin should be 0 .. 9 only */
+void clearpointcount_alt (int cin) {
+               /* cin comes from the altcount tblnum <number_list> or from defcount tblnum <decnum_list> statements*/
+  DBGPRT("Clear Alt Count cin=",cin,"");  /* as of Sep cin should be 0 .. 10 to allow defcount to set the hcp values to dotnums */
   zerocount (tblPointcount[cin]);
-  countindex = cin;                     /* this global var keeps track of which pt cnt table we are updating. */
+  alt_tbl_idx = cin;                      /* this global var keeps track of which pt cnt table we are updating. */
 }
 
-void pointcount (int rank, int value) { /* set the value for an entry in the tblPointCount[idxHCP] tbl */
-                                        /* there is a global var that keeps track of where rank is right now */
+void pointcount (int rank, int value) { /* set the value for an entry in the tblPointCount[idxHcp] tbl */
+            /* There is a global var alt_tbl_idx set by YACC code that tracks which alt count is being changed */
+            /* there is a global var pointcount_index set by YACC code that keeps track of where rank is right now */
+   int dbg_tbl_idx ;
   assert (rank <= 12);
   if (rank < 0) {                       /* we have counted down from 12 too far. */
       yyerror ("too many pointcount values");
   }
-  if (countindex < 0)  {                     /* countindex selects which table to affect; < 0 means the hcp one */
+  if (alt_tbl_idx < 0 )  {                  /* alt_tbl_idx selects which table to affect; < 0 defaults to the hcp one */
     tblPointcount[idxHcp][rank] = value;
     points[ rank ] = value ;               /* keep the points and tblPointcount[idxHCP] arrays in sync */
+    dbg_tbl_idx = idxHcp ;
   }
   else {
-    tblPointcount[countindex][rank] = value;
+    tblPointcount[alt_tbl_idx][rank] = value;
+    dbg_tbl_idx = alt_tbl_idx ;
   } /* end if else countindex */
+#ifdef JGMDBG
+  if (jgmDebug >= 3 ) {
+      fprintf(stderr, "In pointcount:: Setting TBL#%d Rank=%d to Value=%d -> %d\n", dbg_tbl_idx, rank, value, tblPointcount[dbg_tbl_idx][rank] );
+  }
+#endif
 }  /* end set point count pointcount */
+
+
 
 void setshapebit (int cl, int di, int ht, int sp, int msk, int excepted) {
   if (excepted)

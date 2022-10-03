@@ -1,0 +1,12 @@
+# File Descr.KnR vs LTC by JGM
+title " Wide Frequency 2D Example using two dotnum functions"
+
+# This file shows that on a reasonably wide monitor with 9pt Monospace font, there is room for only
+# 22 cols of numbers across: 19 cols of data plus 1 col for Low, 1 for High, and 1 for Sum = 22 total.
+generate 100000
+produce 50000
+
+
+action frequency "KnR pts (Down) vs LTC (Across)" ( cccc(north),1000,1600, ltc(north), 50, 1000 ),
+
+

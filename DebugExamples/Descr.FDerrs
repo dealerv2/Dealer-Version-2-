@@ -1,0 +1,13 @@
+# File Descr.bigshape by JGM
+title " Shapes that give Francois Problems  "
+
+generate 2000
+produce 4
+
+condition
+ shape{$1, $2:d>c or h>s} && $0($1) <= $5
+
+action
+    printall
+
+

@@ -12,6 +12,9 @@
 extern void showdecisiontree(struct tree *t);
 extern void showvarlist(struct var *v ) ;
 extern void showactionlist(struct action *a );
+extern void showAltCounts( void ) ;
+extern void showdistrbits( int ***distrbitmaps[14] ) ;
+
 
 /* &&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&& */
         /* routines in, or called by, yyparse action clauses */

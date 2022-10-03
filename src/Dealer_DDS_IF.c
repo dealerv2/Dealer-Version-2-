@@ -45,7 +45,7 @@ int Deal52_to_Holding(deal d , unsigned int kards[DDS_HANDS][DDS_SUITS] ) {
       s = CARD_SUIT(d[di]);
       dds_s = 3 - s ;        /* Clubs: s=0, dds_s=3, Diam: s=1, dds_s=2; Hearts s=2, dds_s=1; Spades: s= 3 dds_s=0 */
       r = CARD_RANK(d[di]);  /* deuce = 0, .... Ace=12 */
-      kards[h][dds_s]  |= DDS_BITMASK[r]; //DDS_BITMASK[0]=0x0004 which is the Deuce; [12]=0x800 which is Ace */
+      kards[h][dds_s]  |= DDS_BITMASK[r]; //DDS_BITMASK[0]=0x0004 which is the Deuce; [12]=0x4000 which is Ace */
       di++ ;
       if  (di % 13 == 0 )  h++ ; /* next hand coming up */
   } /* end while di < 52 */
@@ -72,7 +72,7 @@ struct ddTableDeal Deal52_to_DDSBIN(deal d) {
       if  (di % 13 == 0 )  h++ ; /* next hand coming up */
   } /* end while di < 52 */
   return dl ;
-} /* end Deal52_to_DDSPBN */
+} /* end Deal52_to_DDSBIN */
 
 /* simple  Descending Order Ace to Deuce Insertion sort:
  * Test show that for 13 elems Insertion is faster than Shell or Selection

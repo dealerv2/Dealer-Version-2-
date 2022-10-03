@@ -250,3 +250,20 @@ void showdistrbits ( int ***distrbitmaps[14] ) {
    return ;
 }  /* end show distrbitmaps */
 
+void showAltCounts( void ) {
+   int tbl,r ;
+   fprintf(stderr, "Points Table, a copy of tblPointcount[idxHcp] table \n Pts:  ");
+   for (r=0; r<13 ; r++ ) {
+      fprintf(stderr, "%4d ", points[r] ) ;
+   }
+   fprintf(stderr, "\n");
+   fprintf(stderr, "tblPointcount Tables in order Ten, Jack, Queen, King, Ace, Top2, Top3, Top4, Top5, C13, HCP\n");
+   for (tbl=0 ; tbl < idxEnd ; tbl++ ) {
+      fprintf(stderr, "Tbl%2d:", tbl );
+      for (r=0 ; r < 13 ; r++ ) {
+         fprintf(stderr, "%4d ", tblPointcount[tbl][r] );
+      }
+      fprintf(stderr, "\n");
+   }
+} /* end ShowAltCounts */
+

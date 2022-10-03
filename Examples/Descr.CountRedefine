@@ -1,0 +1,13 @@
+generate   10000
+produce    8
+# title " Test Redefine hcp and altcounts with integers only. "
+# seed 919
+
+pointcount 5 4 3 2 1
+altcount 1 450 300 150 75 25
+altcount 0 4 3 2 1
+
+
+action
+ printes("Cowan hcp =", hcp(west), ", Real HCP= ", pt0(west), ", BigHCP=", pt1(west), " : " ), printoneline
+

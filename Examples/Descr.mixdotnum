@@ -1,0 +1,36 @@
+generate   10000
+produce    2
+title "Dotnums in various contexts "
+seed 919
+# a list of dotnums does not work. it just gets uses the first one in the list and discards the rest.
+# Trying all dotnums for pointcountargs
+
+#redefine the hcp values (for syntax check only; will be over-ridden later by defcount 10 <dotnum_list> statement )
+pointcount 6 5 4 3 2 1
+# Try a list of decnums in altcount
+altcount 8 4.5 3.0 1.5 0.75 .25
+# and a list of ints in altcount
+altcount 7 3 2 1
+
+#Mix dotnums and ints in same list. (not practical )
+altcount 0 440 3.3 220 1.1 0.25 .05
+
+# defcount  redefine the C13 values using mix of dotnums  and ints should result in 625 425 150 75 25
+defcount 9 6.25 425  1.5  75  .25
+
+#redefine the hcp values using dotnums (table-id 10 is the hcp table)
+#defcount 10 4.5 3.0 1.5 0.75 .25
+#pointcount 4.5 3.0 1.5 0.75 .25
+
+wbighcp = pt9(west)
+whcp    = hcp(west)
+wltc    = ltc(west)
+wlosers = losers(west)
+wc4    = cccc(west)
+condition (11 <= hcp(west) && hcp(west) <= 19 ) or (12.00 <= cccc(west) && cccc(west) <= 20.00 )
+
+action
+
+printrpt("hcp=",hcp(west), " pt9,8,7= ",pt9(west), pt8(west), pt7(west), " KnR=", cccc(west), " ltc= ", ltc(west), west ),
+
+

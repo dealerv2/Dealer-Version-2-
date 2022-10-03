@@ -1,6 +1,9 @@
-# JGM Makefile for deal_v3  2022/01/01 DEBUG directory
+# JGM Makefile for deal_v4  2022/09/02 DEBUG directory
 # Note MUST use g++ as the linker stage because DDS library created with g++
 # This is the Debug directory Makefile so set the JGMDBG variable. Type 'make showme' to verify its effect.
+#
+# 2022/10/02 -- added deal_bktfreq_subs.c to the SRCS defn
+
 JGMDBG := 1
 CC      = gcc
 CFLAGS = -std=gnu17 -mtune=corei7 -flto -fopenmp -pthread -Wall -pedantic -g -Og -I../include
@@ -22,9 +25,9 @@ endif
 FLEX    = flex
 YACC    = bison -d
 
-SRCS  = ../src/dealaction_subs.c ../src/dealdds_subs.c ../src/dealdebug_subs.c ../src/dealeval_subs.c ../src/dealparse_subs.c
-SRCS += ../src/Dealer_DDS_IF.c ../src/c4.c ../src/dealerv2.c
-OBJS = $(patsubst ../src/%.c,%.o,$(SRCS) ) dealflex.o dealyacc.tab.o
+SRCS  = ../src/dealaction_subs.c ../src/dealdds_subs.c ../src/dealdebug_subs.c ../src/dealeval_subs.c
+SRCS += ../src/dealparse_subs.c ../src/Dealer_DDS_IF.c ../src/c4.c ../src/deal_bktfreq_subs.c ../src/dealerv2.c
+OBJS = $(patsubst ../src/%.c,%.o,$(SRCS) ) dealglobals.o dealflex.o dealyacc.tab.o
 
 HDR  = ../include/allheaders.h
 # Need to link with g++ because libdds library was built with c++
@@ -38,7 +41,7 @@ clean:
 	rm -f ${OBJS} ${LOBJ} ${YOBJ} *.gch
 
 showme:
-	@echo DestDir = $(DESTDIR) JGMDBG = $(JGMDBG)
+	@echo DestDir = $(DESTDIR) JGMDBG = $(JGMDBG) PROGRAM = $(PROGRAM)
 	@echo CC=$(CC) $(CFLAGS) $(LDFLAGS)
 	@echo CXX=$(CXX) $(CXXFLAGS) $(LDFLAGS)
 	@echo BISON SRC= $(YSRC) OBJ= $(YOBJ)
@@ -84,6 +87,8 @@ deal%.o : ../src/deal%.c $(HDR)
 Dealer_DDS_IF.o : ../src/Dealer_DDS_IF.c $(HDR)
 	$(CC) $(CFLAGS) -o $@ -c $<
 c4.o : ../src/c4.c ../include/c4.h $(HDR)
+	$(CC) $(CFLAGS) -o $@ -c $<
+dealglobals.o : ../include/dealglobals.c $(HDR)
 	$(CC) $(CFLAGS) -o $@ -c $<
 
 objects : $(OBJS)

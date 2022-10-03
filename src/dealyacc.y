@@ -6,7 +6,9 @@
   // :JGM:  2021-12-23  -- Extensive changes to EVALCONTRACT grammar and action clauses
   // :JGM:  2022-02-10  -- Completed first version of csvreport
   // :JGM:  2022-02-11  -- Started adding TRIX functionality to csvreport
-
+  // :JGM:  2022-09-10  -- Debugging altcount and pointcount statements. Dotnums don't work there but ints like 450 do.
+  // :JGM:  2022-09-11  -- Fixed up altcount, pointcount, and defcount processing. Can now do any mix of ints and dotnums in list
+  // :JGM:  2022-09-14  -- Removed defcount; start adding bktfreq
 
 %code top {
     /* Entries here will not be put to the dealyacc.tab.h file, but will go to the dealyacc.tab.c file */
@@ -50,8 +52,6 @@
         int            y_arr2[2];   /* 8 bytes */
         short int      y_arr4[4];   /* 8 bytes */
         char           y_arr8[8];   /* 8 bytes */
-        decimal_k      y_decnum ;   /* 4 bytes int containing float * 100 */
-        numx100_k      y_numx100;   /* 4 bytes all the numbers of the form 99.99 will be x100 */
         struct csvterm_st *y_csv ;  /* 8 bytes */
 }  /* end union */
   /*
@@ -128,6 +128,7 @@
 %token  CSVRPT
 %token  TRIX
 %token  PRINTRPT
+%token  BKTFREQ
 
 %token <y_int> NUMBER
 %token <y_str> HOLDING
@@ -142,7 +143,7 @@
 %token <y_distr> DISTR_OR_NUMBER
 
   // :JGM: added next 2 lines: DECNUM= nn.mm; side = NS or EW
-%token <y_numx100> DECNUM
+%token <y_int> DECNUM
 %token <y_int> SIDE
 
 %type <y_tree>  expr
@@ -157,10 +158,11 @@
 %type <y_str> optstring
   /* Next by JGM 2021-09-20 */
 %type <y_int> side
-%type <y_numx100> decnum
+%type <y_int> decnum
 %type <y_csv> csvlist
+%type <y_int> numval
 
-%printer { fprintf(yyo, "[%d]", $$); } <y_int> <y_numx100>
+%printer { fprintf(yyo, "[%d]", $$); } <y_int>
 %printer { fprintf(yyo, "[%s]", $$); } <y_str> <y_distr>
     /* %printer { fprintf(yyo, "[%g]", $$); } <y_flt>  No floats in this grammar */
 
@@ -213,13 +215,12 @@ holdings
 
 pointcountargs
         : /* empty */
-        | number
+        | numval
                 { pointcount(pointcount_index, $1);
                   pointcount_index--;
                 }
           pointcountargs
         ;
-
 compass
         : COMPASS
                 { use_compass[$1] = 1; $$= $1;  }
@@ -250,15 +251,22 @@ any
 
 /* AM990705: extra production to fix unary-minus syntax glitch */
 number
-        : NUMBER
+        : NUMBER  { $$ = $1 ; }
         | ARMINUS NUMBER
                 { $$ = - $2; }
         | DISTR_OR_NUMBER
                 { $$ = d2n($1); }
         ;
 
-decnum  : DECNUM { $$ = $1 ; }
+decnum  : DECNUM { $$ = $1 ;
+         #ifdef JGMDBG
+               if(jgmDebug >= 3) { fprintf(stderr, "YACC:: Got DECNUM returned TOS Value= %d from Ret Value=%d\n",$$, $1 ) ; }
+         #endif
+        }
         ;
+numval : number
+       | decnum
+       ;
 
 shape
         : DISTR
@@ -279,7 +287,7 @@ expr
         : number
                 { $$ = newtree(TRT_NUMBER, NIL, NIL, $1, 0); }
         | decnum
-                { $$ = newtree(TRT_DECNUM, NIL, NIL, $1, 100); }
+                { $$ = newtree(TRT_DECNUM, NIL, NIL, $1, 100); } // the 100 in int2 is a scale factor. Not used yet.
         | IDENT
                 { $$ = var_lookup($1, 1); }
         | SUIT '(' compass ')'
@@ -515,18 +523,46 @@ action                          /* Actions that happen during the run Do not cho
 
         | FREQUENCY optstring '(' expr ',' number ',' number ')'
                 { $$ = newaction(ACT_FREQUENCY, $4, $2, 0, NIL);
-                  $$->ac_u.acu_f.acuf_lowbnd = $6;
-                  $$->ac_u.acu_f.acuf_highbnd = $8;}
+                  $$->ac_u.acu_f.acuf_lowbnd = $6;                /* $6 = Low */
+                  $$->ac_u.acu_f.acuf_highbnd = $8;}              /* $8 = Hi */
+
+        /*    1        2       3   4    5    6     7    8     9   10   11   12    13   14  */
         | FREQUENCY optstring '(' expr ',' number ',' number ',' expr ',' number ',' number ')'
-                { $$ = newaction(ACT_FREQUENCY2D, $4, $2, 0, $10);
+                { $$ = newaction(ACT_FREQUENCY2D, $4, $2, 0, $10);   /* $4 = expr1, $2 = optstring $10 = expr2*/
                   $$->ac_u.acu_f2d.acuf_lowbnd_expr1 = $6;
                   $$->ac_u.acu_f2d.acuf_highbnd_expr1 = $8;
                   $$->ac_u.acu_f2d.acuf_lowbnd_expr2 = $12;
                   $$->ac_u.acu_f2d.acuf_highbnd_expr2 = $14; }
+ /* Bucket Oriented Frequency function. numval can be either 'integer' or 'decnum' */
+         /*    1        2    3   4    5    6     7    8     9   10    11   */
+        | BKTFREQ optstring '(' expr ',' numval ',' numval ',' numval ')'
+                { $$ = newaction(ACT_BKTFREQ, $4, $2, 0, NIL);
+                  $$->ac_u.acu_bf.bkt.Lo = $6;
+                  $$->ac_u.acu_bf.bkt.Hi = $8;
+                  $$->ac_u.acu_bf.bkt.Sz = $10;
+                  $$->ac_u.acu_bf.bkt.Dir= 'D' ;
+                  $$->ac_u.acu_bf.bkt.Num= 3 + ($$->ac_u.acu_bf.bkt.Hi - $$->ac_u.acu_bf.bkt.Lo)/$$->ac_u.acu_bf.bkt.Sz  ;
+                  }
+         /*   1        2     3   4    5    6     7    8     9   10    11   12  13    14   15   16    17   18    19 */
+        | BKTFREQ optstring '(' expr ',' numval ',' numval ',' numval ',' expr ',' numval ',' numval ',' numval ')'
+                { $$ = newaction(ACT_BKTFREQ2D, $4, $2, 0, $12);     /* $4 = expr_dwn, $12 = expr_acr */
+                  $$->ac_u.acu_bf2d.bktd.Lo = $6;
+                  $$->ac_u.acu_bf2d.bktd.Hi = $8;
+                  $$->ac_u.acu_bf2d.bktd.Sz = $10;
+                  $$->ac_u.acu_bf2d.bktd.Dir= 'D';
+                  $$->ac_u.acu_bf2d.bktd.Num=
+                                 3 + ($$->ac_u.acu_bf2d.bktd.Hi - $$->ac_u.acu_bf2d.bktd.Lo)/$$->ac_u.acu_bf2d.bktd.Sz  ;
+                  $$->ac_u.acu_bf2d.bkta.Lo = $14;
+                  $$->ac_u.acu_bf2d.bkta.Hi = $16;
+                  $$->ac_u.acu_bf2d.bkta.Sz = $18;
+                  $$->ac_u.acu_bf2d.bkta.Dir= 'A';
+                  $$->ac_u.acu_bf2d.bkta.Num=
+                             3 + ($$->ac_u.acu_bf2d.bkta.Hi - $$->ac_u.acu_bf2d.bkta.Lo)/$$->ac_u.acu_bf2d.bkta.Sz  ;
+                  }
 
         | EVALCONTRACT '(' side ',' CONTRACT ',' VULN ')'          /* removed will_print++. This action prints only at EOJ. */
                 { $$=newaction(ACT_EVALCONTRACT,0,0,$3, NIL);
-                  $$->ac_u.acucontract.coded = $5 ;           /* Flex makes coded contract from e.g z3Hxx */
+                  $$->ac_u.acucontract.coded = $5 ;           /* Flex makes coded contract from e.g z3Hxx. Next Steps decode it */
                   $$->ac_u.acucontract.vul = $7 ;             /* Vul not part of flex coded contract */
                   $$->ac_u.acucontract.dbl =  $5 / 40;        /* DBL = 1, RDBL = 2 */
                   $$->ac_u.acucontract.strain = $5 % 5;       /* 0 .. 4 => C D H S N */

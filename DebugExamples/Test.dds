@@ -1,0 +1,10 @@
+# File Descr.DDSTrixCond by JGM 
+title " DDS DD Condition only "
+
+generate 100000
+produce 10 
+seed 117
+condition  (shape(south, any 4432) && hcp(south) >= 16 ) && hcp(north) == 8 
+action printes("DDS West Sp=", dds(west,spades),  " DDS south NT=", dds(south, notrump),", ", hcp(north), ":: " ) ,
+		 printoneline 
+

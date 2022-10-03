@@ -1,7 +1,10 @@
-  /* File dealdefs.h -- VERSION 2.1.5 FD shapes, and printrpt ported from deal_v3
-   * by ;;JGM   2022 version Collect all dealer symbolic constants and macros in one place.
-   * Last Modified: 2022/02/19
+  /* File dealdefs.h --
+   * Date      Version   Author  Description
+   * 2022/01/02 1.0.0    JGM     Collect all dealer symbolic constants and macros in one place.
+   * 2022/02/09 2.1.5    JGM     FD shapes, and printrpt ported from deal_v3
+   * 2022/10/05 2.3.0    JGM     Added Bucket Frequency histograms functionality. Re-Orged globals.c treatment.
    */
+
   /* Does not do function prototypes, or global vars. or externs */
   /* Deleted many defs no longer needed since the code is modified. */
 
@@ -11,11 +14,11 @@
 #ifndef _GNU_SOURCE
   #define _GNU_SOURCE
 #endif
-#define BUILD_DATE "2022/03/19"
+#define BUILD_DATE "2022/10/05"
 #ifndef JGMDBG
-  #define VERSION "2.1.7"
+  #define VERSION "2.3.0"
 #else
-  #define VERSION "102.1.7"
+  #define VERSION "102.3.0"
 #endif
 
 #ifndef UNUSED
@@ -96,7 +99,7 @@ enum suit_ek {CLUBS=0, DIAMONDS, HEARTS, SPADES, nosuit=-1 } ;
 #define NON_VUL 0
 #define VUL     1
 
-  /* this looks like it could be in an enum but never mind */
+  /* Types of Expression trees. This looks like it could be in an enum but never mind */
 #define TRT_NUMBER      0
 #define TRT_AND2        1
 #define TRT_OR2         2
@@ -177,6 +180,9 @@ enum suit_ek {CLUBS=0, DIAMONDS, HEARTS, SPADES, nosuit=-1 } ;
 #define ACT_EXP_SEAT_HLD 14
 #define ACT_CSVRPT       15
 #define ACT_PRINTRPT     16
+#define ACT_BKTFREQ      17
+#define ACT_BKTFREQ2D    18
+
 
 /* Constants for CCCC and Quality */
 #define C4_TYPE         int
@@ -188,10 +194,14 @@ enum suit_ek {CLUBS=0, DIAMONDS, HEARTS, SPADES, nosuit=-1 } ;
 #define RK_NINE          7
 #define RK_EIGHT         6
 
-#define DEFAULT_MODE STAT_MODE
 #define TWO_TO_THE_13 (1<<13)
-// since int is 4 bytes get 32 different shapes. On 64 bit system could get 64 shapes if were to use long ints.
+/* since int is 4 bytes get 32 different shape statements.
+ * On 64 bit system could get 64 shape statements if were to use long ints.
+ */
 #define MAXDISTR    8*sizeof(int)
+/*
+#define MAXDISTR    8*sizeof(long)
+*/
 
 /* --------------------JGM LATER ADD ONS ------------------------------- */
   // #define RANDOM drand48

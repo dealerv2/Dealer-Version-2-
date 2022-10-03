@@ -9,6 +9,7 @@
 #include <ctype.h>
 #include <getopt.h>
 #include <limits.h>
+#include <malloc.h>     /* for malloc_usable_size for debugging.  */
 #include <math.h>       /* for atof and sqrt -- sqrt needs -lm as a linker flag*/
 #include <stddef.h>     /* size_t ...  */
 #include <stdio.h>

@@ -1,0 +1,42 @@
+#!/usr/bin/perl -I.
+
+use Dist;
+use strict;
+use Carp;
+
+sub preshape {
+    my @results;
+    my $shapes = shift;
+    my @shapes = split(/(\s+[-+]\s+)/, $shapes);
+    my $s = Dist->new;
+    my $todealer_r;
+
+    unshift @shapes, ' + ' unless $shapes =~ /^\s+([-+])/;
+    while(@shapes) {
+	my $expanded;
+	my $sexp = shift @shapes;
+	my $sign;
+
+	$sexp =~ /\s+([-+])/ or die "BUG analysing $shapes";
+	push @results, $sign = " $1 ";
+
+	$s->shape(shift @shapes);
+	$todealer_r = $s->to_dealer;
+	$todealer_r =~ s/\+/\-/g if $sign =~ /\-/;
+	$expanded = join $sign, $todealer_r;
+	push @results, $expanded;
+    }
+    shift @results;
+    return join '', @results;
+}
+	
+    
+
+while(<>) {
+    s/(shape\s*\{\s*\w+\s*,)([^\}]+)/"$1".&preshape($2)/ge;
+    s/shape\s*\{([^\}]+)\}/shape($1)/g;
+    s/\/\/.*$//; # Comments are now double '//'
+    print;
+}
+
+

@@ -1,0 +1,17 @@
+generate   10000000
+produce    100
+title " Eval Contract Thor 4H"
+predeal south SAQ5,HKJ9642,DQJ6,C8
+
+condition shape(north, 4153) and 
+			(hcp(north) > 9 and hcp(north) < 14) and 
+			hcp(north,clubs) < 2 and 
+			clubs(west) > 4 and 
+			hcp(west) > 9 
+
+
+action   evalcontract ( NS , z4H, nv ),
+			average "South Ten+ Tricks H" (dds(south,hearts)>=10),
+         average "South Ten+ Tricks S" (dds(south,spades)>=10),	
+         average "South 11+ Tricks  D" (dds(south,diamonds)>=11)
+         		

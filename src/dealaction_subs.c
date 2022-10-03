@@ -12,6 +12,7 @@
 #include "../include/dealexterns.h"
 #include "../include/dealprotos.h"
 #include "../include/dealdebug_subs.h"
+#include "deal_bktfreq_subs.h"
 
 /* Code for New Actions by JGM */
 void printside (deal d, int side ) ;
@@ -85,14 +86,22 @@ void setup_action () { /* run once right after the parsing done */
       case ACT_EXP_SIDE_HLD :    /* export the side's two hands in 'holding' fmt */
       case ACT_EXP_SEAT_HLD :    /* export the seat's hand in 'holding' fmt */
         break ;
-
+      case ACT_BKTFREQ:
+        acp->ac_u.acu_bf.bkt_freqs  = alloc_bkts1D(&acp->ac_u.acu_bf.bkt); /* set bkt.Names ptr as a side effect */
+        fill_bkt_names(&acp->ac_u.acu_bf.bkt) ;
+        break;
+      case ACT_BKTFREQ2D:  /* next call sest bktd.Names and bkta.Names ptrs as a side effect */
+        acp->ac_u.acu_bf2d.bkt_freqs = alloc_bkts2D(&acp->ac_u.acu_bf2d.bktd, &acp->ac_u.acu_bf2d.bkta ) ;
+        fill_bkt_names(&acp->ac_u.acu_bf2d.bktd) ;
+        fill_bkt_names(&acp->ac_u.acu_bf2d.bkta) ;
+        break;
       } /* end switch acp type */
     } /* end for acp->next action list */
 } /* end setup_action */
 
 void action () {            /* For each 'Interesting' deal, Walk the action_list and do the actions requested */
   struct action *acp;
-  int expr, expr2, val1, val2, high1 = 0, high2 = 0, low1 = 0, low2 = 0;
+  int expr, expr1, expr2, val1, val2, high1 = 0, high2 = 0, low1 = 0, low2 = 0;
   char *expbp = export_buff ;
   double  dcount, dsum, dsqsum ;
   int actionitem = 0;  /* Debugging tracer var */
@@ -317,9 +326,17 @@ void action () {            /* For each 'Interesting' deal, Walk the action_list
          sep = ' '; /*re-init for next line in csv report */
       } /* end case ACT_PRINTRPT */
         break;
-   } /* end switch acp action_type */
-    } /* end for acp action list */
-
+     case ACT_BKTFREQ:
+        expr1 = evaltree (acp->ac_expr1);
+        upd_bkt1D( expr1, acp->ac_u.acu_bf.bkt_freqs, &acp->ac_u.acu_bf.bkt ) ;
+        break;
+     case ACT_BKTFREQ2D:
+        expr1 = evaltree (acp->ac_expr1);
+        expr2 = evaltree (acp->ac_expr2);
+        upd_bkt2D( expr1, expr2, acp->ac_u.acu_bf2d.bkt_freqs, &acp->ac_u.acu_bf2d.bktd, &acp->ac_u.acu_bf2d.bkta ) ;
+        break;
+      } /* end switch acp action_type */
+   } /* end for acp action list */
 } /* end action() i.e. process the action list */
 
 void cleanup_action () {  /* this also does the end-of-run actions like FREQUENCY, AVERAGE, EVALCONTRACT, & PRINT */
@@ -429,8 +446,16 @@ void cleanup_action () {  /* this also does the end-of-run actions like FREQUENC
         printf (" %6d", sumcol);
         }
         printf (" %6d%s%s", sumtot, crlf, crlf);
+        break ;
       } /* end FREQ2D case line 333 */
-    } /* end switch ( acp->ac_type ) line 270 approx */
+      case ACT_BKTFREQ:
+        show_freq1D (acp->ac_u.acu_bf.bkt_freqs, acp->ac_str1 ? acp->ac_str1 : "", &acp->ac_u.acu_bf.bkt, 'd' ) ;
+        break;
+      case ACT_BKTFREQ2D:
+        show_freq2D(acp->ac_u.acu_bf2d.bkt_freqs, acp->ac_str1 ? acp->ac_str1 : "",
+                      &acp->ac_u.acu_bf2d.bktd, &acp->ac_u.acu_bf2d.bkta ) ;
+        break ;
+     } /* end switch ( acp->ac_type ) line 270 approx */
   } /* end for acp action list line 269 */
 } /* end cleanup_action line 264 */
 

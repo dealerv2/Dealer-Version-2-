@@ -4,11 +4,16 @@ JUNK
 junk/*
 Test/*
 Scratchpad/*
+scratchpad/*
 Debug/Scratchpad/*
+Debug/scratchpad/*
 *.o
 a.out
 MSDOS/*
 .~lock*
 drafts/*
+Archive
 Archive/*
 Simulations/*
+Simulations
+github-link.txt

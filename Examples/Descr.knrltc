@@ -1,0 +1,7 @@
+generate   10000
+produce    8
+title " Checking KnR and LTC  "
+
+# write out data pairs for testing the new freq2D tables
+action  
+    csvrpt(cccc(north),ltc(north) )      

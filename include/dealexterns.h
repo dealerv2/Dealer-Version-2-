@@ -1,5 +1,9 @@
  /* File dealgbls.h  2021-09-17 ;;;JGM  This file is the extern defs for the stuff in dealglbls.c */
- /* 2022-02-27 -- Mods for Francois Dellacherie enhanced shapes */
+ /*  Date      Version   Author  Description
+  * 2022/01/02 1.0.0    JGM     Collect all dealer symbolic constants and macros in one place.
+  * 2022-02-27 2.1.7    JGM     Mods for Francois Dellacherie enhanced shapes
+  * 2022/09/15 2.2.0    JGM     Mods for Bucket Frequency Functionality
+  */
 #ifndef DEALEXTERNS_H
 #define DEALEXTERNS_H
 #ifndef _GNU_SOURCE
@@ -12,6 +16,7 @@
     #include "deal_dds.h"
 
     /* cmd line parameter variables  some used by yyparse */
+ extern struct options_st options ; /* defined and init in globals.c */
  extern int     lino ;              /* incremented in yylex() when comments etc found. Not any more ?*/
  extern int     nprod,maxproduce;
  extern int     ngen,maxgenerate;
@@ -27,7 +32,6 @@
  extern char   *input_file;
  extern int     dds_mode;           /* 0=GIB, 1=SolveOneBoard, 2=CalcDDtable Binary, 3=CalcDDtablePBN */
  extern int     par_vuln;
- extern int     computing_mode;
  extern int     progressmeter;
  extern int     nThreads;           /* -R 0..10 MaxRam = 160 * nThreads */
  extern int     MaxRamMB ;
@@ -36,6 +40,7 @@
  extern size_t  csv_trixbuff_len ;
  extern FILE   *fexp ;
  extern FILE   *fcsv ;
+ extern int errflg ;
   /* used by yyparse in its action clauses or directly by Flex*/
  extern int     maxdealer;        /* Flex */
  extern int     maxvuln;          /* Flex */
@@ -104,9 +109,9 @@ extern char export_buff[64] ;
 
  extern int     points[13] ;            /* Goren (or other) HCP values A=4, K=3 etc. */
  extern int     ltc_weights[13] ;       /* Weight that allows coding the top cards in a suit. A=32, K=16, Q=8, J=4, T=2 x=1*/
- /* the pointcount array of various point count arrays. */
+ /* the pointcount array of various point count arrays. Needs the file pointcount.h to be included with this file.*/
  extern int tblPointcount [idxEnd][13] ;
- extern int countindex;
+ extern int alt_tbl_idx;
  extern int pointcount_index;
  /* Some ReadOnly Attributes of various cards Currently Controls is the main one, also Kleinman pts and ltc weights(dup) */
  extern int CardAttr_RO [idxEndRO][13] ;

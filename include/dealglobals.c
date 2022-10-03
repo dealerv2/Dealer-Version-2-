@@ -100,7 +100,6 @@ int deal_sorted = 0 ;       /* Future use; Several print actions could benefit f
 int hand_sorted[4] = {0,0,0,0};
 
 enum { STAT_MODE, EXHAUST_MODE };  /* Deleted all the Francois stuff; so only STAT_MODE relevant */
-int computing_mode = DEFAULT_MODE;
 
 char lcrep[] = "23456789tjqka";
 char ucrep[] = "23456789TJQKA";
@@ -151,8 +150,8 @@ struct contract_st contract;     /* level, strain, dbled, Vul, coded, string*/
 int ltc_weights[13] = { 1, 1, 1, 1, 1, 1, 1, 1, 2, 4, 8, 16, 32 }; /* may be superceded by CardAttr_RO  below */
 int points[13]      = { 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 2,  3,  4 }; /* Goren HCP values */
 /* the pointcount array itself */
-int countindex = -1;
-int pointcount_index;    /* global variable for pointcount communication */
+int alt_tbl_idx = -1 ;       /* Global var set by Yacc file code to track which altcount is being modified */
+int pointcount_index;        /* global var set by Yacc file code to track which rank is being modified */
 int tblPointcount [idxEnd][13] = {
     /* tables tens to c13 MUST be in this order to make sense to the user.
      * Put HCP at very end since it has its own routines to handle it.

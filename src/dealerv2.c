@@ -1,14 +1,15 @@
 // dealerv2.c  version 2.0.x by JGM 2022-Feb-15
 // Version 2.0.1  remove MSC stuff ... & Francois Stuff ... & GIB Library file
-//         2.0.2  Add LTC, Title, Printside, and other minor enhancements
-//         2.0.3  Add DDS calculation of Tricks and Par.
-//         2.0.4  Added -D switch on cmd line. Testing why DDS is so slow.
-//         2.0.5  Complete redo of DDS to use binary not PBN deals. restructured dirs. added more cmd line switches
-//         2.0.6  Introduced code to run DOP perl pgm and save results in dealer struct
-//         2.0.7  Export code added. -X option processing.
-//         2.0.8  CSVRPT code added. -C option processing.
-//         2.0.9  seed in input file code added.
-//         2.1.0  Francois Dellacherie shapes added to Dealer input file. Use external program to exapand
+//             2.0.2  Add LTC, Title, Printside, and other minor enhancements
+//             2.0.3  Add DDS calculation of Tricks and Par.
+//             2.0.4  Added -D switch on cmd line. Testing why DDS is so slow.
+//             2.0.5  Complete redo of DDS to use binary not PBN deals. restructured dirs. added more cmd line switches
+//             2.0.6  Introduced code to run DOP perl pgm and save results in dealer struct
+//             2.0.7  Export code added. -X option processing.
+//             2.0.8  CSVRPT code added. -C option processing.
+//             2.0.9  seed in input file code added.
+//             2.1.0  Francois Dellacherie shapes added to Dealer input file. Use external program to expand
+// 2022/09/19  2.2.0  Fixed some bugs in redefining the altcount and pointcount arrays. and in use of dotnums.
 //
 #ifndef _GNU_SOURCE
   #define _GNU_SOURCE
@@ -18,15 +19,21 @@
 #include "../include/dealdefs.h"
 #include "../include/dealtypes.h"
 #include "../include/dealprotos.h"
-#include "../include/dealglobals.c"
+#include "../include/dealexterns.h"   /* was dealglobals but testing if I can compile globals separately and link it. */
+#include "../include/pointcount.h"
 #include "../src/UsageMsg.h"
 
 /* next file for some subs that main uses to setup runtime and debug statements */
 #include "mainsubs.c"
 
+/* This next one is in case we want to use 64 bit ints to hold the distribution bits.
+ * To allow for 64 shape statements instead of 'only' 32 shape statements.
+ * then we can define MAXDISTR as 8*sizeof(long int) or thereabouts
+ */
 #ifndef MAXDISTR
  #define MAXDISTR 8*sizeof(int)
 #endif
+
 void hexdeal_show( deal dx );
 void sr_deal_show( deal dx );
 
@@ -45,7 +52,7 @@ int main (int argc, char **argv) {
     scr_varp = &parm ;  /* parm is a global */
     memset( &parm, 0 , sizeof(parm) ) ;   /* filling with zeros should both terminate the 'strings' and set len to 0 */
 
-    opts = &options ;         /* struct should have been init to all zeroes or null strings */
+    opts = &options ;         /* struct should have been init to all zeroes or null strings in dealglobals.c */
     opts->par_vuln =   -1 ;   /* default no Par calcs            -P switch        */
     opts->dds_mode =    1 ;   /* solve one board                 -M switch        */
     opts->nThreads =    9 ;   /* The sweet spot; >9 no effect    -R switch        */
@@ -55,6 +62,9 @@ int main (int argc, char **argv) {
     opts->upper_case = uppercase;          /* also a toggle */
     opts->opc_opener = opc_opener ;        /* -O switch; minor impact on how OPC calcs its pts */
     opts->opener = Opener ;
+    opts->accross_bkts = 42 ;       /* -a switch for 2D freq plots. 42 allows for 0-40 hcp plus lo and hi. */
+    opts->down_bkts    = 42 ;       /* -d switch for 1D and 2D freq plots. */
+                                    /* max bkts accross and down needed because dotnums can vary from 0 to 4000 say. */
     memset(opts->preDeal_len, 0, 4*sizeof(int) ) ; /* preDeal stores the -N,-E,-S,-W opt settings */
     memset(opts->preDeal, '\0' , 128 ) ;
 
@@ -68,7 +78,6 @@ int main (int argc, char **argv) {
     verbose = 1;
     quiet = 0 ;
     uppercase = 0 ;
-    computing_mode = DEFAULT_MODE;
     input_file = '\0' ;
 
   struct timeval tvstart, tvstop;
@@ -77,7 +86,13 @@ int main (int argc, char **argv) {
   fcsv = stdout ; // FILE *fcsv Will be opened by getopts if there is a -C option
 
  /* process cmd line options. Save them for later after parsing done */
+ /* Note that get_options returns immediately after it has found a -V or -h switch
+  * so put any other options such as -D or -T that you want to affect the display, BEFORE
+  * the said switch. e.g. dealerv2 -D3 -T "Test Run" -M2 -C w:/tmp/MyDataFile.csv -0 12 - 1 14 -V
+  * This will show the options struct contents and the script vars before the version info and exiting.
+  */
   get_options( argc, argv, opts) ;
+
    #ifdef JGMDBG
         if(jgmDebug > 0 ) {  fprintf(stderr, "JGMDBG DEFINED= %d in main \n",JGMDBG ); }
         if(jgmDebug >= 2) {  fprintf(stderr, "--------HELLO FROM VERSION %s ---------- \n", VERSION); }
@@ -120,6 +135,10 @@ int main (int argc, char **argv) {
 
 /* ===============> YYPARSE HERE <=============== */
   yyparse ();   /* build the list of conditions to evaluate and the list of actions to do */
+  /* make sure that the points array (of A, K, Q, J, etc.) is in sync with the tblPointcount [idxHCP] array.
+   * The latter may have been redefined by the user via a pointcount statement
+   */
+   for (i=0 ; i< 13 ; i++ ) { points[i] = tblPointcount[idxHcp][i] ; }  /* V4.5 */
 
   /* ----------------- Parsing of User Specs done. Decision Tree built. Action list built. -------------------*/
   /*                     Proceed to generate random hands, evaluate them, and print them                      */
@@ -135,6 +154,7 @@ int main (int argc, char **argv) {
     showactionlist(actionlist); fprintf(stderr, "\nACTION List DONE \n");
     if (jgmDebug >= 4) {
         showdistrbits(distrbitmaps) ; fprintf(stderr, "\nDistr Bit Maps DONE \n");
+        showAltCounts() ; fprintf (stderr, "Show ALT Counts Done \n");
     }
     fprintf(stderr, "\n-----------------------\n");
   } /* end if jgmDebug */

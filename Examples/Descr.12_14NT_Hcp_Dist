@@ -1,0 +1,13 @@
+generate   10000000
+produce    1000000
+title "12 -14 NT Opener HCP distribution"
+seed 910
+opener west
+condition ( shape(west, any 4333 + any 4432 + any 5332 - 5xxx - x5xx ) && hcp(west) >= 12 && hcp(west) <= 14
+
+    )
+action 
+       average "12 hcp" (hcp(west) == 12 ) ,
+       average "13 hcp" (hcp(west) == 13 ) ,
+       average "14 hcp" (hcp(west) == 14 ) , 
+       frequency "12-14 HCP Distribution" (hcp(west), 12 , 14)

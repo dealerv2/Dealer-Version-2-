@@ -1,0 +1,11 @@
+generate   10000
+produce    2
+title " Show Shape Bits Test -- Run with Debug=4"
+condition
+   shape(north, any 5431 ) or
+   shape(south, any 7420 ) or
+   shape(east , any 6421 ) or
+   shape(west , any 4333 + 1345 + 2614 + 7240 )
+# The west one is so that we can see more than one mask bit set in shapebit integer
+action
+    printoneline

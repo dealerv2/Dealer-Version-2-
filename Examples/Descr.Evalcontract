@@ -1,0 +1,12 @@
+generate   10000
+produce    10
+title " Eval Contract EW and NS DBL RDBL"
+condition ( (hcp(north)+hcp(south)) >= 22 && (hcp(north)+hcp(south)) <= 24 )
+
+NStricks_NT=dds(south,notrump)
+EWtricks_H =dds(west, hearts)
+
+action   printrpt(deal, "NS_tricksNT ", NStricks_NT, "EW_tricksH ", EWtricks_H ), 
+         evalcontract ( NS , z2Nx , vul ),
+         evalcontract ( EW , z3Hxx , nv  )
+

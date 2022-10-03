@@ -1,0 +1,17 @@
+# File Descr.ShapeFD0 by JGM
+title " Scripting Inside and Outside of Francois Shapes  "
+
+generate 200000
+produce 200
+seed 13
+action
+    average "S > H" spades(west) >= hearts(west),
+    average "D > H" diamonds(west) >= hearts(west),
+    average "D > H" clubs(west) >= hearts(west),
+    average "H Big" (hearts(west) > spades(west)) && (hearts(west) > diamonds(west) ) && (hearts(west) > clubs(west))
+
+condition
+      shape{west, x4+xx:h>c,h>d} && shape{west, x4+xx:h>s}
+
+   /* the above should give an average of 0.0 for the first three and 1.0 for the last one */
+

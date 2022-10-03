@@ -1,0 +1,16 @@
+# File Descr.ShapeFNegTst by JGM
+title " Negative Shape Tests -- Negative Shapes MUST go after all the positive shapes "
+
+generate 200000
+produce 200
+seed 13
+action
+    printoneline,
+    average "S < 2  " spades(west) < 2 ,
+
+condition
+      shape(west, any x44x - 1444 - 0xxx  )  /* works */
+#     shape(west, - 1444 - 0xxx + any x4xx)  /* Does NOT work */
+
+
+

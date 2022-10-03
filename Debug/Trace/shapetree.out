@@ -1,0 +1,341 @@
+Starting parse
+Entering state 0
+Reducing stack by rule 1 (line 178):
+-> $$ = nterm defs (1.1: )
+Stack now 0
+Entering state 1
+Reading a token: Next token is token CONDITION (5.1: )
+Shifting token CONDITION (5.1: )
+Entering state 7
+Reading a token: Next token is token SHAPE (5.1: )
+Shifting token SHAPE (5.1: )
+Entering state 6
+Reading a token: Next token is token '(' (5.1: )
+Shifting token '(' (5.1: )
+Entering state 49
+Reading a token: Next token is token COMPASS (5.1: [3])
+Shifting token COMPASS (5.1: [3])
+Entering state 113
+Reducing stack by rule 22 (line 223):
+   $1 = token COMPASS (5.1: [3])
+-> $$ = nterm compass (5.1: [3])
+Stack now 0 1 7 6 49
+Entering state 115
+Reading a token: Next token is token ',' (5.1: )
+Shifting token ',' (5.1: )
+Entering state 177
+Reading a token: Next token is token DISTR_OR_NUMBER (5.1: [5431])
+Reducing stack by rule 26 (line 238):
+-> $$ = nterm shlprefix (5.1: [0])
+Stack now 0 1 7 6 49 115 177
+Entering state 246
+Next token is token DISTR_OR_NUMBER (5.1: [5431])
+Reducing stack by rule 28 (line 245):
+-> $$ = nterm any (5.1: [0])
+Stack now 0 1 7 6 49 115 177 246
+Entering state 289
+Next token is token DISTR_OR_NUMBER (5.1: [5431])
+Shifting token DISTR_OR_NUMBER (5.1: [5431])
+Entering state 328
+Reducing stack by rule 35 (line 264):
+   $1 = token DISTR_OR_NUMBER (5.1: [5431])
+-> $$ = nterm shape (5.1: [5431])
+Stack now 0 1 7 6 49 115 177 246 289
+Entering state 329
+Reducing stack by rule 36 (line 268):
+   $1 = nterm shlprefix (5.1: [0])
+   $2 = nterm any (5.1: [0])
+   $3 = nterm shape (5.1: [5431])
+-> $$ = nterm shapelistel (5.1: )
+Stack now 0 1 7 6 49 115 177
+Entering state 247
+Reducing stack by rule 37 (line 273):
+   $1 = nterm shapelistel (5.1: )
+-> $$ = nterm shapelist (5.1: )
+Stack now 0 1 7 6 49 115 177
+Entering state 248
+Reading a token: Next token is token ARPLUS (5.1: )
+Shifting token ARPLUS (5.1: )
+Entering state 243
+Reducing stack by rule 25 (line 235):
+   $1 = token ARPLUS (5.1: )
+-> $$ = nterm shlprefix (5.1: [0])
+Stack now 0 1 7 6 49 115 177 248
+Entering state 246
+Reading a token: Next token is token DISTR_OR_NUMBER (5.1: [6421])
+Reducing stack by rule 28 (line 245):
+-> $$ = nterm any (5.1: [0])
+Stack now 0 1 7 6 49 115 177 248 246
+Entering state 289
+Next token is token DISTR_OR_NUMBER (5.1: [6421])
+Shifting token DISTR_OR_NUMBER (5.1: [6421])
+Entering state 328
+Reducing stack by rule 35 (line 264):
+   $1 = token DISTR_OR_NUMBER (5.1: [6421])
+-> $$ = nterm shape (5.1: [6421])
+Stack now 0 1 7 6 49 115 177 248 246 289
+Entering state 329
+Reducing stack by rule 36 (line 268):
+   $1 = nterm shlprefix (5.1: [0])
+   $2 = nterm any (5.1: [0])
+   $3 = nterm shape (5.1: [6421])
+-> $$ = nterm shapelistel (5.1: )
+Stack now 0 1 7 6 49 115 177 248
+Entering state 291
+Reducing stack by rule 38 (line 274):
+   $1 = nterm shapelist (5.1: )
+   $2 = nterm shapelistel (5.1: )
+-> $$ = nterm shapelist (5.1: )
+Stack now 0 1 7 6 49 115 177
+Entering state 248
+Reading a token: Next token is token ')' (5.1: )
+Shifting token ')' (5.1: )
+Entering state 290
+Reducing stack by rule 71 (line 342):
+   $1 = token SHAPE (5.1: )
+   $2 = token '(' (5.1: )
+   $3 = nterm compass (5.1: [3])
+   $4 = token ',' (5.1: )
+   $5 = nterm shapelist (5.1: )
+   $6 = token ')' (5.1: )
+-> $$ = nterm expr (5.1: )
+Stack now 0 1 7
+Entering state 50
+Reading a token: Next token is token AND2 (5.1: )
+Shifting token AND2 (5.1: )
+Entering state 101
+Reading a token: Next token is token SHAPE (5.1: )
+Shifting token SHAPE (5.1: )
+Entering state 6
+Reading a token: Next token is token '(' (5.1: )
+Shifting token '(' (5.1: )
+Entering state 49
+Reading a token: Next token is token COMPASS (5.1: [1])
+Shifting token COMPASS (5.1: [1])
+Entering state 113
+Reducing stack by rule 22 (line 223):
+   $1 = token COMPASS (5.1: [1])
+-> $$ = nterm compass (5.1: [1])
+Stack now 0 1 7 50 101 6 49
+Entering state 115
+Reading a token: Next token is token ',' (5.1: )
+Shifting token ',' (5.1: )
+Entering state 177
+Reading a token: Next token is token DISTR (5.1: [65xx])
+Reducing stack by rule 26 (line 238):
+-> $$ = nterm shlprefix (5.1: [0])
+Stack now 0 1 7 50 101 6 49 115 177
+Entering state 246
+Next token is token DISTR (5.1: [65xx])
+Reducing stack by rule 28 (line 245):
+-> $$ = nterm any (5.1: [0])
+Stack now 0 1 7 50 101 6 49 115 177 246
+Entering state 289
+Next token is token DISTR (5.1: [65xx])
+Shifting token DISTR (5.1: [65xx])
+Entering state 327
+Reducing stack by rule 34 (line 263):
+   $1 = token DISTR (5.1: [65xx])
+-> $$ = nterm shape (5.1: [65xx])
+Stack now 0 1 7 50 101 6 49 115 177 246 289
+Entering state 329
+Reducing stack by rule 36 (line 268):
+   $1 = nterm shlprefix (5.1: [0])
+   $2 = nterm any (5.1: [0])
+   $3 = nterm shape (5.1: [65xx])
+-> $$ = nterm shapelistel (5.1: )
+Stack now 0 1 7 50 101 6 49 115 177
+Entering state 247
+Reducing stack by rule 37 (line 273):
+   $1 = nterm shapelistel (5.1: )
+-> $$ = nterm shapelist (5.1: )
+Stack now 0 1 7 50 101 6 49 115 177
+Entering state 248
+Reading a token: Next token is token ')' (5.1: )
+Shifting token ')' (5.1: )
+Entering state 290
+Reducing stack by rule 71 (line 342):
+   $1 = token SHAPE (5.1: )
+   $2 = token '(' (5.1: )
+   $3 = nterm compass (5.1: [1])
+   $4 = token ',' (5.1: )
+   $5 = nterm shapelist (5.1: )
+   $6 = token ')' (5.1: )
+-> $$ = nterm expr (5.1: )
+Stack now 0 1 7 50 101
+Entering state 163
+Reading a token: Next token is token AND2 (5.1: )
+Reducing stack by rule 84 (line 375):
+   $1 = nterm expr (5.1: )
+   $2 = token AND2 (5.1: )
+   $3 = nterm expr (5.1: )
+-> $$ = nterm expr (5.1: )
+Stack now 0 1 7
+Entering state 50
+Next token is token AND2 (5.1: )
+Shifting token AND2 (5.1: )
+Entering state 101
+Reading a token: Next token is token SHAPE (5.1: )
+Shifting token SHAPE (5.1: )
+Entering state 6
+Reading a token: Next token is token '(' (5.1: )
+Shifting token '(' (5.1: )
+Entering state 49
+Reading a token: Next token is token COMPASS (5.1: [0])
+Shifting token COMPASS (5.1: [0])
+Entering state 113
+Reducing stack by rule 22 (line 223):
+   $1 = token COMPASS (5.1: [0])
+-> $$ = nterm compass (5.1: [0])
+Stack now 0 1 7 50 101 6 49
+Entering state 115
+Reading a token: Next token is token ',' (5.1: )
+Shifting token ',' (5.1: )
+Entering state 177
+Reading a token: Next token is token ANY (5.1: )
+Reducing stack by rule 26 (line 238):
+-> $$ = nterm shlprefix (5.1: [0])
+Stack now 0 1 7 50 101 6 49 115 177
+Entering state 246
+Next token is token ANY (5.1: )
+Shifting token ANY (5.1: )
+Entering state 288
+Reducing stack by rule 29 (line 246):
+   $1 = token ANY (5.1: )
+-> $$ = nterm any (5.1: [1])
+Stack now 0 1 7 50 101 6 49 115 177 246
+Entering state 289
+Reading a token: Next token is token DISTR_OR_NUMBER (5.1: [4333])
+Shifting token DISTR_OR_NUMBER (5.1: [4333])
+Entering state 328
+Reducing stack by rule 35 (line 264):
+   $1 = token DISTR_OR_NUMBER (5.1: [4333])
+-> $$ = nterm shape (5.1: [4333])
+Stack now 0 1 7 50 101 6 49 115 177 246 289
+Entering state 329
+Reducing stack by rule 36 (line 268):
+   $1 = nterm shlprefix (5.1: [0])
+   $2 = nterm any (5.1: [1])
+   $3 = nterm shape (5.1: [4333])
+-> $$ = nterm shapelistel (5.1: )
+Stack now 0 1 7 50 101 6 49 115 177
+Entering state 247
+Reducing stack by rule 37 (line 273):
+   $1 = nterm shapelistel (5.1: )
+-> $$ = nterm shapelist (5.1: )
+Stack now 0 1 7 50 101 6 49 115 177
+Entering state 248
+Reading a token: Next token is token ')' (5.1: )
+Shifting token ')' (5.1: )
+Entering state 290
+Reducing stack by rule 71 (line 342):
+   $1 = token SHAPE (5.1: )
+   $2 = token '(' (5.1: )
+   $3 = nterm compass (5.1: [0])
+   $4 = token ',' (5.1: )
+   $5 = nterm shapelist (5.1: )
+   $6 = token ')' (5.1: )
+-> $$ = nterm expr (5.1: )
+Stack now 0 1 7 50 101
+Entering state 163
+Reading a token: Next token is token AND2 (5.1: )
+Reducing stack by rule 84 (line 375):
+   $1 = nterm expr (5.1: )
+   $2 = token AND2 (5.1: )
+   $3 = nterm expr (5.1: )
+-> $$ = nterm expr (5.1: )
+Stack now 0 1 7
+Entering state 50
+Next token is token AND2 (5.1: )
+Shifting token AND2 (5.1: )
+Entering state 101
+Reading a token: Next token is token SHAPE (5.1: )
+Shifting token SHAPE (5.1: )
+Entering state 6
+Reading a token: Next token is token '(' (5.1: )
+Shifting token '(' (5.1: )
+Entering state 49
+Reading a token: Next token is token COMPASS (5.1: [2])
+Shifting token COMPASS (5.1: [2])
+Entering state 113
+Reducing stack by rule 22 (line 223):
+   $1 = token COMPASS (5.1: [2])
+-> $$ = nterm compass (5.1: [2])
+Stack now 0 1 7 50 101 6 49
+Entering state 115
+Reading a token: Next token is token ',' (5.1: )
+Shifting token ',' (5.1: )
+Entering state 177
+Reading a token: Next token is token ANY (5.1: )
+Reducing stack by rule 26 (line 238):
+-> $$ = nterm shlprefix (5.1: [0])
+Stack now 0 1 7 50 101 6 49 115 177
+Entering state 246
+Next token is token ANY (5.1: )
+Shifting token ANY (5.1: )
+Entering state 288
+Reducing stack by rule 29 (line 246):
+   $1 = token ANY (5.1: )
+-> $$ = nterm any (5.1: [1])
+Stack now 0 1 7 50 101 6 49 115 177 246
+Entering state 289
+Reading a token: Next token is token DISTR (5.1: [9xxx])
+Shifting token DISTR (5.1: [9xxx])
+Entering state 327
+Reducing stack by rule 34 (line 263):
+   $1 = token DISTR (5.1: [9xxx])
+-> $$ = nterm shape (5.1: [9xxx])
+Stack now 0 1 7 50 101 6 49 115 177 246 289
+Entering state 329
+Reducing stack by rule 36 (line 268):
+   $1 = nterm shlprefix (5.1: [0])
+   $2 = nterm any (5.1: [1])
+   $3 = nterm shape (5.1: [9xxx])
+-> $$ = nterm shapelistel (5.1: )
+Stack now 0 1 7 50 101 6 49 115 177
+Entering state 247
+Reducing stack by rule 37 (line 273):
+   $1 = nterm shapelistel (5.1: )
+-> $$ = nterm shapelist (5.1: )
+Stack now 0 1 7 50 101 6 49 115 177
+Entering state 248
+Reading a token: Next token is token ')' (5.1: )
+Shifting token ')' (5.1: )
+Entering state 290
+Reducing stack by rule 71 (line 342):
+   $1 = token SHAPE (5.1: )
+   $2 = token '(' (5.1: )
+   $3 = nterm compass (5.1: [2])
+   $4 = token ',' (5.1: )
+   $5 = nterm shapelist (5.1: )
+   $6 = token ')' (5.1: )
+-> $$ = nterm expr (5.1: )
+Stack now 0 1 7 50 101
+Entering state 163
+Reading a token: Now at end of input.
+Reducing stack by rule 84 (line 375):
+   $1 = nterm expr (5.1: )
+   $2 = token AND2 (5.1: )
+   $3 = nterm expr (5.1: )
+-> $$ = nterm expr (5.1: )
+Stack now 0 1 7
+Entering state 50
+Now at end of input.
+Reducing stack by rule 8 (line 186):
+   $1 = token CONDITION (5.1: )
+   $2 = nterm expr (5.1: )
+-> $$ = nterm def (5.1: )
+Stack now 0 1
+Entering state 41
+Reducing stack by rule 2 (line 179):
+   $1 = nterm defs (1.1: )
+   $2 = nterm def (5.1: )
+-> $$ = nterm defs (1.1-5.0: )
+Stack now 0
+Entering state 1
+Now at end of input.
+Shifting token $end (7.1: )
+Entering state 2
+Stack now 0 1 2
+Cleanup: popping token $end (7.1: )
+Cleanup: popping nterm defs (1.1-5.0: )
