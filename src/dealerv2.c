@@ -10,6 +10,8 @@
 //             2.0.9  seed in input file code added.
 //             2.1.0  Francois Dellacherie shapes added to Dealer input file. Use external program to expand
 // 2022/09/19  2.2.0  Fixed some bugs in redefining the altcount and pointcount arrays. and in use of dotnums.
+// 2022/10/05  2.3.0  Added Bucket Frequency functionality
+// 2023/01/03  2.3.1  Fixed bug Predeal / StackedPack handling by sorting stacked_pack.
 //
 #ifndef _GNU_SOURCE
   #define _GNU_SOURCE

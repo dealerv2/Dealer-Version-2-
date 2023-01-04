@@ -3,6 +3,7 @@
    * 2022/01/02 1.0.0    JGM     Collect all dealer symbolic constants and macros in one place.
    * 2022/02/09 2.1.5    JGM     FD shapes, and printrpt ported from deal_v3
    * 2022/10/05 2.3.0    JGM     Added Bucket Frequency histograms functionality. Re-Orged globals.c treatment.
+   * 2023/01/03 2.3.1    JGM     Fixed bug Predeal / StackedPack handling.
    */
 
   /* Does not do function prototypes, or global vars. or externs */
@@ -14,11 +15,11 @@
 #ifndef _GNU_SOURCE
   #define _GNU_SOURCE
 #endif
-#define BUILD_DATE "2022/10/05"
+#define BUILD_DATE "2023/01/03"
 #ifndef JGMDBG
-  #define VERSION "2.3.0"
+  #define VERSION "2.3.1"
 #else
-  #define VERSION "102.3.0"
+  #define VERSION "102.3.1"
 #endif
 
 #ifndef UNUSED

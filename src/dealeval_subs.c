@@ -143,6 +143,7 @@ int shuffle (deal d) {   /* Algorithm per Knuth */
 
 void setup_deal () {   /* fill curdeal taking into account the Predeal and swapping requirements in stacked pack*/
   int i, j;
+  sortDeal(stacked_pack); /* BUG FIX 2023-01-03 */
   j = 0;
   for (i = 0; i < 52; i++) {
     if (stacked_pack[i] != NO_CARD) {
