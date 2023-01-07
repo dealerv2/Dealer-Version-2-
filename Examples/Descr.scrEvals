@@ -1,6 +1,8 @@
 generate   10000000
 produce    100
+
 title " Eval Contract Scripted "
+
 predeal south SAQ5,HKJ9642,DQJ6,C8
 
 condition shape(north, 4153) and
@@ -11,4 +13,5 @@ condition shape(north, 4153) and
 
 
 action  evalcontract ( NS , $1, nv ),
+
 

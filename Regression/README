@@ -1,0 +1,7 @@
+This is the directory Regression 
+The Descr files in this directory all have a seed cmd in them; the seed number is typically a prime.
+The primes can be got from the ~/Programming/Perl5/testing/list_primes.pl
+There is also a script that will check the Output files vs the files in the Refer directory.
+If no Refer directory name is given then the Refer Files are in the current directory.
+---------
+

@@ -1,5 +1,15 @@
 produce 12
 title "Swapping test. Try with -x2 and -x3 "
+seed 257
 action printall
 #  -------------------------------------------------------------------
+# North hand is fixed for each cycle.
+# -x2 swaps east and west north and south are fixed
+# -x3  does 6 swaps as follows:
+#  N  E  S  W
+#  N  W  S  E
+#  N  W  E  S
+#  N  E  W  S
+#  N  S  W  E
+#  N  S  E  W
 

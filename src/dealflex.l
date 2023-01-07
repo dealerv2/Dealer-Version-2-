@@ -88,7 +88,7 @@
  char *fmt_cmd_buff( char *buff, char *txt ) {  // generic to just append anything we ask starting at bp.
     char *bp  ;
     bp = buff ;
-   // cmd buff to say e.g. ../lib/dpp 'shape{north, 5M(431)}' with single quotes around shape to avoid shell exp
+   // cmd buff to say e.g. ../lib/fdp 'shape{north, 5M(431)}' with single quotes around shape to avoid shell exp
    bp = stpcpy(bp, txt) ;        // typically yytext strdup passed in.
   *bp = '\0' ;                   // and then make sure we end with a null
   #ifdef JGMDBG
@@ -105,7 +105,7 @@
     fp = popen(cmd_buff , "r" ) ;
     if (fp == NULL) {
         perror( ":: popen returned NULL" ) ;
-        fprintf(stderr, "parse_fd_shapes:: popen DOP cmd failed ! \n");
+        fprintf(stderr, "parse_fd_shapes:: popen FDP cmd failed ! \n");
         return -1 ;
     }
     cptr = fgets(fd_res->fd_shape_str, FD_SHAPE_LEN, fp ) ;  // read the output of the pipe; includes one NULL

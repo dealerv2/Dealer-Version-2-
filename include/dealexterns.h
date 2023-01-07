@@ -88,6 +88,9 @@
  extern deal           stacked_pack;
  extern deal           curdeal;
  extern deal          *deallist;
+ extern deal           small_pack;   /* 2023-01-05 cards left after predeal done */
+ extern int            small_size;   /* number of cards left after predeal done  */
+ extern int            stacked_size;
  extern int            biasdeal[4][4];
 
  extern int deal_sorted ;       /* set when a deal is sorted. In case we need to be sure */

@@ -1,0 +1,22 @@
+ 'The Whole Deal: ',n T32.J72.982.8632 e KQ54.954.AT6.QJ9 s J7.Q.J754.AKT754 w A986.AKT863.KQ3. 
+ 'The NS Side hands only: ',n T32.J72.982.8632 s J7.Q.J754.AKT754 
+ 'A single compass direction and an expression: ',w A986.AKT863.KQ3. ,16
+ 'A pair of hands for NS, a string, and some trix ',n T32.J72.982.8632 s J7.Q.J754.AKT754 ,'S:',6,4,1,1,3,e KQ54.954.AT6.QJ9 w A986.AKT863.KQ3. ,'W:',7,9,12,12,10
+ 'The Whole Deal: ',n K63.AT5.T32.K742 e T98.KQ92.KQ85.A6 s AQ42.J873.J6.QT5 w J75.64.A974.J983 
+ 'The NS Side hands only: ',n K63.AT5.T32.K742 s AQ42.J873.J6.QT5 
+ 'A single compass direction and an expression: ',w J75.64.A974.J983 ,6
+ 'A pair of hands for NS, a string, and some trix ',n K63.AT5.T32.K742 s AQ42.J873.J6.QT5 ,'S:',7,5,6,7,6,e T98.KQ92.KQ85.A6 w J75.64.A974.J983 ,'W:',6,8,6,6,6
+ 'The Whole Deal: ',n Q64.QJ982.AJT9.Q e 975.T7653.87.T76 s KJ83.K4.Q52.AJ52 w AT2.A.K643.K9843 
+ 'The NS Side hands only: ',n Q64.QJ982.AJT9.Q s KJ83.K4.Q52.AJ52 
+ 'A single compass direction and an expression: ',w AT2.A.K643.K9843 ,14
+ 'A pair of hands for NS, a string, and some trix ',n Q64.QJ982.AJT9.Q s KJ83.K4.Q52.AJ52 ,'S:',6,9,10,11,9,e 975.T7653.87.T76 w AT2.A.K643.K9843 ,'W:',5,3,3,2,2
+ 'The Whole Deal: ',n 6.T965.JT542.972 e A2.A32.AQ3.AQ643 s K8743.KQ.9.KJT85 w QJT95.J874.K876. 
+ 'The NS Side hands only: ',n 6.T965.JT542.972 s K8743.KQ.9.KJT85 
+ 'A single compass direction and an expression: ',w QJT95.J874.K876. ,7
+ 'A pair of hands for NS, a string, and some trix ',n 6.T965.JT542.972 s K8743.KQ.9.KJT85 ,'S:',6,3,3,2,2,e A2.A32.AQ3.AQ643 w QJT95.J874.K876. ,'W:',7,9,9,10,10
+
+Showing a few different versions of the printrpt / csvrpt features
+Generated 8 hands
+Produced  4 hands
+Initial random seed 41588624113741
+Time needed    0.794 sec

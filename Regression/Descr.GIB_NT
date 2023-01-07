@@ -29,7 +29,7 @@ nCtrix = tricks(north, clubs)
 /* this next block determines which strain the max tricks comes from. Just bec North has a NT opener does not mean they play in NT */
 ntrix_Major = nStrix > nHtrix ? nStrix : nHtrix
 ntrix_minor = nDtrix > nCtrix ? nDtrix : nCtrix
-ntrix_suit = ntrix_Major > ntri_xinorm ? ntrix_Major : ntrix_minor
+ntrix_suit = ntrix_Major > ntrix_minor ? ntrix_Major : ntrix_minor
 ntrix  = ntrix_suit > nNtrix ? ntrix_suit : nNtrix
 
 condition

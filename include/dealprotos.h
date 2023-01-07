@@ -86,11 +86,12 @@ extern void fprintcompact (FILE * f, deal d, int oneline); /* used for both GIB 
         /*     Initializations Delete the extern on some of these if never accessed outside ?*/
 extern void          initdistr ();
 extern void          initevalcontract ();
+extern void          setup_action ();
 extern void          initprogram( struct options_st *opt_ptr) ;
 extern void          newpack (deal d);
-extern void          setup_action ();
 extern void          setup_deal ();
-extern int           shuffle (deal d) ;
+extern void          deal_cards (deal d) ;
+extern void          Shuffle(deal d, int size) ;
 
 
         /* low level functions and macros These may be useful in more than just the dealer.c file */

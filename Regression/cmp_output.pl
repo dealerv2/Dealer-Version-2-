@@ -21,7 +21,7 @@ foreach $input (`ls Descr.*`) {
   $refer  =~ s/Descr/Refer/;
   # uncomment one of these next two lines to run the tests, and generate the output or refer files
   #  system ("$exe -s $seed $input >$output");
-  #  system ("$exe -s $seed $input >$output");
+  #  system ("$exe -s $seed $input >$refer");
 
   print "Done, output in $output\n";
 

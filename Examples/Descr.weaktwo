@@ -1,3 +1,5 @@
+title "Gen Stats for Spade Weak Two"
+seed 211
 # calculates some statistics of hands deemed to be weak two's
 # I do not claim this definition of a weak two will satisfy everybody
 

@@ -10,8 +10,8 @@ seed 17
 # Pass the output to the perl script fmt_distribution.pl
 #
 generate 10000000
-seed 997
-action 
+
+action
         frequency  "HCP N"  (hcp(north), 0, 37),
         frequency  "HCP E"  (hcp(east),  0, 37),
         frequency  "HCP S"  (hcp(south), 0, 37),
@@ -240,5 +240,5 @@ action
         frequency  "Card W C4"   (hascard(west, 4C), 0, 1),
         frequency  "Card W C3"   (hascard(west, 3C), 0, 1),
         frequency  "Card W C2"   (hascard(west, 2C), 0, 1),
- 
- 
+
+

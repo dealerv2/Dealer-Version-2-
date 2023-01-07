@@ -1,4 +1,4 @@
-# JGM Makefile for deal_v3  2022/01/01
+# JGM Makefile for deal_v4  2023/01/06
 # Note MUST use g++ as the linker stage because DDS library created with g++
 
 CC      = gcc
@@ -21,9 +21,9 @@ YACC    = bison -d
 
 PROGRAM  = dealjgm
 
-SRCS  = ../src/dealaction_subs.c ../src/dealdds_subs.c ../src/dealdebug_subs.c ../src/dealeval_subs.c ../src/dealparse_subs.c
-SRCS += ../src/Dealer_DDS_IF.c ../src/c4.c ../src/dealerv2.c
-OBJS = $(patsubst ../src/%.c,%.o,$(SRCS) ) dealflex.o dealyacc.tab.o
+SRCS  = ../src/dealaction_subs.c ../src/dealdds_subs.c ../src/dealdebug_subs.c ../src/dealeval_subs.c ../src/dealcard_subs.c
+SRCS += ../src/dealparse_subs.c ../src/Dealer_DDS_IF.c ../src/c4.c ../src/deal_bktfreq_subs.c ../src/dealerv2.c
+OBJS = $(patsubst ../src/%.c,%.o,$(SRCS) ) dealglobals.o dealflex.o dealyacc.tab.o
 
 HDR  = ../include/allheaders.h
 # Need to link with g++ because libdds library was built with c++
@@ -74,7 +74,7 @@ $(YOBJ) : $(YSRC) $(HDR)
 #dealflex.c: ../src/dealflex.l dealyacc.tab.h $(HDR)
 #dealyacc.tab.c: ../src/dealyacc.y $(HDR)
 #dealyacc.tab.h: ../src/dealyacc.y $(HDR)
-dealerv2.o : ../src/dealerv2.c ../src/mainsubs.c $(HDR)
+dealerv2.o : ../src/dealerv2.c ../src/mainsubs.c $(HDR) ../src/UsageMsg.h
 	$(CC) $(CFLAGS) -o $@ -c $<
 dealflex.o : dealflex.c $(HDR)
 	$(CC) $(CFLAGS) -o $@ -c $<
@@ -85,6 +85,8 @@ deal%.o : ../src/deal%.c $(HDR)
 Dealer_DDS_IF.o : ../src/Dealer_DDS_IF.c $(HDR)
 	$(CC) $(CFLAGS) -o $@ -c $<
 c4.o : ../src/c4.c ../include/c4.h $(HDR)
+	$(CC) $(CFLAGS) -o $@ -c $<
+dealglobals.o : ../include/dealglobals.c $(HDR)
 	$(CC) $(CFLAGS) -o $@ -c $<
 
 objects : $(OBJS)

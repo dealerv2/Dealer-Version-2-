@@ -6,15 +6,15 @@
 #
 
 DEALER = ../dealerv2
-
+#DEALER = dealerv2
 SHELL=/bin/sh
 
 OUTPUT = $(wildcard Output.*)
 
-test: examples distribution 
+test: examples distribution
 
 distribution:
-	${DEALER} -s 1 <Test.distribution | ./convert.pl >Output.distribution	
+	${DEALER} -s 1 <Test.distribution | ./convert.pl >Output.distribution
 	diff Output.distribution Refer.distribution
 
 examples:
@@ -26,7 +26,10 @@ refer:
 		f1=`echo $$f | sed s/Output/Refer/` ; \
 		echo $$f1; \
 		/bin/cp $$f $$f1; \
-	done 
+	done
+
+refer_dir:
+	./refer_dealer.pl
 
 
 clean:

@@ -1,9 +1,3 @@
-### Note from JGM on 2022/03/13
-### This is François Dellacherie's orginal (1997) Readme file for his pre-processor which he called DPP.
-### JGM has renamed from 'dpp' to 'fdp' to give credit where it is due.
-### JGM has added a couple of extra explanations at the end of FD's original text.
-###########################################################################################################
-
 ### DPP README ###
 
 1/ What is dpp ?
@@ -17,7 +11,7 @@ dpp is written in Perl-object. In fact, it was a small part of a
 package that I will probably never finish to write (a package that
 should do automatic checking of bidding conventions...).
 
-It contains two files:
+It contains two file:
 o the executable file 'dpp',
 o the package 'Dist.pm'.
 
@@ -57,7 +51,7 @@ nice isn't it ??
 5/ Differences with the original syntax of shape :
 --------------------------------------------------
 Perl is great. (Repeat after me...)
-The only thing it misses regarding text-parsing is the ability to
+The only thing it misses regarding text-parsing is the hability to
 handle sexp (in a more general case, I don't recommend having sex-p with a
 computer ;-).
 The bad news is that I had to change the parenthesis () into 
@@ -70,7 +64,7 @@ the word 'any' anymore.
 
 The new general syntax is :
 
-shape{COMPASS, shp1 + shp2 + ... + shpM - shm1 - ... - shmN}  ### JGM Note: The '+' shapes all come before any '-' shape.
+shape{COMPASS, shp1 + shp2 + ... + shpM - shm1 - ... - shmN}
 
 See below for the atomic (shp or shm) shapes...
 
@@ -97,7 +91,8 @@ after being dp-processed...
  -->shape(north,0xxx + 1xxx + 2xxx)
 
 (d) the 'range' operator :
-    the range operator operates on a single suit. It comes with [], like in Perl.
+    the range operator operates on a single suit. It comes with [],
+    like in Perl.
     Example:
     shape{north, x[3-5]x[13]} : (3 to 5) hearts, and one or 3 clubs 
  -->shape(north,x3x1 + x4x1 + x3x3 + x5x1 + x4x3 + x5x3)
@@ -189,7 +184,7 @@ b/ Windows/DOS world :
        add a '-dpp' option to dealer. I won't do it, since I cannot
        check if that works properly.
 
-c/ you can also try some shapes by typing 'dpp' on the command line, ### JGM Note: use 'fdpi' not dpp or fdp .... 
+c/ you can also try some shapes by typing 'dpp' on the command line,
    and enter shape{} one by one to see how it transforms them.
 
 
@@ -238,30 +233,8 @@ someday. >>
 
 Have Fun !
 François DELLACHERIE
- < email deleted by JGM because it does not work anymore >
+sr007-2@dial.oleane.com
 Paris, FRANCE
-###############################################################################
-################# Further comments by JGM 2022/03/13 ##########################
-1) Several bugs in the original DPP code have been fixed in 2022.
-2) François' comment about not handling signs (sexp) properly has been fixed
-   provided that you enter all your plus shapes before any minus shape. Dealer itself seems to 
-   work that way anyway so it should not be a big burden.
-3) The dpp program has been replaced by two programs: 'fdp' for use by Dealer itself, and 
-   'fdpi' for use by users who want to enter shapes interactively from the command line.
-4) you need to specify the complete shape specification ( all on one line)  not just the distribution
-   Ex: do NOT enter:             4+M(431) - 2-m(xxx) - 5+mxxx:h>s
-       do enter    : shape{west, 4+M(431) - 2-m(xxx) - 5+mxxx:h>s }
-   and you will see as a result: 
-Parsing:: shape{west, 4+M(431) - 2-mxxx - 5+mxxx:h>s }
-[Length:969, patterns: 137] shape(west,1534 + 1543 + 3514 + 3541 + 4513 + 4531 + 5134 + 5143 + 5314 + 5341 + 5413 + 5431 - xx0x - 
-xx1x - xx2x - xxx0 - xxx1 - xxx2 - 0139 - 0148 - 0157 - 0166 - 0175 - 0184 - 0193 - 0229 - 0238 - 0247 - 0256 - 0265 - 0274 - 0283 - 
-0292 - 0319 - 0328 - 0337 - 0346 - 0355 - 0364 - 0373 - 0382 - 0391 - 0409 - 0418 - 0427 - 0436 - 0445 - 0454 - 0463 - 0472 - 0481 - 
-0490 - 0508 - 0517 - 0526 - 0535 - 0553 - 0562 - 0571 - 0580 - 0607 - 0616 - 0625 - 0652 - 0661 - 0670 - 0706 - 0715 - 0751 - 0760 - 
-0805 - 0850 - 1219 - 1228 - 1237 - 1246 - 1255 - 1264 - 1273 - 1282 - 1291 - 1309 - 1318 - 1327 - 1336 - 1345 - 1354 - 1363 - 1372 - 
-1381 - 1390 - 1408 - 1417 - 1426 - 1435 - 1453 - 1462 - 1471 - 1480 - 1507 - 1516 - 1525 - 1552 - 1561 - 1570 - 1606 - 1615 - 1651 - 
-1660 - 1705 - 1750 - 2308 - 2317 - 2326 - 2335 - 2353 - 2362 - 2371 - 2380 - 2407 - 2416 - 2425 - 2452 - 2461 - 2470 - 2506 - 2515 - 
-2551 - 2560 - 2605 - 2650 - 3406 - 3415 - 3451 - 3460 - 3505 - 3550)
-
 
 
 

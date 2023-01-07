@@ -58,14 +58,14 @@ void dump_curdeal(deal d) { /* ouput deal in easy to read, verbose fmt */
   fprintf(stderr, "----------------dump curr deal done ----------------\n");
 } /* end dump curr deal */
 
-void hexdeal_show(deal dl ) { /* one line output of the coded cards in hex */
+void hexdeal_show(deal dl, int sz ) { /* one line output of the coded cards in hex */
     int i ;
     i = 0;
     fprintf (stderr, " dl=[");
-    for (i=0; i<52 ; i++ ) {  /* print hex deal */
-        fprintf(stderr, "%02x ", dl[i] );
+    for (i=0; i < sz ; i++ ) {  /* print hex deal */
+        fprintf(stderr, "%02X ", dl[i] );
     } /* end hex deal */
-    fprintf(stderr, "/]\n");
+    fprintf(stderr, "]\n");
 } /* end hexdeal_show */
 
 void sr_deal_show(deal dl ) { /* two line output of the cards in SuitRank */
@@ -252,7 +252,7 @@ void showdistrbits ( int ***distrbitmaps[14] ) {
 
 void showAltCounts( void ) {
    int tbl,r ;
-   fprintf(stderr, "Points Table, a copy of tblPointcount[idxHcp] table \n Pts:  ");
+   fprintf(stderr, "Points Table, a copy of tblPointcount[idxHcp] table \n Pts: ");
    for (r=0; r<13 ; r++ ) {
       fprintf(stderr, "%4d ", points[r] ) ;
    }

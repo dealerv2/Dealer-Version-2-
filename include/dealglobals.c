@@ -95,6 +95,11 @@ deal fullpack;
 deal stacked_pack;
 deal curdeal;
 deal *deallist;
+deal small_pack;   /* 2023-01-05 cards left after predeal done */
+int  small_size   = 0 ;   /* number of cards left after predeal done  */
+int  stacked_size = 0 ;
+
+
 char dds_pbndeal[80] ;      /* the deal in a format DDS likes. 69 chars; similar to printoneline but not quite */
 int deal_sorted = 0 ;       /* Future use; Several print actions could benefit from knowing the hands are sorted */
 int hand_sorted[4] = {0,0,0,0};

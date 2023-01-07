@@ -33,6 +33,11 @@ fi
 # setup the GIB external program in case there is anyone who still wants to use it.
 cp -p /usr/games/bridge /usr/games/gibcli
 
-echo Dealver2 installed in "$ROOTDIR"/DealerV2 and the OPC Perl script in "$ROOTDIR"/DOP
+# make sure the exec permission bits are set for the script files
+chmod +x /usr/games/bridge /usr/games/gibcli
+chmod +x ${ROOTDIR}/DOP/*.pl ${ROOTDIR}DealerV2/lib/fdp*
+
+echo installed the OPC Perl script(s) in "$ROOTDIR"/DOP
+echo dealver2 installed in "$ROOTDIR"/DealerV2,  and the fdpi and fdp Perl script(s) in "$ROOTDIR"/DealerV2/lib
 
 

@@ -1,7 +1,7 @@
 #ifndef DEALDBG_SUBS_H
 #define DEALDBG_SUBS_H
 extern void dump_curdeal(deal dl);
-extern void hexdeal_show(deal dlx );
+extern void hexdeal_show(deal dlx, int sz );
 extern void sr_deal_show(deal dlx );
 extern void sr_hand_show(int h, deal dlx) ;
 extern void showtreenode(int tlev, struct tree *tr);

@@ -10,8 +10,8 @@
 //             2.0.9  seed in input file code added.
 //             2.1.0  Francois Dellacherie shapes added to Dealer input file. Use external program to expand
 // 2022/09/19  2.2.0  Fixed some bugs in redefining the altcount and pointcount arrays. and in use of dotnums.
-// 2022/10/05  2.3.0  Added Bucket Frequency functionality
-// 2023/01/03  2.3.1  Fixed bug Predeal / StackedPack handling by sorting stacked_pack.
+// 2023/01/06  2.3.2  Redo Shuffle Logic. 2nd attempt.
+
 //
 #ifndef _GNU_SOURCE
   #define _GNU_SOURCE
@@ -22,6 +22,7 @@
 #include "../include/dealtypes.h"
 #include "../include/dealprotos.h"
 #include "../include/dealexterns.h"   /* was dealglobals but testing if I can compile globals separately and link it. */
+#include "../include/dealdebug_subs.h"   /* for sr_deal_show etc. */
 #include "../include/pointcount.h"
 #include "../src/UsageMsg.h"
 
@@ -35,9 +36,6 @@
 #ifndef MAXDISTR
  #define MAXDISTR 8*sizeof(int)
 #endif
-
-void hexdeal_show( deal dx );
-void sr_deal_show( deal dx );
 
 int main (int argc, char **argv) {
 #ifdef JGMDBG
@@ -96,8 +94,7 @@ int main (int argc, char **argv) {
   get_options( argc, argv, opts) ;
 
    #ifdef JGMDBG
-        if(jgmDebug > 0 ) {  fprintf(stderr, "JGMDBG DEFINED= %d in main \n",JGMDBG ); }
-        if(jgmDebug >= 2) {  fprintf(stderr, "--------HELLO FROM VERSION %s ---------- \n", VERSION); }
+        if(jgmDebug > 0 ) {  fprintf(stderr, "JGMDBG DEFINED= %d in main version %s \n",JGMDBG, VERSION ); }
         #ifdef YYDEBUG
              if(jgmDebug > 0 ) {  fprintf(stderr, "YYDEBUG DEFINED yydebug== %d BISON DBG Active.  \n",yydebug ); }
         #else
@@ -124,9 +121,8 @@ int main (int argc, char **argv) {
     perror (argv[optind]);
     exit (-1);
   }
-   newpack(fullpack);   /* fill fullpack with cards in order from Club Deuce(North) up to Spade Ace(West) */
-
-  for (i = 0; i < 52; i++) stacked_pack[i] = NO_CARD; /* stacked pack used for preDeals */
+  newpack(fullpack);   /* fill fullpack with cards in order from North SA downto West C2 */
+  memset(stacked_pack, NO_CARD, 52) ;  /* stacked pack used for preDeals */
   initdistr ();
   maxdealer = -1;  /* set so that yyparse/flex will fill them in if reqd */
   maxvuln = -1;
@@ -135,16 +131,17 @@ int main (int argc, char **argv) {
      if (jgmDebug >= 3) { fprintf(stderr, "Calling yyparse from file[%s] at line [%d]\n",__FILE__,__LINE__); }
 #endif
 
-/* ===============> YYPARSE HERE <=============== */
-  yyparse ();   /* build the list of conditions to evaluate and the list of actions to do */
-  /* make sure that the points array (of A, K, Q, J, etc.) is in sync with the tblPointcount [idxHCP] array.
-   * The latter may have been redefined by the user via a pointcount statement
+  /*
+   * build the list of conditions to evaluate and the list of actions to do
+   * ===============> YYPARSE HERE <===============
    */
-   for (i=0 ; i< 13 ; i++ ) { points[i] = tblPointcount[idxHcp][i] ; }  /* V4.5 */
+  yyparse ();
 
-  /* ----------------- Parsing of User Specs done. Decision Tree built. Action list built. -------------------*/
-  /*                     Proceed to generate random hands, evaluate them, and print them                      */
-#ifdef JGMDBG
+
+   for (i=0 ; i< 13 ; i++ ) { points[i] = tblPointcount[idxHcp][i] ; }  /* V4.5 ensure the two tables are in sync */
+
+
+#ifdef JGMDBG   /* print several results from the parsing phase */
   if (jgmDebug >= 3) {
     fprintf(stderr, " After yyparse:: maxproduce=%d, maxgenerate=%d, maxdealer=%d, maxvuln=%d, Opener=%c, Title=%s\n",
                      maxproduce,    maxgenerate,    maxdealer,      maxvuln,   opc_opener, title );
@@ -156,49 +153,53 @@ int main (int argc, char **argv) {
     showactionlist(actionlist); fprintf(stderr, "\nACTION List DONE \n");
     if (jgmDebug >= 4) {
         showdistrbits(distrbitmaps) ; fprintf(stderr, "\nDistr Bit Maps DONE \n");
-        showAltCounts() ; fprintf (stderr, "Show ALT Counts Done \n");
+        showAltCounts() ;
+        fprintf (stderr, "Show ALT Counts Done \n");
     }
-    fprintf(stderr, "\n-----------------------\n");
+    fprintf(stderr, "\n-------MAIN PARSING DONE @ dealerv2.c:160----------------\n");
   } /* end if jgmDebug */
 #endif
-  /* Vers 2.0.9 -- the seed could come from input file or from cmd line -- move initprogram to before RNG init */
-  /* Vers 2.1.0 -- Added Francois shapes to Descr file. Expanded by his Perl program */
+
+  /* ----------------- Parsing of User Specs done. Decision Tree built. Action list built. -------------------*/
+  /* Now initialize the rest of the program, taking into account the command line parms
+   * Some of which may over ride the input file
+   */
 
   initprogram(opts);  /* here we will over-ride yyparse if reqd from cmd line and do other stuff. */
 
   /*Using glibc standard lib routines rand48 and srand48.*/
   /* If no seed provided, use function init_rand48 which uses kernel as seed source*/
-  if (jgmDebug >= 3 ) { DBGPRT("Initializing RNG. Seed_providedx10000 + seed",(seed_provided*10000+seed)," in main "); }
+  JGMDPRT(3,"Initializing RNG. Seed_provided=%ld, seed=%ld \n",seed_provided, seed);
   if (!seed_provided) {
     seed = SRANDOM(0) ; /* use init_rand48() to init the RNG with a seed that the kernel provides */
   }
   else {
     seed = SRANDOM(seed) ; /* use init_rand48() to init the RNG with the users seed */
   }
-  if (jgmDebug >= 3 ) { DBGPRT("Seed val=",seed,"Calling Init prog now"); }
-  //SetMaxThreads(9);
-  SetResources(opts->maxRamMB, opts->nThreads) ; /* 160MB/Thread max; 9,12,16 threads all equal and 25% faster than 6 Threads*/
+  JGMDPRT(3,"RNG initialized with Seed val=%ld",seed );
 
+  SetResources(opts->maxRamMB, opts->nThreads) ; /* 160MB/Thread max; 9,12,16 threads all equal and 25% faster than 6 Threads*/
   if (maxgenerate == 0) maxgenerate = 10000000;
   if (maxproduce == 0)  maxproduce = ((actionlist == &defaultaction) || will_print) ? 40 : maxgenerate;
-#ifdef JGMDBG
-  if (jgmDebug >= 2) { fprintf(stderr, "Maxgenerate=%d, Maxproduce=%d, Calling setup_action \n", maxgenerate, maxproduce ); }
-#endif
+  JGMDPRT(2, "Maxgenerate=%d, Maxproduce=%d, DDS Threads=%d\n",maxgenerate, maxproduce, opts->nThreads );
+
   setup_action();
 
+  /* Initialize the Deck with predealt cards from the stacked_pack, and leftover cards from small_pack */
+  setup_deal();
+
   if (progressmeter) fprintf (stderr, "Calculating...  0%% complete\r"); // \r CR not \n since want same line ..
-  setup_deal(); /* fill curdeal taking into account the Predeal and swapping requirements in stacked pack*/
 
   /* ----------- Begin the Main Loop ------------*/
+  JGMDPRT(4,"^^^^^^ Begin Main Loop ^^^^^^\n") ;
   for (ngen = 1, nprod = 0; ngen <= maxgenerate && nprod < maxproduce; ngen++) { /* start ngen at 1; simplifies counting */
       treedepth = 0;
-      if (jgmDebug >= 8 )
-            DBGPRT("In Main Generating Hands: ngen=",ngen," Calling Shuffle");
-      shuffle (curdeal);
+      if (jgmDebug >= 8 ) { DBGPRT("In Main Generating Hands: ngen=",ngen," Calling deal_cards"); }
+      deal_cards(curdeal) ; /* NEW 2023-01-06 -- Shuffle, Swap, or Predeal then Shuffle as required */
       #ifdef JGMDBG
         if (jgmDebug >= 9) {  sr_deal_show(curdeal); }
       #endif
-          analyze (curdeal, hs);  // Collect and save all info that will be needed by eval_tree() aka interesting() */
+      analyze (curdeal, hs);  // Collect and save all info that will be needed by eval_tree() aka interesting() */
    #ifdef JGMDBG
       if (jgmDebug >= 8 ) { fprintf(stderr, "Main.164:: Calling Interesting for ngen=%d \n", ngen);  }
    #endif

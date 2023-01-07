@@ -15,7 +15,7 @@
 #include "../include/dealtypes.h"
 #include "../include/dealexterns.h"
 #include "../include/dealprotos.h"
-#include "../include/dealdebug_subs.h"   /* for DBGPRT, etc.? */
+#include "../include/dealdebug_subs.h"   /* for sr_deal_show etc. */
 #ifndef intresting
 #define interesting() ((int)evaltree(decisiontree))
 #endif
@@ -39,123 +39,7 @@ void show_opcVals(struct sidestat *resp ) {
    fprintf(stderr, "~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~\n");
    return ;
 }
-
-
 int opc_value(int side, int strain, struct tree *t ) ;
-void swap2 (deal d, int p1, int p2) { /*keep for swapping */
-
-  /* functions to assist "simulated" shuffling with player
-     swapping or loading from Ginsberg's library.dat -- AM990423 */
-  card t;
-  int i;
-  p1 *= 13;
-  p2 *= 13;
-  for (i = 0; i < 13; ++i) {
-    t = d[p1 + i];
-    d[p1 + i] = d[p2 + i];
-    d[p2 + i] = t;
-  }
-} /* end swap2 */
-int hascard (deal d, int player, card thiscard){
-  int i;
-  for (i = player * 13; i < (player + 1) * 13; i++)
-    if (d[i] == thiscard) return 1;
-  return 0;
-}
-
-void newpack (deal d) { /* created cards in order Club Deuce(north) up to Spade Ace(west) */
-  int place;
-  enum rank_ek rank;
-  enum suit_ek suit;
-
-  place = 0;
-  for (suit = CLUBS; suit <= SPADES; suit++)
-    for (rank = TWO; rank <= ACE; rank++)            /* JGM mod so rank is enum; a DEUCE is 0, an ACE is 12 */
-      d[place++] = MAKECARD (suit, rank);
-}  /* end newpack */
-
-int shuffle (deal d) {   /* Algorithm per Knuth */
-  int i, j;
-  #ifdef JGMDBG
-    enum rank_ek r1, r2;  /* for debugging */
-    enum suit_ek s1, s2;
-  #endif
-  card t;
-  /* JGM deleted a bunch of code referring to loading from library which was (a) Windows and (b) library not found anymore*/
-#ifdef JGMDBG
-    if (jgmDebug >= 8 ) {
-        fprintf(stderr, "In Shuffle:: Swapping=%d, Swapindex=[%d] \n",swapping, swapindex );
-    }
-#endif
-  if (swapping != 0 && swapindex != 0 ) {   //Swapindex gets set to zero after each swapping group so we gen a new random deal
-    switch (swapindex) {
-      case 1:        swap2 (d, 1, 3);        break;
-      case 2:        swap2 (d, 2, 3);        break;
-      case 3:        swap2 (d, 1, 2);        break;
-      case 4:        swap2 (d, 1, 3);        break;
-      case 5:        swap2 (d, 2, 3);        break;
-    }
-  }
-  else {
-    /* Algorithm according to Knuth. For each card exchange with a random
-       other card. This is supposed to be the perfect shuffle algorithm.
-       It only depends on a valid random number generator.  */
-
-       /* Nov 2021: JGM has replaced Hans' original clever RNG with standard library calls. */
-       /* Arith ops are 1000+ times faster now than in 1989 when original was written */
-       /* JGM:: 52 random numbers per deal; if we generate 10000 deals we need 520000 random numbers per run.
-        * so need a period of 5.2*10^5 squared (27 * 10^10 = 27*2^33) to avoid birthday paradox.
-        * The period of the 2020 version of gnurand 2^48 so we should be OK
-        */
-
-    for (i = 0; i < 52; i++) {           /* for each card in the deck  ... */
-      if (stacked_pack[i] == NO_CARD) {  /* Thorvald Aagaard 14.08.1999: if the card was not pre-dealt ...  */
-        do {
-          j = gen_rand_slot(52) ;        /* generate a random slot to switch with until we find one that ... */
-        } while (stacked_pack[j] != NO_CARD);              /* .... was not predealt also */
-
-        /* At this point, neither d[i] nor d[j] are predealt cards, so switch them */
-        #ifdef JGMDBG
-
-            r1 = CARD_RANK(d[i]) ; r2 = CARD_RANK(d[j]) ;
-            s1 = CARD_SUIT(d[i]) ; s2 = CARD_SUIT(d[j]) ;
-            if (jgmDebug >= 9 ) {
-                fprintf(stderr, "Shuffle: switch slots %i=[%02x:%c%c] and %i=[%02x:%c%c]\n",
-                       i,d[i],strain_id[s1],card_id[r1],j,d[j],strain_id[s2],card_id[r2]);
-             }
-        #endif
-        t = d[j];
-        d[j] = d[i];
-        d[i] = t;
-      }  /* end if not predealt */
-    }    /* end for each card in the deck */
-  }      /* end else  Knuth algorithm for shuffle */
-    ++swapindex;
-    if ((swapping == 2 && swapindex > 1) || (swapping == 3 && swapindex > 5))
-      swapindex = 0;  /* reset to zero so we gen a new random deal next time */
-#ifdef JGMDBG
-    if (jgmDebug >= 8 ) {
-        fprintf(stderr, "In Shuffle::Done Shuffle or Swap NewSwapindex=[%d] Swapping=%d \n", swapindex, swapping );
-    }
-#endif
-  return 1;
-} /* end shuffle */
-
-void setup_deal () {   /* fill curdeal taking into account the Predeal and swapping requirements in stacked pack*/
-  int i, j;
-  sortDeal(stacked_pack); /* BUG FIX 2023-01-03 */
-  j = 0;
-  for (i = 0; i < 52; i++) {
-    if (stacked_pack[i] != NO_CARD) {
-      curdeal[i] = stacked_pack[i];   /* if stacked_pack_card[i] was predealt then add it to curdeal */
-    } else {
-      while (fullpack[j] == NO_CARD)  /* else skip NOCARDs in fullpack and add first legit one to slot i in curdeal */
-        j++;
-      curdeal[i] = fullpack[j++];
-      assert (j <= 52);
-    }
-  }
-} /* end setup_deal */
 int isCard (char crd) {
    char Ranks[14]="23456789TJQKA" ;
    unsigned char uc ;
@@ -165,6 +49,12 @@ int isCard (char crd) {
       if ( uc == Ranks[rc] )  return rc ;
    }
    return -1;
+}
+int hascard (deal d, int player, card thiscard){
+  int i;
+  for (i = player * 13; i < (player + 1) * 13; i++)
+    if (d[i] == thiscard) return 1;
+  return 0;
 }
 
 void predeal_cmdparms(int compass, char *holding) { // preDeal[n]
@@ -249,7 +139,7 @@ void initprogram ( struct options_st *opt_ptr) {
       } /* end if checking the lengths for predeal */
       #ifdef JGMDBG
          if (jgmDebug >=4 ) {
-            fprintf(stderr, "init_program.244:: Predeal check, FullPack then StackedPack\n");
+            fprintf(stderr, "init_program.257:: Predeal check, FullPack then StackedPack\n");
             sr_deal_show(fullpack);
             sr_deal_show(stacked_pack);
          }
@@ -1186,9 +1076,6 @@ int opc_value(int side, int strain, struct tree *t ) {
    }  /* end cached == 1 */
    /* The cache for the current side (and maybe also the other side) needs refreshing */
    dbg_opc_cmd_calls++ ;
-    // since the fmt_side function sorts each hand we no longer need this call for now.
-   // sortDeal(curdeal);
-
    opc_cmd_buff[opc_pgmlen] = '\0' ; // Reset buff to just the pgm name string
    fmt_opc_cmd_buff(opc_cmd_buff, side, curdeal ) ;
    get_opc_vals(&opcRes, opc_cmd_buff );

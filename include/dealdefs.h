@@ -3,7 +3,7 @@
    * 2022/01/02 1.0.0    JGM     Collect all dealer symbolic constants and macros in one place.
    * 2022/02/09 2.1.5    JGM     FD shapes, and printrpt ported from deal_v3
    * 2022/10/05 2.3.0    JGM     Added Bucket Frequency histograms functionality. Re-Orged globals.c treatment.
-   * 2023/01/03 2.3.1    JGM     Fixed bug Predeal / StackedPack handling.
+   * 2023/01/06 2.3.2    JGM     Re-Org shuffling, swapping, and predealing functions to fix preDeal bug. added JGMDPRT macro.
    */
 
   /* Does not do function prototypes, or global vars. or externs */
@@ -15,11 +15,11 @@
 #ifndef _GNU_SOURCE
   #define _GNU_SOURCE
 #endif
-#define BUILD_DATE "2023/01/03"
+#define BUILD_DATE "2023/01/07"
 #ifndef JGMDBG
-  #define VERSION "2.3.1"
+  #define VERSION "2.3.2"
 #else
-  #define VERSION "102.3.1"
+  #define VERSION "102.3.2"
 #endif
 
 #ifndef UNUSED
@@ -72,13 +72,13 @@ enum suit_ek {CLUBS=0, DIAMONDS, HEARTS, SPADES, nosuit=-1 } ;
 #define MAKECARD(suit,rank) ( (card)((suit)<<4) | ((rank)&0xF) )
 #define CARD_RANK(c) (  (card)(c)&0xF     )
 #define CARD_SUIT(c) ( ((card)(c)>>4)&0xF )
-#define C_SUIT(c)       ((c)>>4)
-#define C_RANK(c)       ((c)&0x0F)
+#ifndef C_SUIT
+  #define C_SUIT(c)    ( ((c)>>4)&0xF )
+  #define C_RANK(c)    (  (c)&0xF     )
+#endif
 #define NO_CARD     0xFF
 /* This next macro is used several times in the dealaction_subs.c file. BTW hascard is a somewhat inefficient routine */
 #define HAS_CARD(d,p,c) hascard(d,p,c)
-/* JGM Removed MAKECONTRACT since it was no longer used in the JGM revised eval contract routines */
-/* #define MAKECONTRACT(suit, tricks, dbl) ( (tricks*5 + suit) + 40*dbl ) -- No longer used even with dbl */
 
 #define NSEATS          4
 #define SIDE_NS         0
@@ -213,9 +213,11 @@ enum suit_ek {CLUBS=0, DIAMONDS, HEARTS, SPADES, nosuit=-1 } ;
     /* a print statement with a description, some sort of int value, and an explanation */
    #define DBGPRT(d,iv,ex) fprintf(stderr,"%s[%ld] at [%s]\n",(d),(long int)(iv),(ex));
    /* a print statement with a descriptrion, a value, the format to use, and a term (often new line or space) char */
-   #define JGMPRT(d,v,fmt,tc) fprintf(stderr,"%s[%(fmt)](tc)",(m),(v) ) ;
+   // #define JGMPRT(d,v,fmt,tc) fprintf(stderr,"%s[%(fmt)](tc)",(m),(v) ) ;
+   #define JGMDPRT(l,fmt,...) do {if (jgmDebug >= (l)) { fprintf(stderr, "%s:%d " fmt, __FILE__,__LINE__,## __VA_ARGS__) ; } } while(0)
  #else
    #define DBGPRT(m,i,l)
+   #define JGMDPRT(l,fmt,...)
  #endif
 
 #endif /*ifndef DEALDEFS_H */

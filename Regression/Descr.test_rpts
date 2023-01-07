@@ -1,20 +1,21 @@
 generate 10000
 produce 8
-title "Example of Reports  "
-seed 181  
+title "Example of Outputs produced by various actions including printrpt "
+seed 181
 nNtrix = dds(north, spades)
 NS_hcp = hcp(north) + hcp(south)
 condition
     shape(north, any 4333 + any 4432 + any 5332) and
         hcp(north) + hcp(south) > 23
-        
+
   // printrpt (and csvrpt) are the most flexible output options. The any combination of hands, expressions, and labels can be shown.
 action  printrpt( "North Tricks in Spades ", nNtrix, ",  NS HCP= ", hcp(north)+hcp(south), NS ) ,
-	print(east , west )
+   print(west, east ), printoneline (dds(north, spades) ), printside( NS ) ,
+   printall
 
 #action printoneline (dds(north, spades) )  // 1 line per deal, with the spade tricks at the end.
 #action printcompact (dds(north, spades) ) // 4 lines per deal with a 5th line with the spade tricks
-#action printside( NS )			// two hands only accross the page 
-#action printall					// all 4 accross the page. hand record style
+#action printside( NS )       // two hands only accross the page
+#action printall              // all 4 accross the page. hand record style
 #action print(east , west )   // hands on separate pages for bidding practice. Occurs at end of run.
 

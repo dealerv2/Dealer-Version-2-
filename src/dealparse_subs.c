@@ -167,6 +167,7 @@ void predeal (int player, card onecard) {  /* this moves a card from fullpack to
       for (j = player * 13; j < (player + 1) * 13; j++)
         if (stacked_pack[j] == NO_CARD) {
         stacked_pack[j] = onecard;
+        stacked_size++ ;
         return;
         }
       yyerror ("More than 13 cards for one player");

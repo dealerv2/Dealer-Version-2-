@@ -1,7 +1,7 @@
 /* File dealmain_subs.c JGM 2022-Feb-17  */
 /* 2022-02-07 Expanding Options with -X and -0 thru -9 */
 /* 2022-03-07 Fine tune Debug levels */
-/* This file should not be compiled independently. #inlcude it in dealjgm.c */
+/* This file should not be compiled independently. #inlcude it in dealerv2.c */
 #if 1                            /* change to  when not testing */
 #include "../include/std_hdrs.h"  /* all the stdio.h stdlib.h string.h assert.h etc. */
 
@@ -36,7 +36,7 @@ long int init_rand48( long int seed ) {
     seed48(su.sss) ;   /* ignore seed48 return value of pointer to internal buffer */
     u_seed48 = (long int)su.sss[0] + (long int)su.sss[1]*two16 + (long int)su.sss[2]*two32;
 #ifdef JGMDBG
-     if (jgmDebug >= 1 ) {
+     if (jgmDebug >= 2 ) {
          fprintf(stderr, "No Seed Provided. DONE Initializing RNG init_rand48, %d, %d, %d, %ld\n",
                 su.sss[0], su.sss[1], su.sss[2], u_seed48);
      }
@@ -45,7 +45,7 @@ long int init_rand48( long int seed ) {
 } /* end init_rand48 */
 
 int gen_rand_slot ( int topval ) { /* return a random number in the range [0 .. (topval - 1)] */
-        /* mrand48 returns a number between in range -2^31 .. +2^31 i.e. a 32 bit range. */
+        /* mrand48 returns a number in range -2^31 .. +2^31 i.e. a 32 bit range. */
         return ( abs( (int) (mrand48() % (long int) topval) ) ) ;
 }
 

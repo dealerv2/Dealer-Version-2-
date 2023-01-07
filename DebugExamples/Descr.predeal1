@@ -1,0 +1,9 @@
+generate   10000
+produce    10
+title "Testing New shuffle for Predeals"
+seed 901
+
+predeal    south SA, HK , DQ, CJ
+predeal    north S2, H2, D2, C2
+
+action     printoneline
