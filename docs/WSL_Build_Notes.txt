@@ -1,0 +1,14 @@
+# ---- JGM has received the following note from a user: ---------------------
+I have also successfully built it on WSL (UBuntu)
+       ^^^^
+
+I had to install the following after installing WSL on Windows
+
+sudo apt update && sudo apt upgrade
+sudo apt install make
+sudo apt-get install gcc
+sudo apt-get install -y bison
+sudo apt-get install flex
+sudo apt-get install g++
+git clone https://github.com/dealerv2/Dealer-Version-2-.git
+

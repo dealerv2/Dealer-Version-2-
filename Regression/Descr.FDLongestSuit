@@ -1,10 +1,10 @@
-# File Descr.LongestSuit by JGM
-title " West - Hearts Longest Suit example   "
+# File Descr.FDLongestSuit by JGM
+title " FD Shapes: West - Hearts Longest Suit"
 
 generate 1000000
 produce 1000
 seed 79  
-action average "Hearts Longest Suite" (hearts(west) > clubs(west) && hearts(west) > diamonds(west) && hearts(west) > spades(west) )
+action average "Hearts Longest Suit" (hearts(west) > clubs(west) && hearts(west) > diamonds(west) && hearts(west) > spades(west) )
 
 condition
  shape{west, x4+xx:h>c,h>d} && shape{west, x4+xx:h>s}

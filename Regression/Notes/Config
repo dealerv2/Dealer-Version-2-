@@ -1,0 +1,11 @@
+This is the directory Regression 
+The Descr files in this directory all have a seed cmd in them; the seed number is typically a prime.
+The primes can be got from the ~/Programming/Perl5/testing/list_primes.pl
+There is also a script that will check the Output files vs the files in the Refer directory.
+If no Refer directory name is given then the Refer Files are in the current directory.
+The files that begin with HOW2 cannot be run in batch mode. 
+They are files that illustrate scripting a dealer file with parms passed in on the command line.
+List the file(s) for an example of how to use them.
+See the file, "README_HOW2.txt" for more details.
+---------
+

@@ -1,4 +1,0 @@
-produce 1
-action 
-       printrpt(trix(deal),deal   )
-

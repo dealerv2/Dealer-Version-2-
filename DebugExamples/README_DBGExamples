@@ -1,0 +1,5 @@
+This DebugExamples directory contains dealerv2 input files used by the developer during the testing of modifications to dealerv2.
+The idea is not to clutter the other directories with files that might not work, or that generate output that is only useful to a developer.
+
+
+Use at your own discretion. Your mileage may vary.

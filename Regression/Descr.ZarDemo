@@ -4,6 +4,7 @@ seed 191
 title "Demo How To Use Ternary Op to Calculate Zar Points  "
 # For ZAR we need longest suit, second longest suit and shortest suit.
 # We also use the C13 Count (6-4-2-1) to value the honors.
+# See Descr.TernaryTest for a commented version of this logic
 
 SMaj = (spades(west)  <= hearts(west)) ? spades(west)  : hearts(west)
 LMaj = (spades(west)  >= hearts(west)) ? spades(west)  : hearts(west)

@@ -1,7 +1,0 @@
-OPC NS : Mean= 2517.1000, Std Dev=  587.1303, Var=344722.0341, Sample Size=500 
-
-Testing DOP Timing: 1 val in cond, 1 val in action 
-Generated 538 hands
-Produced  500 hands
-Initial random seed 16
-Time needed   19.625 sec

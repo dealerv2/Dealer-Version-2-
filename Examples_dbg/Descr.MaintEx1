@@ -1,9 +1,0 @@
-generate 100000000
-produce 32
-seed 13
-condition ( ( hcp(west) + hcp(east) )     > 25 && 
-            (hearts(west) + hearts(east)) >= 9 && 
-            not shape(west,  any 7xxx ) && not shape(north, any 7xxx) && 
-            not shape(south, any 7xxx ) && shape(east , any xxxx - any 7xxx)
-            &&  dds(west, hearts) < 10 )
-action printoneline

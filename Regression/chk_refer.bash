@@ -1,6 +1,5 @@
 #!/bin/bash
 REFDIR=${1:-.}
-err=0
 for of in Output.* ; do 
 	SFX=${of#*.} ; 
 	rf="$REFDIR/Refer.$SFX";

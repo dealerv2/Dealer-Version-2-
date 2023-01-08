@@ -1,0 +1,8 @@
+This Debug directory contains the Makefile and the executable for the debug version of dealerv2.
+Extra code has been included in this executable to report on the state of the program at various points.
+All of the debug output is sent to stderr, so that you can send it to a separate file for later viewing 
+rather than see it mixed with the actual output on the screen.
+To get the debug output put -Dn on the command line where n is a number from 0 to 9.
+Zero suppresses debug output, 9 gives very verbose debug output.
+
+Other files in this directory are likely artifacts and can be ignored.

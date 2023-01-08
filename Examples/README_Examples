@@ -1,0 +1,6 @@
+This Examples directory contains dealerv2 input files designed to illustrate how to use the various functionality in dealerv2.
+Effort has been made to ensure that these examples actually work, but they are not regression tested from version to version.
+Many of these files are just duplicates of the files in the Regression directory. Many others are not in the Regression 
+directory at all because they are not of sufficient general interest.
+
+Use at your own discretion. Your mileage may vary.
