@@ -1,9 +1,9 @@
 generate 2000
 produce 10
 seed 13
-title " Checking how to nest ternary tests "
+title " Checking how to nest ternary tests ; Compare brute force with Intermediate Vars "
 # In C and Perl you can nest the ternary almost indefinitely as in
-# Answ = ( cond1 ) ? Var1 :
+# Answ =  ( cond1 ) ? Var1 :
 #         ( cond2 ) ? Var2 :
 #         ....
 #         ( condn ) ? Varn : DefaultVar

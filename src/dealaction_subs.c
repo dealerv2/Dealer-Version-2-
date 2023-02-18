@@ -12,7 +12,8 @@
 #include "../include/dealexterns.h"
 #include "../include/dealprotos.h"
 #include "../include/dealdebug_subs.h"
-#include "deal_bktfreq_subs.h"
+#include "../include/deal_bktfreq_subs.h"
+#include "../include/dbgprt_macros.h"
 
 /* Code for New Actions by JGM */
 void printside (deal d, int side ) ;
@@ -81,7 +82,10 @@ void setup_action () { /* run once right after the parsing done */
            sizeof (long));
         break;
       case ACT_EVALCONTRACT:
-        initevalcontract ();
+        /* as of 2023-01-18 each action_tree of type EvalContract carries its own set of counters
+         * These are initialized in the code in dealyacc.y that creates the action node
+         */
+
         break;
       case ACT_EXP_SIDE_HLD :    /* export the side's two hands in 'holding' fmt */
       case ACT_EXP_SEAT_HLD :    /* export the seat's hand in 'holding' fmt */
@@ -117,7 +121,7 @@ void action () {            /* For each 'Interesting' deal, Walk the action_list
   for (acp = actionlist; acp != 0; acp = acp->ac_next) {
     actionitem++;
     #ifdef JGMDBG
-        if(jgmDebug > 4) { fprintf(stderr, "ActionItem [%3d] of type [%3d] \n", actionitem,acp->ac_type); }
+        JGMDPRT(6, "ActionItem [%3d] of type [%3d] \n", actionitem,acp->ac_type);
     #endif
     switch (acp->ac_type) {
       default:
@@ -227,7 +231,7 @@ void action () {            /* For each 'Interesting' deal, Walk the action_list
         acp->ac_u.acu_f2d.acuf_freqs[(high2 - low2 + 3) * val1 + val2]++;
         break;
       case ACT_EVALCONTRACT :
-        evalcontract(acp->ac_int1, acp->ac_u.acucontract.strain) ; /*Save the DDtricks for the given side & strain on this deal */
+        evalcontract(acp) ; /*Save the DDtricks for the given side & strain on this deal */
         break;
       case ACT_EXP_SIDE_HLD :
          init_export_buff(export_buff, sizeof(export_buff) );
@@ -370,7 +374,7 @@ void cleanup_action () {  /* this also does the end-of-run actions like FREQUENC
             /*Note acp->ac_int1 is a bit mask listing each COMPASS we want to print. Each one on separate page  */
             /* e.g. N & W -> 1001 , E & W -> 1010, N & S & E -> 0111 and so on. */
             /* We dont get to choose what order they are printed in  */
-            /* so print (north, west) and print (west, north) will both all the North hands, then all the West hands */
+            /* so print (north, west) and print (west, north) will both print all the North hands before all the West hands */
 
           if (!(acp->ac_int1 & (1 << player))) continue;  /* next player */
           if (title_len > 0 ) { printf("%s\n", title ) ; }
@@ -459,17 +463,18 @@ void cleanup_action () {  /* this also does the end-of-run actions like FREQUENC
   } /* end for acp action list line 269 */
 } /* end cleanup_action line 264 */
 
-/* Could be made more efficient now that deal is sorted by default,
- * Maybe worth it if printoneline is used a lot for 1000's of hands in simulation */
+/* Has_card array mow makes this simpler */
 void fprintcompact (FILE * f, deal d, int ononeline) {  /* this is the routine used to spec to GIB */
   char pt[] = "nesw";
   int s, p, r;
   for (p = COMPASS_NORTH; p <= COMPASS_WEST; p++) { /*after each hand print newline (for compact) or not (oneline)*/
     fprintf (f, "%c ", pt[p]);
     for (s = SUIT_SPADE; s >= SUIT_CLUB; s--) {
-      for (r = 12; r >= 0; r--)  /* r goes from Ace to deuce This loop would give an enum problems*/
-        if (HAS_CARD (d, p, MAKECARD (s, r)))
+      for (r = 12; r >= 0; r--)  { /* r goes from Ace to deuce This loop would give an enum problems*/
+        if ( HAS_KARD ( (p), (s), (r) ) ) {  /* Look up the card in the Has_card array */
           fprintf (f, "%c", ucrep[r]);
+        }
+      }
       if (s > 0) fprintf (f, ".");  /* dont print a dot after clubs, the last suit printed */
     } /* end for suit */
     fprintf (f, ononeline ? " " : "\n");
@@ -676,27 +681,27 @@ int printpbn (int board, deal d) {  /* Rudimentary PBN report primarily to exg w
   return 0;
 } /*end printpbn */
 
-/* All this Eval Contract stuff completely redone by JGM 2021 See Docs*/
-/* Note there is only one set of counters, so there can be only one evalcontract action else garbage results */
-void initevalcontract () {      // Call this during initialization phase of program.
-  int i, j, k;                  // i is Side, j is strain, k is number of tricks taken 0 .. 13
-  for (i = 0; i < 2; i++)       // side NS = 0, EW = 1
-    for (j = 0; j < 5; j++)     // strain 0 .. 4 C, D, H, S, N
-      for (k = 0; k < 14; k++)  // tricks taken per DD analysis. Count number of times k tricks were taken
-        results[i][j][k] = 0;
-} /* end initevalcontract() */
+/* All this Eval Contract stuff completely redone by JGM 2021 and again in 2023 See Docs*/
 
-void show_evalres( int side, int strain ) {
-   int lvl ;
-   fprintf(stderr, "Prod Num=%d :: EvalContract Results for side=%d, strain=%d [ ",nprod,side,strain);
-   for (lvl=0; lvl < 14 ; lvl++ ) { fprintf(stderr,"%2d ",results[side][strain][lvl] ) ; }
+void show_evalres( struct action *acp ) { /* Debug routine; called inside if jgmDebug statement */
+   int lvl, side, strain ;
+   struct contract_st *ac_cp ;
+   ac_cp = &acp->ac_u.acucontract ;
+   side = acp->ac_int1 ;
+   strain = ac_cp->strain;
+   fprintf(stderr, "Prod Num=%d :: EvalContract Counts for side=%d, strain=%d Contract=%s[ ",nprod,side,strain,ac_cp->c_str);
+   for (lvl=0; lvl < 14 ; lvl++ ) { fprintf(stderr,"%2d ", ac_cp->trix[lvl] ) ; }
    fprintf(stderr, "]\n");
 }
-
-void showevalcontract (struct action *acp, int nh) {  // print the average score obtained for this contract, with these hands.
+/*
+ * Show the average score obtained, the make pct and the fail pct for the contract.
+ * Show also the missed game and slam percents, and the cost per board of missing said games and slams
+ */
+void showevalcontract (struct action *acp, int nh) {
   int ddtricks , uscore, dscore, tricks_cnt, score_tot, success_cnt, fail_cnt ;
-  double avg_score, success_pct, fail_pct ;
-  int s, l, v, dbl, side, coded;
+  double avg_score, success_pct, fail_pct, missed_game_pct, missed_slam_pct, G_imps_per_board, S_imps_per_board ;
+  int s, l, v, dbl, side, coded, game_lvl, missed_games, missed_slams, missed_G_imps, missed_S_imps ;
+  struct contract_st *ac_cp ;
   char side_str[2][3] = {"NS", "EW"};
   side = acp->ac_int1 ;
   s    = acp->ac_u.acucontract.strain;
@@ -704,61 +709,97 @@ void showevalcontract (struct action *acp, int nh) {  // print the average score
   v    = acp->ac_u.acucontract.vul ;
   dbl  = acp->ac_u.acucontract.dbl ;
   coded= acp->ac_u.acucontract.coded;
+  ac_cp = &acp->ac_u.acucontract ;
+  if      (s > SPADES )   {game_lvl = 3  ; } /* must be NT */
+  else if (s > DIAMONDS ) {game_lvl = 4 ; } /* must be a Major */
+  else                    {game_lvl = 5 ; }
+  missed_games = 0 ;
+  missed_G_imps = 0 ;
+  missed_S_imps = 0 ;
+      /* -- check to see if there was a missed game or slam */
+  if (l < game_lvl) {
+     for (ddtricks= game_lvl+6; ddtricks < 14 ; ddtricks++ ) {
+        missed_games  += ac_cp->trix[ddtricks] ;
+        missed_G_imps += ac_cp->trix[ddtricks]*imps(undbled_score(v,s,game_lvl, ddtricks) - undbled_score(v,s,l,ddtricks) ) ;
+        JGMDPRT(4, "DDlvl=%d,GameLvl+6=%d,Occurs=%d,GameScore=%d,contractScore=%d\n",
+        ddtricks, game_lvl+6, ac_cp->trix[ddtricks], undbled_score(v,s,game_lvl, ddtricks), undbled_score(v,s,l,ddtricks) );
+     }
+  }
+  if ( l < 6 ) {
+     missed_slams  = ac_cp->trix[12] + ac_cp->trix[13] ;
+     missed_S_imps = ac_cp->trix[12] * imps( undbled_score(v,s,6, 12) - undbled_score(v,s,l,12) ) +
+                     ac_cp->trix[13] * imps( undbled_score(v,s,7, 13) - undbled_score(v,s,l,13) ) ;
+  }
 
-  fmt_contract_str(acp->ac_u.acucontract.c_str, l,s,dbl,v);  // for printout
+  JGMDPRT(4,"EvalContract acp=%p,ac_cp=%p, trix[8]=%d missed_Games=%d\n",
+                        (void *)acp, (void *)ac_cp, ac_cp->trix[8], missed_games );
+  // fmt_contract_str(acp->ac_u.acucontract.c_str, l,s,dbl,v);  now done in the yacc file. can be used for dbg
         // Total score in this contract over the course of the run.
         score_tot = 0 ;
         success_cnt = 0 ;
         fail_cnt = 0 ;
-        if (jgmDebug >=4 )
-           fprintf(stderr, "SHOWEVALCONTRACT::[%s]nh=%d, L=%d,S=%d,V=%d , Dbl=%d ..\n",
+        JGMDPRT(4, "Contract=::[%s] NumberOfHands=%d, Level=%d,Suit=%d,Vul=%d , Dbl=%d ..\n",
             acp->ac_u.acucontract.c_str, nh, l, s, v, dbl );
     if (0 == dbl ) {
         for (ddtricks = 0; ddtricks < 14; ddtricks++) {  // For tricks taken DD 0..13
           uscore = undbled_score (v, s, l, ddtricks);
-          tricks_cnt  = results[side][s][ddtricks];     /* we saved the results of DD analysis for this Side's contract(s) */
+          tricks_cnt  = ac_cp->trix[ddtricks];     /* we saved the results of DD analysis for this Side's contract(s) */
           score_tot +=  uscore * tricks_cnt ;           /* uscore * number of times it occurred */
           if (uscore > 0 ) { success_cnt += tricks_cnt ; }
           if (uscore < 0 ) { fail_cnt    += tricks_cnt ; }
-          if (jgmDebug >=4 )
-               fprintf(stderr, "SHOWEVALCONTRACT::ddtricks=%d, tricks_cnt=%d, uscore=%d, succ_cnt=%d, fail_cnt=%d  \n",
-                                 ddtricks, tricks_cnt, uscore, success_cnt, fail_cnt) ;
-
+          if (tricks_cnt > 0 ) { /* interested only in cases that occurred */
+               JGMDPRT(5, "\tddtricks=%d, tricks_cnt=%d, uscore=%d, succ_cnt=%d, fail_cnt=%d  \n",
+                                             ddtricks, tricks_cnt, uscore, success_cnt, fail_cnt) ;
+          }
         }
-        if (jgmDebug >=4 )
-           fprintf(stderr, "SHOWEVALCONTRACT:: Tot_Score=%d, SuccessTot=%d, FailTot=%d, NH=%d \n",
+        JGMDPRT(4,  "Undoubled COntract Tot_Score=%d, SuccessTot=%d, FailTot=%d, NH=%d \n",
                                                 score_tot, success_cnt, fail_cnt, nh ) ;
     }  /* end undoubled */
     else {  // contract was dbled or redbled
         for (ddtricks = 0; ddtricks < 14; ddtricks++) {  // For tricks taken DD 0..13
             dscore = score(v, coded, ddtricks );
-            tricks_cnt  = results[side][s][ddtricks];     /* we saved the results of DD analysis for this Side's contract(s) */
+            tricks_cnt  = ac_cp->trix[ddtricks];     /* we saved the results of DD analysis for this Side's contract(s) */
             score_tot +=  dscore * tricks_cnt ;           /* uscore * number of times it occurred */
             if (dscore > 0 ) { success_cnt += tricks_cnt ; } // There is no such thing as a score of zero in bridge!
             if (dscore < 0 ) { fail_cnt    += tricks_cnt ; }
         }
-        if (jgmDebug >=4 )
-           fprintf(stderr, "SHOWEVALCONTRACT:: Tot_Score=%d, SuccessTot=%d, FailTot=%d, NH=%d \n",
+         JGMDPRT(4, "Doubled/RDBLD Contract Tot_Score=%d, SuccessTot=%d, FailTot=%d, NH=%d \n",
                                                 score_tot, success_cnt, fail_cnt, nh ) ;
      } /* end doubled or redoubled */
         avg_score   = (double)(score_tot)/nh ;
         success_pct = (double)(100*success_cnt)/nh ;
         fail_pct    = (double)(100*fail_cnt)/nh ;
-        printf("Contract %6s by %3s Average Result = % 8.2f, Success pct= % 7.2f, Fail pct= % 7.2f \n",
+        missed_game_pct = (double)(100.0*missed_games)/nh;
+        missed_slam_pct = (double)(100.0*missed_slams)/nh;
+        G_imps_per_board = ((double)missed_G_imps)/nh;
+        S_imps_per_board = ((double)missed_S_imps)/nh;
+
+        printf("\nContract %6s by %3s Average Result = % 8.2f, Made pct= % 7.2f, Fail pct= % 7.2f\n",
                 acp->ac_u.acucontract.c_str, side_str[side], avg_score, success_pct, fail_pct );
+        printf("Missed Game_pct= % 7.2f, Missed Slam_pct=% 7.2f, Missed Game Imps/board=% 7.2f, Missed Slam Imps/board=% 7.2f\n",
+        missed_game_pct, missed_slam_pct,  G_imps_per_board, S_imps_per_board );
 }
 /* end showevalcontract */
 
-void evalcontract(int side, int strain ) {
-    int ddtricks;
+void evalcontract(struct action *acp ) { /* Updates the counts if the deal is 'interesting' */
+  struct contract_st *ac_cp ;
+  int strain, side ;
+  ac_cp = &acp->ac_u.acucontract ;
+  strain = ac_cp->strain ;
+  side = acp->ac_int1 ;
+
+  int ddtricks;
 //    ddtricks = dd(curdeal, side, strain ) ; // using GIB
     if(0 == side ) {
       ddtricks = dds_tricks( 2, strain ) ;  // if NS make S declarer
     }
     else ddtricks = dds_tricks( 3, strain ) ; // if EW make W declarer
 
-    results[side][strain][ddtricks]++ ; /* add +1 to the number of times ddtricks were taken in strain 's' */
-    if (jgmDebug >= 4 ) show_evalres(side, strain) ;
+    ac_cp->trix[ddtricks]++ ; /* add +1 to the number of times ddtricks were taken in this contract */
+    #ifdef JGMDBG
+      if (jgmDebug >= 6 ) show_evalres(acp) ;
+    #endif
+
     return ;
 } /* end evalcontract */
 

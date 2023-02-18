@@ -11,9 +11,7 @@
 #ifndef DEAL_BKTFREQ_SUBS_H
   #include "../include/deal_bktfreq_subs.h"
 #endif
-// int bucket_sizes[] = {1, 2, 5, 10, 20, 25, 50, 100, 250, 500, 1000, 2000, 2500, 5000, 10000 }; // 'nice' bucket sizes
-// int num_bkt_sizes = sizeof(bucket_sizes)/sizeof(int);   // calculated at compile time.
-// above not needed. original idea was to automatically choose a bkt size based on Hi - Lo. But better to let user choose.
+
 extern int jgmDebug ;
 int *alloc_bkts1D(struct bucket_st *bkt) {
    int *alloc_ptr ;
@@ -30,10 +28,8 @@ int *alloc_bkts1D(struct bucket_st *bkt) {
       perror(" Cant calloc space for 1D Counters ");
       exit (-7);
    }
-   if (jgmDebug  >= 4 ) {
-      DBGLOC( "ALLOC1D:: Freq1D ptr = %p , Num of Buckets=%d \n",
+   JGMDPRT(4,"ALLOC1D:: Freq1D ptr = %p , Num of Buckets=%d \n",
                        (void *)alloc_ptr, bkt->Num );
-   }
    return ( alloc_ptr ) ;  // freq1D set to this value on return
 } /* end allocate 1D Ram */
 
@@ -95,13 +91,11 @@ int fill_bkt_names(struct bucket_st *bkt ) {  // Used by both 1D and 2D. calloc 
    int idx ;
    int uflow_idx, oflow_idx ;
    // bkt_id 0 is for underflow
-   // bkt_id bkt.Num-1  is for overflow. Structure Num member is Data Buckets + 2 . Data goes from 1 to Num-2; Num-1 is Oflow.
+   // bkt_id bkt.Num-1  is for overflow. Struct.Num is Data Buckets + 2 . Data goes from 1 to Num-2; Num-1 is Oflow.
    // 10 data buckets means bkts 1 .. 10 get real names.
    uflow_idx = 0 ;
    oflow_idx = bkt->Num - 1 ;
    int *pnames = bkt->Names ;
-   // pnames = (int * ) calloc((size_t)bkt->Num, sizeof(int) ) ; for debug. calloc already done in alloc_bkts
-
    for (idx = 1 ; idx <= (bkt->Num - 2)  ; idx++ ) {
       *(pnames + idx) =  bkt->Lo + (idx-1) * bkt->Sz;
    }
@@ -120,7 +114,6 @@ int fill_bkt_names(struct bucket_st *bkt ) {  // Used by both 1D and 2D. calloc 
          //show_array(bkt->Num, bkt->Names) ;
       } /* end jgmDebug >= 4 */
     #endif
-
    return ( 1 ) ;
 } /* end fill bkt names */
 
@@ -150,15 +143,12 @@ int *alloc_bkts2D ( struct bucket_st *d_bkt, struct bucket_st *a_bkt ) {
       perror(" Cant calloc space for 2D Bkts Freq Counters ");
       exit (-7);
    }
-   if (jgmDebug  >= 4 ) {
-      DBGLOC( "ALLOC2D:: Freq2D ptr = %p , Num of Buckets=%d \n",
+   JGMDPRT(4,"ALLOC2D:: Freq2D ptr = %p , Num of Buckets=%d \n",
                        (void *)alloc_ptr, (a_bkt->Num * d_bkt->Num )  );
-   }
    return ( alloc_ptr ) ;  // freq2D set to this value on return
 } /* end allocate 2D Ram */
 
 int find_bkt_id(int val, struct bucket_st *bkt ) { /* used only in the 2D case */
-
     int bkt_id ;
     int uflow = 0 ;
     int oflow = bkt->Num - 1 ;
@@ -166,24 +156,20 @@ int find_bkt_id(int val, struct bucket_st *bkt ) { /* used only in the 2D case *
     if (val >= bkt->Lo + ( oflow ) * bkt->Sz ) { return ( oflow ) ; } // oflow
     bkt_id = ( 1 + (val - bkt->Lo )/bkt->Sz );
     /* ex Lo=100, Hi=4100, Sz=400 ; bkt->Num =  1 + (4100 - 100)/400 = 11 */
-    if (jgmDebug >= 6 ) {
-       DBGLOC( "FIND_BKT_ID:: val=%d, bkt->Lo=%d, bkt->Sz= %d, bkt_id=%d \n", val, bkt->Lo, bkt->Sz, bkt_id ) ;
-    }
+    JGMDPRT(6,"FIND_BKT_ID:: val=%d, bkt->Lo=%d, bkt->Sz= %d, bkt_id=%d \n", val, bkt->Lo, bkt->Sz, bkt_id ) ;
     return (bkt_id) ;
 } /* end find_bkt_id */
 
 int upd_bkt2D(int val_dwn, int val_acr, int *freq2D, struct bucket_st *d, struct bucket_st *a) {
-
 int offset2D ;
 int d_bkt_id, a_bkt_id ;
    d_bkt_id = find_bkt_id(val_dwn, d) ;
    a_bkt_id = find_bkt_id(val_acr, a) ;
    offset2D =  (d_bkt_id * a->Num ) + a_bkt_id ; // freq2D[dwn][acr]
    (*(freq2D + offset2D))++ ;                  // update the correct cell in the tbl
-   if (jgmDebug >= 6 ) {
-      fprintf(stderr, "UPD2D:: val_dwn=%d, d_bkt_id=%d, val_acr=%d, a_bkt_id=%d, offset2D=%d, Counter[d][a]=%d \n",
-        val_dwn, d_bkt_id, val_acr, a_bkt_id, offset2D, *(freq2D + offset2D) ) ;
-   }
+
+   JGMDPRT(6,"UPD2D:: val_dwn=%d, d_bkt_id=%d, val_acr=%d, a_bkt_id=%d, offset2D=%d, Counter[d][a]=%d \n",
+                     val_dwn, d_bkt_id, val_acr, a_bkt_id, offset2D, *(freq2D + offset2D) ) ;
    return offset2D ;  // return the offset to the updated counter.
 } // end upd_bkt2D
 

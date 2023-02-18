@@ -1,18 +1,21 @@
  // file Descr.c4qual  -- note the single line C style comment works ok so long as not start in col 1
 produce 8
 generate 100
+seed 29
 dealer west
 vulnerable EW
-title "      Testing  CCCC and Quality Testing with both int and decimal numbers     "
+title "Testing  CCCC and Quality Testing with both int and decimal numbers"
 # above processed by flex without involving yyparse
 
-c4req = cccc(east)
-qualreq = quality(east, spade)
+c4east = cccc(east)
+qualEspade = quality(east, spade)
 c4north = cccc(north)
 qualNclub = quality(north, clubs)
-condition c4req < 1625 || qualreq > 375 or c4north < 18.25 or qualNclub >= 2.5
+condition c4east < 1625 || qualEspade > 375 or c4north < 18.25 or qualNclub >= 2.5
 
 /*---------------- Testing now --------------------*/
-action printoneline, printes("c4_E= ",c4req,"  Qual_E_S= ", qualreq , " c4N=", c4north, " qualNclub=",qualNclub, \n )
+#action  printes(\n,"c4E= ",c4east,"  Qual_E_S= ", qualEspade , " c4N=", c4north, " qual_N_C=",qualNclub, \n )
 # The following action statements all work
-#action printoneline, printes("c4_E= ",c4req,"  Qual_E_S= ", qualreq , \n )
+#action printoneline, printes(\n,"c4E= ",c4east,"  Qual_E_S= ", qualEspade , " c4N=", c4north, " qual_N_C=",qualNclub, \n )
+action printrpt (north, east ),
+printrpt("c4E= ",c4east,"  Qual_E_S= ", qualEspade , " c4N=", c4north, " qual_N_C=",qualNclub)

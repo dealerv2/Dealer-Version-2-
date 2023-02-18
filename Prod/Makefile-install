@@ -16,38 +16,40 @@ PROGRAM  = dealerv2
 FLEX    = flex
 YACC    = bison -d
 
-SRCS  = ../src/dealaction_subs.c ../src/dealdds_subs.c ../src/dealdebug_subs.c ../src/dealeval_subs.c ../src/dealparse_subs.c
-SRCS += ../src/Dealer_DDS_IF.c ../src/c4.c ../src/dealerv2.c
-OBJS = $(patsubst ../src/%.c,%.o,$(SRCS) ) dealflex.o dealyacc.tab.o
+SRCS  = ../src/dealaction_subs.c ../src/dealdds_subs.c ../src/dealdebug_subs.c ../src/dealeval_subs.c ../src/dealcard_subs.c
+SRCS += ../src/dealparse_subs.c ../src/Dealer_DDS_IF.c ../src/c4.c ../src/deal_bktfreq_subs.c
+SRCS += ../src/dealServer_subs.c ../src/dealerv2.c
+
+OBJS = $(patsubst ../src/%.c,%.o,$(SRCS) ) dealglobals.o dealflex.o dealyacc.tab.o
 
 HDR  = ../include/allheaders.h
 # Need to link with g++ because libdds library was built with c++
 dealerv2: ${OBJS}
-	$(CXX) $(CXXFLAGS) -o $@ ${OBJS}  $(LDFLAGS)
+   $(CXX) $(CXXFLAGS) -o $@ ${OBJS}  $(LDFLAGS)
 
 allheaders :
-	touch ../include/allheaders.h
+   touch ../include/allheaders.h
 
 clean:
-	rm -f ${OBJS} ${LOBJ} ${YOBJ} *.gch
+   rm -f ${OBJS} ${LOBJ} ${YOBJ} *.gch
 install:
-	if [[ ! -d /usr/local/bin/Dealer ]] ; then mkdir /usr/local/bin/Dealer ; fi
-	cp -pR ../Prod/* /usr/local/bin/Dealer
-	chmod -R 555 /usr/local/bin/Dealer/Prod/*
-	echo 'PATH=/usr/local/bin/Dealer:$PATH' >> ~/.bashrc
+   if [[ ! -d /usr/local/bin/Dealer ]] ; then mkdir /usr/local/bin/Dealer ; fi
+   cp -pR ../Prod/* /usr/local/bin/Dealer
+   chmod -R 555 /usr/local/bin/Dealer/Prod/*
+   echo 'PATH=/usr/local/bin/Dealer:$PATH' >> ~/.bashrc
 
 showme:
-	@echo DestDir = $(DESTDIR) JGMDBG = $(JGMDBG) PROGRAM = $(PROGRAM)
-	@echo CC=$(CC) $(CFLAGS) $(LDFLAGS)
-	@echo CXX=$(CXX) $(CXXFLAGS) $(LDFLAGS)
-	@echo BISON SRC= $(YSRC) OBJ= $(YOBJ)
-	@echo FLEX  SRC= $(LSRC) OBJ=$(LOBJ)
-	@echo
-	@echo SRCS=$(SRCS)
-	@echo
-	@echo OBJS=$(OBJS)
-	@echo
-	@echo BUILD=$(CXX) CXXFLAGS -o dealdbg ${OBJS}  $(LDFLAGS)
+   @echo DestDir = $(DESTDIR) JGMDBG = $(JGMDBG) PROGRAM = $(PROGRAM)
+   @echo CC=$(CC) $(CFLAGS) $(LDFLAGS)
+   @echo CXX=$(CXX) $(CXXFLAGS) $(LDFLAGS)
+   @echo BISON SRC= $(YSRC) OBJ= $(YOBJ)
+   @echo FLEX  SRC= $(LSRC) OBJ=$(LOBJ)
+   @echo
+   @echo SRCS=$(SRCS)
+   @echo
+   @echo OBJS=$(OBJS)
+   @echo
+   @echo BUILD=$(CXX) CXXFLAGS -o dealdbg ${OBJS}  $(LDFLAGS)
 
 
 #
@@ -57,7 +59,7 @@ LSRC = ../src/dealflex.l dealyacc.tab.h
 LOBJ = dealflex.c
 
 $(LOBJ) : $(LSRC) $(HDR)
-	${FLEX} -o $@ $<
+   ${FLEX} -o $@ $<
 
 #
 # Yacc/Bison -- bison -d creates the file dealyacc.tab.c and dealyacc.tab.h
@@ -67,23 +69,23 @@ YSRC = ../src/dealyacc.y
 YOBJ = dealyacc.tab.c dealyacc.tab.h
 
 $(YOBJ) : $(YSRC) $(HDR)
-	${YACC} $<
+   ${YACC} $<
 #
 # File dependencies
 #
 
 dealerv2.o : ../src/dealerv2.c ../src/mainsubs.c $(HDR) ../src/UsageMsg.h
-	$(CC) $(CFLAGS) -o $@ -c $<
+   $(CC) $(CFLAGS) -o $@ -c $<
 dealflex.o : dealflex.c $(HDR)
-	$(CC) $(CFLAGS) -o $@ -c $<
+   $(CC) $(CFLAGS) -o $@ -c $<
 dealyacc.tab.o : dealyacc.tab.c $(HDR)
-	$(CC) $(CFLAGS) -o $@ -c $<
+   $(CC) $(CFLAGS) -o $@ -c $<
 deal%.o : ../src/deal%.c $(HDR)
-	$(CC) $(CFLAGS) -o $@ -c $<
+   $(CC) $(CFLAGS) -o $@ -c $<
 Dealer_DDS_IF.o : ../src/Dealer_DDS_IF.c $(HDR)
-	$(CC) $(CFLAGS) -o $@ -c $<
+   $(CC) $(CFLAGS) -o $@ -c $<
 c4.o : ../src/c4.c ../include/c4.h $(HDR)
-	$(CC) $(CFLAGS) -o $@ -c $<
+   $(CC) $(CFLAGS) -o $@ -c $<
 
 objects : $(OBJS)
 # could I make the last two read $(OBJS) : $(SRCS) $(HDR) ?

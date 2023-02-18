@@ -1,0 +1,25 @@
+generate   10000
+produce    10
+seed 17
+title "Descr.UE_Karpin -- All Karpin NS/EW NT and Suit  "
+#      0      1    2     3     4      5       6      7    8    9    10   11    12    13   14       -1
+#  { BERG=0, CPU, DKP, GOREN, JGM1, KAPLAN, KARPIN, KnR, LAR, MOPC, PAV, R22, SHEIN, ZAR, UNKN, Quit=-1} ;
+
+# 2022/12/24 Printing all the Karpin results 0-13
+#            Only Berg(0) and Karpin(6) implemented. -- No option for HCP and OPC since these done internally
+# Lets just see if we can print these out ... usereval(6, ....) calls the Karpin evaluation function;
+
+
+action
+#  Karpin NS all the details --
+       printrpt ( NS ),
+       printrpt ( "NS_NT=", usereval(6,NS,0),  usereval(6,NS,1), usereval(6,NS,2) ),
+       printrpt ( "H0_NT=", usereval(6,NS,6),  usereval(6,NS,7),"   H1_NT=", usereval(6,NS,8), usereval(6,NS,9) ),
+       printrpt ( "NS_DF=", usereval(6,NS,3),  usereval(6,NS,4), usereval(6,NS,5) ),
+       printrpt ( "H0_DF=", usereval(6,NS,10), usereval(6,NS,11),"  H1_DF=", usereval(6,NS,12), usereval(6,NS,13) ),
+#Karpin EW
+       printrpt ( EW ),
+       printrpt ( "EW_NT=", usereval(6,EW,0),  usereval(6,EW,1), usereval(6,EW,2) ),
+       printrpt ( "H0_NT=", usereval(6,EW,6),  usereval(6,EW,7),"   H1_NT=", usereval(6,EW,8), usereval(6,EW,9) ),
+       printrpt ( "EW_DF=", usereval(6,EW,3),  usereval(6,EW,4), usereval(6,EW,5) ),
+       printrpt ( "H0_DF=", usereval(6,EW,10), usereval(6,EW,11),"  H1_DF=", usereval(6,EW,12), usereval(6,EW,13) ),

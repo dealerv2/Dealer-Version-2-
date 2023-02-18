@@ -1,0 +1,17 @@
+ // file Descr.UE_KnR  -- note the single line C style comment works ok so long as NOT start in col 1
+produce 1
+generate 100
+seed 29
+dealer west
+vulnerable EW
+title "Testing CCCC mods "
+
+
+/*---------------- Testing now --------------------*/
+
+#
+action  printrpt (deal) ,
+printrpt ("C4_NESW", cccc(north), cccc(east), cccc(south), cccc(west) , "Q_NS_SH_ED_CW=",
+quality(north,spade),quality(south,heart),quality(east,diamond), quality(west,club) ),
+
+

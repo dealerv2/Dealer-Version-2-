@@ -1,0 +1,18 @@
+Frequency points:
+    5	    1345
+    6	    1562
+    7	    2110
+    8	    1896
+    9	    2285
+   10	    1902
+   11	    2068
+hearts: Mean=    2.3328, Std Dev=    0.9919, Var=    0.9838, Sample Size=13168 
+Ace of spades: Mean=    0.5555, Std Dev=    0.4969, Var=    0.2469, Sample Size=13168 
+Jack of spades: Mean=    0.4626, Std Dev=    0.4986, Var=    0.2486, Sample Size=13168 
+Heart fit: Mean=    0.1378, Std Dev=    0.3447, Var=    0.1188, Sample Size=13168 
+
+Stats for a Weak Two in Spades
+Generated 1000000 hands
+Produced  13168 hands
+Initial random seed 43
+Time needed    1.475 sec

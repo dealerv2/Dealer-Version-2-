@@ -1,6 +1,8 @@
 /* This is file dealglobals.c -- defines global vars and allocates storage for them  */
 /* Uses types, tags, and symbolic constants defined in other header files */
 /* 2022-02-27 -- Mods for Francois Dellacherie enhanced shapes */
+/* 2022-10-18 Mods for Has_card and future user_eval functionlity */
+/* 2023/01/07 -- Merged in changes from V4 to fix predeal; dealcards_subs.c and globals, etc. */
 #ifndef DEALGLOBALS_C
 #define DEALGLOBALS_C
 #ifndef _GNU_SOURCE
@@ -21,44 +23,51 @@ char side_seat[2][2]= { {'N','S'} , {'E','W'} };
 int  side_hand[2][2]= { { 0 , 2 } , { 1 , 3 } } ;
 
 /* JGM Added Global variables */
-struct options_st options = {0};             /* Cmd line will set these. Will override values from input file if set */
+ /* Cmd line may set options Will override values from input file if set */
+struct options_st options = {0};        /* C99 supposed to set according to type?*/
 struct param_st parm ;
 int    csv_firsthand = COMPASS_NORTH ;
 char   csv_trixbuff[64] ; // room for 20 * (2digits + comma) and a bit extra
 size_t csv_trixbuff_len ;
-//struct fd_shape_st fd_shapes ;  // Francois Dellacherie shapes
-//char fd_cmd[16] = "./fdp ' ";
-//char fd_cmd_buff[256] = "./fdp ' ";
 
-
-/* for CCCC */
-struct context c;
 /* original cmd line switches -- many also appear in a yyparse action clause. --   would be nicer to put these all in a struct */
-int swapping;                  /* -x [0|2|3] */
-int swapindex;
-int computing_mode;            /* e */             /* e is no longer valid option. var kept just in case */
-int maxgenerate = 0 ;          /* -g: */  /* flex action clause */
+
+int maxgenerate = 0 ;          /* -g: */  /* flex action clause Must be zero for Flex to process the input file value*/
 int progressmeter = 0;         /* -m */   /* this is a toggle option */
 int Opener = COMPASS_WEST;     /* -O: */  /* flex action clause  0=north (or east) 1=east(or north) 2=south(or west) 3=west(or south) */
 char opc_opener = 'W' ;                   /* define one so that extern will be happy. Dont want to extern a struct memb*/
-int maxproduce = 0     ;       /* -p: */  /* flex action clause */
-int quiet;                     /* -q */
+int maxproduce = 0     ;       /* -p: */  /* flex action clause Must be zero for Flex to process the input file value*/
+int quiet = 0 ;                /* -q */
 long seed  = 0 ;               /* -s: */ /* seed can now be set in Input File */
-long seed_provided = 0  ;
+long seed_provided = -1  ;
 int uppercase = 0 ;            /* -u */
 int verbose = 1;               /* -v */
-int errflg;
+int swapping = 0 ;             /* -x [0|2|3] Zero turns off swapping*/
+int swapindex = 0;
+int errflg = 0;
 
 /* JGM Added the following cmd line options .. Also the Opener O flag above */
 int jgmDebug = 0;       /* -D 1 .. 9; level of verbosity in fprintf(stderr, ) statements. 0 = No Debug (unless defined JGMDEBUG) */
-int dds_mode = 1;       /* -M 0 Dont use DDS; 1=Solve One Board(default in main); 2= Solve CalcTable BIN; 3 = solve CalcTablePBN ; 4=both) */
-int par_vuln = -1;      /* -P -1 no par calculations, 0=none, 1=both, 2=ns, 3= ew */
-int nThreads = 9;       /* -R 0..10 MaxRam = 160 * nThreads */
-int MaxRamMB = 1440 ;
+int srvDebug = 0;       /* -D has a decimal digit 0 ..9 e.g. -D 1.6 (dealer=1, server=6), or -D .9 (dealer = 0, server = 9) */
+int dds_mode = 1;       /* -M 1 use Board Mode fastest for 1-5 results; 2 Use Table Mode, fastest for 5-20 results*/
+int par_vuln = -1;      /* -P -1 no par calculations, 0=noneVul, 1=bothVul, 2=nsVul, 3= ewVul */
+int nThreads = 1;       /* -R 1..9 MaxRam = 160 * nThreads On an 8 core box, more than 9 threads is no benefit*/
+int MaxRamMB = 160 ;
+int TblModeThreads = 9;
+/* If we need to force Table Mode on DDS for e.g. Par Calcs, or just via -M switch, then also force extra threads. */
+
 char title[MAXTITLESIZE]= "";  /* -T title. Usually in quotes which are removed by getopt flex action clause */
 size_t  title_len = 0 ;
 FILE *fexp;      /* -X file for exporting to; Normally NOT left as stdout except for testing */
-FILE *fcsv;      /* -C file for csvreport. Open in append mode unless user puts filename:w */
+FILE *fcsv;      /* -C file for csvreport. Open in append mode unless user puts w:filename */
+/* -U Path name for the UserEval binary. Default is UserServer in the current directory. Can be set by -U cmd line parm
+ * -U Must be full pathname. ../src/MyUserPgm will NOT work.
+ * Instead: /home/author/Programming/Bridge_SW/JGMDealer/deal_v5/src    (56 chars long )
+ */
+char server_dir[SERVER_PATH_SIZE+1]  = "/home/greg19/Programming/Bridge_SW/JGMDealer/deal_v5/UserEval";
+char server_pgm[64]   = "DealerServer"; /* In the current directory. or user sets path name via -U switch */
+char server_path[SERVER_PATH_SIZE+1] = "/home/greg19/Programming/Bridge_SW/JGMDealer/deal_v5/UserEval/DealerServer";
+pid_t userserver_pid = 0 ;
 
 int dbg_dds_lib_calls = 0;
 int dbg_dds_res_calls = 0;
@@ -67,7 +76,9 @@ int dbg_tdd_calls = 0;
 int dbg_dd_calls = 0;
 int dbg_opc_calls = 0;
 int dbg_opc_cmd_calls = 0;
-int dbg_analyze_active = 0;
+
+int dbg_userserver_extcalls = 0 ;
+int dbg_userserver_askquery = 0 ;
 
 int dds_dealnum = -1 ;         /* -1 no DDS needed; 0 DDS needed; >0 ngen number of last fetch */
 int opc_dealnum = -1 ;         /* -1 OPC not done ; >0 ngen number of the last opc call */
@@ -76,8 +87,8 @@ char* input_file = '\0';
 
 /* Non Parsing Global vars*/
 int nprod, ngen ;
-struct handstat hs[4] ;
-struct sidestat ss[2] ;
+struct handstat    hs[4] ;
+struct sidestat_st ss[2] ;
 
 /* OPC Related vars. Maybe they don't need to be globals */
 char opc_cmd_buff[128] = "/usr/local/bin/DOP/dop ";
@@ -85,21 +96,23 @@ char opc_pgm_path[32]  = "/usr/local/bin/DOP/dop ";
 int opc_pgmlen = 23 ;
 struct opc_Vals_st opcRes ;
 
-char export_buff[64] ; /* only need about 50 chars now; prob wont use export buff for csv since re-init too often? ... */
+char export_buff[64] ; /* Room for two or three Predeal hands. */
 
-/* CSV Report Stuff */
-
-
-    /* typedef usigned char deal[52];     see typedefs.h */
+    /* typedef char deal[52];     see typedefs.h Changed from unsigned to straight char 2022-10-24*/
 deal fullpack;
 deal stacked_pack;
 deal curdeal;
 deal *deallist;
 deal small_pack;   /* 2023-01-05 cards left after predeal done */
-int  small_size   = 0 ;   /* number of cards left after predeal done  */
-int  stacked_size = 0 ;
+int  small_size   = 52 ;   /* number of cards left after predeal done  */
+int  stacked_size = 0  ;
+int  full_size = 52 ;
 
-
+/*
+ * these next ones are probably no longer needed:
+ *    dds_pbndeal no longer used. dealer now calls dds with the dds binary format not PBN format as originally coded
+ *    deal sorted, and hand sorted no longer needed as we now sort deal by default
+ */
 char dds_pbndeal[80] ;      /* the deal in a format DDS likes. 69 chars; similar to printoneline but not quite */
 int deal_sorted = 0 ;       /* Future use; Several print actions could benefit from knowing the hands are sorted */
 int hand_sorted[4] = {0,0,0,0};
@@ -128,10 +141,8 @@ int results[2][5][14];  /* evalcontract: [side][strain][number of tricks] Counts
 
 struct tree    defaulttree = {TRT_NUMBER, NIL, NIL, 1, 0};
 struct tree   *decisiontree = &defaulttree;
-struct action  defaultaction = {   /* next-ptr     type       expr1            expr2             int   str1      */
-                    (struct action *) 0,     ACT_PRINTALL, (struct tree *) 0, (struct tree *) 0 , 0 , (char *) 0 ,
-            /* union.averages     count sum sumsq var   std */
-                     .ac_u.acuavg={ 0,   0,   0,   0.0, 0.0 }     // init struct acuavgt
+struct action  defaultaction = {   /* next-ptr     type       expr1            expr2             int1   str1      */
+                    (struct action *) 0,     ACT_PRINTALL, (struct tree *) 0, (struct tree *) 0 , 0 , (char *) 0
 } ;
  // end defaultaction intializer list
 struct action *actionlist = &defaultaction;
@@ -139,13 +150,13 @@ struct var    *vars = 0 ;
 
         /* Vars used by code in parser action statements init them for safety */
 int will_print = 0;
-int maxdealer = 0;
-int maxvuln = -1;
+int maxdealer = -1;           /* set to a value to force yyparse to fill it in if needed */
+int maxvuln = -1;             /* Ditto. Both Strictly descriptive in printpbn routine. Seldom used */
+int userserver_reqd = 0 ;       /* will set this if we see a usereval statement in the input file */
 int predeal_compass = -1 ;    /* global variable for predeal communication */
 int shapeno = 0;              /* Count number of shape statements. 0-31. Defines bit in bit mask */
-int use_compass[NSEATS] = {0,0,0,0};
-int use_vulnerable[NVULS] ;
-int use_side[2] = {0,0};     /* for opc so we dont call DOP for both sides if only one side needed */
+int use_compass[NSEATS] = {0,0,0,0};  /* skip analysis if compass never used */
+int use_side[2] = {0,0};     /* opc and usereval use this. will also cause related use_compass'es to be set */
 
 
 struct contract_st contract;     /* level, strain, dbled, Vul, coded, string*/
@@ -177,11 +188,13 @@ int tblPointcount [idxEnd][13] = {
 } ; /* End tblPointCount */
 
 int CardAttr_RO [idxEndRO][13] = { /* Values Not changeable by user via altcount or pointcount cmd */
-    /* 2  3  4  5  6  7  8  9  T  J  Q   K   A */
+    /* 2  3  4  5  6  7  8  9  T  J  Q  K    A */
     {  0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1,   2},  /* controls idxControls = 0 */
     {  1, 1, 1, 1, 1, 1, 1, 1, 2, 4, 8, 16, 32},  /* ltc weights. Will ID WHICH of the top cards we have. */
     {  0, 0, 0, 0, 0, 0, 0, 0, 0, 2, 5, 9,  13},  /* Kleinman Pts Need to add 1 synergy pt to a suit with A or K and 1 other*/
 } ; /* End CardAttr_RO */
+
+
 
 /* JGM Debugging and learning about Dealer use of Trees */
 struct treeptr_st tree_ptrs[100] ;      /* JGM?+ an array to store pointers for tracing and debugging. */

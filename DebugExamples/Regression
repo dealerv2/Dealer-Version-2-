@@ -1,0 +1,5 @@
+produce 12
+title "Swapping test. Try with -x2 and -x3 "
+action printall
+#  -------------------------------------------------------------------
+

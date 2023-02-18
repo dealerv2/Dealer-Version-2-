@@ -1,0 +1,7 @@
+Avg Random Number (0..100): Mean=   49.4861, Std Dev=   28.8567, Var=  832.7070, Sample Size=10000000 
+
+Random Number Generator Test 10,000,000 No Conditions
+Generated 10000000 hands
+Produced  10000000 hands
+Initial random seed 35
+Time needed   13.991 sec

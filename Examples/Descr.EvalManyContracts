@@ -1,7 +1,7 @@
 generate   10000
 produce    100
 # Run this with -M2 since there are several calls to dds on the same deal.
-
+seed 117
 # NOTE ****** only one eval contract per strain in same side; but can have several contracts per side in different strains.
 
 title " Eval Contract, Par, Freq2D, Tricks, Score NS 21-24hcp"

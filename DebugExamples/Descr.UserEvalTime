@@ -1,0 +1,19 @@
+generate   10000
+produce    10000
+seed 113
+title "Timiming 10 thousand UserEval Calls  "
+
+action
+#    10 thousand calls to average usereval(10, NS, 8 ) Time needed  253.076 sec ( 0.025 per call )
+     average "Avg: userEval  8 NS "  usereval(10, NS, 8 )
+#    10 thousand calls to average hcp(north) Time needed    0.041 secs
+#    average "Avg: hcp(north) " hcp(north)
+
+#Notes:
+# (1)Oon 3 GHz intel Core i7 - 2600K Linux OS, (54580 bogoMips -- 6822 per cpu )
+# (2) Since hcp(north) is always done anyway the 10K hcp(north) averages are zero incremental cost.
+
+
+
+
+

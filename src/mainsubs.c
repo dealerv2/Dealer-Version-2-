@@ -1,8 +1,9 @@
 /* File dealmain_subs.c JGM 2022-Feb-17  */
 /* 2022-02-07 Expanding Options with -X and -0 thru -9 */
 /* 2022-03-07 Fine tune Debug levels */
-/* This file should not be compiled independently. #inlcude it in dealerv2.c */
-#if 1                            /* change to  when not testing */
+/* 2022-10-27 Add -U option for userserver path */
+/* This file should NOT be compiled independently. #inlcude it in dealerv2.c */
+#if 1                            /* change to 0 when not testing */
 #include "../include/std_hdrs.h"  /* all the stdio.h stdlib.h string.h assert.h etc. */
 
 #include "../include/dealdefs.h"
@@ -10,7 +11,10 @@
 #include "../include/dealprotos.h"
 #include "../include/dealexterns.h"
 #endif
-#define OPTSTR "hmquvVg:p:s:x:C:D:M:O:P:R:T:N:E:S:W:X:0:1:2:3:4:5:6:7:8:9:"
+#ifndef UsageMessage
+  #include "../src/UsageMsg.h"
+#endif
+#define OPTSTR "hmquvVg:p:s:x:C:D:M:O:P:R:T:N:E:S:W:X:U:0:1:2:3:4:5:6:7:8:9:"
 
 long int init_rand48( long int seed ) {
     union {
@@ -36,7 +40,7 @@ long int init_rand48( long int seed ) {
     seed48(su.sss) ;   /* ignore seed48 return value of pointer to internal buffer */
     u_seed48 = (long int)su.sss[0] + (long int)su.sss[1]*two16 + (long int)su.sss[2]*two32;
 #ifdef JGMDBG
-     if (jgmDebug >= 2 ) {
+     if (jgmDebug >= 1 ) {
          fprintf(stderr, "No Seed Provided. DONE Initializing RNG init_rand48, %d, %d, %d, %ld\n",
                 su.sss[0], su.sss[1], su.sss[2], u_seed48);
      }
@@ -76,7 +80,7 @@ void show_options ( struct options_st *opts , int v ) {
     fprintf(stderr, "\t %s=[%d ; %d]\n", "v:Verbose", opts->verbose, verbose ) ;
     fprintf(stderr, "\t %s=[%d]\n", "x:eXchange aka Swapping", opts->swapping ) ;
     fprintf(stderr, "\t %s=[%s] mode=[%s]\n", "C:Fname",   opts->csv_fname, opts->csv_fmode   ) ;
-    fprintf(stderr, "\t %s=[%d] set to %d\n", "D:Debug Verbosity", opts->dbg_lvl, jgmDebug ) ;
+    fprintf(stderr, "\t %s=[%d] set to %d Server Debug=%d\n", "D:Debug Verbosity", opts->dbg_lvl, jgmDebug, srvDebug ) ;
     fprintf(stderr, "\t %s=[%d] set to %d\n", "M:DDS Mode", opts->dds_mode, dds_mode ) ;
     fprintf(stderr, "\t %s=[%c, %d]\n", "O:Opener", opts->opc_opener, opts->opener  ) ;
     fprintf(stderr, "\t %s=[%d]\n", "P:Par Vuln", opts->par_vuln  ) ;
@@ -88,6 +92,7 @@ void show_options ( struct options_st *opts , int v ) {
     fprintf(stderr, "\t %s=[%s]\n", "E:PreDeal", opts->preDeal[1] ) ;
     fprintf(stderr, "\t %s=[%s]\n", "W:PreDeal", opts->preDeal[3] ) ;
     fprintf(stderr, "\t %s=[%s]\n", "X:Fname",   opts->ex_fname   ) ;
+    fprintf(stderr, "\t %s=[%s]\n", "U:Fname",   opts->userpgm    ) ;
    return ;
 } /* end show opts */
 void showargs(int argc, char *argv[]) {
@@ -119,30 +124,53 @@ int str_UC(char *dst, char *src , int maxn) {
    *dst='\0';
    return p ;
 }
+int srv_dbg (char *opt_D ) {
+   int dot = '.';
+   char *dot_pos;
+   if ( (dot_pos = strchr(opt_D, dot )) ) {
+      return ( atoi( (dot_pos +1 ) ) );
+   }
+   return 0 ;
+}
 
-/* this code will set the opts in the options struct and also the related global variable(s) for backwards compatitbility */
+/* this code will set the opts in the options struct
+ * and also the related global variable(s) for backwards compatitbility
+ * It should ALWAYS update the related global var, when the equivalent opts->var is changed.
+ */
+    #include <sys/stat.h>  // for stat structure
 int get_options (int argc, char *argv[], struct options_st *opts) {
     int opt_c;
+    int stat_rc ;
+    struct stat statbuff ;
+
     opterr = 0;
     opts->options_error = 0 ;  /* assume success */
-    /* init some options to the same init state as their global variable to keep them in sync in case not set on cmd line */
-    opts->swapping = 0;
-    opts->progress_meter = 0;
-    opts->quiet = 0 ;
-    opts->upper_case = 1;
-    opts->verbose = 1 ;
-    opts->max_generate = 100000 ;
-    opts->max_produce = 40 ;
-    opts->seed = 0 ;
-    opts->seed_provided = 0 ;
-    opts->dbg_lvl = 0 ;
-    opts->opc_opener = 'N' ;
-    opts->opener = 1 ;
-    opts->dds_mode = 1 ;
-    opts->par_vuln = -1 ;
-    opts->nThreads = 1 ;
-    opts->maxRamMB = 160 ;
-    opts->csv_fmode[0] = '\0' ; // if null no csvfile specified.
+    /* make sure that all the opts have sane default values. Use value set in globals.c if available */
+
+    opts->max_generate = 100000 ;      /* Not the same as global. FLex Side effect? */
+    opts->max_produce = 40 ;           /*  Ditto */
+    opts->seed = seed ;                /* global */
+    opts->seed_provided = -1 ;         /* Default to no cmd line spec. Note a cmd line spec of 0 will get random seed */
+    opts->dbg_lvl = jgmDebug ;         /* global */
+    opts->srv_dbg_lvl = srvDebug;      /* global */
+    opts->opc_opener = opc_opener ;    /* global */
+    opts->opener = Opener ;            /* global */
+    opts->dds_mode = dds_mode ;        /* global */
+    opts->par_vuln = par_vuln ;        /* global */
+    opts->progress_meter = progressmeter; /* global */
+    opts->quiet = quiet ;              /* global */
+    opts->swapping = swapping;         /* global */
+    opts->title_len = 0 ;              /* ignore global for this one. */
+    opts->upper_case = uppercase ;     /* global */
+    opts->verbose = verbose ;          /* global */
+    opts->nThreads = nThreads ;        /* global */
+    opts->maxRamMB = 160 * opts->nThreads ;
+    opts->csv_fmode[0] = '\0';        // if null no csvfile specified.
+    opts->csv_fname[0] = '\0';
+    opts->userpgm[0]   = '\0';         // None or default path assumed.
+    opts->ex_fname[0]  = '\0';
+    memset(opts->preDeal_len, 0, 4*sizeof(int) ) ; /* preDeal stores the -N,-E,-S,-W opt settings */
+    memset(opts->preDeal, '\0' , 128 ) ;
 
     while ((opt_c = getopt(argc, argv, OPTSTR)) != EOF) {
       switch(opt_c) {
@@ -198,7 +226,7 @@ int get_options (int argc, char *argv[], struct options_st *opts) {
         return 3 ;
         break ;
 
-/* options added by JGM: -C, -D,  -M, -O, -P, -R, -T, -N, -E, -S, -W, -X and -0 thru -9  */
+/* options added by JGM: -C, -D,  -M, -O, -P, -R, -T, -N, -E, -S, -W, -X, -U and -0 thru -9  */
       case 'C':         /* Filename for CSV report. Normally opened with append unless preceded by w: */
          if ( optarg[0] == 'w' && optarg[1] == ':' ) {
             strncpy(opts->csv_fname, &optarg[2], 127 ) ;
@@ -219,11 +247,14 @@ int get_options (int argc, char *argv[], struct options_st *opts) {
          #endif
           break ;
       case 'D':
-        opts->dbg_lvl = atoi( optarg ) ;      jgmDebug = opts->dbg_lvl;
+        opts->dbg_lvl = atoi( optarg ) ;
+        jgmDebug = opts->dbg_lvl;
+        opts->srv_dbg_lvl = srv_dbg( optarg ) ; /* check if the D option was x.y or .y or 0.y where y is debug verbosity for server */
+        srvDebug = opts->srv_dbg_lvl ;
         break ;
      case 'M':
         opts->dds_mode = atoi( optarg ) ;
-        if (0 <= opts->dds_mode && opts->dds_mode <= 2 ) { dds_mode = opts->dds_mode ; }
+        if (1 <= opts->dds_mode && opts->dds_mode <= 2 ) { dds_mode = opts->dds_mode ; }
         else opts->dds_mode = dds_mode ; // if invalid use the  compile time value
         break ;
      case 'O':
@@ -248,10 +279,15 @@ int get_options (int argc, char *argv[], struct options_st *opts) {
            opts->nThreads = 9 ;
            opts->options_error = 2 ; // invalid thread value
         }
-        opts->maxRamMB = 160*opts->nThreads ;
+        opts->maxRamMB = 160*opts->nThreads ; /* DDS needs 160MB per thread */
+        nThreads = opts->nThreads;
+        MaxRamMB = opts->maxRamMB  ;
         break ;
       case 'T':
-        strncpy( opts->title, optarg, 79);       strncpy(title, optarg, 79);
+        strncpy( opts->title, optarg, 200); /* docs say 100; pgm allows 255 */
+        strncpy(title, optarg, 200);
+        opts->title[200] = '\0';             /* if strncpy truncates, there will be no NUL unless we add one. */
+        title[200] = '\0';
         opts->title_len = strlen( opts->title ); title_len = opts->title_len;
         break;
       case 'W':
@@ -275,9 +311,20 @@ int get_options (int argc, char *argv[], struct options_st *opts) {
             opts->options_error = -2 ;
          }
          break ;
-
+      case 'U':
+         stat_rc = stat(optarg, &statbuff) ; /* stat returns zero if successful Not documented */
+         if ( 0 != stat_rc ) {
+            perror("stat -U User Eval program path FAILED. Aborting... ") ;
+            fprintf(stderr, "Path [%s] cannot be opened. Return code = %d\n" , optarg, stat_rc );
+            exit(-1) ;
+         }
+         strncpy(opts->userpgm, optarg, SERVER_PATH_SIZE ) ;
+         strncpy(server_path,   optarg, SERVER_PATH_SIZE  ) ;
+         server_path[SERVER_PATH_SIZE+1] = '\0' ; /* server_path is SERVER_PATH_SIZE+1 byte array */
+         break ;
 
       /* Next ten options set the scripting variables stored in the global struct 'parm' */
+      /* parm.script_var[i] SHOULD always have a NULL since optarg will be NUL terminated, and should never be > PARAM_SIZE */
       case '0' :
          strncpy(parm.script_var[0], optarg, PARAM_SIZE) ;
          parm.script_var_len[0] = strlen(parm.script_var[0]) ;
@@ -340,7 +387,6 @@ int get_options (int argc, char *argv[], struct options_st *opts) {
             break;
       } /* end switch(opt) */
     } /* end while getopt*/
-/* +++++++++++++++++++++++++++++++ main program continues here +++++++++++++++++++ */
     if (opts->dbg_lvl >= 4 ) { fprintf(stderr, "Command Line switches done proceeding with main program \n") ; }
         return opts->options_error ;
 

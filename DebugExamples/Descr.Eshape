@@ -1,6 +1,7 @@
 generate   10000
-produce    2
-title " Francois Shapes test"
+produce    10
+title " Francois Shapes test -- contrived example "
+# West at most a 3cM, H longer than S OR South 5-7S, 2-4H or at least 6 card minor or North 4=4=3=2 or 5S&5D & no voids
 condition
 ( (shape{west , 3-Mxxx:h>s } ) or
   (shape{south, [5-7]s[2-4]hxx + 6+mxxx } ) or

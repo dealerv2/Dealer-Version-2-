@@ -1,4 +1,5 @@
 /* File dealprotos.h -- define function prototypes both those used in actions from Flex and Yacc and also ones used by main */
+/* 2023/01/07 -- Merged in changes from V4 to fix predeal; dealcards_subs.c and globals, etc. */
 #ifndef DEALPROTOS_H
 #define DEALPROTOS_H
 #ifndef _GNU_SOURCE
@@ -35,7 +36,7 @@ extern void              clearpointcount_alt (int cin);      /* yyparse action c
 extern void              pointcount (int index, int value);  /* yyparse action clause affects HCPs*/
 extern void              zerocount (int points[]);           /* called by clearpointcount etc. */
 extern struct csvterm_st *new_csvterm (struct tree *tr1, char *str1, int hand_mask, int trix_mask, struct csvterm_st *csv1); /* yyparse action clause */
-
+extern struct tree      *newquery(int tag, int side, int compass, int suit, int idx); /* yyparse action clause */
 /* Evaluation and condition stuff called by main, after the parsing during the evaluation phase */
 #define interesting() ((int)evaltree(decisiontree))
 extern void          analyze (deal d, struct handstat *hsbase);
@@ -67,16 +68,20 @@ int dds_tricks   (int compass, int strain ) ; /* reads the DDSRES_k struct and r
 int dds_parscore (int compass ) ;             /* reads the DDSRES_k struct and returns the par score asked for */
 int csv_trix     ( char *buff, int h_mask ) ; /* fmts buff with a list of trick counts for the hands asked for */
 
+/* from UserServer_subs.c */
+extern int ask_query(int qtag, int side, int qcoded ) ;
 
 /* print and other action stuff Called by main if the deal is 'interesting' ie meets the condition */
 extern void action ();
 extern void cleanup_action () ;  /* maybe mod this one to clear out some cache's etc? ; it seems to happen at the very end of each deal */
-extern void evalcontract (int side, int strain) ;
+extern void evalcontract (struct action *acp) ;
 extern void showevalcontract ( struct action *acp, int nh);
 extern void printdeal (deal d);
 extern void printside (deal d, int side); /*JGM replaced printew with this one. */
 extern void printhands (int boardno, deal *dealp, int player, int nhands);
 extern int  printpbn (int, deal);
+extern char *Hand52_to_pbnbuff (int p, char *dl, char *buff ) ;
+void printhands_pbn(FILE *fp, int mask, deal curdeal ) ;
 extern void fprintcompact (FILE * f, deal d, int oneline); /* used for both GIB input and oneline printout */
 #define printoneline(d) (fprintcompact(stdout, d, 1))
 #define printcompact(d) (fprintcompact(stdout, d, 0))
@@ -88,16 +93,19 @@ extern void          initdistr ();
 extern void          initevalcontract ();
 extern void          setup_action ();
 extern void          initprogram( struct options_st *opt_ptr) ;
+
 extern void          newpack (deal d);
 extern void          setup_deal ();
 extern void          deal_cards (deal d) ;
 extern void          Shuffle(deal d, int size) ;
+//extern int           shuffle (deal d) ; /* replaced by Shuffle */
+
+extern pid_t         setup_userserver( char *pathname ) ;
+extern int           cleanup_userserver ( pid_t pid ) ;
 
 
         /* low level functions and macros These may be useful in more than just the dealer.c file */
 extern int           hascard (deal d, int player, card onecard) ;
-/* there is another version of hascard with an extra parameter if Francois is defined */
-
 
 extern card          make_card (char rankchar, char suitchar);       /* used in yylex() */
 extern int           make_contract (char *c_str ) ;  /* Flex passes yytext[1]... = [1-7][CDHSN][x]{0,2} */

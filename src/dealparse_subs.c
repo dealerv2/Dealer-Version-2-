@@ -1,5 +1,7 @@
 /* File dealparse_subs.c -- JGM 2022-Feb-15 */
-/* Contains code mostly called from yyparse(). Separate file to limit size of the dealyacc.y file */
+/* Contains code mostly called from yyparse(). Separate file to limit size of the dealyacc.y file
+ * 2023/01/07 -- Merged in changes from V4 to fix predeal; dealcards_subs.c and globals, etc.
+ */
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -10,6 +12,7 @@
 #include "../include/dealtypes.h"
 #include "../include/dealexterns.h"
 #include "../include/dealprotos.h"
+#include "../include/dbgprt_macros.h"
 
 char *mycalloc (size_t nel, size_t siz) {
   char *p;
@@ -48,15 +51,14 @@ void clearpointcount () {   /* zero out the HCP array 'points' and the copy tblP
 
 void clearpointcount_alt (int cin) {
                /* cin comes from the altcount tblnum <number_list> or from defcount tblnum <decnum_list> statements*/
-  DBGPRT("Clear Alt Count cin=",cin,"");  /* as of Sep cin should be 0 .. 10 to allow defcount to set the hcp values to dotnums */
+  JGMDPRT(4,"Clear Alt Count cin=%d\n",cin);  /* as of Sep cin should be 0 .. 10 to allow defcount to set the hcp values to dotnums */
   zerocount (tblPointcount[cin]);
-  alt_tbl_idx = cin;                      /* this global var keeps track of which pt cnt table we are updating. */
+  alt_tbl_idx = cin;                      /* global var alt_tbl_idx keeps track of which pt cnt table we are updating. */
 }
 
 void pointcount (int rank, int value) { /* set the value for an entry in the tblPointCount[idxHcp] tbl */
             /* There is a global var alt_tbl_idx set by YACC code that tracks which alt count is being changed */
             /* there is a global var pointcount_index set by YACC code that keeps track of where rank is right now */
-   int dbg_tbl_idx ;
   assert (rank <= 12);
   if (rank < 0) {                       /* we have counted down from 12 too far. */
       yyerror ("too many pointcount values");
@@ -64,15 +66,13 @@ void pointcount (int rank, int value) { /* set the value for an entry in the tbl
   if (alt_tbl_idx < 0 )  {                  /* alt_tbl_idx selects which table to affect; < 0 defaults to the hcp one */
     tblPointcount[idxHcp][rank] = value;
     points[ rank ] = value ;               /* keep the points and tblPointcount[idxHCP] arrays in sync */
-    dbg_tbl_idx = idxHcp ;
   }
   else {
     tblPointcount[alt_tbl_idx][rank] = value;
-    dbg_tbl_idx = alt_tbl_idx ;
   } /* end if else countindex */
 #ifdef JGMDBG
   if (jgmDebug >= 3 ) {
-      fprintf(stderr, "In pointcount:: Setting TBL#%d Rank=%d to Value=%d -> %d\n", dbg_tbl_idx, rank, value, tblPointcount[dbg_tbl_idx][rank] );
+      JGMDPRT(3,"In pointcount:: Setting TBL# %d Rank=%d to Value=%d -> %d\n", alt_tbl_idx, rank, value, tblPointcount[alt_tbl_idx][rank] );
   }
 #endif
 }  /* end set point count pointcount */
@@ -164,6 +164,7 @@ void predeal (int player, card onecard) {  /* this moves a card from fullpack to
   for (i = 0; i < 52; i++) {
     if (fullpack[i] == onecard) {
       fullpack[i] = NO_CARD;
+      --full_size;
       for (j = player * 13; j < (player + 1) * 13; j++)
         if (stacked_pack[j] == NO_CARD) {
         stacked_pack[j] = onecard;
@@ -171,7 +172,7 @@ void predeal (int player, card onecard) {  /* this moves a card from fullpack to
         return;
         }
       yyerror ("More than 13 cards for one player");
-    }
+    }  /* end fullpack == onecard */
   }
   yyerror ("Card predealt twice");
 } /* end  predeal -- */

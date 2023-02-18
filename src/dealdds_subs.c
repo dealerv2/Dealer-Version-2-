@@ -32,6 +32,7 @@ extern int dbg_dds_res_calls;
 extern int dbg_parscore_calls;
 extern int MaxRamMB;
 extern int nThreads;
+extern int TblModeThreads;
 extern int csv_firsthand;        /* not used was intending to allow user to print deal in arbitrary seq; but too confusing */
 
 /*API we export to the Dealer side */
@@ -42,7 +43,7 @@ extern int ngen, dds_dealnum, par_vuln, jgmDebug ;
 extern deal curdeal;
 
 DDSRES_k dds_res_bin;
-DDSRES_k dds_res ;
+// DDSRES_k dds_res ;  /*-?-?*/
 
 /*    Prototypes From Dealer Side */
     /* for Debugging .. To Be Deleted or in an #ifdef */
@@ -84,15 +85,24 @@ int SetDDSmode(int mode) {       /* Default is mode 1; but Par, csv_trix, and th
     }
     if (mode == DDS_TABLE_MODE ) {
         dds_mode = DDS_TABLE_MODE ;
-        SetResources(MaxRamMB, nThreads) ;  // Could be insufficient but user must have a reason for setting this.
+        if (nThreads < 2 ) {                 // The user has not specified nThreads via a -R switch so use TBLMODE default
+            MaxRamMB = TblModeThreads*160 ;       // update global vars for consistency
+            nThreads = TblModeThreads ;
+            SetResources(MaxRamMB, TblModeThreads) ;
+        }
+        else {
+            MaxRamMB = TblModeThreads*160;
+            SetResources(MaxRamMB, nThreads) ;  // Honor Users -R switch value.
+        }
         return 1 ;
     }
     else  {
         fprintf(stderr, "SetDDSmode:: dds mode[%d] is INVALID!!. Setting to TableMode with 9 Threads and 1440 MB \n", mode );
         dds_mode = DDS_TABLE_MODE ;
-        SetResources(9*160, 9) ; // 9 Threads seems the sweet spot on my machine
-        MaxRamMB = 9*160 ;       // update global vars for consistency
-        nThreads = 9 ;
+        MaxRamMB = TblModeThreads*160 ;       // update global vars for consistency
+        nThreads = TblModeThreads ;
+        SetResources(MaxRamMB, TblModeThreads) ;
+
         return 1 ;
     }
 } /* end SetDDSmode */

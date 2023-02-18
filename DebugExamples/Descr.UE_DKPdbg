@@ -1,0 +1,29 @@
+generate   10000
+produce    10
+seed 17
+title "UE_dbg2 -- All DKP NS/EW NT and Suit  "
+
+# -----
+#  I should make a version that scripts this for the metric
+#
+#      0      1    2     3     4      5       6      7    8    9    10   11    12    13   14       -1
+#  { BERG=0, CPU, DKP, GOREN, JGM1, KAPLAN, KARPIN, KnR, LAR, MOPC, PAV, R22, SHEIN, ZAR, UNKN, Quit=-1} ;
+
+# 2023/01/15 Printing all the DKP results 0-22
+action
+#  DKP NS all the details --
+       printrpt ( NS ),
+       printrpt ( "NS_NT=", usereval(2,NS,0),  usereval(2,NS,1), usereval(2,NS,2) ),
+       printrpt ( "H0_NT=", usereval(2,NS,6),  usereval(2,NS,7), usereval(2,NS,8), usereval(2,NS,9), usereval(2,NS,10),
+               "   H1_NT=", usereval(2,NS,11), usereval(2,NS,12),usereval(2,NS,13),usereval(2,NS,14),usereval(2,NS,15) ),
+       printrpt ( "NS_DF=", usereval(2,NS,3),  usereval(2,NS,4), usereval(2,NS,5) ),
+       printrpt ( "H0_DF=", usereval(2,NS,16), usereval(2,NS,17),usereval(2,NS,18),
+                  "H1_DF=", usereval(2,NS,19), usereval(2,NS,20),usereval(2,NS,21) ),
+#DKP EW
+       printrpt ( EW ) ,
+       printrpt ( "EW_NT=", usereval(2,EW,0),  usereval(2,EW,1), usereval(2,EW,2) ),
+       printrpt ( "H0_NT=", usereval(2,EW,6),  usereval(2,EW,7), usereval(2,EW,8), usereval(2,EW,9), usereval(2,EW,10),
+               "   H1_NT=", usereval(2,EW,11), usereval(2,EW,12),usereval(2,EW,13),usereval(2,EW,14),usereval(2,EW,15) ),
+       printrpt ( "EW_DF=", usereval(2,EW,3), usereval(2,EW,4), usereval(2,EW,5) ),
+       printrpt ( "H0_DF=", usereval(2,EW,16), usereval(2,EW,17),usereval(2,EW,18),
+                  "H1_DF=", usereval(2,EW,19), usereval(2,EW,20),usereval(2,EW,21) ),

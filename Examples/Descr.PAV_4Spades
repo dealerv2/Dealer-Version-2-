@@ -1,0 +1,17 @@
+generate 50000
+produce 40
+title "Pavlicek Simulation of 4M: 8+fit, no 7+ suits -- HcP>=23"
+
+condition (spades(north) + spades(south) >= 8 ) &&
+           shape{north, 1+xxx - (7+xxx) } and shape{south, 1+xxx - (7+xxx) } &&
+           (hcp(north) + hcp(south) ) >= 23
+#           (cccc(north) + cccc(south) ) >= 23.00
+
+action         evalcontract(NS, z4S, vul ),
+#               printrpt (NS , "Spades Trump Tricks South", dds(south,spades) ),
+#        bktfreq "KnR(down)  vs South Tricks(accross)" ( cccc(north)+cccc(south), 23.0,37.0,0.5, dds(south,spades),6,12,1 ),
+        frequency "HCP_NS (down) vs DDS(south,Spades) accross" (hcp(north)+hcp(south),23,37,dds(south,spades),6,12 ),
+
+
+
+

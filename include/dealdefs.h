@@ -3,11 +3,10 @@
    * 2022/01/02 1.0.0    JGM     Collect all dealer symbolic constants and macros in one place.
    * 2022/02/09 2.1.5    JGM     FD shapes, and printrpt ported from deal_v3
    * 2022/10/05 2.3.0    JGM     Added Bucket Frequency histograms functionality. Re-Orged globals.c treatment.
-   * 2023/01/06 2.3.2    JGM     Re-Org shuffling, swapping, and predealing functions to fix preDeal bug. added JGMDPRT macro.
+   * 2022/11/15 2.5.0    JGM     Added UserEval client / server functionality.
+   * 2023/01/07 -- Merged in changes from V4 to fix predeal; dealcards_subs.c and globals, etc.
+   * 2023/01/26 2.5.5    JGM     Changed Version to reflect modified EvalContract and working UserEval
    */
-
-  /* Does not do function prototypes, or global vars. or externs */
-  /* Deleted many defs no longer needed since the code is modified. */
 
   /* Make the header file guard .. */
 #ifndef DEALDEFS_H
@@ -15,11 +14,11 @@
 #ifndef _GNU_SOURCE
   #define _GNU_SOURCE
 #endif
-#define BUILD_DATE "2023/01/07"
+#define BUILD_DATE "2023/01/26"
 #ifndef JGMDBG
-  #define VERSION "2.3.2"
+  #define VERSION "2.5.5"
 #else
-  #define VERSION "102.3.2"
+  #define VERSION "102.5.5"
 #endif
 
 #ifndef UNUSED
@@ -40,12 +39,13 @@
 #define DD_PGM "/usr/games/gibcli"
 #define OPC_PGM "/usr/local/bin/DOP/dop"
 #define FDP_PGM "/usr/local/bin/DealerV2/fdp"
+#define SERVER_PATH_SIZE 255
 #define SUCCESS 1
 #define FAILED  0
 #define NIL ((struct tree *) 0)
 
 /* ENUMS need spot, no suit = -1 to force enum type to signed int instead of unsigned int */
-enum rank_ek {TWO=0, THREE, FOUR, FIVE, SIX, SEVEN, EIGHT, NINE, TEN, JACK, QUEEN, KING, ACE, SPOT=-1 } ;
+enum rank_ek {TWO=0, DEUCE=0, THREE, FOUR, FIVE, SIX, SEVEN, EIGHT, NINE, TEN, JACK, QUEEN, KING, ACE, SPOT=-1 } ;
 enum suit_ek {CLUBS=0, DIAMONDS, HEARTS, SPADES, nosuit=-1 } ;
 
  /* these next ones mostly by JGM */
@@ -68,17 +68,19 @@ enum suit_ek {CLUBS=0, DIAMONDS, HEARTS, SPADES, nosuit=-1 } ;
 
   /* following macros changed by ;;; JGM  */
   /* was shift <<6, >>6 and mask 0x3F  */
-  /* but card is unsigned char, so <<6 will use high bit. */
-#define MAKECARD(suit,rank) ( (card)((suit)<<4) | ((rank)&0xF) )
-#define CARD_RANK(c) (  (card)(c)&0xF     )
-#define CARD_SUIT(c) ( ((card)(c)>>4)&0xF )
+  /* if shift by 4  then card can be a signed char, and we avoid a bunch of obnoxious casting */
+#define CARD_RANK(c) (  (int) ( (c)&0x0F )     )
+#define CARD_SUIT(c) ( ((int) ( (c)>>4)&0x0F)  )
+#define MAKECARD(suit,rank) ( (char) (((suit)<<4) | ((rank)&0x0F)) )
 #ifndef C_SUIT
   #define C_SUIT(c)    ( ((c)>>4)&0xF )
   #define C_RANK(c)    (  (c)&0xF     )
 #endif
-#define NO_CARD     0xFF
-/* This next macro is used several times in the dealaction_subs.c file. BTW hascard is a somewhat inefficient routine */
-#define HAS_CARD(d,p,c) hascard(d,p,c)
+#define NO_CARD     0x7F   /* was 0xFF; changed when card became signed char */
+// #define HAS_CARD(d,p,c) hascard(d,p,c) :: redefined by JGM below
+/* HAS_CARD redefined. 2022/11/10; Analyze now populates the array Has_card[h][13] simplifying a frequent lookup */
+#define HAS_CARD(d,p,c) hs[(p)].Has_card[C_SUIT((c))][C_RANK((c))]
+#define HAS_KARD(p,s,r) hs[(p)].Has_card[ (s) ][ (r) ]
 
 #define NSEATS          4
 #define SIDE_NS         0
@@ -128,7 +130,7 @@ enum suit_ek {CLUBS=0, DIAMONDS, HEARTS, SPADES, nosuit=-1 } ;
 #define TRT_TRICKS      24
 #define TRT_RND         25
 #define TRT_CONTROL     26
-#define TRT_CONTROLTOTAL        27
+#define TRT_CONTROLTOTAL   27
 #define TRT_SCORE       28
 #define TRT_IMPS        29
 #define TRT_CCCC        30
@@ -153,7 +155,7 @@ enum suit_ek {CLUBS=0, DIAMONDS, HEARTS, SPADES, nosuit=-1 } ;
 #define TRT_PT8         49
 #define TRT_PT9TOTAL    50
 #define TRT_PT9         51
-/* Next added by JGM  -- leave a gap and start at 60? */
+/* Next added by JGM   */
 #define TRT_DECNUM      52
 #define TRT_LTC         53
 #define TRT_LTCTOTAL    54
@@ -161,6 +163,7 @@ enum suit_ek {CLUBS=0, DIAMONDS, HEARTS, SPADES, nosuit=-1 } ;
 #define TRT_PAR         56
 #define TRT_OPCCOMPASS  57
 #define TRT_OPCSIDE     58
+#define TRT_USEREVAL    59
 
 /* ---Action Types another possible enum --- */
 
@@ -198,6 +201,7 @@ enum suit_ek {CLUBS=0, DIAMONDS, HEARTS, SPADES, nosuit=-1 } ;
 #define TWO_TO_THE_13 (1<<13)
 /* since int is 4 bytes get 32 different shape statements.
  * On 64 bit system could get 64 shape statements if were to use long ints.
+ * This would require changing several declarations in various locations.
  */
 #define MAXDISTR    8*sizeof(int)
 /*
@@ -208,17 +212,6 @@ enum suit_ek {CLUBS=0, DIAMONDS, HEARTS, SPADES, nosuit=-1 } ;
   // #define RANDOM drand48
 #define RANDOM(top)  gen_rand_slot( (top) )
 #define SRANDOM(s)   init_rand48((s))
-
- #ifdef JGMDBG
-    /* a print statement with a description, some sort of int value, and an explanation */
-   #define DBGPRT(d,iv,ex) fprintf(stderr,"%s[%ld] at [%s]\n",(d),(long int)(iv),(ex));
-   /* a print statement with a descriptrion, a value, the format to use, and a term (often new line or space) char */
-   // #define JGMPRT(d,v,fmt,tc) fprintf(stderr,"%s[%(fmt)](tc)",(m),(v) ) ;
-   #define JGMDPRT(l,fmt,...) do {if (jgmDebug >= (l)) { fprintf(stderr, "%s:%d " fmt, __FILE__,__LINE__,## __VA_ARGS__) ; } } while(0)
- #else
-   #define DBGPRT(m,i,l)
-   #define JGMDPRT(l,fmt,...)
- #endif
 
 #endif /*ifndef DEALDEFS_H */
 

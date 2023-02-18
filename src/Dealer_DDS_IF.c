@@ -134,7 +134,7 @@ int validPBNline(char *pbn_ptr ) { // check that not too long and that first cha
     return TRUE ;
 } /* end validPBNline */
 
-struct ddTableDealPBN Deal52_to_DDSPBN (deal d ) {  /* d will be modified by sort. should not matter as Dealer does not care*/
+struct ddTableDealPBN Deal52_to_DDSPBN (deal d ) {  /* d will be modified by sort. Caused a problem for Predeals pre2023*/
     // N:832.T763.J42.K72 AKJ6.A984.Q6.Q43 T4.Q52.T8753.T65 Q975.KJ.AK9.AJ98
     // N:...AKQJT98765432 ..AKQJT98765432. .AKQJT98765432.. AKQJT98765432...  is the pathological case
   char pt[] = "nesw";

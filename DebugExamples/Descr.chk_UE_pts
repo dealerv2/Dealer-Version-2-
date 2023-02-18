@@ -1,0 +1,17 @@
+generate   10000
+produce    5
+seed 113
+title "Chk UE pts for a hand  use -0 n as the metric number"
+
+predeal north SJ8652,HT7,D976,CQ96
+predeal south SAKQ3,HA96,DQ54,CAJ2
+action
+printrpt ( NS , hcp(north),hcp(south),usereval($0,NS,0), usereval($0,NS,1), usereval($0,NS,2),
+                                    usereval($0,NS,3), usereval($0,NS,4), usereval($0,NS,5), "EW="hcp(east), hcp(west)),
+         evalcontract(NS, z4S, nv), evalcontract(NS,z3S,nv)
+
+#printrpt ( NS , usereval(88,NS,0), usereval(88,NS,1), usereval(88,NS,2), usereval(88,NS,3), usereval(88,NS,4), usereval(88,NS,5)),
+#                usereval(88,NS,6), usereval(88,NS,7), usereval(88,NS,8), usereval(88,NS,9), usereval(88,NS,10),
+
+
+

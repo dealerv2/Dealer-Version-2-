@@ -4,6 +4,7 @@
 * 2021/12/28 1.0.0    JGM     Collect all dealer symbolic constants and macros in one place.
 * 2022/02/09 2.1.5    JGM     FD shapes, and printrpt ported from deal_v3
 * 2022/09/25 2.2.0    JGM     Added constants for Bucket Frequency functionality
+* 2022/10/18 2.5.0    JGM     Changed typedef for card; added Has_cards array; other changes for user_eval functionality.
 */
 #ifndef DEALTYPES_H
 #define DEALTYPES_H 1
@@ -11,21 +12,27 @@
   #define _GNU_SOURCE
 #endif
 #include <sys/types.h>   /* to import some std ISO types for our own use */
-#include "dealdefs.h"   /* for symbolic constants */
+#ifndef DEALDEFS_H
+   #include "dealdefs.h"   /* for symbolic constants */
+#endif
 #include "pointcount.h"  /* for the enum for the pointcounts. It defines idxEnd needed later */
 
-#if 1   // Dealer Structs and types  _k means 'kind' aka type but _t reserved
 typedef int decimal_k ; /* to allow easy switch to float if ever.*/
 typedef int numx100_k ; /* Not used at present. Future may allow for different eval tree functions */
-/* JGM refers to Dealer deals as deal52 since it takes 52 bytes to store one.
+/*
+ * JGM refers to Dealer deals as deal52 since it takes 52 bytes to store one.
  * These next two for future change to legacy Dealer code to make the types _k so that card and deal don't conflict with
- * other users. card and deal are really names that are too generic to be used in this way */
-typedef unsigned char card52_k ;
+ * other users. card and deal are really names that are too generic to be used in this way
+ */
+typedef char     card52_k ;
 typedef card52_k deal52_k[52] ;
 /* The legacy Dealer definitions. Too embedded in code to be changed at this point. TODO list */
-typedef unsigned char card;
+/* 2022-10-18. Removed unsigned Since JGM changed the macros to shift 4 from shift 6,
+ * unsigned causes warnings and requires casting to avoid them
+ */
+//typedef unsigned char card;
+typedef char card;
 typedef card deal[52];
-
 
 /*
  * decision tree and other expression stuff. JGM added a float to struct tree for future use. Not used at present
@@ -35,7 +42,7 @@ struct tree {
         struct tree     *tr_leaf1, *tr_leaf2;
         int             tr_int1;
         int             tr_int2;
-        int             tr_int3;   // a grep for this thru all source files does not show any hits.
+        int             tr_int3;   // JGM used for USEREVAL coded hand/suit/idx 2022-11-07
         float           tr_flt1;   // maybe store the dotnums as both decimal_k and float JGM?+?
 };
 typedef struct tree TREE_ST ;
@@ -59,6 +66,7 @@ struct contract_st { // we encode the contract so it will fit into an int and we
     int vul ;       // 0 = nv, 1 = vul ; encode with |= (vul << 8 ); decode with (contract >> 8) & 0x1 ;
     int coded;      // results of all of above if used. A number less than 248
     char c_str[8];  // space for the contract string such as z3Hxx for e.g. 3 Hearts ReDoubled
+    int  trix[14];  // 2023-01-17 incr trix[i] each time dds(compass,strain) returns value "i"
  } ;
 typedef struct contract_st CONTRACT_k ;  // use _k suffix for 'kind' since _t for 'type' is POSIX reserved.
 
@@ -71,12 +79,26 @@ struct csvterm_st {
       struct csvterm_st     *next;      /* Pointer to next csv_term */
 }; /* end csv_term_st */
 
-#define FD_SHAPE_LEN 2046
+#define FD_SHAPE_LEN 2046  /* FD shapes can expand to over 1300 chars frequently */
 struct fd_shape_st {
    size_t shape_len ;
    char fd_shape_str[2048];  // two more than FD_SHAPE_LEN because Flex needs TWO nulls at end of string buffer.
                              // testing: shape{north, 5+Mxxx:h>=c,h>=d } gives an output of 1173 chars 167 shapes
 } ;
+
+struct qcoded_st {
+        unsigned int idx   : 8 ;  // low bits
+        unsigned int suit  : 8 ;
+        unsigned int hand  : 8 ;
+        unsigned int sflag : 4 ;
+        unsigned int hflag : 4 ; // high bits
+    } ;
+
+union qcoded_ut {
+      unsigned int coded_all ;
+      struct qcoded_st ucbits ;
+} ;
+
 
 /*
  * Actions to be taken
@@ -137,7 +159,7 @@ struct action {
         struct tree     *ac_expr2;
         int              ac_int1;
         char            *ac_str1;
-        union {
+        union ac_ut {
                 struct acuft acu_f;
                 struct acuft2d acu_f2d;
                 struct acuavgt acuavg;
@@ -147,13 +169,15 @@ struct action {
         } ac_u;
 };
 
-/* For cccc and quality */
-struct context {
+/* For cccc and quality --- Does not seem to be used by either c4.c or c4.h*/
+/* might be useful for the upcoming user_eval functionality */
+struct context_st {
   deal *pd ; /* pointer to current deal */
   struct handstat *ps ; /* Pointer to stats of current deal */
 };
 
 struct handstat {
+    int hs_seat ;               /* make it easy to deduce the player given the pointer */
     int hs_length[NSUITS];      /* distribution */
     int hs_points[NSUITS];      /* 4321 HCP per suit */
     int hs_totalpoints;         /* Sum of above hs_points[NSUITS]; */
@@ -162,19 +186,26 @@ struct handstat {
     int hs_totalloser;          /* Losers in the hand */
     int hs_control[NSUITS];     /* Controls in a suit */
     int hs_totalcontrol;        /* Controls in the hand */
-    int hs_counts[idxEnd][NSUITS];  /* pt0 thru pt9 + HCP  last one is a  dup of the hs_points array */
-    int hs_totalcounts[idxEnd];
+    int hs_counts[idxEnd][NSUITS];  /* pt0 thru pt9 & HCP which is a dup of the hs_points array */
+    int hs_totalcounts[idxEnd];     /* pt0 thru pt9 & HCP total of all 4 suits */
 
 /*   Next fields added by JGM .... */
-    decimal_k hs_ltc[NSUITS];     /* Modern  Losing trick count per suit. Not OPC related.;;;JGM */
-    decimal_k hs_totalltc;        /* Total of above four ;;;JGM */
-    int topcards[NSUITS][3];
+    int square_hand ;              /* == 1 for 4333 zero otherwise */
+    int hs_ltc[NSUITS];     /* Modern  Losing trick count per suit. Counts in half losers. Values x 100 */
+    int hs_totalltc;        /* Total ltc in the hand Counts in half losers. Values x 100 */
+    int topcards[NSUITS][3];      /* These are bit masks that allow easy calc of LTC via a switch statement */
+    int Has_card[NSUITS][13];    /* CCCC uses cards down to the 8; printoneline and others use hascard a lot. */
 
 };  /* end struct handstat */
+typedef struct handstat HANDSTAT_k ;
 
-struct opc_Vals_st {    /* The 8 values that the -q OPC report returns at this time. */
+
+/*
+ * Minimal set of opc values. Only ones returned by perl program for now; as returned as floats, and as used in pgm
+ */
+struct opc_Vals_st {          /* The 8 values that the -q OPC report returns as floats. struct filled by scanf */
     /* Since all OPC values can take on either half or sometimes quarter values e.g. Ace=4.5 hcp
-     * fscanf returns floating values. We can then convert these to decimal_k and store in sidestat
+     * fscanf returns floating values. We can then convert these to decimal_k (aka int x100) and store in sidestat
      */
     int opc_dealnum ;   /* For caching  */
     float DOP[5];       /* Side: opc per strain C, D, H, S, N *OR* Compass: one per compass +1 for hand total */
@@ -183,90 +214,91 @@ struct opc_Vals_st {    /* The 8 values that the -q OPC report returns at this t
     float QL_nt ;       /* Quick Losers in NT. A stiff is now two losers, not one. */
     int fields ;        /* For Debugging. should be the number of fields returned by dop -q call */
 } ;
-/* Fields that might be needed one day if ever I get around to building opc into dealer instead of a perl pgm */
-/* change the #if 0 below to #if 1 to compile them in. */
+
+typedef struct sidestat_st {  /* the floats converted to int x100 for use by this pgm */
+    int       ss_cached ;         /* 0 Values for this side are not current; 1 values for this side are current */
+    decimal_k ss_opc_hlf_nt;        /* the total opc for the side if playing in NT */
+    decimal_k ss_opc_hldf_l;        /*      ditto                            in their longest fit. */
+    decimal_k ss_opc_hldf[NSUITS] ; /*      ditto  when each suit is trumps. one of these will dup the longest fit. */
+    decimal_k ss_quick_losers_suit; /* Quick losers for suit play  Total for the side */
+    decimal_k ss_quick_losers_nt;   /* Quick losers for nt   play  Total for the side */
+} SIDESTAT_k ; /* end struct sidestat */
+
 #if 0
-   // fields on a per hand basis
-    int hs_fl[NSUITS];          /* FL per suit ? OPC fit length pts. +1 for F8, +2 for F9, +3 for F10 & up */
-    int hs_fv[NSUITS];          /* FV per suit Hf or Df pts for honors in partner's suit */
-    int hs_together[NSUITS];    /* Length together with partner */
-    int hs_totalfl;             /* Sum of above hs_fl[NSUITS]; */
-    int hs_totalfv;             /* Sum of above hs_fv[NSUITS]; */
-/* OPC related fields. Each one should be x100 internally to preserve integer values thruout        */
-/* User MUST enter either numbers with decimal pts in them -- digits after Dec pt are optional
- *      e.g. opc(NS)>=26. or Mult x 100 himself e.g opc(NS)>=2600                                   */
-/* So when comments below refer to -1 or +1 the value in the hs_xxxx field will be -100 or +100 etc.*/
-/* Most relevant is the total for the side depends on whether NT or suit contract and which suit ,  */
-/* then for the hand, and much less often for the suit.                                             */
+/*
+ * If the following fields are ever to be used, change the #if 0 preceeding to #if 1 (or remove altogether)
+ *
+ * OPC related fields. Each one should be x100 internally to preserve integer values thruout
+ * User MUST enter either numbers with decimal pts in them -- digits after Dec pt are optional
+ *      e.g. opc(NS)>=26. or Mult x 100 himself e.g opc(NS)>=2600
+ * When comments below refer to -1 or +1 the value in the hs_xxxx field will be -100 or +100 etc.
+ * Most relevant is the total for the side depends on whether NT or suit contract and which suit ,
+ * then for the hand, and much less often for the suit.
+ *
+ * Note that all opc values must be decimal_k types since even the ones that cannot take on fractions
+ * will be added to others that do take on fractions and hence will be x100
+ */
+ /* Hand Stat 4 will be needed */
+struct hs_opc_st {
     decimal_k hs_opc_hcp[NSUITS];    /* opc version of hcp */
     decimal_k hs_opc_lpt[NSUITS];    /* opc pts for 5+ suits */
-    decimal_k hs_opc_dpt[NSUITS];   /* opc for voids, stiffs, or doubletons Opener only unless bidding NT */
-    decimal_k hs_opc_syn[NSUITS]; /* opc pts for 3 of top 4 honors in 5+ suits = +1, in 6+suit = +2  Add one more in each case if  4 of top 5 */
+    decimal_k hs_opc_dpt[NSUITS];    /* opc for voids, stiffs, or doubletons Opener only unless bidding NT */
+    decimal_k hs_opc_syn[NSUITS]; /* pts for 3 of top 4: 5c suit= +1, in 6+suit= +2  4 of top 5. +1 extra pt. */
 
     decimal_k hs_opc_hcp_tot;  /* total for the hand, not for the side */
-    decimal_k hs_opc_lpt_tot;  /* total for the hand, not for the side; max of 2 pts for Responder */
-    decimal_k hs_opc_dpt_tot;  /* total for the hand, not for the side */
-    decimal_k hs_opc_syn_tot;  /* total for the hand, not for the side */
+    decimal_k hs_opc_lpt_tot;  /* total for the hand, not for the side; max of 2 length pts for Responder */
+    decimal_k hs_opc_dpt_tot;  /* total for the hand, not for the side; D points Opener only. Resp only counts D if NT opener */
+    decimal_k hs_opc_syn_tot;  /* total for the hand, not for the side; count in all suits. */
     /* +ve Adjustments */
     decimal_k hs_opc_kings;    /* +1 for 3 Kings, +2 for 4 Kings */
     decimal_k hs_opc_queens;   /* +1 for 4 Queens */
     /* Negative Adjustments. Do not deduct more than 2 opc pts for NoAce, NoKing, NoQueen, and 4333 */
-    decimal_k hs_opc_noaces ;  /* -1 Dedcution for no Aces */
-    decimal_k hs_opc_nokings;  /* -1 Deduction for no Kings. +1 for 3 Kings, +2 for 4 Kings */
-    decimal_k hs_opc_noqueens; /* -1 Deduction for no Queens. +1 for 4 Queens */
+    decimal_k hs_opc_noaces ;  /* -1 Deduction for no Aces */
+    decimal_k hs_opc_nokings;  /* -1 Deduction for no Kings.  */
+    decimal_k hs_opc_noqueens; /* -1 Deduction for no Queens. */
     decimal_k hs_opc_square;   /* -1 Deduction for 4333 shape */
     decimal_k hs_opc_adj_tot;  /* total of above 4 ; max of 2 pts deduction */
     decimal_k hs_opc_nt_ded_tot; /* When playing in NT -2 for each stiff, -3 for each void */
-
-    /* These arrays need both hands in order to fill them in */
-    decimal_k hs_opc_hf[NSUITS];       /* Bonus for honors in partner's 5+ suit */
-    decimal_k hs_opc_misfit[NSUITS];   /* Deduction for shortness in partner's 5+ suits */
+    /* These arrays need both hands in order to fill them in but still operate on a per hand basis */
+    decimal_k hs_opc_hf[NSUITS];       /* Bonus for honors (<=3 hcp) in partner's 5+ suit */
+    decimal_k hs_opc_misfit[NSUITS];   /* Deduction for shortness (xx or worse) in partner's 5+ suits */
     decimal_k hs_opc_waste[NSUITS];    /* Deduction for wasted honors vs partner's stiff or void */
-    decimal_k hs_opc_nowaste[NSUITS];  /* Add pts for no wasted honors vs partner's stiff or void */
+    decimal_k hs_opc_nowaste[NSUITS];  /* Add pts for no wasted honors vs partner's stiff or void incl Ax(x) vs x */
     decimal_k hs_opc_dfit[NSUITS];     /* Support points in hand when this suit is trumps */
 
     decimal_k hs_opc_hf_tot;           /* total for the hand, not for the side */
     decimal_k hs_opc_misfit_tot;       /* total for the hand, not for the side */
     decimal_k hs_opc_waste_tot;        /* total for the hand, not for the side */
     decimal_k hs_opc_nowaste_tot;      /* total for the hand, not for the side */
+}
 
-   /* fields on a per side basis */
-    decimal_k ss_opc_hcp_tot;     /* total for the side */
-    decimal_k ss_opc_lpt_tot;     /* total for the side */
-    decimal_k ss_opc_dpt_tot;     /* total for the side */
-    decimal_k ss_opc_syn_tot;     /* total for the side */
-    decimal_k ss_opc_adj_tot;     /* total for the side */
-    decimal_k ss_opc_nt_ded_tot;  /* When playing in NT -2 for each stiff, -3 for each void. one fewer if dummy */
+ /* Side Stat 2 will be needed */
+struct ss_opc_st {
+    int       ss_opc_fit_len[NSUITS]; /* Length together with partner. Not a pt count so can be an int, not x100  */
+    decimal_k ss_opc_flpt[NSUITS];  /* FL per suit OPC fit length pts. +1 for F8, +2 for F9, +3 for F10 & up +1 for Hx vs 5 */
+    decimal_k ss_opc_flpt_tot;      /* Sum of above hs_fl[NSUITS]; */
+    decimal_k ss_opc_hcp_tot;       /* total for the side */
+    decimal_k ss_opc_lpt_tot;       /* total for the side */
+    decimal_k ss_opc_dpt_tot;       /* total for the side */
+    decimal_k ss_opc_syn_tot;       /* total for the side */
+    decimal_k ss_opc_adj_tot;       /* total for the side */
+    decimal_k ss_opc_nt_ded_tot;    /* When playing in NT -2 for each stiff, -3 for each void. one fewer if dummy */
+    decimal_k ss_opc_dfpts[NSUITS]; /* Shortness Points when this suit is trumps; Total for the side */
+    decimal_k ss_opc_hf_tot;        /* total for the side */
+    decimal_k ss_opc_misfit_tot;    /* total for the side */
+    decimal_k ss_opc_waste_tot;     /* total for the side */
+    decimal_k ss_opc_nowaste_tot;   /* total for the side */
+    decimal_k ss_opc_mirror_tot;    /* total for the side */
+}
+/*
+ * To use the above add this to globals or externs:
+ *             struct hs_opc_st  hs_opc[4], *phs_opc ;
+ *             struct ss_opc_st  ss_opc[2], *pss_opc ;
+ */
+#endif   /* end of #if 0 on line 209 approx */
 
-    /* These arrays need both hands in order to fill them in */
-    decimal_k ss_opc_fitlen[NSUITS];    /* Length of fit with partner in this suit */
-    decimal_k ss_opc_flpts[NSUITS];     /* Bonus opc pts for  8, 9, or 10+ fit in each suit */
-    decimal_k ss_opc_dfpts[NSUITS];     /* Shortness Points when this suit is trumps; Total for the side */
-
-    decimal_k ss_opc_hf_tot;      /* total for the side */
-    decimal_k ss_opc_misfit_tot;  /* total for the side */
-    decimal_k ss_opc_waste_tot;   /* total for the side */
-    decimal_k ss_opc_nowaste_tot; /* total for the side */
-    decimal_k ss_opc_mirror_tot;  /* total for the side */
-#endif
-
-struct sidestat {          /* OPC related numbers that need both hands of a side to be calculated */
-                           /* Since all OPC values can take on either half or sometimes quarter values e.g. Ace=4.5 hcp */
-                           /* We store everything internally as x100 integers e.g. Ace=4.5=>450, 15.5 OPC->15500 etc. */
-/* opc related fields. I may never fill these in individually; all I really need for now is the total for the side for NT and for the Longest fit. */
-    int       ss_cached ;         /* 0 Values for this side are not current; 1 values for this side are current */
-
-
-/* 2022/01/15 -- These are the only ones returned by the OPC call at this time. */
-    decimal_k ss_opc_hlf_nt;        /* the total opc for the side if playing in NT */
-    decimal_k ss_opc_hldf_l;        /*      ditto                            in their longest fit. */
-    decimal_k ss_opc_hldf[NSUITS] ; /*      ditto  when each suit is trumps. one of these will dup the longest fit. */
-    decimal_k ss_quick_losers_suit; /* Quick losers for suit play  Total for the side */
-    decimal_k ss_quick_losers_nt;   /* Quick losers for nt   play  Total for the side */
-}; /* end struct sidestat */
-
-
-struct options_st {         /* struct for storing cmd line option switches */
+/* struct for storing cmd line option switches */
+struct options_st {
   int       options_error;          //  0 = none. 3= Version Info. 1= Invalid option. 2=Fixed Thread. 4=Usage msg*/
   int       swapping;               // -x 0|2|3 (eXchange) JGM needs 0-9 for scripting parameter passing
   int       progress_meter;         // -m
@@ -280,12 +312,13 @@ struct options_st {         /* struct for storing cmd line option switches */
   long int  seed;                   // -s:
   long int  seed_provided;
   /* these next ones are by JGM.  */
-  char      title[MAXTITLESIZE];    // -T:   descriptive title for the set of hands.(MAXTITLE=100)
+  char      title[MAXTITLESIZE];    // -T:   descriptive title for the set of hands.(MAXTITLE=100 in docs, 256 in defs)
   size_t    title_len ;
   char      preDeal[4][32] ;        // Predeal Holdings in Dealer fmt Sxxxx,Hxxxxx, etc. -N, -E, -S, -W options
   int       preDeal_len[4] ;        // length of preDeal strings on cmd line.
   int       dbg_lvl;                // -D:  run program with this value of debug verbosity.
-  int       dds_mode ;              // -M  1= PBN, 2= Binary, Default = 1
+  int       srv_dbg_lvl;            //      If usereval forks a server, run server with this value of debug verbosity
+  int       dds_mode ;              // -M  1 Single result mode; 2 all 20 strain-compass combinations; used for par etc.
   char      opc_opener ;            // -O  mostly for OPC; N/E  or W/S; assume W if not set.
   int       opener;                 /*     an int for this pgm since it wants ints for Compass'es */
   int       par_vuln ;              // -P  Set Vuln for Par calcs. 0=None, 1=NS, 2=EW, 3=Both. Then converted to DDS coding.
@@ -294,8 +327,7 @@ struct options_st {         /* struct for storing cmd line option switches */
   char      ex_fname[128] ;         // -X  Filename used for exporting ; opens FILE *fexp global var
   char      csv_fname[128];         // -C  Filename used for CSV report; if w:<fname> opens for write. else for append
   char      csv_fmode[8];
-  int       accross_bkts  ;         // -a   Max buckets accross for the 2D frequency plots. Def = 42 Needed for dotnum values.
-  int       down_bkts     ;         // -d   Max buckets down for the 1D or 2D frequency plots. Def = 42 Needed for dotnum values.
+  char      userpgm[256]  ;         // -U   Path of the User provided external server executable. Default=UserServer ROOT Dir.
 } ;   /* end options_st */
 #define PARAM_SIZE 126
 struct param_st {
@@ -310,36 +342,6 @@ struct treeptr_st {
     int tree_type ;
     TREE_PTR tree_ptr ;
 } ;
-
- #endif   // dealer structs and types
-
- #if 0 // JGM temp maybe unused structs and types Change to #if 1 to add them to code
-// Next one just for fun by JGM. Not sure what I would use it for, ...  */
-struct res_st {
-        u_int16_t res_typ;
-        union  {
-              char    res_buff[32];
-              int     res_ivals[8] ;
-              double  res_dvals[4];
-        } res_u;
-} ;
-typedef struct res_st RESULT_k ;
-/* a JGM tree ... for what we don't know */
-struct gtree_st {                       /* spec members in order that leads to best packing 8bytes first then 4 then 1 */
-    struct gtree_st *gt_left, *gt_right ;
-    //int         gt_type ;
-    u_int16_t   gt_type ;
-    int         gt_iv[6] ;      /* 24 bytes */
-    decimal_k   gt_dv[6] ;
-    float       gt_fv[6] ;
-    char        gt_str[24] ; /* enough for one hand string in GIB fmt(16 chars) + 6 chars for trix + 1 char for null; */
-    struct res_st *gt_resptr ; /* the struct will need to be malloc'ed if needed */
-};
-typedef struct gtree_st GTREE_k ;
-typedef struct gtree_st *GTREEPTR_k ;
-#endif  //JGM temp types
-
-
 
 #endif /* ifndef DEALTYPES_H */
 

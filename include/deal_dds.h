@@ -10,10 +10,10 @@ struct Dealer_Results_st {      // Struct passed back from IF to Dealer
     char ddsmsg[40];  // in case DDS fails get some of the errmsg. Also used for contract strings
 } ;
 typedef struct Dealer_Results_st DDSRES_k ;
-struct Dealer_deal_st { unsigned int d[52] ; }; // Maybe no longer needed; we just pass in the curdeal ... */
-typedef struct Dealer_deal_st Dealer_deal_k;
+//struct Dealer_deal_st { unsigned int d[52] ; }; // Maybe no longer needed; we just pass in the curdeal ... */
+//typedef struct Dealer_deal_st Dealer_deal_k;    /* ?-*?-* */
+// extern DDSRES_k dds_res;
 extern DDSRES_k dds_res_bin;
-extern DDSRES_k dds_res;
 extern int dds_mode;
 extern int dds_tricks(int compass, int strain );
 extern int dds_parscore(int compass );

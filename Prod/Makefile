@@ -1,6 +1,13 @@
-# JGM Makefile for deal_v4  2022/10/05 PROD directory
+# JGM Makefile for deal_v5  2023/01/07 in the  PROD directory
 # Note MUST use g++ as the linker stage because DDS library created with g++
-# 2022/10/05 Added the deal_bktfreq_subs.c to the sources. Also separate compile for globals.c
+
+# This is the Prod directory Makefile  Type 'make showme' to verify macro settings.
+#
+# 2022/10/02 -- added deal_bktfreq_subs.c to the SRCS defn
+# 2022/11/15 -- added usereval_subs.c as a pre-req for dealer. Also added UserEval (the server) as a target.
+# 2022/12/13 -- renamed usereval_subs.c to dealServer_subs.c; added UserEval sub-dir
+# 2023/01/07 -- Merged in changes from V4 to fix predeal; dealcards_subs.c and globals, etc.
+
 
 CC      = gcc
 CFLAGS = -std=gnu17 -mtune=corei7 -flto -fopenmp -pthread -Wall -pedantic -O3  -I../include
@@ -18,10 +25,12 @@ FLEX    = flex
 YACC    = bison -d
 
 SRCS  = ../src/dealaction_subs.c ../src/dealdds_subs.c ../src/dealdebug_subs.c ../src/dealeval_subs.c ../src/dealcard_subs.c
-SRCS += ../src/dealparse_subs.c ../src/Dealer_DDS_IF.c ../src/c4.c ../src/deal_bktfreq_subs.c ../src/dealerv2.c
+SRCS += ../src/dealparse_subs.c ../src/Dealer_DDS_IF.c ../src/c4.c ../src/deal_bktfreq_subs.c
+SRCS += ../src/dealServer_subs.c ../src/dealerv2.c
+
 OBJS = $(patsubst ../src/%.c,%.o,$(SRCS) ) dealglobals.o dealflex.o dealyacc.tab.o
 
-HDR  = ../include/allheaders.h
+HDR  = ../include/allheaders.h ../include/dbgprt_macros.h
 # Need to link with g++ because libdds library was built with c++
 dealerv2: ${OBJS}
 	$(CXX) $(CXXFLAGS) -o $@ ${OBJS}  $(LDFLAGS)
@@ -30,7 +39,7 @@ allheaders :
 	touch ../include/allheaders.h
 
 clean:
-	rm -f ${OBJS} ${LOBJ} ${YOBJ} *.gch
+	rm -f ${OBJS} ${LOBJ} ${YOBJ} *.gch ../include/*.gch
 
 install:
 	sudo ../install_dealer.bash
@@ -45,6 +54,7 @@ showme:
 	@echo BISON SRC= $(YSRC) OBJ= $(YOBJ)
 	@echo FLEX  SRC= $(LSRC) OBJ=$(LOBJ)
 	@echo
+	@echo HDR=$(HDR)
 	@echo SRCS=$(SRCS)
 	@echo
 	@echo OBJS=$(OBJS)
@@ -65,7 +75,7 @@ $(LOBJ) : $(LSRC) $(HDR)
 # Yacc/Bison -- bison -d creates the file dealyacc.tab.c and dealyacc.tab.h
 #
 
-YSRC = ../src/dealyacc.y
+YSRC = ../src/dealyacc.y ../include/dbgprt_macros.h
 YOBJ = dealyacc.tab.c dealyacc.tab.h
 
 $(YOBJ) : $(YSRC) $(HDR)
@@ -88,5 +98,12 @@ c4.o : ../src/c4.c ../include/c4.h $(HDR)
 	$(CC) $(CFLAGS) -o $@ -c $<
 dealglobals.o : ../include/dealglobals.c $(HDR)
 	$(CC) $(CFLAGS) -o $@ -c $<
+dealServer_subs.o : ../src/dealServer_subs.c ../include/mmap_template.h $(HDR)
+	$(CC) $(CFLAGS) -o $@ -c $<
 
-objects : $(OBJS)
+ objects : $(OBJS)
+
+user_eval.o : ../src/user_eval.c  ../include/mmap_template.h
+	$(CC) $(CFLAGS) -o $@  -c $<
+UserEval : user_eval.o
+	$(CC) $(CFLAGS) -o $@  $<

@@ -1,0 +1,18 @@
+ // file Descr.c4qual  -- note the single line C style comment works ok so long as not start in col 1
+produce 8
+generate 100
+seed 29
+dealer west
+vulnerable EW
+title "Testing  SHORT CCCC and Quality Testing with both int and decimal numbers"
+
+# c4east = cccc(east)
+# c4north = cccc(north)
+
+/*---------------- Testing now --------------------*/
+
+#action printoneline, printes(\n,"c4E= ",c4east,"  Qual_E_S= ", qualEspade , " c4N=", c4north, " qual_N_C=",qualNclub, \n )
+action printrpt (north,"=",cccc(north), "    ", east,"=",cccc(east) ),
+
+#printrpt("Q_N:",quality(north,spade),quality(north,heart),quality(north,diamond), quality(north,club),
+#         "Q_E:",quality(east,spade),quality(east,heart),quality(east,diamond), quality(east,club) )

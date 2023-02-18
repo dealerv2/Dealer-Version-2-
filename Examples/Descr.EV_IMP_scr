@@ -1,0 +1,22 @@
+generate   1000000
+produce    500
+seed 23
+title " Game With A Fit -- vs HCP "
+#
+condition ( hcp(east)+hcp(west) == $0 )
+          && ( hearts(west)+hearts(east) == $1 )
+
+
+action
+         average " Hearts * 1000 + hcp " ($1)*1000+($0) ,
+         evalcontract ( EW , z2H  , vul ),
+#         evalcontract ( EW , z4H  , vul ),
+#         printrpt( EW ,dds(west,hearts) )
+
+  // Sample Output:
+  // Contract  2H  V by  EW Average Result =   177.86, Made pct=   99.80, Fail pct=    0.20
+  // Missed Game_pct=   76.80, Missed Slam_pct=  13.40, Missed Game Imps/board=   7.68, Missed Slam Imps/board=   2.17
+  // Contract  4H  V by  EW Average Result =   465.34, Made pct=   76.80, Fail pct=   23.20
+  // Missed Game_pct=    0.00, Missed Slam_pct=  13.40, Missed Game Imps/board=   0.00, Missed Slam Imps/board=   1.79
+
+

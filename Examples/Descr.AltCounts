@@ -2,7 +2,7 @@
 # mechanisms; useful for debugging the analyze function
 title "Test script for debugging the analyze function"
 produce 1
-seed = 9
+seed = 211
 action
    print ( north ),
    average "HCP"     hcp(north),

@@ -1,0 +1,29 @@
+ // file Descr.UE_KnR  -- note the single line C style comment works ok so long as NOT start in col 1
+produce 1
+generate 100
+seed 29
+dealer west
+vulnerable EW
+title "Testing UE version of KnR With Fits"
+# 8fit  spades; one Dfit south, one Fn North
+#predeal north SQJT98,HA432,D432,C2
+#predeal south SK32,H876,D9,C987654
+# 9fit  spades; one Dfit south, one Fn North
+#predeal north SQJT98,HA432,D432,C2
+#predeal south SK432,H876,D9,C98765
+# 10fit  spades; one Dfit south, one Fn North
+#predeal north SQJT987,HA43,D432,C2
+#predeal south SK432,H8765,C98765
+# 7fit  spades; Misfit clubs.
+#predeal north SQJT98,HA4,D5432,C2
+#predeal south SK4,H8765,D8,CK87654
+# No Fit; Misfit clubs.
+predeal north SQJT9,HAJ4,D5432,C2
+predeal south SK4,H8765,D8,CK87654
+/*---------------- Testing now --------------------*/
+
+#
+action  printrpt (deal) ,
+printrpt(usereval(7,NS,0),usereval(7,NS,1),usereval(7,NS,2),usereval(7,NS,3),"C4_NS",cccc(north)+cccc(south) )
+
+

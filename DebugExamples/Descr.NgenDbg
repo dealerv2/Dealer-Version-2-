@@ -1,0 +1,18 @@
+generate 50
+produce 5
+seed 23
+
+title "Debugging Ngen "
+predeal north S2
+#
+# Using FD shapes to limit the 7+ suits. Cant just put {north, - (7+xxx) } which you should be able to do.
+# FD seems to need at least one term before any minus term. Hence the 'useless' (xxxx) term first.
+
+
+ls = spades(north) + spades(south)
+lh = hearts(north) + hearts(south)
+ld = diamond(north)+ diamond(south)
+lc = clubs(north)  + clubs(south)
+
+action    frequency "Deals?" (hascard(north, 2S), 0, 1),
+   printrpt ( NS, ls, lh, ld, lc, usereval(10,NS,0) )

@@ -1,6 +1,7 @@
 /* JGM -- File dealdebug_subs.c -- Routines for debugging output mostly */
 /* Try not to include any functions that are defined elsewhere in dealer
  * so that including this one will not result in conflicts
+ * 2023/01/07 -- Merged in changes from V4 to fix predeal; dealcards_subs.c and globals, etc.
  */
 
 #include <stdio.h>          /* for perror() */
@@ -15,6 +16,22 @@
 #include "../include/dealprotos.h"
 
 #include "../include/dealdebug_subs.h"
+void show_hands_pbn( int mask, deal d ) {
+/* Clone of printhands_pbn in action subs.c except always goes to stderr */
+  char pt[] = "nesw";
+  int  p;
+  char pbn_buff[128], *pbn_ptr ;
+  pbn_ptr=pbn_buff ;
+  for (p=0 ; p< 4; p++ ) {
+     if ( !(mask & 1 << p ) ) continue ; /* skip this player if he was not called for */
+    *pbn_ptr++ = pt[p]; *pbn_ptr++ = ' ' ; // player names are followed by a space */
+    pbn_ptr = Hand52_to_pbnbuff (p, (char *)d, pbn_ptr ); // append a hand to end of pbnbuff; returns ptr to null at end.
+  }
+  /* pbnbuff formatted now print it out */
+  *pbn_ptr++ = '\n'; *pbn_ptr='\0';
+  fprintf(stderr, "%s",pbn_buff ) ; /* no newline at this point. */
+
+} /* end show_hands_pbn */
 void dump_curdeal(deal d) { /* ouput deal in easy to read, verbose fmt */
     int  pnum , cardcount;
     char *pname="NESW";
@@ -25,7 +42,7 @@ void dump_curdeal(deal d) { /* ouput deal in easy to read, verbose fmt */
     pnum = 0 ;
 
     cardcount = 0;
-    unsigned int crd ;
+    int crd ;
     char pn, rn ;
     pn='*'; rn='-';
     /* this is already a debugging routine; no need to use DBGPRT */
@@ -43,8 +60,8 @@ void dump_curdeal(deal d) { /* ouput deal in easy to read, verbose fmt */
           for (r = ACE; r >= TWO; r--) {     /* r goes from Ace to Deuce. r must be a signed int, not an unsigned */
               assert(TWO <= r && r<= ACE );  /* if r is not signed this will not be true */
               rn = rname[r];
-              crd = (unsigned int)MAKECARD (s, r);
-              // fprintf(stderr, "%02X => %d:%c ", crd, r, rn);
+              crd = MAKECARD (s, r);
+              fprintf(stderr, "%02X => %d:%c ", crd, r, rn); // Comment out.
               if (hascard(d, pnum, crd)) {
                      fprintf(stderr, "%c%c ",sid, rn );
                   cardcount++ ;
@@ -56,6 +73,7 @@ void dump_curdeal(deal d) { /* ouput deal in easy to read, verbose fmt */
         assert(cardcount == 13 );  /* must find 13 cards for each player */
   } /* end for player */
   fprintf(stderr, "----------------dump curr deal done ----------------\n");
+  fsync(2) ;
 } /* end dump curr deal */
 
 void hexdeal_show(deal dl, int sz ) { /* one line output of the coded cards in hex */
@@ -66,7 +84,7 @@ void hexdeal_show(deal dl, int sz ) { /* one line output of the coded cards in h
         fprintf(stderr, "%02X ", dl[i] );
     } /* end hex deal */
     fprintf(stderr, "]\n");
-} /* end hexdeal_show */
+}
 
 void sr_deal_show(deal dl ) { /* two line output of the cards in SuitRank */
     char rns[] = "23456789TJQKA-";
@@ -88,6 +106,7 @@ void sr_deal_show(deal dl ) { /* two line output of the cards in SuitRank */
 
     }
     fprintf (stderr,"]\n");
+    fsync(2);
 } /* end sr_deal_show */
 
 void sr_hand_show(int p, deal dl ) {  /* two line output of the cards in SuitRank */
@@ -104,7 +123,8 @@ void sr_hand_show(int p, deal dl ) {  /* two line output of the cards in SuitRan
              r=C_RANK(dl[di]); rn=rns[r];
              fprintf (stderr,"%c%c ", sn,rn );
     }
-    printf ("]\n");
+    fprintf (stderr, "]\n");
+    fsync(2);
 } /* end sr_hand_show */
 /* These next routines to display the structures that yyparse builds. Helps understand how Dealer works. */
     int var_lev = 0;  /* file level global for the showvar_tree routines */
@@ -115,7 +135,7 @@ void showtreenode(int tlev, struct tree *tr) {
     for (prt_cnt = 1; prt_cnt < tlev; prt_cnt++) { fprintf(stderr, "  ") ; } // indent two spaces per level
     lf1 =  (tr->tr_leaf1 != NULL ) ? tr->tr_leaf1->tr_type : -1 ;
     lf2 =  (tr->tr_leaf2 != NULL ) ? tr->tr_leaf2->tr_type : -1 ;
-    fprintf(stderr,"Typ=[%2d], Int1=[%2d],Int2=[%2d],Int3=[%2d], lf1_Typ=[%2d] ptr1=[%p],lf2_typ=[%2d] ptr2=[%p]\n",
+    fprintf(stderr,"Typ=[%2d], Int1=[%2d],Int2=[%2d],Int3=[x%02x], lf1_Typ=[%2d] ptr1=[%p],lf2_typ=[%2d] ptr2=[%p]\n",
         tr->tr_type, tr->tr_int1, tr->tr_int2, tr->tr_int3, lf1,(void *)tr->tr_leaf1, lf2, (void *)tr->tr_leaf2 ) ;
     return ;
 } /* end showtreenode() */
@@ -252,7 +272,7 @@ void showdistrbits ( int ***distrbitmaps[14] ) {
 
 void showAltCounts( void ) {
    int tbl,r ;
-   fprintf(stderr, "Points Table, a copy of tblPointcount[idxHcp] table \n Pts: ");
+   fprintf(stderr, "Points Table, a copy of tblPointcount[idxHcp] table \n  Pts:");
    for (r=0; r<13 ; r++ ) {
       fprintf(stderr, "%4d ", points[r] ) ;
    }

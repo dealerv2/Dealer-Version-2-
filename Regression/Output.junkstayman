@@ -1,0 +1,27 @@
+4450,7d: Mean=    0.0000, Std Dev=    0.0000, Var=    0.0000, Sample Size=26 
+4450,8d: Mean=    0.2692, Std Dev=    0.4523, Var=    0.2046, Sample Size=26 
+4450,8M: Mean=    0.7308, Std Dev=    0.4523, Var=    0.2046, Sample Size=26 
+Frequency :
+    0	       7
+    1	      19
+Frequency :
+    0	       0
+    1	       0
+    2	       0
+    3	       0
+    4	       0
+    5	       0
+    6	       0
+    7	       6
+    8	      10
+    9	      10
+   10	       0
+   11	       0
+   12	       0
+   13	       0
+
+Junk Stayman
+Generated 1000000 hands
+Produced  26 hands
+Initial random seed 28
+Time needed    1.526 sec

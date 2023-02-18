@@ -1,0 +1,14 @@
+generate   10000
+produce    1
+seed 11393
+title "Descr.UE_individual metric debug "
+# Call with dealdbg -D5.8 Descr.UE_metric_dbg -0 <m>'
+condition ( hcp(north)>=10 && spades(north)>=5 && hcp(south)>=10 &&spades(south)>=3 )
+
+action
+  printrpt( NS, usereval($0,NS,0), usereval($0,NS,1), usereval($0,NS,2), usereval($0,NS,3), usereval($0,NS,4),
+                usereval($0,NS,5), usereval($0,NS,6), usereval($0,NS,7), usereval($0,NS,8), usereval($0,NS,9),
+                usereval($0,NS,10), usereval($0,NS,11) ),
+  printrpt (EW, usereval($0,EW,0), usereval($0,EW,1), usereval($0,EW,2), usereval($0,EW,3), usereval($0,EW,4),
+                usereval($0,EW,5), usereval($0,EW,6), usereval($0,EW,7), usereval($0,EW,8), usereval($0,EW,9),
+                usereval($0,EW,10), usereval($0,EW,11) )

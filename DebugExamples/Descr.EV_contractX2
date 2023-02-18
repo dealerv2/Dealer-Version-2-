@@ -1,0 +1,20 @@
+generate   10000
+produce    10
+# Mods from earlier to use z[1-7][CDHSN]xx form of contracts
+title " Check if we can have two contracts in the same strain for same side"
+condition ( (hcp(north)+hcp(south)) >= 22 && (hcp(north)+hcp(south)) <= 26 )
+          && ( (hearts(west)+hearts(east) >=8 ) && (hearts(west)+hearts(east) <=10) )
+
+DDSNS=dds(south,notrump)
+Score2NTxVul=score(vul, z2Nx, DDSNS )
+Score3NTvul=score(vul,z3N,DDSNS)
+
+
+action
+#         printrpt( NS, "  DDS=", DDSNS, " Score NS 2NxVVul=",Score2NTxVul, "Score3NTVul=",Score3NTvul ),
+         evalcontract ( NS , z2Nx , vul ),
+         evalcontract ( NS , z3N , vul  ),
+         evalcontract ( EW , z2H , nv ) ,
+         evalcontract ( EW , z4H , nv ) ,
+#         average "NS 2Nx" Score2NTxVul,
+#         average "NS_3Nvul" Score3NTvul

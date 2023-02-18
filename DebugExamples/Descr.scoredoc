@@ -5,4 +5,5 @@ title " Check Score 3Hx vul"
  condition ( hcp(north)+hcp(south) > 23 && hearts(north) + hearts(south) >=8 )
 
  S3HxV = score(vul, z4Hx, dds(south,hearts))
- action  printes("S3HxV: ", S3HxV, " , " , dds(south,hearts), " :: " ) , printoneline
+ action  printes("S3HxV: ", S3HxV, " , " , dds(south,hearts), " :: " ) , printoneline,
+   printrpt("3H Dbl Vul By S", S3HxV, dds(south,hearts), deal )

@@ -6,4 +6,4 @@ title " Checking Mode=2 DDS Timing 20 Hands Two DDS Calls per hand  "
 action  average "  DDS WEST CLUBS TRICKS= " dds(west, club),
         average "DDS SOUTH HEARTS TRICKS= " dds(south, heart),
 	average "ltc N = " ltc(north),
-	printoneline 
+#	printoneline 

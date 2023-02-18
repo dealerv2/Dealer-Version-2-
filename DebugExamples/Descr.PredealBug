@@ -1,0 +1,13 @@
+produce    2
+seed 901
+predeal east S4,CA8
+predeal north SJT3,H9,DKQ,CQJ95432
+predeal south SA5,HAJT32, DJ32, CKT6
+predeal west SKQ,C7
+/*
+predeal north CAKQ
+predeal south CJT9
+predeal east  C876
+predeal west  C5432
+*/
+action printrpt ( deal )

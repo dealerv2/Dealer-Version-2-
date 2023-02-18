@@ -8,7 +8,8 @@
   // :JGM:  2022-02-11  -- Started adding TRIX functionality to csvreport
   // :JGM:  2022-09-10  -- Debugging altcount and pointcount statements. Dotnums don't work there but ints like 450 do.
   // :JGM:  2022-09-11  -- Fixed up altcount, pointcount, and defcount processing. Can now do any mix of ints and dotnums in list
-  // :JGM:  2022-09-14  -- Removed defcount; start adding bktfreq
+  // :JGM:  2022-10-24  -- Removed defcount; added bktfreq and bktfreq2d
+  // :JGM:  2022-11-07  -- Added USEREVAL and newquery.
 
 %code top {
     /* Entries here will not be put to the dealyacc.tab.h file, but will go to the dealyacc.tab.c file */
@@ -29,6 +30,7 @@
 #include "../include/dealdefs.h"       /* symbolic constants for everything */
 #include "../include/dealtypes.h"      /* types; some needed by union aka YYSTYPE so put them here */
 #include "../include/dealexterns.h"    /* extern statements for the various global vars. */
+#include "../include/dbgprt_macros.h"  /* DBGLOC definition */
 
 } /* end code requires */
 
@@ -129,6 +131,7 @@
 %token  TRIX
 %token  PRINTRPT
 %token  BKTFREQ
+%token  USEREVAL
 
 %token <y_int> NUMBER
 %token <y_str> HOLDING
@@ -407,11 +410,11 @@ expr
        | LTC '(' compass ',' SUIT ')'
                 { $$ = newtree(TRT_LTC,      NIL, NIL, $3, $5 );  }
        | OPC '(' side ')'
-                 { $$ = newtree(TRT_OPCSIDE, NIL, NIL, $3,  5);  } // 'strain' = 5 means longest fit
+                { $$ = newtree(TRT_OPCSIDE, NIL, NIL, $3,  5);  } // 'strain' = 5 means longest fit
        | OPC '(' side ',' SUIT ')'
-                 { $$ = newtree(TRT_OPCSIDE, NIL, NIL, $3,  $5);  } // opc pts if strain is the trump suit.
+                { $$ = newtree(TRT_OPCSIDE, NIL, NIL, $3,  $5);  } // opc pts if strain is the trump suit.
        | OPC '(' side ',' NOTRUMPS ')'
-                 { $$ = newtree(TRT_OPCSIDE, NIL, NIL, $3,  4);  } // 'strain' = 4 means Notrump
+                { $$ = newtree(TRT_OPCSIDE, NIL, NIL, $3,  4);  } // 'strain' = 4 means Notrump
 
        | DDS '(' compass ',' SUIT ')'
                 { $$ = newtree(TRT_DDS, NIL, NIL, $3, $5); ;}
@@ -420,6 +423,15 @@ expr
        | PAR '(' side ')'
                 { $$ = newtree(TRT_PAR, NIL, NIL, $3,  0);  /* PAR needs all 20 results. Forces mode=2. */ }
       // PAR ( side , both|none|NS|EW ) will need to resurrect the VULNERABLE token that is now just a flex action.
+
+        | USEREVAL '(' number ',' side ',' number ')'
+               { $$ = newquery( $3 , $5 , -1 , -1 , $7 ) ; }
+        | USEREVAL '(' number ',' side ',' SUIT ',' number ')'
+               { $$ = newquery( $3 , $5 , -1 , $7 , $9 ) ; }
+        | USEREVAL '(' number ',' compass ',' number ')'
+               { $$ = newquery( $3 , -1 , $5 , -1 , $7 ) ; }
+        | USEREVAL '(' number ',' compass ',' SUIT ',' number ')'
+               { $$ = newquery( $3 , -1 , $5 , $7 , $9 ) ; }
         ;
       // The exprlist is only used for the printes action, not for the condition decision tree.
 exprlist
@@ -432,7 +444,7 @@ exprlist
         | exprlist ',' STRING
                 { $$ = newexpr(0, $3, $1); }  /* add a struct containing ptr to string($3) to end of expr list $1 */
         ;
-     // The csvlist is only used for the csvrpt action. Like printes but allows hands and trix as well as expr and strings
+  // The csvlist is for the csvrpt and printrpt actions. Like printes but allows hands and trix as well as expr and strings
 csvlist
         : COMPASS
                { $$ = new_csvterm(0,  0,  1<<$1,   0,    0) ; } /* set bit in bit mask */
@@ -560,13 +572,16 @@ action                          /* Actions that happen during the run Do not cho
                              3 + ($$->ac_u.acu_bf2d.bkta.Hi - $$->ac_u.acu_bf2d.bkta.Lo)/$$->ac_u.acu_bf2d.bkta.Sz  ;
                   }
 
-        | EVALCONTRACT '(' side ',' CONTRACT ',' VULN ')'          /* removed will_print++. This action prints only at EOJ. */
+        | EVALCONTRACT '(' side ',' CONTRACT ',' VULN ')'          /* This action prints only at EOJ. */
                 { $$=newaction(ACT_EVALCONTRACT,0,0,$3, NIL);
                   $$->ac_u.acucontract.coded = $5 ;           /* Flex makes coded contract from e.g z3Hxx. Next Steps decode it */
                   $$->ac_u.acucontract.vul = $7 ;             /* Vul not part of flex coded contract */
                   $$->ac_u.acucontract.dbl =  $5 / 40;        /* DBL = 1, RDBL = 2 */
                   $$->ac_u.acucontract.strain = $5 % 5;       /* 0 .. 4 => C D H S N */
                   $$->ac_u.acucontract.level  = ($5 % 40 )/5; /* 5 .. 35  for 1 - 7 */
+                  fmt_contract_str( $$->ac_u.acucontract.c_str,$$->ac_u.acucontract.level,
+                                    $$->ac_u.acucontract.strain, $$->ac_u.acucontract.dbl, $$->ac_u.acucontract.vul );
+                  memset($$->ac_u.acucontract.trix, 0, 14*sizeof(int) ) ; /* init counter array to zero this contract */
                 }
         | EXPORT '(' side ')'
                 { $$=newaction(ACT_EXP_SIDE_HLD, 0, 0, $3, NIL); }
@@ -839,6 +854,35 @@ struct csvterm_st *new_csvterm (struct tree *tr1, char *str1, int hand_mask,  in
     else   {   return csv;   } /* handles the case of the very first term */
 
 } /* end new_csvterm() */
+
+/*
+ * Called when USEREVAL statement found; returns a pointer to a new tree of type TRT_USEREVAL
+ */
+struct tree  *newquery( int tag, int side, int compass, int suit, int idx ) {
+   union qcoded_ut uqc ;
+   struct tree *ptree ;
+   uqc.coded_all = 0 ;
+   if ( side == -1 ) { side = (compass & 0x01) ; }
+   if ( compass != -1 ) {
+      uqc.ucbits.hflag = 1 ;
+      uqc.ucbits.hand  = compass ;
+   }
+   if ( suit != -1 ) {
+      uqc.ucbits.sflag = 1 ;
+      uqc.ucbits.suit  = suit ;
+   }
+   uqc.ucbits.idx = idx ;
+   ptree = newtree(TRT_USEREVAL, NIL, NIL, tag, side ) ;
+   ptree->tr_int3 = uqc.coded_all ;   /* only use of tree.tr_int3 in this program */
+
+   JGMDPRT(4,"NewQuery: Tag=%d, side=%d, compass=%d, suit=%d, idx=%d, coded_all=%08X, QueryTree=%p\n",
+                        tag,side,compass,suit,idx, uqc.coded_all, (void*)ptree ) ;
+
+   return ptree ;
+} /* end newquery */
+
+
+
 
 #define YY_USE_PROTOS
 

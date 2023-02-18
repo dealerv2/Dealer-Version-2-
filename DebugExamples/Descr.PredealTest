@@ -1,0 +1,16 @@
+ // file Descr.UE_KnR  -- note the single line C style comment works ok so long as NOT start in col 1
+produce 1
+generate 100
+seed 29
+dealer west
+vulnerable EW
+title "Testing Predeal"
+
+predeal north SAJT432,HKT92,D32,C2
+predeal south SKQ,HA43,DJT4,CK6543
+
+/*---------------- Testing now --------------------*/
+
+#
+action  printrpt (deal)
+

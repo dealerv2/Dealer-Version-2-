@@ -1,6 +1,7 @@
 generate   100000
 produce    5000
 title " Checking KnR vs HcP  "
+seed 223
 KnR_N = cccc(north)
 HCP_N = hcp(north)
 

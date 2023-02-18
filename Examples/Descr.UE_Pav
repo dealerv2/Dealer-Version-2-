@@ -1,0 +1,13 @@
+generate   10000
+produce    2
+seed 17
+title "Descr.UE_Pav -- All Pavlicek Hand Evaluation in NT and Suit  "
+# 10 is the query-id that asks for Pavlicek hand evaluation.
+# The external code was written to return the various results in 0 .. 5
+
+#  Pavlicek Evaluation
+
+#                    Total            North              South
+action printrpt(NS,
+        "NS_NT=",usereval(10,NS,0),usereval(10,NS,1), usereval(10,NS,2),
+      "NS_Suit=",usereval(10,NS,3),usereval(10,NS,4), usereval(10,NS,5))

@@ -11,6 +11,8 @@
 /* JGM 2022-03-03   Adding SETSEED and <FR1>, <FR2>, <FR3> and buffer switching for Francois shapes -- based on V4. */
 /* JGM 2022-09-11   Cleaned up altcount, pointcount, and defcount processing. Can now do any mix of ints and dotnums in list */
 /* JGM 2022-09-14   Removed defcount. Added bktfreq. */
+/* JGM 2022-11-07   Mods for UserEval; new token ; new keyword .. */
+/* JGM 2022-12-20   Touch up for UserEval; uevtag, var name change */
  #ifndef _GNU_SOURCE
    #define _GNU_SOURCE
  #endif
@@ -195,6 +197,9 @@ dotnum    \.[0-9]{1,2}
 decnum    [0-9]{1,2}\.[0-9]{0,2}
 scriptvar [$][0-9]
 
+ /* descriptive tags for the UserEval Statements. Also allowed numbers */
+ /*   uevtag   [~][A-Za-z] */
+
   /* stuff for Francois Shapes  */
 FTERM  [}]
 FCOMPASS (north|east|south|west){ws}*[,]
@@ -263,10 +268,11 @@ deal            return(DEAL);
 csvrpt          return(CSVRPT);
 printrpt        return(PRINTRPT);
 bktfreq         return(BKTFREQ) ;
+usereval        { userserver_reqd++ ; return(USEREVAL); } /* set a flag to start the server */
 
    /* now do some direct handling of the cases where yyparse not needed. It simplifies the yyparse() and the grammar */
    /* We do have to allow for the fact that the user might enter the keyword
-    * e.g. generate on a different line from the value e.g. 1000000
+    * e.g. "generate" on a different line from the value e.g. 1000000
     * Rather than define a pattern that can span multiple lines we use the exclusive states feature of Flex
     */
 seed({ws}|{nl}) { BEGIN(SETSEED);   }
