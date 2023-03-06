@@ -59,14 +59,18 @@ int isCard (char crd) {
    return -1;
 }
 
-#if 0   /* OLD Version of hascard -- keep for reference --- */
-int hascard (deal d, int player, card thiscard){
+
+/* search 13 slots in deal looking  for one specific card -- original version of hascard
+ *  we need this slower version for actions at end of run, when the handstat struct is no longer current
+ * even tho it can take over 600 accesses to the deal to print one hand
+ */
+int hasKard (deal d, int player, card thiscard){
   int i;
   for (i = player * 13; i < (player + 1) * 13; i++)
     if (d[i] == thiscard) return 1;
   return 0;
-}
-#endif
+} /* end hasKard */
+
 
 /* JGM redo to use the Has_card[s][r] array in handstat keep same prototype even tho deal not needed anymore */
 int hascard (deal d, int player, card thiscard) {
@@ -1060,7 +1064,7 @@ int get_opc_vals (struct opc_Vals_st *opcRes, char *cmd_buff ) {
                         &opcRes->DOP[0], &opcRes->DOP[1], &opcRes->DOP[2], &opcRes->DOP[3], &opcRes->DOP[4], &opcRes->DOP_long );
     opcRes->fields += fscanf(fp, " %5f %5f", &opcRes->QL_suit, &opcRes->QL_nt );
 
-        JGMDPRT(7,"DOP fscanf Calls return fields=%d\n",opcRes->fields);
+        DBGLOC("DOP fscanf Calls return fields=%d\n",opcRes->fields);
  #ifdef JGMDBG
     if (jgmDebug >= 8 ) {
         int i ;
@@ -1128,7 +1132,7 @@ int opc_value(int side, int strain, struct tree *t ) {
    if ( strain == 5 )      {   opcval= ss[side].ss_opc_hldf_l       ; }
    else if ( strain == 4 ) {   opcval= ss[side].ss_opc_hlf_nt       ; }
    else                    {   opcval= ss[side].ss_opc_hldf[strain] ; }
-      JGMDPRT(7 "Returning opc_val for side=%d, strain=%d, val=%d ", side, strain, opcval );
+      JGMDPRT(7, "Returning opc_val for side=%d, strain=%d, val=%d ", side, strain, opcval );
    return opcval ;
 } /* end opc_value */
 

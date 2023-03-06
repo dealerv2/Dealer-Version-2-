@@ -77,7 +77,7 @@ enum suit_ek {CLUBS=0, DIAMONDS, HEARTS, SPADES, nosuit=-1 } ;
   #define C_RANK(c)    (  (c)&0xF     )
 #endif
 #define NO_CARD     0x7F   /* was 0xFF; changed when card became signed char */
-// #define HAS_CARD(d,p,c) hascard(d,p,c) :: redefined by JGM below
+#define HASKARD(d,p,c) hasKard(d,p,c)  // we need this one for printcompass; handstat is not current at that point.
 /* HAS_CARD redefined. 2022/11/10; Analyze now populates the array Has_card[h][13] simplifying a frequent lookup */
 #define HAS_CARD(d,p,c) hs[(p)].Has_card[C_SUIT((c))][C_RANK((c))]
 #define HAS_KARD(p,s,r) hs[(p)].Has_card[ (s) ][ (r) ]

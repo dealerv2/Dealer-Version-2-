@@ -39,7 +39,7 @@ allheaders :
 	touch ../include/allheaders.h
 
 clean:
-	rm -f ${OBJS} ${LOBJ} ${YOBJ} *.gch ../include/*.gch
+	rm -f ${OBJS} ${LOBJ} ${YOBJ} *.gch ../include/*.gch *.o
 
 install:
 	sudo ../install_dealer.bash

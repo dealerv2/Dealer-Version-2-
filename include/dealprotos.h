@@ -106,6 +106,7 @@ extern int           cleanup_userserver ( pid_t pid ) ;
 
         /* low level functions and macros These may be useful in more than just the dealer.c file */
 extern int           hascard (deal d, int player, card onecard) ;
+extern int           hasKard (deal d, int player, card thiscard) ; /* the slow version of the above */
 
 extern card          make_card (char rankchar, char suitchar);       /* used in yylex() */
 extern int           make_contract (char *c_str ) ;  /* Flex passes yytext[1]... = [1-7][CDHSN][x]{0,2} */

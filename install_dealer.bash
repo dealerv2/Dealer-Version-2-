@@ -3,6 +3,8 @@
 #set -x
 DISTRODIR="$PWD"
 ROOTDIR="/usr/local/bin"
+SUDO_USER=$USER
+echo "Debug: User=${SUDO_USER} is installing from $DISTRODIR to $ROOTDIR "
 
 if [[ -d "$ROOTDIR"/DealerV2 ]]; then echo Found "$ROOTDIR"/DealerV2
 else
@@ -19,9 +21,11 @@ fi
 cp -pR "$DISTRODIR"/*  "$ROOTDIR"/DealerV2
 chown -R ${SUDO_USER}:${SUDO_USER} "$ROOTDIR"/DealerV2/*
 
-# setup the DOP Perl external program
-mv "$ROOTDIR"/DealerV2/DOP/*  "$ROOTDIR"/DOP/
-rmdir  "$ROOTDIR"/DealerV2/DOP
+# setup the DOP/OPC Perl external program
+cd  "$ROOTDIR"/DOP/
+tar -xvf "$ROOTDIR"/DealerV2/DOP4DealerV2.tar.gz
+chown -R ${SUDO_USER}:${SUDO_USER} "$ROOTDIR"/DOP/*
+cd -
 
 if $( echo $PATH | grep /usr/local/bin/DealerV2 | grep -q /usr/local/bin/DOP ) ; then
    echo PATH is OK

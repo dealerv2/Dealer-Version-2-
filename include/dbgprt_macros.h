@@ -2,6 +2,7 @@
 #ifndef DBGPRT_MACROS_H
 #define DBGPRT_MACROS_H
 /* this next line should come from the environment. */
+ #define JGMDBG 1   /* for testing  */
 #ifdef JGMDBG
   #define DBGPRINT(...) fprintf(stderr, __VA_ARGS__)
   #define DBGLOC(fmt,...) fprintf(stderr, "%s:%d " fmt, __FILE__,__LINE__,## __VA_ARGS__)
@@ -16,7 +17,7 @@
   #define PHEX(...)
   #define DBGBLK(...)
   #define JGMDPRT(...)
-  #define DBGDO(l,...)
+  #define DBGDO(l,...)        // Note You still need the arglist here to gobble up what is in the code
 #endif
 /* Note that in the PHEX, the value is in a fixed width field so things line up on the left. The descr is on the right.
  */

@@ -1,7 +1,10 @@
 generate   1000000
 produce    500
 seed 23
-title " Game With A Fit -- vs HCP "
+title " Game With A Fit -- vs HCP Using Scripting Feature "
+
+# On the command line use -0 to spec hcp, and -1 to spec size of heart fit.
+# e.g. dealerv2 -0 23 -1 9 Descr.EV_IMP_scr
 #
 condition ( hcp(east)+hcp(west) == $0 )
           && ( hearts(west)+hearts(east) == $1 )
@@ -10,7 +13,7 @@ condition ( hcp(east)+hcp(west) == $0 )
 action
          average " Hearts * 1000 + hcp " ($1)*1000+($0) ,
          evalcontract ( EW , z2H  , vul ),
-#         evalcontract ( EW , z4H  , vul ),
+         evalcontract ( EW , z4H  , vul ),
 #         printrpt( EW ,dds(west,hearts) )
 
   // Sample Output:

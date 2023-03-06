@@ -172,7 +172,8 @@ void action () {            /* For each 'Interesting' deal, Walk the action_list
           printpbn (nprod, curdeal);
         break;
       case ACT_PRINT:
-        memcpy (deallist[nprod], curdeal, sizeof (deal));  /*save curdeal in malloc'ed area for later printing */
+        memcpy (deallist+nprod, curdeal, sizeof (deal));  /*save curdeal in malloc'ed area for later printing */
+        JGMDPRT(6,"nprod=%d,dealsize=%ld,@deallist[0]=%p,@deal_dest=%p\n",nprod,sizeof(deal),(void *)deallist, (void *)(deallist+nprod) );
         break;
       case ACT_AVERAGE:  /* mods by JGM to a) have a running avg, and b) include Variance as well as avg in final rpt */
         expr = evaltree (acp->ac_expr1);   /* calculate the expr we are averaging */
@@ -380,7 +381,7 @@ void cleanup_action () {  /* this also does the end-of-run actions like FREQUENC
           if (title_len > 0 ) { printf("%s\n", title ) ; }
           printf ("\n%s hands:\n\n", player_name[player]);
           for (i = 0; i < nprod; i += 4)  /* print hands 4 across at a time. */
-                printhands (i, deallist + i, player, nprod - i > 4 ? 4 : nprod - i);
+                printhands (i, deallist+i, player, nprod - i > 4 ? 4 : nprod - i);
           printf ("\f"); /* end each player with a form feed */
         }  /* end for player */
         break;
@@ -518,22 +519,24 @@ void printdeal (deal d) {   /* the PRINTALL action. Print All 4 hands on the fly
 
     /* The print(compass list) action: print a given player's hands done at action_cleanup time*/
     /* 'n-hands' across at a time (n=4 usually) from an array of hands saved during the generation phase */
-void printhands (int boardno, deal * dealp, int player, int nhands) {
+void printhands (int boardno, deal *dealp, int player, int nhands) {
 
   int i, suit, rank, cards;
+  JGMDPRT(6,"printhands called with boardno=%d, player=%d, nhands=%d, dealptr=%p \n",boardno,player,nhands,(void *)dealp);
   for (i = 0; i < nhands; i++)
     printf ("%4d.%15c", boardno + i + 1, ' '); /* print board number as a heading */
   printf ("\n");
   for (suit = SUIT_SPADE; suit >= SUIT_CLUB; suit--) {
-    cards = 10;
+    cards = 10;  /* left justify the first hand */
     for (i = 0; i < nhands; i++) {
-      while (cards < 10) {
+       JGMDPRT(6,"hand=%d,dealp=%p\n",i,(void *) &dealp[i] );
+      while (cards < 10) {  /* spaces until next hand column */
         printf ("  ");
         cards++;
       }
       cards = 0;
-      for (rank = 12; rank >= 0; rank--) {
-        if (HAS_CARD (dealp[i], player, MAKECARD (suit, rank))) {
+      for (rank = 12; rank >= 0; rank--) { /* call the slow version of hascard since the handstat array not current */
+        if (hasKard (dealp[i], player, MAKECARD (suit, rank))) {
           printf ("%c ", ucrep[rank]);
           cards++;
         }
@@ -579,9 +582,9 @@ void printside (deal d, int side ) {  /* JGM Replacement for printew to allow NS
           cards++;
         }
         cards = 0;   /* reset card count for this player */
-        /* go thru the whole suit checking to see if the player has a card of each rank. */
-        /* since HAS_CARD scans a 13 slot portion of the deal, we will have 2*4*13*13 probes of the deal array */
-        /* worst case; on average 4*13*13 = 676 probes of the deal array per hand printed */
+         /* HAS_CARD now just checks the Has_card[][] array in handstat. avoids the
+          *  on average 4*13*13 = 676 probes of the deal array per hand printed
+          */
         for (rank = 12; rank >= 0; rank--) {
             if (HAS_CARD (d, player, MAKECARD (suit, rank))) {
             printf ("%c ", rank_ids[rank]);
@@ -947,3 +950,5 @@ void printhands_pbn( FILE *fp, int mask, deal d ) {   // No newline at end of pr
   fprintf(fp, "%s",pbn_buff ) ; /* no newline at this point. */
 
 } /* end printhands_pbn */
+
+
