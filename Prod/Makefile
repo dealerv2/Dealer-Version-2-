@@ -48,7 +48,7 @@ uninstall:
 	sudo ../Un_install_dealer.bash
 
 showme:
-	@echo DestDir = $(DESTDIR) JGMDBG = $(JGMDBG) PROGRAM = $(PROGRAM)
+	@echo DestDir = $(DESTDIR) JGMDBG =[ $(JGMDBG)]  PROGRAM = $(PROGRAM)
 	@echo CC=$(CC) $(CFLAGS) $(LDFLAGS)
 	@echo CXX=$(CXX) $(CXXFLAGS) $(LDFLAGS)
 	@echo BISON SRC= $(YSRC) OBJ= $(YOBJ)
