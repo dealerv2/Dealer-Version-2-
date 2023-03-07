@@ -3,7 +3,7 @@ produce    100
 # Run this with -M2 since there are several calls to dds on the same deal.
 seed 117
 
-title " Eval Contract, Par, Freq2D, Tricks, Score NS 21-24hcp"
+title " Eval Contract, Par, Freq2D, Tricks, Score NS 21-24hcp ** NEW Strain Limit removed"
 condition ( (hcp(north)+hcp(south)) >= 21 && (hcp(north)+hcp(south)) <= 24 )
 
 DDSNS=dds(south,notrump)
@@ -13,10 +13,10 @@ Par_NS = par (NS )
 
 
 action
-         evalcontract ( NS , z2Nx , vul ),
-         evalcontract ( NS , z3Sxx, nv  ),
+         evalcontract ( NS , z2Nx , vul ), evalcontract ( NS , z3N , vul ),
+         evalcontract ( NS , z3Sxx, nv  ), evalcontract ( NS , z4S, nv  ),
          evalcontract ( NS , z3D,   vul ),
-         evalcontract ( EW , z3Hx , nv  ),
+         evalcontract ( EW , z3Hx , nv  ), evalcontract ( EW , z4H , nv  ),
          average "Par NS      = " Par_NS,
          average "ScoreNS_2NTx= " ScoreNS_2NTx,
          average "ScoreNS_1NT = " ScoreNS_1NT,

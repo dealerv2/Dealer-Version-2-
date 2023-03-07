@@ -2,6 +2,7 @@
 ### This is François Dellacherie's orginal (1997) Readme file for his pre-processor which he called DPP.
 ### JGM has renamed from 'dpp' to 'fdp' to give credit where it is due.
 ### JGM has added a couple of extra explanations at the end of FD's original text.
+###  --- This file is included to give credit to Francois by preserving his original documentation ---
 ###########################################################################################################
 
 ### DPP README ###
