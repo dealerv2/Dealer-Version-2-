@@ -576,3 +576,23 @@ int make_test_evals(struct detailed_res_st *p_ures) {
    return 64 ;
 }
 
+/* Check if we have the controls for a NT slam; we are not considering shortness as a control in this routine. *
+ * Note that this is a rudimentary check; to see if we have one (or more) uncontrolled suits
+ */
+#define NOT_OK 0
+#define OK 1
+int NT_slam_ok (HANDSTAT_k *phs[2] ) {
+   int s;
+   int first_ctls = 0 ;
+   int sec_ctls   = 0 ;
+   for (s=CLUBS; s<=SPADES ; s++ ) {
+      if (phs[0]->hs_control[s] == 0 && phs[1]->hs_control[s] == 0 ) { return NOT_OK ; }
+      if (phs[0]->hs_control[s] >= 2 || phs[1]->hs_control[s] >= 2 ) { first_ctls++ ; continue ; }
+      sec_ctls++ ;
+   }
+   if ( first_ctls == 4 ) { return OK ; }
+   if ( first_ctls <  3 ) { return NOT_OK ; }
+   if ( first_ctls == 3 && sec_ctls == 0 ) { return NOT_OK ; }
+   return OK ; /* 3 suits with at least first round control, and 4th suit with second round control */
+} /* end NT_slam_ok */
+

@@ -4,7 +4,7 @@
 # 2022/12/13 --  First Draft
 # 2023/01/26 JGM Added KnR.c and .o
 
-# JGMDBG := 1
+JGMDBG := 1
 
 CC      = gcc
 CFLAGS = -std=gnu17 -mtune=corei7 -flto -fopenmp -pthread -Wall -pedantic  -I../include

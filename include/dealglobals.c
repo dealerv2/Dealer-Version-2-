@@ -37,11 +37,11 @@ int progressmeter = 0;         /* -m */   /* this is a toggle option */
 int Opener = COMPASS_WEST;     /* -O: */  /* flex action clause  0=north (or east) 1=east(or north) 2=south(or west) 3=west(or south) */
 char opc_opener = 'W' ;                   /* define one so that extern will be happy. Dont want to extern a struct memb*/
 int maxproduce = 0     ;       /* -p: */  /* flex action clause Must be zero for Flex to process the input file value*/
-int quiet = 0 ;                /* -q */
+int quiet = 0 ;                /* -q */   /* option for pbn printout */
 long seed  = 0 ;               /* -s: */ /* seed can now be set in Input File */
 long seed_provided = -1  ;
 int uppercase = 0 ;            /* -u */
-int verbose = 1;               /* -v */
+int verbose = 1;               /* -v */   /* end of run stats. Default is to print them */
 int swapping = 0 ;             /* -x [0|2|3] Zero turns off swapping*/
 int swapindex = 0;
 int errflg = 0;
@@ -62,11 +62,13 @@ FILE *fexp;      /* -X file for exporting to; Normally NOT left as stdout except
 FILE *fcsv;      /* -C file for csvreport. Open in append mode unless user puts w:filename */
 /* -U Path name for the UserEval binary. Default is UserServer in the current directory. Can be set by -U cmd line parm
  * -U Must be full pathname. ../src/MyUserPgm will NOT work.
- * Instead: /home/author/Programming/Bridge_SW/JGMDealer/deal_v5/src    (56 chars long )
+ * Instead: /usr/local/bin/DealerV2/UserEval/DealerServer  or /home/MyUser/MyDir/MySubDir/MyUserPgm
  */
 char server_dir[SERVER_PATH_SIZE+1]  = "/home/greg19/Programming/Bridge_SW/JGMDealer/deal_v5/UserEval";
+//char server_dir[SERVER_PATH_SIZE+1]  = "/usr/local/bin/DealerV2/UserEval"; // The user's current directory
 char server_pgm[64]   = "DealerServer"; /* In the current directory. or user sets path name via -U switch */
-char server_path[SERVER_PATH_SIZE+1] = "/home/greg19/Programming/Bridge_SW/JGMDealer/deal_v5/UserEval/DealerServer";
+// char server_path[SERVER_PATH_SIZE+1] = "/usr/local/bin/DealerV2/UserEval/DealerServer";
+char server_path[SERVER_PATH_SIZE+1]  = "/home/greg19/Programming/Bridge_SW/JGMDealer/deal_v5/UserEval/DealerServer";
 pid_t userserver_pid = 0 ;
 
 int dbg_dds_lib_calls = 0;

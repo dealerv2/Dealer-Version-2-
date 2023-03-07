@@ -14,6 +14,7 @@
 // 2022/10/18  2.5.0  Fixed some bugs in C4.c; begin user_eval functionality
 // 2022/11/07  2.5.0  usereval functionality coded; testing to do.
 // 2023/01/07  2.5.2a Merged in changes from V4 to fix predeal; Shuffle, dealcards_subs.c and globals, etc.
+// 2023/03/07  2.5.3  Fixes to printcompass, and documentation
 //
 #ifndef _GNU_SOURCE
   #define _GNU_SOURCE

@@ -126,6 +126,12 @@ extern char export_buff[64] ;
 /* table that converts a score diff to IMPs */
  extern int imp_tbl[24] ;
 
+/* Global Vars to launch DealerServer daemon */
+extern char server_dir[] ;    /* Path to the distro version */
+extern char server_pgm[] ;    /* Default DealerServer in the current directory. or user sets path name via -U switch */
+extern char server_path[];    /* path set by the -U switch. Should begin with a SLASH not a DOT */
+pid_t userserver_pid  ;
+
  /* some debugging stuff */
 extern int      treelev;                /* the level we are at in the decision tree */
 extern int      showtree;               /* default to show it if in DBG mode */
@@ -144,3 +150,4 @@ extern int dbg_userserver_extcalls ;
 extern int dbg_userserver_askquery ;
 
 #endif /* ifndef DEALEXTERNS_H */
+

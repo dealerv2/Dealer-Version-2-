@@ -10,5 +10,6 @@ condition ctlsN < 4 and ctlsEH != 2 and loserW < 8 and loserSC == 1
 
 #asked for hands are always printed as follows: all the north, all the east, all the south then all the west.
 # no matter what order you spec in the print statement. So this next statement prints all the north, then all south
+# the printns and printew actions are done during the run, the print (compass-list) action is done at the end of run.
 
-action print (south, north, west, east )
+action print (south, north, west, east ),printns,printew

@@ -3,7 +3,7 @@
 /* 2022-03-07 Fine tune Debug levels */
 /* 2022-10-27 Add -U option for userserver path */
 /* This file should NOT be compiled independently. #inlcude it in dealerv2.c */
-#if 1                            /* change to 0 when not testing */
+#if 0                            /* change to 0 when not testing */
 #include "../include/std_hdrs.h"  /* all the stdio.h stdlib.h string.h assert.h etc. */
 
 #include "../include/dealdefs.h"
@@ -198,7 +198,7 @@ int get_options (int argc, char *argv[], struct options_st *opts) {
         opts->seed_provided = 1;                seed_provided = opts->seed_provided;
         opts->seed = atol( optarg );            seed          = opts->seed;
         if (seed == LONG_MIN || seed == LONG_MAX) {
-            fprintf (stderr, "Seed overflow: seed must be between %ld and %ld\n",
+            fprintf (stderr, "Seed overflow: seed must be greater than %ld and less than %ld\n",
               LONG_MIN, LONG_MAX);
             exit (-1);
         }

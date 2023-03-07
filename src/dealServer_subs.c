@@ -345,7 +345,13 @@ pid_t create_server(int mm_fd, char *userserver_path) {
 
       int exe_rc = execve( userserver_path, args, NULL ) ;  /* Start the server */
                            /* Not Reached if execve is successful */
-      if ( exe_rc < 0 ) { die("execve of server path FAILED") ; }
+      if ( exe_rc < 0 ) {
+         fprintf(stdout, "Exec call of %s FAILED!! \n",userserver_path);
+         fprintf(stdout, "Try copying DealerServer binary to your working directory; set exec permissions and re-run\n");
+         fprintf(stdout, "The distribution copy of DealerServer is in %s \n",server_dir);
+         fprintf(stdout, "Or you can set the __complete__ pathname (begin with SLASH not DOT) to your DealerServer via the -U option.\n");
+         die("execve of server path FAILED") ;
+      }
       /* NOT REACHED */
     } /* end in child server_pid == 0 */
    /* in parent; server started, resume our own work */
