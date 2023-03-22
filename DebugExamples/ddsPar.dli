@@ -1,0 +1,8 @@
+generate   10000
+produce    200
+title " Checking DDS Par Timing 200 Hands One Call to DDS"
+#condition dummy
+
+action
+#    printrpt(NS , par(NS) ),
+    average "Par NS = " par(NS)

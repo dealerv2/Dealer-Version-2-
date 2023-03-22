@@ -64,7 +64,7 @@ int eval_cccc (int seat) {
   int Shorts = 0 ; /* JGM 2023. Count voids and stiffs */
 
   int suit;
-  JGMDPRT(3,"C4 START for SEAT=%d \n", seat) ;
+  JGMDPRT(7,"C4 START for SEAT=%d \n", seat) ;
   /* For each suit.... */
   for (suit = SUIT_CLUB; suit <= SUIT_SPADE; ++suit) {
     eval = 0;   pakq = 0 ;  pjt = 0 ;
@@ -73,7 +73,7 @@ int eval_cccc (int seat) {
     QualityPoints = 0 ; /* QualityPoints in this suit */
 
     int Length = hs[seat].hs_length[suit];
-    JGMDPRT(3,"C4 for seat=%d, suit=%d : %c, length=%d \n", seat, suit, "CDHS"[suit], Length) ; //4
+    JGMDPRT(8,"C4 for seat=%d, suit=%d : %c, length=%d \n", seat, suit, "CDHS"[suit], Length) ; //4
 
     int HasAce   = HAS_CARD2 (suit, RK_ACE);
     int HasKing  = HAS_CARD2 (suit, RK_KING);
@@ -81,7 +81,7 @@ int eval_cccc (int seat) {
     int HasJack  = HAS_CARD2 (suit, RK_JACK);
     int HasTen   = HAS_CARD2 (suit, RK_TEN);
     int HasNine  = HAS_CARD2 (suit, RK_NINE);
-    JGMDPRT(7,"A=%d,K=%d,Q=%d,J=%d,T=%d,Nine=%d\n",HasAce,HasKing,HasQueen,HasJack,HasTen,HasNine ) ;
+    JGMDPRT(8,"A=%d,K=%d,Q=%d,J=%d,T=%d,Nine=%d\n",HasAce,HasKing,HasQueen,HasJack,HasTen,HasNine ) ;
 
     /* Honors Points. A=3, K=2, Q=1 ; J, T, 9 depend on other higher cards */
     if (HasAce) {
@@ -95,7 +95,7 @@ int eval_cccc (int seat) {
       if (Length == 1) pakq -= 150;  /* Stiff K worth only 0.5 plus 2 pts for the stiff added later*/
       HigherHonors++;               // HigherHonors counts A and K at this point.
     } /* end HasKing */
-    JGMDPRT(7,"Has_KING=%d, pakq_321Pts=%d High_Honors=%d\n", HasKing, pakq,HigherHonors) ;
+    JGMDPRT(8,"Has_KING=%d, pakq_321Pts=%d High_Honors=%d\n", HasKing, pakq,HigherHonors) ;
 
     if (HasQueen) {  // Stiff Q=0; AQ or KQ, -> Q=0.5 ; QJ/QT/Qx ->  Q = 0.25
          /* Stiff Q gets zero 321 points */
@@ -105,7 +105,7 @@ int eval_cccc (int seat) {
         if (Length >= 3 && HigherHonors >  0)  pakq += 100 ;    // AQx(x), KQx(x), AKQ(x) Q is worth 1.0
         HigherHonors++;                                        // HigherHonors now includes the Q.
     } /* end HasQueen */
-    JGMDPRT(7,"Has_Queen=%d, pakq_321Pts=%d High_Honors=%d\n", HasQueen, pakq, HigherHonors) ;
+    JGMDPRT(8,"Has_Queen=%d, pakq_321Pts=%d High_Honors=%d\n", HasQueen, pakq, HigherHonors) ;
     eval += pakq ;
 
     if (HasJack) {
@@ -113,15 +113,15 @@ int eval_cccc (int seat) {
         if (HigherHonors == 1) pjt += 25;
         HigherHonors++;                                        // HigherHonors now includes the J.
     } /* end HasJack */
-    JGMDPRT(7,"Has_Jack=%d, pjt_H_Pts=%d High_Honors=%d\n", HasJack, pjt,HigherHonors) ;
+    JGMDPRT(8,"Has_Jack=%d, pjt_H_Pts=%d High_Honors=%d\n", HasJack, pjt,HigherHonors) ;
 
     if (HasTen ) { /* Count all Tens even in long suits for this part  */
         if ( HigherHonors == 2)             pjt += 25;
         if ((HigherHonors == 1) && HasNine) pjt += 25;
     } /* end HasTen */
-    JGMDPRT(7,"Has_Ten=%d, pjt_H_Pts=%d High_Honors=%d\n", HasTen, pjt,HigherHonors) ;
+    JGMDPRT(8,"Has_Ten=%d, pjt_H_Pts=%d High_Honors=%d\n", HasTen, pjt,HigherHonors) ;
     eval += pjt ;
-    JGMDPRT(7,"High Card suit pts=%d from AKQ=%d,+ JT=%d \n", eval , pakq, pjt ) ;
+    JGMDPRT(8,"High Card suit pts=%d from AKQ=%d,+ JT=%d \n", eval , pakq, pjt ) ;
    /*
     * Calculate suit Quality for this suit
     */
@@ -131,7 +131,7 @@ int eval_cccc (int seat) {
     else { QualityPoints = 0 ; }
     eval += QualityPoints;
 
-    JGMDPRT(3,"Qual=%d,  New suitEval=%d \n", QualityPoints ,eval ) ;
+    JGMDPRT(7,"Qual=%d,  New suitEval=%d \n", QualityPoints ,eval ) ;
 
     switch (Length) {
        case 0 : ShapePoints = 300 ; Shorts++; break ;
@@ -149,7 +149,7 @@ int eval_cccc (int seat) {
 
     /* Test for 4333 */
   if ( hs[seat].square_hand == 1 )  { toteval -= 50 ; }
-  JGMDPRT(6,"C4 END SEAT[%d] TotEval=%d, square=%d\n\n",seat, toteval, hs[seat].square_hand ) ;
+  JGMDPRT(7,"C4 END SEAT[%d] TotEval=%d, square=%d\n\n",seat, toteval, hs[seat].square_hand ) ;
 
   assert ((toteval % 5) == 0); /* KnR pts go in steps of 0.05 always */
   return (toteval);
@@ -162,7 +162,7 @@ int suit_quality (int seat, int suit) {
   int HigherHonors = 0;
 
   int Length = hs[seat].hs_length[suit];
-  JGMDPRT(7,"Quality :: suit=%d, Length=%d, seat=%d \n", suit, Length, seat);  //4
+  JGMDPRT(8,"Quality :: suit=%d, Length=%d, seat=%d \n", suit, Length, seat);  //4
 
   int HasAce   = HAS_CARD2 (suit, RK_ACE);      /* JGM Mod; HAS_CARD2 now just accesses hs[seat].Has_card[s][r] */
   int HasKing  = HAS_CARD2 (suit, RK_KING);
@@ -176,7 +176,7 @@ int suit_quality (int seat, int suit) {
   if (HasAce) {
       qhcp += 400 ;
       HigherHonors++;
-      JGMDPRT(3,"Quality ::Ace qhcp=%d HighHonors=%d\n", qhcp,HigherHonors) ;
+      JGMDPRT(8,"Quality ::Ace qhcp=%d HighHonors=%d\n", qhcp,HigherHonors) ;
    }
 
   /*KING*/
@@ -202,7 +202,7 @@ int suit_quality (int seat, int suit) {
    /* Ten */
      if (HasTen) {      /* All Tens count for at least 0.5; some tens count more see later */
       qhcp += 50;
-      JGMDPRT(3,"Quality ::Ten qhcp=%d HighHonors=%d\n", qhcp,HigherHonors) ;
+      JGMDPRT(8,"Quality ::Ten qhcp=%d HighHonors=%d\n", qhcp,HigherHonors) ;
    }
 
 /* This next bit adds Q and/or J equivalent in 7+ suits even if the honor is not present. ReDone to suit me JGM */
@@ -223,7 +223,7 @@ int suit_quality (int seat, int suit) {
         if ( (HigherHonors > 1) || HasJack ) { qhcp += 50 ; }       // Ten with J or with 2+ is worth 1 else worth 0.5
      }
      if (HasNine && ( HigherHonors == 2 || HasEight || HasTen ) ) { qhcp += 50 ; }
-      JGMDPRT(7,"qhcp :: with Ten & 9 adjustment= %d suit len = %d \n",qhcp, Length ) ;
+      JGMDPRT(8,"qhcp :: with Ten & 9 adjustment= %d suit len = %d \n",qhcp, Length ) ;
    } /* end Length <= 6 */
    Quality = qhcp * Length/10 ;
    JGMDPRT(7,"Suit[%d:%c] Final Quality Pts=%d Length=%d, qhcp=%d\n", suit, "CDHS"[suit],  Quality, Length,qhcp) ;

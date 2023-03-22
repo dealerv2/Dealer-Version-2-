@@ -7,6 +7,7 @@
 # 2022/11/15 -- added usereval_subs.c as a pre-req for dealer. Also added UserEval (the server) as a target.
 # 2022/12/13 -- renamed usereval_subs.c to dealServer_subs.c; added UserEval sub-dir
 # 2023/01/07 -- Merged in changes from V4 to fix predeal; dealcards_subs.c and globals, etc.
+# 2023/03/14 -- Added dealrpdd_subs and dealinit_subs to requirements
 
 
 CC      = gcc
@@ -24,15 +25,15 @@ PROGRAM  = dealerv2
 FLEX    = flex
 YACC    = bison -d
 
-SRCS  = ../src/dealaction_subs.c ../src/dealdds_subs.c ../src/dealdebug_subs.c ../src/dealeval_subs.c ../src/dealcard_subs.c
-SRCS += ../src/dealparse_subs.c ../src/Dealer_DDS_IF.c ../src/c4.c ../src/deal_bktfreq_subs.c
-SRCS += ../src/dealServer_subs.c ../src/dealerv2.c
-
+SRCS  = ../src/c4.c ../src/dealaction_subs.c ../src/dealcard_subs.c ../src/deal_bktfreq_subs.c
+SRCS += ../src/dealdds_subs.c ../src/dealdebug_subs.c ../src/dealeval_subs.c ../src/dealinit_subs.c
+SRCS += ../src/dealparse_subs.c  ../src/dealrpdd_subs.c ../src/dealServer_subs.c  ../src/Dealer_DDS_IF.c
+SRCS += ../src/dealerv2.c
 OBJS = $(patsubst ../src/%.c,%.o,$(SRCS) ) dealglobals.o dealflex.o dealyacc.tab.o
 
 HDR  = ../include/allheaders.h ../include/dbgprt_macros.h
 # Need to link with g++ because libdds library was built with c++
-dealerv2: ${OBJS}
+dealerv2: ${OBJS} ${HDR}
 	$(CXX) $(CXXFLAGS) -o $@ ${OBJS}  $(LDFLAGS)
 
 allheaders :
@@ -48,9 +49,9 @@ uninstall:
 	sudo ../Un_install_dealer.bash
 
 showme:
-	@echo DestDir = $(DESTDIR) JGMDBG =[ $(JGMDBG)]  PROGRAM = $(PROGRAM)
-	@echo CC=$(CC) $(CFLAGS) $(LDFLAGS)
-	@echo CXX=$(CXX) $(CXXFLAGS) $(LDFLAGS)
+	@echo DestDir = $(DESTDIR) JGMDBG = [ $(JGMDBG)] PROGRAM = $(PROGRAM)
+	@echo CC=$(CC) CFLAGS=$(CFLAGS) LDFLAGS=$(LDFLAGS)
+	@echo CXX=$(CXX) CXXFLAGS=$(CXXFLAGS) LDXFLAGS=$(LDFLAGS)
 	@echo BISON SRC= $(YSRC) OBJ= $(YOBJ)
 	@echo FLEX  SRC= $(LSRC) OBJ=$(LOBJ)
 	@echo
@@ -101,9 +102,5 @@ dealglobals.o : ../include/dealglobals.c $(HDR)
 dealServer_subs.o : ../src/dealServer_subs.c ../include/mmap_template.h $(HDR)
 	$(CC) $(CFLAGS) -o $@ -c $<
 
- objects : $(OBJS)
+objects : $(OBJS)
 
-user_eval.o : ../src/user_eval.c  ../include/mmap_template.h
-	$(CC) $(CFLAGS) -o $@  -c $<
-UserEval : user_eval.o
-	$(CC) $(CFLAGS) -o $@  $<

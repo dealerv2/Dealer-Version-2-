@@ -6,6 +6,7 @@
 # 2022/11/12 -- added usereval_subs.c as a pre-req for dealer. Also added UserEval (the server) as a target.
 # 2022/12/13 -- renamed usereval_subs.c to dealServer_subs.c; added UserEval sub-dir
 # 2023/01/07 -- Merged in changes from V4 to fix predeal; dealcards_subs.c and globals, etc.
+# 2023/03/14 -- Added dealrpdd_subs and dealinit_subs to requirements
 
 JGMDBG := 1
 CC      = gcc
@@ -28,14 +29,15 @@ endif
 FLEX    = flex
 YACC    = bison -d
 
-SRCS  = ../src/dealaction_subs.c ../src/dealdds_subs.c ../src/dealdebug_subs.c ../src/dealeval_subs.c ../src/dealcard_subs.c
-SRCS += ../src/dealparse_subs.c ../src/Dealer_DDS_IF.c ../src/c4.c ../src/deal_bktfreq_subs.c
-SRCS += ../src/dealServer_subs.c ../src/dealerv2.c
+SRCS  = ../src/c4.c ../src/dealaction_subs.c ../src/dealcard_subs.c ../src/deal_bktfreq_subs.c
+SRCS += ../src/dealdds_subs.c ../src/dealdebug_subs.c ../src/dealeval_subs.c ../src/dealinit_subs.c
+SRCS += ../src/dealparse_subs.c  ../src/dealrpdd_subs.c ../src/dealServer_subs.c  ../src/Dealer_DDS_IF.c
+SRCS += ../src/dealerv2.c
 OBJS = $(patsubst ../src/%.c,%.o,$(SRCS) ) dealglobals.o dealflex.o dealyacc.tab.o
 
 HDR  = ../include/allheaders.h ../include/dbgprt_macros.h
 # Need to link with g++ because libdds library was built with c++
-dealdbg: ${OBJS}
+dealdbg: ${OBJS} ${HDR}
 	$(CXX) $(CXXFLAGS) -o $@ ${OBJS}  $(LDFLAGS)
 
 allheaders :

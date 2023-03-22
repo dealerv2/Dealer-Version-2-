@@ -1,0 +1,17 @@
+generate   10000
+produce    2
+seed 17
+title "Test All Print Actions  "
+ctlsN  = controls(north)
+ctlsEH = control(east, hearts)
+loserW = losers(west)
+loserSC= loser(south, clubs)
+
+# condition ctlsN < 4 and ctlsEH != 2 and loserW < 8 and loserSC == 1
+
+# all the possible print statements for hands; omitting printrpt
+
+action print (south, north, west, east ),
+printes(\n,"----- New Deal -----",\n), printns,printew,printoneline,printcompact,printall,printpbn,
+ printes("Controls North= ", ctlsN,\n,"Re-do printns with printside(NS)",\n), printside( NS ),
+ printes("Re-do printew with printside(EW)",\n),printside( EW ),

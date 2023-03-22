@@ -1,0 +1,14 @@
+seed 37 
+title "Controls in a strong balanced hand"
+# This example calculates the frequency of controls (A=2, K=1) in a
+# strong balanced hand
+
+condition
+	shape(north, any 4333 + any 4432 + any 5332) and
+		hcp(north)>=20 and hcp(north)<=22
+
+produce 
+	10000
+
+action
+	frequency "controls" (control(north), 0, 12)

@@ -1,0 +1,48 @@
+0
+struct mmap_hdr_st {  /* should be fairly static over the course of the run */
+   char map_name[32] ;
+   void *query_descr_ptr ;  
+   void *dealer_area_ptr ;
+   void *dealer_handstat_ptr ;
+   void *eval_area_ptr ; 
+   void *eval_results_ptr; 
+
+} ; 
+struct query_descr_st {
+   char query_tag ; /* so we know which evaluation to perform if eval implements more than one. */
+   short int q_side[2] ; /* set to 1 if we want eval for this side; 0 if not */
+   short int q_seat[4] ; /* set to 1 if we want eval for this seat; Note that side[0] will force seat[0]&seat[2] ; ditto */
+   char deal52[52]     ; /* the hands sorted low to high with one card per slot in Dealer representation */
+} ;  
+                           /*  */
+struct dealer_hdr_st { char dealer_area_name[32] ; }
+struct dealer_values {
+   struct handstat_st dhs[4] ;
+/* other input data not included in handstat goes here... */
+};
+struct eval_hdr_st { char eval_area_name[32] ; }                               /* 1560 bytes total */
+struct reply_data_st {
+   struct results_st qhr[2];        /* one result struct per side */
+} ;                               
+
+struct results_st {
+    char descr[15] ; /* 15 so as to keep alignment */
+    char  u_tag ; /* so recipient knows what fmt Union written with and can use in a switch statement*/
+    union {
+      struct {
+         short  int  Hs[4][4]   ;   // North[Cl, Di, He, Sp] : East[Cl, Di, He, Sp] : S[...] : W[...]
+         short  int  Hand_tot[4];
+         short  int  Ss[2][5]   ;  // NS[Cl, Di, He, Sp, NT] : EW[Cl, Di, He, Sp, NT]
+         short  int  Side_tot[2];  // NS, EW ; not really a total of above just the final evaluation for the side.
+             } dl ;                // Only 32 ints even though the union is 64 ints.
+      struct {             /* first the ones that need only one hand hence on a per hand basis*/
+               short int hcp_nd[4], hcp_n, hcp_sd[4], hcp_s, len_nd[4], len_n, len_sd[4], len_s,
+                         syq_nd[4], syq_n, syq_sd[4], syq_s, rich_n, rich_s, sq_n, sq_s, tot_n, tot_s ;  //36 ints
+                         /* 2nd the ones that need both hands, hence on a per side basis */
+               short int fn_d[4], fn, HfDm_d[4], HfDm, waste_d[4], waste, Dfit[4] , Dfit_l, NT_ded, mirror, tot_NS ; //59
+               short int spare[5] ;
+             } f;                /* the 'Factors' struct. */
+      short int v[64] ;       /* generic access to any int in the above */
+      char buf[128]   ;       /* generic access to any byte in the above */
+   } u ;
+} ;   /* syntax <varname>.u.dl.Hs[compass][suit] or <varname>.u.f.hcp_nd[suit] ...  size = 144*/

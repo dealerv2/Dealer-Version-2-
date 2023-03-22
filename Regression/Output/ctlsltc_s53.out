@@ -1,0 +1,57 @@
+Ctls N=1 Ctls E(H)=1 Loser S(C)=1 losers W=7
+                  [ Checking Losers and Controls  ]
+   1. North              East                South               West 
+     T 9 5               A 8 7 4 3           J 2                 K Q 6 
+     T 9 3               K 8                 A J 7 5 4           Q 6 2 
+     Q 6                 J 4 2               A T 9 8 7           K 5 3 
+     K 9 6 4 2           A J 8               5                   Q T 7 3 
+
+Ctls N=2 Ctls E(H)=1 Loser S(C)=1 losers W=7
+   2. North              East                South               West 
+     6                   J 9 5 4             A K 7               Q T 8 3 2 
+     A T 8 7 4 3         K J 5               9                   Q 6 2 
+     J T 9               A 5 2               K Q 6               8 7 4 3 
+     5 3 2               8 6 4               K Q J T 9 7         A 
+
+Ctls N=3 Ctls E(H)=0 Loser S(C)=1 losers W=6
+   3. North              East                South               West 
+     J 3                 K 7 5 4             A 9 8 6 2           Q T 
+     A K 6 3 2           Q J T 9 7 5         4                   8 
+     6 5                 T                   K J 9 3             A Q 8 7 4 2 
+     T 8 4 2             6 5                 K Q 9               A J 7 3 
+
+Ctls N=0 Ctls E(H)=0 Loser S(C)=1 losers W=7
+   4. North              East                South               West 
+     Q 9 2               7 6                 A 8 3               K J T 5 4 
+     9 8 7 5 3           Q J 4               T                   A K 6 2 
+     T 9 7 3             8 6 5               A K Q               J 4 2 
+     J                   Q T 7 6 5           A K 9 8 4 2         3 
+
+Ctls N=0 Ctls E(H)=3 Loser S(C)=1 losers W=6
+   5. North              East                South               West 
+     Q J T 7             A K 8 6 5 4 3 2     9                   - 
+     Q 9 2               A K T 5             J 7 3               8 6 4 
+     Q T 7 6 2           -                   J 8                 A K 9 5 4 3 
+     7                   8                   A Q T 6 5 4 2       K J 9 3 
+
+Ctls N=1 Ctls E(H)=1 Loser S(C)=1 losers W=7
+   6. North              East                South               West 
+     J 5 2               T 4                 K Q 7 6 3           A 9 8 
+     Q J 8 6 5 4         K T 9 3             A 2                 7 
+     -                   Q T 9 7 6           A 8 4 3 2           K J 5 
+     K 8 5 4             A 3                 9                   Q J T 7 6 2 
+
+Ctls N=3 Ctls E(H)=0 Loser S(C)=1 losers W=4
+   7. North              East                South               West 
+     8 2                 T                   K 6 5 4             A Q J 9 7 3 
+     A K 5 4             9 6                 T 8 7 3 2           Q J 
+     J 8 3               T 7 5 4             9 2                 A K Q 6 
+     Q J 9 4             A T 8 7 3 2         K 6                 5 
+
+Ctls N=2 Ctls E(H)=3 Loser S(C)=1 losers W=7
+   8. North              East                South               West 
+     A 6                 K 4                 T 9 5               Q J 8 7 3 2 
+     Q                   A K J 8 4 2         7 6 5 3             T 9 
+     J 9 5 4             A K                 Q 7 6 3 2           T 8 
+     J 9 8 6 4 3         K T 5               2                   A Q 7 
+

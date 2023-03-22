@@ -1,0 +1,23 @@
+seed 179 
+#
+# This example creates hands in PBN format
+#
+title "Testing pbn format output "
+produce 4
+#
+# Dealer and Vulnerability of the simulated problem
+#
+vulnerable all
+dealer north
+
+#
+title "West Big Club; Both Vul; North Deals"	
+west1c = hcp(west)>16
+
+east1h = hcp(east)>7 && control(east)<3
+
+condition	
+        west1c and east1h
+action 
+        printpbn
+

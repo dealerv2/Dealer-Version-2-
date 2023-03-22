@@ -152,7 +152,7 @@
     else if (strchr(s, 's' ) || strchr(s, 'S') ) { return VULNERABLE_NS   ; }
     else if (strchr(s, 'w' ) || strchr(s, 'W') ) { return VULNERABLE_EW   ; }
     else if (strchr(s, 'a' ) || strchr(s, 'A') ) { return VULNERABLE_ALL  ; }
-    else if (strchr(s, 'b' ) || strchr(s, 'B') ) { return VULNERABLE_NS   ; }
+    else if (strchr(s, 'b' ) || strchr(s, 'B') ) { return VULNERABLE_ALL  ; }
     return VULNERABLE_NONE ; /* default to none */
  } /* end vul2int*/
 

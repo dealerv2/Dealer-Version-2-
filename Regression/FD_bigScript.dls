@@ -1,0 +1,13 @@
+# File FD_bigScript.dls by JGM
+title " Scripting of Complex Francois Shapes  "
+
+generate 2000
+produce 8
+seed 233
+action
+    printoneline
+
+condition
+ (shape{$1, $2:d>c or h>s - ($3xxx) }  ) && hcp($1) >= $5
+# you can run the above for example with :: dealerv2 -1 north -2 '(55xx)' -3 0  -5 9 FD_bigScript.dls
+

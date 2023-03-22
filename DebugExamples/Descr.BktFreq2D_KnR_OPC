@@ -1,7 +1,0 @@
-generate   100000
-produce    5000
-title " bktfreq for KnR Points vs OPC Pts "
-action  bktfreq "KnR North 15.0 to 17.0" (cccc(north), 15.00,17.00,0.25 ),
-        bktfreq "KnR (down) vs OPC(across)" (cccc(north)+cccc(south), 20.00,30.75,0.5, opc(NS,notrump),20.00,30.00,0.5  )
-
-

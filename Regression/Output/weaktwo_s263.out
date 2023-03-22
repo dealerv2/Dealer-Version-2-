@@ -1,0 +1,12 @@
+Frequency points:
+    5	    1321
+    6	    1587
+    7	    2162
+    8	    1957
+    9	    2307
+   10	    1926
+   11	    1991
+hearts: Mean=    2.3254, Std Dev=    0.9888, Var=    0.9777, Sample Size=13251 
+Ace of spades: Mean=    0.5499, Std Dev=    0.4975, Var=    0.2475, Sample Size=13251 
+Jack of spades: Mean=    0.4679, Std Dev=    0.4990, Var=    0.2490, Sample Size=13251 
+Heart fit: Mean=    0.1327, Std Dev=    0.3392, Var=    0.1151, Sample Size=13251 

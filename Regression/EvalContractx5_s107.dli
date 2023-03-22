@@ -1,0 +1,18 @@
+seed 107 
+generate   100000
+produce    25
+# Mods from earlier to use z[1-7][CDHSN]xx form of contracts
+title " Eval 3 strains for EW and One for NS "
+condition ( (hcp(east)+hcp(west)) >= 17 && (hcp(east)+hcp(west)) <= 23 ) &&
+          ( (hearts(west)+hearts(east) >=8 ) && (hearts(west)+hearts(east) <=10) )
+# evalcontract calls dds(west, ... ) for EW contracts, and dds(south, ....) for NS contracts.
+# Therefor to take advantage of caching we would use the same compass direction in other DDS calls as what evalcontract will use.
+
+
+action
+         evalcontract ( EW , z3Hx , vul  ),
+         evalcontract ( EW , z1N  , nv   ),
+         evalcontract ( EW , z2S  , nv   ),
+         evalcontract ( NS , z3Cx , nv   ),
+		   evalcontract ( NS , z2C  , nv   ),
+

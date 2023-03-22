@@ -1,0 +1,11 @@
+generate   10000
+produce    10
+# seed 0
+title "Test Library Mode with DDS _pseudo_calls_ "
+trixw = dds(west,notrump)        // this should just lookup result in library provided record
+trixn = dds(north,spades)        //  ditto
+
+# condition ctlsN < 4 and ctlsEH != 2 and loserW < 8 and loserSC == 1
+
+action
+ printrpt(deal,trixn,trixw)

@@ -1,0 +1,18 @@
+generate   10000000
+produce    100
+
+title " Eval Contract Scripted -- South Predealt The (nv) contract is chosen via cmd line -1 switch"
+# shows that any text in the input file can come from a cmd line switch 
+
+predeal south SAQ5,HKJ9642,DQJ6,C8
+
+condition shape(north, 4153) and
+         (hcp(north) > 9 and hcp(north) < 14) and
+         hcp(north,clubs) < 2 and
+         clubs(west) > 4 and
+         hcp(west) > 9
+
+
+action  evalcontract ( NS , $1, nv ),
+
+

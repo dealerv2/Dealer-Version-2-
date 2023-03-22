@@ -36,7 +36,7 @@ extern void              clearpointcount_alt (int cin);      /* yyparse action c
 extern void              pointcount (int index, int value);  /* yyparse action clause affects HCPs*/
 extern void              zerocount (int points[]);           /* called by clearpointcount etc. */
 extern struct csvterm_st *new_csvterm (struct tree *tr1, char *str1, int hand_mask, int trix_mask, struct csvterm_st *csv1); /* yyparse action clause */
-extern struct tree      *newquery(int tag, int side, int compass, int suit, int idx); /* yyparse action clause */
+extern struct tree       *newquery(int tag, int side, int compass, int suit, int idx); /* yyparse action clause */
 /* Evaluation and condition stuff called by main, after the parsing during the evaluation phase */
 #define interesting() ((int)evaltree(decisiontree))
 extern void          analyze (deal d, struct handstat *hsbase);
@@ -70,6 +70,10 @@ int csv_trix     ( char *buff, int h_mask ) ; /* fmts buff with a list of trick 
 
 /* from UserServer_subs.c */
 extern int ask_query(int qtag, int side, int qcoded ) ;
+
+/* RP Library related subs. dealrpdd.c */
+long int seek_rpdd_pos(FILE *rpdd_file, long int seed ) ;
+int get_rpdeal(struct options_st *opts, char *dl ) ;
 
 /* print and other action stuff Called by main if the deal is 'interesting' ie meets the condition */
 extern void action ();

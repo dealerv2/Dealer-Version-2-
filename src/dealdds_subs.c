@@ -6,8 +6,8 @@
 #endif
 
 #define CACHE_INV 0
-#define CACHE_UPD 1
-#define CACHE_OK  2
+#define CACHE_UPD 2
+#define CACHE_OK  1
 #define DDS_TABLE_MODE 2
 #define DDS_BOARD_MODE 1
 #define INV_TRIX -1
@@ -24,6 +24,7 @@
 #include "../include/dealdefs.h"
 #include "../include/dds_dll.h"
 #include "../include/deal_dds.h"
+#include "../include/dbgprt_macros.h"
 
 extern int dds_dealnum;          /* keeps track of whether the dds cache needs refreshing */
 extern int par_vuln;             /* -1 no par calculations, 0=none, 1=ew, 2=ns, 3= both? */
@@ -34,6 +35,7 @@ extern int MaxRamMB;
 extern int nThreads;
 extern int TblModeThreads;
 extern int csv_firsthand;        /* not used was intending to allow user to print deal in arbitrary seq; but too confusing */
+extern int rplib_mode ;
 
 /*API we export to the Dealer side */
 
@@ -43,7 +45,6 @@ extern int ngen, dds_dealnum, par_vuln, jgmDebug ;
 extern deal curdeal;
 
 DDSRES_k dds_res_bin;
-// DDSRES_k dds_res ;  /*-?-?*/
 
 /*    Prototypes From Dealer Side */
     /* for Debugging .. To Be Deleted or in an #ifdef */
@@ -55,6 +56,7 @@ extern int Deal52_to_Holding(deal d , unsigned int kards[DDS_HANDS][DDS_SUITS] )
 extern struct ddTableDeal Deal52_to_DDSBIN(deal d);  // ddTableDeal    uses [hands][suits] index order.
 DDSRES_k true_CalcTable(deal dl, int vul, int dds_mode ) ; // ddTableResults uses [suits][hands] index order.
 int      true_SolveBoard(deal curdeal, int compass, int strain ) ;
+int      rplib_Par(DDSRES_k *DealerRes, int par_vuln) ;
 
 void ZeroCache( DDSRES_k *Results) {
     memset(Results, 0 ,  sizeof(DDSRES_k) ) ;
@@ -110,6 +112,36 @@ int SetDDSmode(int mode) {       /* Default is mode 1; but Par, csv_trix, and th
 /* compass is the hand we want the tricks for. If mode=2, no change needed
  * but for mode 1 we need to set the op leader to be the hand to the right of compass like true_dd does
  */
+int dl2dds_vuln(int dealer_vuln) {
+   int dds_vuln = (dealer_vuln == 0 ) ? 0 :      // None
+                  (dealer_vuln == 1 ) ? 2 :      // NS
+                  (dealer_vuln == 2 ) ? 3 :      // EW
+                  (dealer_vuln == 3 ) ? 1 :      // Both.
+                    0 ;                         // assume none if invalid entry
+   return dds_vuln ;
+}
+int dds2dl_strain(int si) {
+   int dl_strain ;
+   dl_strain = (si == 0 ) ?  3 :     // Spades
+               (si == 1 ) ?  2 :     // Hearts
+               (si == 2 ) ?  1 :     // Diamonds
+               (si == 3 ) ?  0 :     // Clubs
+                             4 ;     // si must equal 4 aka No Trump
+   return dl_strain;
+}
+int dl2dds_tricks(DDSRES_k *DealerRes, struct ddTableResults *Res_20) {
+               // fill the DDS Tricks Results array for use by Par calcs
+   int si, h;
+   int dl_strain  ;
+   for (si=0; si < DDS_STRAINS ; si++ ) {
+       for (h=0 ; h < DDS_HANDS ; h++ ) {
+          dl_strain = dds2dl_strain(si) ;
+          Res_20->resTable[si][h] = DealerRes->tricks[h][dl_strain] ;
+       } /* end for h < DDS_HANDS */
+   } /* end for si < DDS_STRAINS */
+   return 1 ;
+} /* end dl2dds_tricks */
+
 
 int dds_tricks(int compass, int strain ) {  //ngen, dds_dealnum, dds_res_bin, dds_mode are globals
     int t0, t1;
@@ -117,19 +149,12 @@ int dds_tricks(int compass, int strain ) {  //ngen, dds_dealnum, dds_res_bin, dd
     dbg_dds_res_calls++;
 
 
- #ifdef JGMDBG
-    if (jgmDebug >= 5 ) {
-       fprintf(stderr, "IN DDS_TRICKS.112 res_calls=%d ngen=%d dds_dealnum=%d,hand[%c],strain[%c], dds_mode=%d \n",
-                           dbg_dds_res_calls, ngen, dds_dealnum, "neswSW"[compass],"cdhsN"[strain], dds_mode ); }
- #endif
-    CacheState = CheckCache(&dds_res_bin, ngen, dds_dealnum, compass, strain ) ;
- #ifdef JGMDBG
-    if (jgmDebug >= 5 ) {
-       fprintf(stderr, "DDS_TRICKS.118: CheckCache returns[%d], ngen=%d,dds_dealnum=%d, trix=%d \n",
-                        CacheState, ngen, dds_dealnum, dds_res_bin.tricks[compass][strain] );
-    }
- #endif
+   JGMDPRT(5,"IN DDS_TRICKS res_calls=%d ngen=%d dds_dealnum=%d,hand[%c],strain[%c], dds_mode=%d \n",
+                           dbg_dds_res_calls, ngen, dds_dealnum, "neswSW"[compass],"cdhsN"[strain], dds_mode );
+   CacheState = CheckCache(&dds_res_bin, ngen, dds_dealnum, compass, strain ) ;
 
+   JGMDPRT(5, "DDS_TRICKS CheckCache returns[%d], ngen=%d,dds_dealnum=%d, trix=%d \n",
+                        CacheState, ngen, dds_dealnum, dds_res_bin.tricks[compass][strain] );
     if    (CacheState == CACHE_INV ) { /* ngen is on a new deal */
         ZeroCache( &dds_res_bin);
         dds_res_bin.CacheStatus = CACHE_INV ;
@@ -140,24 +165,18 @@ int dds_tricks(int compass, int strain ) {  //ngen, dds_dealnum, dds_res_bin, dd
     if ( CacheState == CACHE_UPD || CacheState == CACHE_INV ) { /* Decide what kind of lib call to make then make it. */
            dbg_dds_lib_calls++;
 
-#ifdef JGMDBG
-         if (jgmDebug >= 5 ) {fprintf(stderr, "IN DDS_TRICKS.134 CacheInvalid lib_calls=%d, mode=%d, dds_dealnum=[%d]  \n",
-                           dbg_dds_lib_calls, dds_mode, dds_dealnum ); }
-#endif
+      JGMDPRT(5,"IN DDS_TRICKS CacheInvalid lib_calls=%d, mode=%d, dds_dealnum=[%d]  \n",
+                           dbg_dds_lib_calls, dds_mode, dds_dealnum );
 
         if (dds_mode == DDS_TABLE_MODE ) {
             dds_res_bin = true_CalcTable (curdeal, par_vuln, DDS_TABLE_MODE) ;
         }
         else if (dds_mode == DDS_BOARD_MODE) {
 
-           dds_res_bin.tricks[compass][strain] = true_SolveBoard(curdeal, compass, strain ) ;
-           t1 = dds_res_bin.tricks[compass][strain];
-   #ifdef JGMDBG
-            if (jgmDebug >= 5 ) {
-               fprintf(stderr, "SOLVEBOARD for compass=%c strain=%c, returns %d trix \n",
+            dds_res_bin.tricks[compass][strain] = true_SolveBoard(curdeal, compass, strain ) ;
+            t1 = dds_res_bin.tricks[compass][strain];
+            JGMDPRT(5,"SOLVEBOARD for compass=%c strain=%c, returns %d trix \n",
                            "neswSW"[compass], "cdhsN"[strain], t1 );
-            }
-   #endif
         }
         else {
             fprintf(stderr, "Cant Happen in dds_tricks. dds_mode=[%d] is Invalid!! Continuing with TableMode\n", dds_mode );
@@ -165,12 +184,8 @@ int dds_tricks(int compass, int strain ) {  //ngen, dds_dealnum, dds_res_bin, dd
             dds_res_bin = true_CalcTable (curdeal, par_vuln, DDS_TABLE_MODE) ;
         }
     }  /* end if CacheState */
- #ifdef JGMDBG
-    if (jgmDebug >= 6 ) {
-       fprintf(stderr, "IN DDS_TRICKS.155 res_calls=%d ngen=%d dds_dealnum=%d, trix[%d,%d]=%d \n",
+      JGMDPRT(6,"IN DDS_TRICKS res_calls=%d ngen=%d dds_dealnum=%d, trix[%d,%d]=%d \n",
             dbg_dds_res_calls, ngen, dds_dealnum, compass, strain, dds_res_bin.tricks[compass][strain] );
-   }
- #endif
 
     // assert The cache entry for dds_res_bin.tricks[compass][strain] is valid
 
@@ -178,19 +193,15 @@ int dds_tricks(int compass, int strain ) {  //ngen, dds_dealnum, dds_res_bin, dd
     /* Then return the relevant result from the cache */
     t0 = dds_res_bin.tricks[compass][strain];
     t1 = dds_res_bin.parScore_NS ;
-#ifdef JGMDBG
-    if (jgmDebug >= 6 ) {
-       fprintf(stderr, "Leaving dds_tricks.172 ngen=%d  lib_calls=%d, res_calls=%d tricks=%d, par=%d\n",
+    JGMDPRT(6," ngen=%d  lib_calls=%d, res_calls=%d tricks=%d, par=%d\n",
                            ngen, dbg_dds_lib_calls, dbg_dds_res_calls, t0, t1 );
 
-       fprintf(stderr,"DDS tricks.174 RETURNS dds_res_bin[%d][%d] = %d ******* \n",
+   JGMDPRT(6,"DDS tricks RETURNS dds_res_bin[%d][%d] = %d ******* \n",
                         compass, strain, dds_res_bin.tricks[compass][strain] );
-    }
-#endif
        return dds_res_bin.tricks[compass][strain];
 } /* end dds_tricks */
 
-DDSRES_k true_CalcTable(deal dl, int vul, int dds_mode ) {  // Mode should always be DDS_TABLE_MODE here...
+DDSRES_k true_CalcTable(deal dl, int par_vul, int dds_mode ) {  // Mode should always be DDS_TABLE_MODE here...
     int dds_rc = 1; /* OK*/
     int si, so, h, t;
     struct ddTableResults    Res_20;    /* 20 Results */
@@ -200,21 +211,22 @@ DDSRES_k true_CalcTable(deal dl, int vul, int dds_mode ) {  // Mode should alway
     char Denom[]   ="NSHDC";  // Different order yet again ... for the parResultsMaster structure
     char seatNames[6][3] = { {"N"},{"E"},{"S"},{"W"},{"NS"},{"EW"} };
     char line[128] ; // for DDS error messages
+    int  dds_vuln   ;
+    /* convert dealer coding par_vul argument  to DDS coding */
+    dds_vuln =  (par_vul == 0 ) ? 0 :      // None
+                (par_vul == 1 ) ? 2 :      // NS
+                (par_vul == 2 ) ? 3 :      // EW
+                (par_vul == 3 ) ? 1 :      // Both.
+                0 ;                         // assume none if invalid entry
 
     // dbg_dds_lib_calls and dbg_dds_res_calls updated by dds_tricks before calling this function
 
-
-#ifdef JGMDBG
-        if (jgmDebug >= 7 ) {
-           fprintf(stderr, "IN trueCalcTable.203 dbg_dds_lib_calls=%d, ngen=%d, dealnum=%d --  jgmDebug=%d, dds_mode=%d\n",
+JGMDPRT(7,"IN trueCalcTable dbg_dds_lib_calls=%d, ngen=%d, dealnum=%d --  jgmDebug=%d, dds_mode=%d\n",
                            dbg_dds_lib_calls, ngen, dds_dealnum, jgmDebug, dds_mode );
-        }
-#endif
         dds_BIN_deal =  Deal52_to_DDSBIN (dl);
         dds_rc = CalcDDtable(dds_BIN_deal, &Res_20 );
-#ifdef JGMDBG
-        if (jgmDebug >= 7 ) { fprintf(stderr, "  CalcDDtable returned with %d \n", dds_rc); }
-#endif
+        JGMDPRT(7, "  CalcDDtable returned with %d \n", dds_rc);
+
         // check return code; print error msg if not OK  NO_FAULT is 1
         if (dds_rc != RETURN_NO_FAULT)  {
             ErrorMessage(dds_rc, line);
@@ -222,7 +234,7 @@ DDSRES_k true_CalcTable(deal dl, int vul, int dds_mode ) {  // Mode should alway
             strncpy(DealerRes.ddsmsg, line, 40);
             DealerRes.errcode = -1 ;
         }
-        dds_rc = SidesParBin(&Res_20, sidesRes, par_vuln);  /* calculate Par result */
+        dds_rc = SidesParBin(&Res_20, sidesRes, dds_vuln);  /* calculate Par result */
             // check return code; print error msg if not OK
         if (dds_rc != RETURN_NO_FAULT)  {
             ErrorMessage(dds_rc, line);
@@ -230,9 +242,8 @@ DDSRES_k true_CalcTable(deal dl, int vul, int dds_mode ) {  // Mode should alway
             strncpy(DealerRes.ddsmsg, line, 40);
             DealerRes.errcode = -1 ;
         }
-#ifdef JGMDBG
-        if (jgmDebug > 7) { showRawResults(&Res_20) ; }
-#endif
+        DBGDO(7,showRawResults(&Res_20) );
+
         // successful DDS call. Fill the Dealer Results struct and return it
         DealerRes.errcode = RETURN_NO_FAULT ; // success
             // fill the tricks results array
@@ -248,9 +259,7 @@ DDSRES_k true_CalcTable(deal dl, int vul, int dds_mode ) {  // Mode should alway
             } /* end for h < DDS_HANDS */
         } /* end for si < DDS_STRAINS */
 
-#ifdef JGMDBG
-        if (jgmDebug > 7) { showReturns(&DealerRes) ;  }
-#endif
+        DBGDO(7, showReturns(&DealerRes) );
         // report the par score and (one of) the corresponding contract(s)
         DealerRes.parScore_NS = sidesRes[0].score;
         sprintf( DealerRes.ddsmsg,"%2d%c by %s  ", sidesRes[0].contracts[0].level,
@@ -260,11 +269,8 @@ DDSRES_k true_CalcTable(deal dl, int vul, int dds_mode ) {  // Mode should alway
          int t1 = DealerRes.parScore_NS ;
          int t0 =  DealerRes.tricks[0][3] ; /* North Spades Just for Debug */
 
-#ifdef JGMDBG
-        if (jgmDebug >= 7) {
-            fprintf(stderr, "Done trueCalcTable.259 : North Spades Tricks=%d, parScore_NS=%d \n ", t0, t1 );
-        }
-#endif
+        JGMDPRT(7,"Done trueCalcTable: North Spades Tricks=%d, parScore_NS=%d \n ", t0, t1 );
+
         return DealerRes ;
 } /* end true_CalcTable*/
 
@@ -340,11 +346,18 @@ char line[120] ;
 
 int dds_parscore(int compass ) {
     int CacheState;
+    int par_NS ;
     dbg_parscore_calls++;
-#ifdef JGMDBG
-    if (jgmDebug >= 6 ) {fprintf(stderr, "IN DDS_PARSCORE.333 par_calls=%d ngen=%d dds_dealnum=%d, dds_mode=%d \n",
-                           dbg_parscore_calls, ngen, dds_dealnum, dds_mode ); }
-#endif
+    JGMDPRT(6,"IN DDS_PARSCORE par_calls=%d ngen=%d dds_dealnum=%d, dds_mode=%d \n",
+                           dbg_parscore_calls, ngen, dds_dealnum, dds_mode );
+    if ( rplib_mode == 1 ) {
+       par_NS =  rplib_Par(&dds_res_bin , par_vuln) ; /* these globals will have been set by get_rp_deal and parsing stage */
+       if(compass == COMPASS_NORTH || compass == COMPASS_SOUTH || compass == SIDE_NS ) {
+          return par_NS ;
+       }
+       else return -(par_NS) ;
+    } /* end rplib mode */
+
 
     if (dds_mode != DDS_TABLE_MODE) {
         fprintf(stderr, "In ParScore:: Using Parscore requires TableMode. Setting Mode and continuing..\n");
@@ -357,17 +370,16 @@ int dds_parscore(int compass ) {
         dbg_dds_lib_calls++;
         dds_res_bin = true_CalcTable (curdeal, par_vuln, DDS_TABLE_MODE) ;
     }
-#ifdef JGMDBG
+
     int t1 = dds_res_bin.parScore_NS ;
-    if (jgmDebug >= 6) { fprintf(stderr, "Leaving DDS_PARSCORE.350 dbg_dds_lib_calls=%d, par=%d\n",
-                           dbg_dds_lib_calls, t1 ); }
-#endif
+   JGMDPRT(6,"Leaving DDS_PARSCORE dbg_dds_lib_calls=%d, par=%d\n", dbg_dds_lib_calls, t1 );
+
     /* at this point the global cache of 20 results + a par score is valid */
      if(compass == COMPASS_NORTH || compass == COMPASS_SOUTH || compass == SIDE_NS ) {
          return dds_res_bin.parScore_NS ;
      }
      else return -(dds_res_bin.parScore_NS) ;
-  } /* end dds_parscore */
+} /* end dds_parscore */
 
 /* csv_trix will return tricks for all 5 strains,  for any number of hands 1-4 */
 int csv_trix( char *buff, int h_mask ) {  //ngen, dds_dealnum, dds_res_bin, dds_mode are globals
@@ -399,47 +411,65 @@ int csv_trix( char *buff, int h_mask ) {  //ngen, dds_dealnum, dds_res_bin, dds_
         dds_res_bin.CacheStatus = CACHE_INV ;
         dbg_dds_lib_calls++;
 
-#ifdef JGMDBG
-         if (jgmDebug >= 5 ) {fprintf(stderr, "IN csv_trix:: CacheInvalid lib_calls=%d, mode=%d, dds_dealnum=[%d]  \n",
-                           dbg_dds_lib_calls, dds_mode, dds_dealnum ); }
- #endif
+         JGMDPRT(6,"IN csv_trix:: CacheInvalid lib_calls=%d, mode=%d, dds_dealnum=[%d]  \n",
+                           dbg_dds_lib_calls, dds_mode, dds_dealnum );
+
         dds_res_bin = true_CalcTable (curdeal, par_vuln, DDS_TABLE_MODE) ;
      }  /* end if CacheState */
- #ifdef JGMDBG
-    if (jgmDebug >= 6 ) {fprintf(stderr, "IN csv_trix:: true_CalcTable Done. res_calls=%d ngen=%d dds_dealnum=%d \n",
-                           dbg_dds_res_calls, ngen, dds_dealnum ); }
- #endif
+
+    JGMDPRT(6,"IN csv_trix:: true_CalcTable Done. res_calls=%d ngen=%d dds_dealnum=%d \n",
+                           dbg_dds_res_calls, ngen, dds_dealnum );
 
     // assert The cache entry for dds_res_bin.tricks[compass][strain] is valid
 
 
-#ifdef JGMDBG
-    if (jgmDebug >= 6 ) {
-       fprintf(stderr, "Leaving csv_trix.174 ngen=%d  lib_calls=%d, res_calls=%d tricks=%d, par=%d\n",
+      JGMDPRT(6,"Leaving csv_trix. ngen=%d  lib_calls=%d, res_calls=%d tricks=%d, par=%d\n",
                            ngen, dbg_dds_lib_calls, dbg_dds_res_calls, t0, t1 );
-    }
-#endif
+
       // now format the buffer giving trix in all 5 strains for each hand asked for.
       nch = 0 ;
       for(i = 0 ; i < 4 ; i++ ) {
          h = (i + csv_firsthand ) & 3 ;
          if ( !(h_mask & 1 << h) ) { continue ; }
-      #ifdef JGMDBG
-         if (jgmDebug >= 6 ) { fprintf(stderr, "hand=%d, ",h); }
-      #endif
+         JGMDPRT(6, "hand=%d, ",h);
          for (s=0; s < 5 ; s++ ) { // for each strain clubs to NT
             nch += sprintf(buff+nch, "%d,", dds_res_bin.tricks[h][s] ) ;
-      #ifdef JGMDBG
-         if (jgmDebug >= 6 ) { fprintf(stderr, "s=%d, tricks=%d, nch=%d, ",s,dds_res_bin.tricks[h][s], nch ); }
-      #endif
-           } /* end for s */
-       #ifdef JGMDBG
-         if (jgmDebug >= 6 ) { fprintf(stderr,"\n"); }  // begin next hand debug on new line
-      #endif
+            JGMDPRT(6, "s=%d, tricks=%d, nch=%d, ",s,dds_res_bin.tricks[h][s], nch );
+         } /* end for s */
+         JGMDPRT(6,"\n");  // begin next hand debug on new line
       } /* end for i  aka hand */
          buff[nch-1] = '\0' ; // replace last comma with null terminator
          return nch-1 ;       // return length of the trix buffer contents
 
 } /* end csv_trix */
+
+int rplib_Par(DDSRES_k *DealerRes, int par_vuln) {
+    int dds_rc = 1; /* OK*/
+    char line[128];
+
+    struct ddTableResults    Res_20;    /* 20 Results */
+    struct parResultsMaster  sidesRes[2] ;
+    int dds_vuln = dl2dds_vuln(par_vuln) ;
+
+/* copy DealerRes.tricks to Res_20 in the right order . */
+   dl2dds_tricks(DealerRes, &Res_20) ;
+
+   dds_rc = SidesParBin(&Res_20, sidesRes, dds_vuln);  /* calculate Par result */
+            // check return code; print error msg if not OK
+   if (dds_rc != RETURN_NO_FAULT)  {
+       ErrorMessage(dds_rc, line);
+       fprintf(stderr, "Table Mode DDS error: %s\n", line);
+       strncpy(DealerRes->ddsmsg, line, 40);
+        DealerRes->errcode = -1 ;
+    }
+    // successful DDS call. Fill the Dealer Results struct and return it
+    DealerRes->errcode = RETURN_NO_FAULT ; // success
+    DealerRes->parScore_NS = sidesRes[0].score;
+    DealerRes->CacheStatus = CACHE_OK ;
+    dds_dealnum = ngen ; /* mark the cache as up to date. */
+    return DealerRes->parScore_NS ;
+} /* end  rplib_Par */
+
+
 
 

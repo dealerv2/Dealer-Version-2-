@@ -18,7 +18,7 @@
 #include <signal.h>           /* to Kill process and also report on child exit status ? */
 #include <stddef.h>           /* offsetof , size_t                  */
 #include <stdio.h>            /* printf(), scanf,                   */
-#include <stdlib.h>           /* exit(), malloc(), free(), rand48,  */
+#include <stdlib.h>           /* exit(), malloc(), free(), rand48, atoi, */
 #include <string.h>           /* memcpy, memset, strcpy, strlen etc. */
 #include <time.h>             /* localtime(), asctime, ctime, gmtime,  */
 #include <unistd.h>           /* sysconf -- to get Pagesize */

@@ -1,4 +1,4 @@
-/* File dealmain_subs.c JGM 2022-Feb-17  */
+/* File dealmain_subs.c JGM 2022-Feb-17 Code only used by main; no need for protos. */
 /* 2022-02-07 Expanding Options with -X and -0 thru -9 */
 /* 2022-03-07 Fine tune Debug levels */
 /* 2022-10-27 Add -U option for userserver path */
@@ -14,7 +14,7 @@
 #ifndef UsageMessage
   #include "../src/UsageMsg.h"
 #endif
-#define OPTSTR "hmquvVg:p:s:x:C:D:M:O:P:R:T:N:E:S:W:X:U:0:1:2:3:4:5:6:7:8:9:"
+#define OPTSTR "hmquvVg:p:s:x:C:D:L:M:O:P:R:T:N:E:S:W:X:U:0:1:2:3:4:5:6:7:8:9:"
 
 long int init_rand48( long int seed ) {
     union {
@@ -39,12 +39,8 @@ long int init_rand48( long int seed ) {
     assert( numbytes == 6 ) ;
     seed48(su.sss) ;   /* ignore seed48 return value of pointer to internal buffer */
     u_seed48 = (long int)su.sss[0] + (long int)su.sss[1]*two16 + (long int)su.sss[2]*two32;
-#ifdef JGMDBG
-     if (jgmDebug >= 1 ) {
-         fprintf(stderr, "No Seed Provided. DONE Initializing RNG init_rand48, %d, %d, %d, %ld\n",
+    JGMDPRT(2,"No Seed Provided. DONE Initializing RNG init_rand48, %d, %d, %d, %ld\n",
                 su.sss[0], su.sss[1], su.sss[2], u_seed48);
-     }
-#endif
     return u_seed48;
 } /* end init_rand48 */
 
@@ -81,6 +77,7 @@ void show_options ( struct options_st *opts , int v ) {
     fprintf(stderr, "\t %s=[%d]\n", "x:eXchange aka Swapping", opts->swapping ) ;
     fprintf(stderr, "\t %s=[%s] mode=[%s]\n", "C:Fname",   opts->csv_fname, opts->csv_fmode   ) ;
     fprintf(stderr, "\t %s=[%d] set to %d Server Debug=%d\n", "D:Debug Verbosity", opts->dbg_lvl, jgmDebug, srvDebug ) ;
+    fprintf(stderr, "\t %s=[%s] rplib_mode[%d] seed=[%ld]\n", "L:Fname", opts->rplib_fname,opts->rplib_mode,opts->rplib_seed);
     fprintf(stderr, "\t %s=[%d] set to %d\n", "M:DDS Mode", opts->dds_mode, dds_mode ) ;
     fprintf(stderr, "\t %s=[%c, %d]\n", "O:Opener", opts->opc_opener, opts->opener  ) ;
     fprintf(stderr, "\t %s=[%d]\n", "P:Par Vuln", opts->par_vuln  ) ;
@@ -133,11 +130,17 @@ int srv_dbg (char *opt_D ) {
    return 0 ;
 }
 
-/* this code will set the opts in the options struct
+/* get_options function will set the opts in the options struct
  * and also the related global variable(s) for backwards compatitbility
  * It should ALWAYS update the related global var, when the equivalent opts->var is changed.
  */
     #include <sys/stat.h>  // for stat structure
+/*
+ * get_options function is called AFTER the parsing of the Input file.
+ * The input file parser sets the global vars, not the members of this struct
+ * Therefore initialize the struct with the already set global vars, then
+ * change any that were specified on the command line
+ */
 int get_options (int argc, char *argv[], struct options_st *opts) {
     int opt_c;
     int stat_rc ;
@@ -147,8 +150,8 @@ int get_options (int argc, char *argv[], struct options_st *opts) {
     opts->options_error = 0 ;  /* assume success */
     /* make sure that all the opts have sane default values. Use value set in globals.c if available */
 
-    opts->max_generate = 100000 ;      /* Not the same as global. FLex Side effect? */
-    opts->max_produce = 40 ;           /*  Ditto */
+    opts->max_generate = 0 ;      /* set to the global default to keep in sync */
+    opts->max_produce = 0 ;           /*  Ditto */
     opts->seed = seed ;                /* global */
     opts->seed_provided = -1 ;         /* Default to no cmd line spec. Note a cmd line spec of 0 will get random seed */
     opts->dbg_lvl = jgmDebug ;         /* global */
@@ -171,13 +174,16 @@ int get_options (int argc, char *argv[], struct options_st *opts) {
     opts->ex_fname[0]  = '\0';
     memset(opts->preDeal_len, 0, 4*sizeof(int) ) ; /* preDeal stores the -N,-E,-S,-W opt settings */
     memset(opts->preDeal, '\0' , 128 ) ;
+    strcpy(opts->rplib_fname ,"=");    /* = is translated to the default location at initialization time. */
+    opts->rplib_mode  = 0 ;            /* no RPLIB by default */
+    opts->rplib_seed = seed ;          /* No effect unless the program is run in Library mode */
 
     while ((opt_c = getopt(argc, argv, OPTSTR)) != EOF) {
       switch(opt_c) {
         case 'h': {
             fprintf(stdout, "--- HELP COMING --- \n");
             fprintf(stdout, "%s Usage: -[options] [input_filename | stdin] [>output_file]\n", argv[0]);
-            fprintf(stdout,"%s\n", UsageMessage);   /* UsageMessage in src/UsageMsg.h */
+            fprintf(stdout,"%s", UsageMessage);   /* UsageMessage in src/UsageMsg.h */
             fprintf(stdout, "--- HELP DONE --- \n");
             opts->options_error = 4 ;
             break;
@@ -197,6 +203,7 @@ int get_options (int argc, char *argv[], struct options_st *opts) {
       case 's':
         opts->seed_provided = 1;                seed_provided = opts->seed_provided;
         opts->seed = atol( optarg );            seed          = opts->seed;
+        opts->rplib_seed = opts->seed ;
         if (seed == LONG_MIN || seed == LONG_MAX) {
             fprintf (stderr, "Seed overflow: seed must be greater than %ld and less than %ld\n",
               LONG_MIN, LONG_MAX);
@@ -211,6 +218,7 @@ int get_options (int argc, char *argv[], struct options_st *opts) {
         break;
       case 'x':                  // replaced the three switches 0,2,3 with one switch that takes a value
          opts->swapping  = atoi( optarg ) ;     swapping = opts->swapping ;
+         JGMDPRT(2,"Swapping Option = %d \n", opts->swapping ) ;
          break;
 
       case 'V':
@@ -240,7 +248,7 @@ int get_options (int argc, char *argv[], struct options_st *opts) {
          if (fcsv == NULL ) {
             perror("ERROR!! Open CSV Report file FAILED");
             fprintf(stderr, "ERROR!! Cant open [%s] for %s \n",opts->csv_fname, opts->csv_fmode );
-            opts->options_error = -2 ;
+            opts->options_error = FATAL_OPTS_ERR - 1;
          }
         #ifdef JGMDBG
                if (jgmDebug >= 4) {fprintf(stderr, "CSVRPT File %s opened in %s Mode\n",opts->csv_fname, opts->csv_fmode ); }
@@ -252,6 +260,24 @@ int get_options (int argc, char *argv[], struct options_st *opts) {
         opts->srv_dbg_lvl = srv_dbg( optarg ) ; /* check if the D option was x.y or .y or 0.y where y is debug verbosity for server */
         srvDebug = opts->srv_dbg_lvl ;
         break ;
+     case 'L':
+         strncpy( opts->rplib_fname, optarg, sizeof(opts->rplib_fname)-1 ) ;
+         if ( strcmp(opts->rplib_fname, "=") == 0 ) {      /* equal sign is shorthand for default rplib path name */
+            strcpy(opts->rplib_fname, rplib_default);
+               // strncpy(opts->rplib_fname, rplib_default, sizeof(opts->rplib_fname)-1 );
+         }
+         rp_file = fopen(opts->rplib_fname , "r" ) ;
+         if (rp_file == NULL ) {
+            perror("ERROR!! Open RP LIB file for reading FAILED");
+            fprintf(stderr, "ERROR!! Cant open [%s] for read. Aborting program \n",opts->rplib_fname );
+            opts->options_error = FATAL_OPTS_ERR - 2 ;
+
+            break ;
+         }
+         opts->rplib_mode = 1 ;
+         opts->rplib_seed = (opts->seed_provided > 0 ) ? opts->seed : 0 ;
+         JGMDPRT(2,"RP DD File '%s' Opened OK \n",opts->rplib_fname ); /* cant seek yet. seed may not be final */
+         break ;
      case 'M':
         opts->dds_mode = atoi( optarg ) ;
         if (1 <= opts->dds_mode && opts->dds_mode <= 2 ) { dds_mode = opts->dds_mode ; }
@@ -267,10 +293,7 @@ int get_options (int argc, char *argv[], struct options_st *opts) {
         break ;
       case 'P':  /* set the vulnerability for Par calculations */
         opts->par_vuln = atoi( optarg ) ; // Will Need to translate from Dealer coding to DDS coding when calling Par function
-        par_vuln =  (opts->par_vuln == 0 ) ? 0 :      // None
-                    (opts->par_vuln == 1 ) ? 2 :      // NS
-                    (opts->par_vuln == 2 ) ? 3 :      // EW
-                    (opts->par_vuln == 3 ) ? 1 : -1 ; // Both. Assume no Par Calcs if invalid entry.
+        par_vuln = opts->par_vuln       ;
         break ;
       case 'R':
         opts->nThreads=atoi( optarg ) ;
@@ -308,7 +331,7 @@ int get_options (int argc, char *argv[], struct options_st *opts) {
          if (fexp == NULL ) {
             perror("ERROR!! Open eXport file for writing FAILED");
             fprintf(stderr, "ERROR!! Cant open [%s] for write \n",optarg );
-            opts->options_error = -2 ;
+            opts->options_error = FATAL_OPTS_ERR - 3 ;
          }
          break ;
       case 'U':
@@ -316,7 +339,7 @@ int get_options (int argc, char *argv[], struct options_st *opts) {
          if ( 0 != stat_rc ) {
             perror("stat -U User Eval program path FAILED. Aborting... ") ;
             fprintf(stderr, "Path [%s] cannot be opened. Return code = %d\n" , optarg, stat_rc );
-            exit(-1) ;
+             opts->options_error = FATAL_OPTS_ERR - 4 ;
          }
          strncpy(opts->userpgm, optarg, SERVER_PATH_SIZE ) ;
          strncpy(server_path,   optarg, SERVER_PATH_SIZE  ) ;
@@ -386,9 +409,9 @@ int get_options (int argc, char *argv[], struct options_st *opts) {
             opts->options_error = 1 ;  // invalid option found
             break;
       } /* end switch(opt) */
-    } /* end while getopt*/
-    if (opts->dbg_lvl >= 4 ) { fprintf(stderr, "Command Line switches done proceeding with main program \n") ; }
-        return opts->options_error ;
+   } /* end while getopt*/
+   if (opts->dbg_lvl >= 4 ) { fprintf(stderr, "Command Line switches done proceeding with main program \n") ; }
+   return opts->options_error ;
 
 } /* end getopts */
 

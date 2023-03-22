@@ -1,0 +1,18 @@
+seed 73 
+# File Descr.DDSTrixCond by JGM 
+title " DDS DD Condition only "
+# putting DDS as the very first chars in the output file seems to make Linux think it is some sort of image or video
+generate 100000
+produce 10 
+#DWtr3 = dds(west,spades)
+#DNtr4 = dds(north, notrump)
+
+condition  shape(north, any 4432) || dds(north, notrump) >= 5    
+action printes(" West Spades(DDS)=", dds(west,spades),  "::  " ) ,
+		 printoneline 
+
+# printes(" West Spades(DDS)=", dds(west,spades),  "::  " ) ,
+# shape(north, any 4432) && dds(north, notrump)
+# printes(" North NT(DDS)=", DNtr4,  "::  " ) ,
+# shape(north, any 4432) && dds(north, notrump) >= 5 
+# shape(north, any 4432) && DNtr4 >= 5 

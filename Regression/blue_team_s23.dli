@@ -1,0 +1,30 @@
+seed 23 
+title "Descr.blue_team"
+#
+# This example creates hands to illustrate the Blue Team Club auction
+# 1C-1H, with 1C strong and 1H positive without 3 controls.
+#
+west1c = hcp(west)>16
+
+east1h = hcp(east)>7 && control(east)<3
+
+condition	
+        west1c and east1h
+
+produce 
+	10
+
+action 
+	printew,
+        frequency  (control(east), 0, 6),
+        frequency  (loser(east), 0, 13)
+
+# The output will look like:
+#
+# A                   Q 4 3 
+# A Q                 9 7 6 
+# A K Q J T 3 2       8 
+# J 8 6               A Q T 9 7 4 
+#
+# leaving ample space to comment about the bidding after 1C-1H.
+#

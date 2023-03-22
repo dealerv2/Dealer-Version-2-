@@ -1,0 +1,15 @@
+seed 211 
+generate   10000
+produce    5
+title " Demo Francois Dellacherie Shapes Simple Examples "
+
+condition   hcp(north) > 15
+               // shapes that are the same as legacy shapes
+     or     shape{north, 5x5x + x5x5 + 6xxx + x6xx }
+               // At least (+) and at most (-) operators
+     or     shape{east, 5-x4+x}     // At most 5 spades, at least 4 diamonds
+ /* Sample HvS shapes:: == shape(south,0x4x + 0x5x + 1x9x + 2x4x + 4x7x + 5x7x ) */
+action
+    printoneline
+
+ /* Sample HvS shapes> shape(south,0x4x + 0x5x + 1x9x + 2x4x + 4x7x + 5x7x ) > */

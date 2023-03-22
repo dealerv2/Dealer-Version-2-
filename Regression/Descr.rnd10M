@@ -1,9 +1,0 @@
-title "Random Number Generator Test 10,000,000 No Conditions"
-generate
-	10000000
-seed 163  	
-# condition hcp(north) < 100
-
-action
-	average "Avg Random Number (0..100)" rnd ( 100 )
-

@@ -1,0 +1,15 @@
+# File Descr.bigshape by JGM
+title " Shapes that give Francois Problems  "
+# This needs script vars set on the cmd line. -1=compass, -2=shape e.g.(xxxx) -0=suit e.g. club -5 = suitlen e.g. 7
+
+generate 2000
+produce 4
+
+condition
+# shape{$1, $2:d>c or h>s} && $0($1) <= $5
+  shape{west, 2+3+3+x:d>c or h>s} && clubs(west) <= 4 
+
+action
+    printoneline
+
+

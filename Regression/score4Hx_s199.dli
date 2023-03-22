@@ -1,0 +1,10 @@
+seed 199 
+generate   10000
+produce    10
+title " Check Score 3Hx vul"
+ condition ( hcp(north)+hcp(south) > 23 && hearts(north) + hearts(south) >=8 )
+
+action  printrpt ("Tricks NS=",	dds(south, hearts) ,
+		"4Hx vul by NS=", score(vul, z4Hx, dds(south,hearts)),  
+		"HCP N+S=", (hcp(north)+hcp(south)), 
+		 NS ) 

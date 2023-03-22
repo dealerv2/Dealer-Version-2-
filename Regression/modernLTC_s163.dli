@@ -1,0 +1,13 @@
+seed 163 
+generate   10000
+produce    8
+title "Modern LTC with dotnums, and int x 100 "
+
+condition (ltc(north) <= 6.5 ) && 
+			(ltc(north, clubs) > 1.0)  && 
+			(ltc(west) > 350 )
+
+action
+    printrpt("LTC north= ", ltc(north), 
+       " LTC north(clubs)= ", ltc(north,clubs), 
+       " LTC West= ", ltc(west) , north )

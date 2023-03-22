@@ -56,7 +56,10 @@ void merge_deal(deal d) {
    return ;
 }
 
-/* take current deal, d, and change it either by shuffling, swapping, or stacking and shuffling */
+/*
+ * take current deal, d, and change it either by shuffling, swapping, or stacking and shuffling
+ * Called from main loop unless library mode is on.
+ * */
 void deal_cards(deal d ) {
    if (stacked_size == 0 && swapping == 0 ) {  /* the vanilla case; no predeal no swapping */
       Shuffle(d, 52) ;
@@ -105,6 +108,7 @@ void newpack (deal d) { /* Fill a deck with cards from SA downto C2 */
    }
    return ;
 #if 0
+   place = 0 ;
   for (suit = CLUBS; suit <= SPADES; suit++) {  /* newpack is in order from Club deuce up to spade Ace. */
     for (rank = TWO; rank <=ACE; rank++)     {
       d[place++] = MAKECARD (suit, rank);
@@ -131,7 +135,7 @@ void setup_deal() {   /* One Time Initialize curdeal taking into account the Pre
      JGMDPRT(4, "First Time curdeal setup done with NO stacking; fullpack -> curdeal and small_pack \n");
   }
   else {
-      sortDeal(stacked_pack);            /* Sort the stacked hands in order of SA to C2 -- helps later processing if Deal is sorted. */
+      sortDeal(stacked_pack);    /* Sort the stacked hands in order of SA to C2 -- helps later processing if Deal is sorted. */
       /* put the predealt cards into curdeal-- note predealt cards are hand specific you cant just put them anywhere */
       memset(curdeal, NO_CARD, 52 ) ;
       JGMDPRT(4, "First Time curdeal START setup with stacking; stacked_size=%d, \n", stacked_size);

@@ -1,0 +1,25 @@
+seed 173 
+generate   10000
+produce    100
+# This should be run with -M2 since we are asking for a Par result. But Dealerv2 will force this anyway.
+
+title " Eval Contract, Par, Freq2D, Tricks, Score NS 21-24hcp"
+condition ( (hcp(north)+hcp(south)) >= 21 && (hcp(north)+hcp(south)) <= 24 )
+
+DDSNS=dds(south,notrump)
+ScoreNS_2NTx=score(vul, z2Nx, DDSNS )
+ScoreNS_1NT=score(vul, z1N,  DDSNS )
+Par_NS = par (NS )
+
+
+action
+         evalcontract ( NS , z2Nx , vul ),
+		   evalcontract ( NS , z1N  , vul ),
+         evalcontract ( EW , z3Hx , nv  ),
+		   evalcontract ( EW , z2Hxx, nv  ),
+         average "Par NS      = " Par_NS,
+         average "ScoreNS_2NTx= " ScoreNS_2NTx,
+         average "ScoreNS_1NT = " ScoreNS_1NT,
+
+         frequency "HCP Vs Tricks" (hcp(north)+hcp(south), 20, 25, DDSNS, 5, 11)
+

@@ -14,11 +14,11 @@
 #ifndef _GNU_SOURCE
   #define _GNU_SOURCE
 #endif
-#define BUILD_DATE "2023/03/07"
+#define BUILD_DATE "2023/03/21"
 #ifndef JGMDBG
-  #define VERSION "2.5.5"
+  #define VERSION "2.5.6"
 #else
-  #define VERSION "102.5.5"
+  #define VERSION "102.5.6"
 #endif
 
 #ifndef UNUSED
@@ -43,6 +43,9 @@
 #define SUCCESS 1
 #define FAILED  0
 #define NIL ((struct tree *) 0)
+#define CACHE_INV 0
+#define CACHE_OK  1
+#define CACHE_UPD 2
 
 /* ENUMS need spot, no suit = -1 to force enum type to signed int instead of unsigned int */
 enum rank_ek {TWO=0, DEUCE=0, THREE, FOUR, FIVE, SIX, SEVEN, EIGHT, NINE, TEN, JACK, QUEEN, KING, ACE, SPOT=-1 } ;
@@ -54,6 +57,15 @@ enum suit_ek {CLUBS=0, DIAMONDS, HEARTS, SPADES, nosuit=-1 } ;
  #define COMPACT_DEAL_SIZE 96
  #define PBNLINE 69
  #define MAXLINE 256
+
+/* RP_BLOCKSIZE will be adjusted at run time based on the number of records in the Library file
+ * The max_seed value will also be adjusted based on the blocksize
+ * If there are more than 10000 records in the Library file the blocksize will be 1000
+ */
+#define RPDD_REC_SIZE 23
+#define RP_BLOCKSIZE 1000
+#define MAX_RP_SEED 10485                 // because the rpdd has 10,485,760 deals in it.
+#define MAX_RPDD_RECS 10485760
 
 #define MAXTITLE        255
 #define MAXTITLESIZE    256
@@ -92,13 +104,14 @@ enum suit_ek {CLUBS=0, DIAMONDS, HEARTS, SPADES, nosuit=-1 } ;
 #define COMPASS_NS      4
 #define COMPASS_EW      5
 
-  /* These next ones were defined in tree.h */
+  /* These next ones were defined in tree.h Used only to set the maxvul global for use by the printpbn function*/
 #define VULNERABLE_NONE 0
 #define VULNERABLE_NS   1
 #define VULNERABLE_EW   2
 #define VULNERABLE_ALL  3
 #define NVULS           4
 
+/* these are used by evalcontract */
 #define NON_VUL 0
 #define VUL     1
 

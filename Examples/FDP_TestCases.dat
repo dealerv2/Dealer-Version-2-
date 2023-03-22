@@ -1,4 +1,4 @@
-# Run this file with fdpi < DPP_TestCases.dat; fdpi ignores lines with # in col 1 and also tells you which shape it is doing
+# Run this file with fdpi < FDP_TestCases.dat; fdpi ignores lines with # in col 1 and also tells you which shape it is doing
 #
 #balanced hand 4 card major
 shape{north, 4M(3+3+2+)}
@@ -26,10 +26,17 @@ shape{north, 4+s4+h(xx):d>c,h+s==10}
 shape{north, (3+3+3+2+) }
 # this next one expands to 886 chars and 249 words. 5+ Hearts and H longer(>) than S and H >= Diam
 shape{north, x5+xx:h>s,h>=d }
-# this one, which FD says is a French 1H opening does not expand at all. Should be fewer terms. Bug?
-# shape{north, x5+xx:h>s,h>=d,h>=c }
-#limiting the minors does not help. this next one does not work either
-#shape{north, x5+6-6-:h>s,h>=d,h>=c }
+# this one, which FD says is a French 1H opening.
+ shape{north, x5+xx:h>s,h>=d,h>=c }
+# This next one is a valid FD shape, but it does not do what is required because it suceeds if hearts longer than either minor.
+shape{north, x5+xx:h>s,h>=m}
+# More extended condtional examples showing that one can have multiple 'and' and multiple 'or' clauses
+shape{north, x5+xx:h>s,h>=d,h>=c or h==s}
+shape{north, x5+xx:h>s,h>=d,h>=c,s<5}
+shape{north,5+Mxxx:s>=d,s>=c or h>=d,h>=c}
+shape{north,7+xxx:h<2 or d<2 or c<2 }
+# this next one expands to the same as the previous one.
+shape{north,7+xxx:h<2 or m<2 }
 # possible NT opening; 5m & 4H is OK. 5m & 4S is not.
 shape{north, 5m(332) + 5m2s(42)} )
 # this next one I made up just to test the edges it does not give errors and gives 135 words 457 chars

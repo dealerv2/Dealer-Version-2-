@@ -1,9 +1,0 @@
-# File Descr.freqEx2D by JGM
-title " Frequency 2D Example  "
-seed  89 
-generate 100000
-produce 5000
-
-action frequency "Controls(across) Vs HCP(down)" ( hcp(north), 10, 23, controls(north),1,9)
-
-

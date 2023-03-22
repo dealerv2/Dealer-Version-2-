@@ -1,0 +1,26 @@
+seed 151 
+#junk stayman
+title "Junk Stayman"
+east_notrump =
+        shape(east, any 4333, any 4432, 2335, 3235, 3325, 2353, 3253, 3352)
+        && hcp(east)>=12 && hcp(east)<=14
+
+west_low = (hcp(west)<8)
+x3=shape(west,4450)
+d=diamonds(east)+diamonds(west)
+h=hearts(east)+hearts(west)
+s=spades(east)+spades(west)
+m8=((s==8) or (h==8))
+
+
+condition
+        (east_notrump and west_low and x3)
+
+generate
+	1000000
+
+action  average "4450,7d" ((d==7) and (not m8)),
+        average "4450,8d" ((d>7) and (not m8)),
+        average "4450,8M" m8,
+        frequency (m8,0,1),
+        frequency (d,0,13)

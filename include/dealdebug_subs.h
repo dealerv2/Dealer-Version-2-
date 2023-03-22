@@ -1,5 +1,6 @@
 #ifndef DEALDBG_SUBS_H
 #define DEALDBG_SUBS_H
+#include "../include/dealtypes.h"
 extern void dump_curdeal(deal dl);
 extern void hexdeal_show(deal dlx, int sz );
 extern void sr_deal_show(deal dlx );

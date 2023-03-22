@@ -18,7 +18,7 @@
 #include <stdlib.h>           /* exit(), malloc(), free(), rand48,   */
 #include <string.h>           /* memcpy, memset, strcpy, strlen etc. */
 #include <time.h>             /* localtime(), asctime, ctime, gmtime,*/
-#include <unistd.h>           /* sysconf, usleep, */
+#include <unistd.h>           /* sysconf, usleep, getopt, write, and other low level i/o */
 #include <sys/random.h>       /* for getrandom() */
 #include <sys/time.h>         /* why do we need both time.h and this one? */
 #include <sys/types.h>        /* /usr/include/x86_64-linux-gnu/sys   for pid_t  */

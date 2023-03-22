@@ -1,6 +1,13 @@
 This is the directory Regression 
 The Descr files in this directory all have a seed cmd in them; the seed number is typically a prime.
-The primes can be got from the ~/Programming/Perl5/testing/list_primes.pl
+The primes can be got from the ~/Programming/Perl5/Testing/primes_list.pl
+
+
+To find out the seeds type the cmd: (which will sort in increasing seed order)
+grep seed Descr.* | sort  -k 2.1 -g
+as of 2023/03/20 the highest seed in use is:  #54 prime is = 257
+
+
 There is also a script that will check the Output files vs the files in the Refer directory.
 If no Refer directory name is given then the Refer Files are in the current directory.
 The files that begin with HOW2 cannot be run in batch mode. 

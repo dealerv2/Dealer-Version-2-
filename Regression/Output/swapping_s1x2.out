@@ -1,0 +1,37 @@
+                  [Swapping test. Try with -x2 and -x3 ]
+   1. North              East                South               West 
+     9 7 6 4 2           A K J T 8           Q 3                 5 
+     A K 6               J 7 4               3                   Q T 9 8 5 2 
+     T                   Q 7 6               J 9 8 3 2           A K 5 4 
+     A J T 8             9 2                 K Q 7 6 3           5 4 
+
+   2. North              East                South               West 
+     9 7 6 4 2           5                   Q 3                 A K J T 8 
+     A K 6               Q T 9 8 5 2         3                   J 7 4 
+     T                   A K 5 4             J 9 8 3 2           Q 7 6 
+     A J T 8             5 4                 K Q 7 6 3           9 2 
+
+   3. North              East                South               West 
+     K Q T 4             A J 5 2             8 7 3               9 6 
+     T                   J 8 7 2             A K 3               Q 9 6 5 4 
+     A K J T 9 6 5       4 2                 Q 8                 7 3 
+     4                   K 9 2               A J 8 7 3           Q T 6 5 
+
+   4. North              East                South               West 
+     K Q T 4             9 6                 8 7 3               A J 5 2 
+     T                   Q 9 6 5 4           A K 3               J 8 7 2 
+     A K J T 9 6 5       7 3                 Q 8                 4 2 
+     4                   Q T 6 5             A J 8 7 3           K 9 2 
+
+   5. North              East                South               West 
+     2                   A K T 8 7           6 5 4 3             Q J 9 
+     K Q T 8 3           6                   A 7 2               J 9 5 4 
+     5 2                 Q 8 7 6             T 4 3               A K J 9 
+     A 9 6 5 3           Q 4 2               K J 8               T 7 
+
+   6. North              East                South               West 
+     2                   Q J 9               6 5 4 3             A K T 8 7 
+     K Q T 8 3           J 9 5 4             A 7 2               6 
+     5 2                 A K J 9             T 4 3               Q 8 7 6 
+     A 9 6 5 3           T 7                 K J 8               Q 4 2 
+

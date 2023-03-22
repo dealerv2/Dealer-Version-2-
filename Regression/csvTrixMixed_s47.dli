@@ -1,0 +1,12 @@
+seed 47 
+generate 100
+produce 2
+title "CSV report with a mixed bag of strings, expressions, hands, DD results"
+ // use the -C cmd line switch to define a file for the CSV output.
+condition
+   hcp(south) >= 10
+
+action csvrpt("South HCP",hcp(south),
+         "North HCP", hcp(north),"N+S HCP", hcp(south)+hcp(north),
+          "Tricks S NT= ", dds(south,notrump),"N S Hands:", NS )
+

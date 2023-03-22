@@ -1,0 +1,45 @@
+seed 223 
+generate   10000
+produce    24
+title " Stress Test Francois Dellacherie Shapes "
+  // This file shows examples of Using the Various Francois Dellachrie shape operators in a simple way.
+  // That is not combinining too many into one statement
+  // The file generates 407 individual distributions from the 10 'shape{}' statements. +1 traditional shape() statement
+
+  // in the Sample shapes produced explanation not all are shown as there are usually WAY too many
+
+condition   shape(north, any 4441 - 1444 )    // allowed to put legacy shape command in same file as FD shape cmd
+     or     shape{north, 5x5x + x5x5 + 6xxx + x6xx } // allowed to put simple legacy distributions in FD shape cmd
+
+          // At least (+) and at most (-) operators
+     or     shape{east, 5-x4+x}     // At most 5 spades, at least 4 diamonds
+                    // Sample HvS shapes := shape(south,0x4x + 0x5x + 1x9x + 2x4x + 4x7x + 5x7x )
+
+          // Permutation Operator Put numbers or x's in parentheses ()
+     or     shape{south, 5(431) + 44(xx) } // any 5431 hand with 5 spades or any 44 majors hand -- 44(xx) same as 44xx
+                     // HvS shapes := shape(east,5134 + 5143 + 5314 + 5341 + 5413 + 5431 + 44xx)
+
+          // Major (M) and minor (m) operators. M and m should be on the left and using with () is recommended but ...
+     or    shape{west, 4M(3+3+2+)}    // balanced hand with 4 card Major
+          // HvS shapes := shape(north,2434 + 2443 + 3424 + 3433 + 3442 + 4234 + 4243 + 4324 + 4333 + 4342 + 4423 + 4432)
+     or     shape{north, 5Mxxx + 4m(4xx)}  // 5 card major, or 4 card minor with 2nd 4 card suit
+                     //  HvS shapes :=  shape(north,5xxx + x5xx + 4x4x + 4xx4 + x44x + x4x4 + xx44)
+     or     shape{east, 4+m5-Mxx } // at least a 4 card minor, at most a 5 card Major
+                     // Above expands to 990 characters, 142 distributions from 0409 to x5x7
+
+         // Range Operator [ ... ] -- specify range or actual numbers
+     or     shape{south, [24-68]s[14]hxx } // 2,4,5,6 or 8 spades, and 1 or 4 hearts
+                     //  HvS shapes := shape(west,21xx + 24xx + 41xx + 44xx + 51xx + 54xx + 61xx + 64xx + 81xx + 84xx)
+
+        // Conditional Operator (:) append on the right after all the other ones to give finer control
+    or      shape{west, (5xxx):h>s,c>d }  // a hand with at least one 5 card suit. H longer than S AND C longer than D
+               // HvS Sample Shapes :=  shape(east,0157 + 0256 + 0445 + 1345 + 1435 +  2506 + 2515 + 3523 + 4513 + 5701)
+       // This next one shows the Conditional Operator with an OR clause instead of AND
+   or       shape{north, (55xx):d>c or h>s}  // Any 55 hand but H longer than S and C longer than D
+         // HvS Sample Shapes := shape(north,0355 + 0535 + 0553 + 1255 + 1525 +  5053 + 5152 + 5251 + 5350 + 5521 + 5530)
+         // and this one shows the use of Arithmetic in the Conditional Operator
+   or     shape{east, 4+s4+h(xx):d>c,h+s==10}
+         //  HvS shapes := shape(north,4621 + 4630 + 5521 + 5530 + 6421 + 6430)
+
+action
+    csvrpt(north, south, east, west)

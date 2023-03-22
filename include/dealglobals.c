@@ -25,10 +25,11 @@ int  side_hand[2][2]= { { 0 , 2 } , { 1 , 3 } } ;
 /* JGM Added Global variables */
  /* Cmd line may set options Will override values from input file if set */
 struct options_st options = {0};        /* C99 supposed to set according to type?*/
-struct param_st parm ;
+struct options_st *p_opts = &options ;
+struct param_st parm = {0};
 int    csv_firsthand = COMPASS_NORTH ;
-char   csv_trixbuff[64] ; // room for 20 * (2digits + comma) and a bit extra
-size_t csv_trixbuff_len ;
+char   csv_trixbuff[64] = {0} ; // room for 20 * (2digits + comma) and a bit extra
+size_t csv_trixbuff_len = 0 ;
 
 /* original cmd line switches -- many also appear in a yyparse action clause. --   would be nicer to put these all in a struct */
 
@@ -36,7 +37,7 @@ int maxgenerate = 0 ;          /* -g: */  /* flex action clause Must be zero for
 int progressmeter = 0;         /* -m */   /* this is a toggle option */
 int Opener = COMPASS_WEST;     /* -O: */  /* flex action clause  0=north (or east) 1=east(or north) 2=south(or west) 3=west(or south) */
 char opc_opener = 'W' ;                   /* define one so that extern will be happy. Dont want to extern a struct memb*/
-int maxproduce = 0     ;       /* -p: */  /* flex action clause Must be zero for Flex to process the input file value*/
+int maxproduce = 0     ;       /* -p: */  /* flex action clause Init value MUST be zero for Flex to process the input file value*/
 int quiet = 0 ;                /* -q */   /* option for pbn printout */
 long seed  = 0 ;               /* -s: */ /* seed can now be set in Input File */
 long seed_provided = -1  ;
@@ -60,6 +61,17 @@ char title[MAXTITLESIZE]= "";  /* -T title. Usually in quotes which are removed 
 size_t  title_len = 0 ;
 FILE *fexp;      /* -X file for exporting to; Normally NOT left as stdout except for testing */
 FILE *fcsv;      /* -C file for csvreport. Open in append mode unless user puts w:filename */
+FILE *rp_file;   /* -L rpdd.zrd file. Default is ../rpdd.zrd */
+char rplib_default[64] = "../rpdd.zrd"; /* parent dir means works from either Debug or Prod */
+
+int    rplib_mode= 0 ;
+int    rp_cnt    = 0 ;
+int    wrap_cnt  = 0 ;
+int    rp_recnum = 0 ;
+int    rplib_blk_sz = RP_BLOCKSIZE ; /* will be adjusted based on DB file size */
+int    rplib_recs   = MAX_RPDD_RECS; /* will be calculated at run time */
+int    rplib_max_seed=MAX_RP_SEED ;
+
 /* -U Path name for the UserEval binary. Default is UserServer in the current directory. Can be set by -U cmd line parm
  * -U Must be full pathname. ../src/MyUserPgm will NOT work.
  * Instead: /usr/local/bin/DealerV2/UserEval/DealerServer  or /home/MyUser/MyDir/MySubDir/MyUserPgm
@@ -115,7 +127,6 @@ int  full_size = 52 ;
  *    dds_pbndeal no longer used. dealer now calls dds with the dds binary format not PBN format as originally coded
  *    deal sorted, and hand sorted no longer needed as we now sort deal by default
  */
-char dds_pbndeal[80] ;      /* the deal in a format DDS likes. 69 chars; similar to printoneline but not quite */
 int deal_sorted = 0 ;       /* Future use; Several print actions could benefit from knowing the hands are sorted */
 int hand_sorted[4] = {0,0,0,0};
 
@@ -195,8 +206,6 @@ int CardAttr_RO [idxEndRO][13] = { /* Values Not changeable by user via altcount
     {  1, 1, 1, 1, 1, 1, 1, 1, 2, 4, 8, 16, 32},  /* ltc weights. Will ID WHICH of the top cards we have. */
     {  0, 0, 0, 0, 0, 0, 0, 0, 0, 2, 5, 9,  13},  /* Kleinman Pts Need to add 1 synergy pt to a suit with A or K and 1 other*/
 } ; /* End CardAttr_RO */
-
-
 
 /* JGM Debugging and learning about Dealer use of Trees */
 struct treeptr_st tree_ptrs[100] ;      /* JGM?+ an array to store pointers for tracing and debugging. */

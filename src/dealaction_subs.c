@@ -51,11 +51,7 @@ void setup_action () { /* run once right after the parsing done */
         break;
       case ACT_PRINT:
         deallist = (deal *) mycalloc (maxproduce, sizeof (deal));
-   #ifdef JGMDBG
-        if(jgmDebug >= 3) {
-            fprintf(stderr, "Setup Action ACT_PRINT maxproduce*52 =%d,  malloc succeeded\n", maxproduce*52 );
-        }
-   #endif
+        JGMDPRT(3, "Setup Action ACT_PRINT maxproduce*52 =%d,  malloc succeeded\n", maxproduce*52 );
         break;
       case ACT_AVERAGE:
         acp->ac_int1 = 0 ; // this holds the sum  so far.
@@ -64,11 +60,7 @@ void setup_action () { /* run once right after the parsing done */
         acp->ac_u.acuavg.sqsum = 0 ; //
         acp->ac_u.acuavg.avg = 0.0; // double float pt. qty should be approx 0.5
         acp->ac_u.acuavg.vary= 0.0; // double float pt. qty variance. should be approx 1/sqrt(12) = 0.28867
-   #ifdef JGMDBG
-        if(jgmDebug >= 3 ) {
-           fprintf(stderr, "Average Init Done. ac_u.acuavg.sqsum=%ld In setup_action\n",((long int) acp->ac_u.acuavg.sqsum));
-        }
-   #endif
+        JGMDPRT(3, "Average Init Done. ac_u.acuavg.sqsum=%ld In setup_action\n",((long int) acp->ac_u.acuavg.sqsum));
         break;
       case ACT_FREQUENCY:
         acp->ac_u.acu_f.acuf_freqs = (long *) mycalloc (
@@ -109,10 +101,7 @@ void action () {            /* For each 'Interesting' deal, Walk the action_list
   char *expbp = export_buff ;
   double  dcount, dsum, dsqsum ;
   int actionitem = 0;  /* Debugging tracer var */
-      #ifdef JGMDBG
-          if(jgmDebug >= 8) { fprintf(stderr, " .... Just entered Action() actionitem=%d\n",actionitem ); }
-      #endif
-
+  JGMDPRT(8," .... Just entered Action() actionitem=%d\n",actionitem );
   sortDeal(curdeal) ; /* JGM sort each hand, Spade Ace downto Club deuce. Simplifies many actions and hardly costs */
   /* next ones not needed now that always sorting, but might be useful error check */
   deal_sorted = 1;
@@ -120,9 +109,7 @@ void action () {            /* For each 'Interesting' deal, Walk the action_list
 
   for (acp = actionlist; acp != 0; acp = acp->ac_next) {
     actionitem++;
-    #ifdef JGMDBG
-        JGMDPRT(6, "ActionItem [%3d] of type [%3d] \n", actionitem,acp->ac_type);
-    #endif
+    JGMDPRT(6, "ActionItem [%3d] of type [%3d] \n", actionitem,acp->ac_type);
     switch (acp->ac_type) {
       default:
         assert (0); /*NOTREACHED */
@@ -172,7 +159,7 @@ void action () {            /* For each 'Interesting' deal, Walk the action_list
           printpbn (nprod, curdeal);
         break;
       case ACT_PRINT:
-        memcpy (deallist+nprod, curdeal, sizeof (deal));  /*save curdeal in malloc'ed area for later printing */
+        memcpy (deallist+nprod, curdeal, sizeof (deal));  /*save sorted curdeal in malloc'ed area for later printing */
         JGMDPRT(6,"nprod=%d,dealsize=%ld,@deallist[0]=%p,@deal_dest=%p\n",nprod,sizeof(deal),(void *)deallist, (void *)(deallist+nprod) );
         break;
       case ACT_AVERAGE:  /* mods by JGM to a) have a running avg, and b) include Variance as well as avg in final rpt */
@@ -193,12 +180,8 @@ void action () {            /* For each 'Interesting' deal, Walk the action_list
            acp->ac_u.acuavg.avg  = dsum ;
            acp->ac_u.acuavg.vary = dsqsum - dsum*dsum ;
         }
-   #ifdef JGMDBG
-        if(jgmDebug >= 7) {
-          fprintf(stderr, "Action_ptr=%p, Count=[%ld], Average Expr=[%d], Sum=[%ld], Sumsq=[%ld], RunningAvg=[%g]\n",
-            (void *)acp, acp->ac_u.acuavg.count, expr, ((long int) acp->ac_u.acuavg.sum), ((long int) acp->ac_u.acuavg.sqsum), dsum/dcount );
-          }
-   #endif
+        JGMDPRT(7, "Action_ptr=%p, Count=[%ld], Average Expr=[%d], Sum=[%ld], Sumsq=[%ld], RunningAvg=[%g]\n",
+           (void *)acp, acp->ac_u.acuavg.count, expr, ((long int) acp->ac_u.acuavg.sum), ((long int) acp->ac_u.acuavg.sqsum), dsum/dcount );
         break;
       case ACT_FREQUENCY:
         expr = evaltree (acp->ac_expr1);
@@ -253,24 +236,18 @@ void action () {            /* For each 'Interesting' deal, Walk the action_list
               expr = evaltree (csvptr->csv_tr); /* returns int only */
               fprintf (fcsv, "%c%d", sep, expr);          /* dont need quotes around numbers */
               sep = ',';
-         #ifdef JGMDBG
-               if (jgmDebug >= 4) {fprintf(stderr, "CSVRPT expr= %d\n", expr ); }
-         #endif
-            } // end if expr
+              JGMDPRT(4, "CSVRPT expr= %d\n", expr );
+            } // end if csvptr->csv_tr
             if (csvptr->csv_str) {  /* term is some kind of string. we put single quotes around it in case it has commas */
-              fprintf (fcsv, "%c'%s'", sep, csvptr->csv_str); /*put quotes around a string in case it contains commas */
-              sep = ',';
-         #ifdef JGMDBG
-               if (jgmDebug >= 4) {fprintf(stderr, "CSVRPT Str== %s\n",csvptr->csv_str ); }
-         #endif
-            } // end if string
+               fprintf (fcsv, "%c'%s'", sep, csvptr->csv_str); /*put quotes around a string in case it contains commas */
+               sep = ',';
+               JGMDPRT(4,  "CSVRPT Str== %s\n",csvptr->csv_str );
+            } // end if string csvptr->csv_str
             if (csvptr->csv_hands) { /* print the requested hands, in gibpbn format ; order is N,E,S,W */
                fprintf(fcsv, "%c",sep) ; /* leave printhands_pbn as a generic routine; no leading comma or trailing \n*/
                printhands_pbn(fcsv, csvptr->csv_hands, curdeal ) ; /* csv_hands is a bit mask of compasses to print */
                sep = ',' ;
-         #ifdef JGMDBG
-               if (jgmDebug >= 4) {fprintf(stderr, "CSVRPT Hands_mask= %d\n",csvptr->csv_hands ); }
-         #endif
+               JGMDPRT(4,  "CSVRPT Hands_mask= %d\n",csvptr->csv_hands );
             }  // end if hands
             if (csvptr->csv_trix) {  /* user wants tricks in all 5 strains for some set of hands */
                csv_trixbuff_len = csv_trix(csv_trixbuff, csvptr->csv_trix) ; //fmt a buff with comma sep trick counts
@@ -280,9 +257,7 @@ void action () {            /* For each 'Interesting' deal, Walk the action_list
             sep = ',';  // this one should replace all the others above
             csvptr = csvptr->next;
           } /* end while csvptr -- reached end of csvlist */
-         #ifdef JGMDBG
-               if (jgmDebug >= 4) {fprintf(stderr, "CSVRPT end of list printing NewLine\n" ); }
-         #endif
+         JGMDPRT(4, "CSVRPT end of list printing NewLine\n" );
          fprintf(fcsv, "\n") ;  /* print a newline after the last item is done */
          sep = ' '; /*re-init for next line in csv report */
       } /* end case ACT_CSVRPT */
@@ -297,24 +272,18 @@ void action () {            /* For each 'Interesting' deal, Walk the action_list
               expr = evaltree (csvptr->csv_tr); /* returns int only */
               fprintf (stdout, "%c%d", sep, expr);          /* dont need quotes around numbers */
               sep = ',';
-         #ifdef JGMDBG
-               if (jgmDebug >= 4) {fprintf(stderr, "CSVRPT expr= %d\n", expr ); }
-         #endif
+               JGMDPRT(4, "PRINTRPT expr= %d\n", expr );
             } // end if expr
             if (csvptr->csv_str) {  /* term is some kind of string. we put single quotes around it in case it has commas */
-              fprintf (stdout, "%c'%s'", sep, csvptr->csv_str); /*put quotes around a string in case it contains commas */
-              sep = ',';
-         #ifdef JGMDBG
-               if (jgmDebug >= 4) {fprintf(stderr, "CSVRPT Str== %s\n",csvptr->csv_str ); }
-         #endif
+               fprintf (stdout, "%c'%s'", sep, csvptr->csv_str); /*put quotes around a string in case it contains commas */
+               sep = ',';
+               JGMDPRT(4, "PRINTRPT Str== %s\n",csvptr->csv_str );
             } // end if string
             if (csvptr->csv_hands) { /* print the requested hands, in gibpbn format ; order is N,E,S,W */
                fprintf(stdout, "%c",sep) ; /* leave printhands_pbn as a generic routine; no leading comma or trailing \n*/
                printhands_pbn(stdout, csvptr->csv_hands, curdeal ) ; /* csv_hands is a bit mask of compasses to print */
                sep = ',' ;
-         #ifdef JGMDBG
-               if (jgmDebug >= 4) {fprintf(stderr, "CSVRPT Hands_mask= %d\n",csvptr->csv_hands ); }
-         #endif
+               JGMDPRT(4, "PRINTRPT Hands_mask= %d\n",csvptr->csv_hands );
             }  // end if hands
             if (csvptr->csv_trix) {  /* user wants tricks in all 5 strains for some set of hands */
                csv_trixbuff_len = csv_trix(csv_trixbuff, csvptr->csv_trix) ; //fmt a buff with comma sep trick counts
@@ -324,11 +293,9 @@ void action () {            /* For each 'Interesting' deal, Walk the action_list
             sep = ',';  // this one should replace all the others above
             csvptr = csvptr->next;
           } /* end while csvptr -- reached end of prtrpt list of terms */
-         #ifdef JGMDBG
-               if (jgmDebug >= 4) {fprintf(stderr, "CSVRPT end of list printing NewLine\n" ); }
-         #endif
-         fprintf(stdout, "\n") ;  /* print a newline after the last item is done */
-         sep = ' '; /*re-init for next line in csv report */
+          JGMDPRT(4, "PRINTRPT end of list printing NewLine\n" );
+          fprintf(stdout, "\n") ;  /* print a newline after the last item is done */
+          sep = ' '; /*re-init for next line in csv report */
       } /* end case ACT_PRINTRPT */
         break;
      case ACT_BKTFREQ:
@@ -517,8 +484,11 @@ void printdeal (deal d) {   /* the PRINTALL action. Print All 4 hands on the fly
   if ( (((nprod+1) % 10) == 0) && (title_len > 0)) { printf("\f"); do_title = 1 ; } /* 10 deals per page then a form feed and another title */
 }  /* end printdeal */
 
-    /* The print(compass list) action: print a given player's hands done at action_cleanup time*/
-    /* 'n-hands' across at a time (n=4 usually) from an array of hands saved during the generation phase */
+    /*     ----- REDO ------
+     * The print(compass list) action: print a given player's hands. At action_cleanup time*/
+    /* 'n-hands' across at a time (n=4 usually) from an array of hands saved during the generation phase
+     * This routine could be made much more efficient by using the fact that the hands are sorted.
+     */
 void printhands (int boardno, deal *dealp, int player, int nhands) {
 
   int i, suit, rank, cards;

@@ -1,0 +1,6 @@
+seed 241
+title "Swapping test. Try with -x2 and -x3 "
+produce 12
+action printall
+#  -------------------------------------------------------------------
+

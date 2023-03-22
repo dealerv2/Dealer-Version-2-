@@ -1,0 +1,18 @@
+seed 101 
+generate   10000
+produce    10
+title " DDS and Eval Contract using same cache"
+condition ( (hcp(north)+hcp(south)) >= 22 && (hcp(north)+hcp(south)) <= 24 ) ||
+          ( ( (hcp(east)+hcp(west)) >= 17 && (hcp(east)+hcp(west)) <= 23 ) &&
+          ( (hearts(west)+hearts(east) >=8 ) && (hearts(west)+hearts(east) <=10) ) )
+
+# Note that we use south and west in the dds calls since that is what evalcontract uses and we want to take advantage of caching.
+NStricks_NT=dds(south,notrump)
+EWtricks_H =dds(west, hearts)
+
+action   printrpt(deal, "NS_tricksNT ", NStricks_NT, "EW_tricksH ", EWtricks_H ), 
+         evalcontract ( NS , z2Nx , vul ),
+         evalcontract ( EW , z3Hxx , nv  ),
+         average "EW Tricks in Hearts " EWtricks_H,
+         average "EW HCP " hcp(east)+hcp(west)
+

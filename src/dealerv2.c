@@ -15,6 +15,7 @@
 // 2022/11/07  2.5.0  usereval functionality coded; testing to do.
 // 2023/01/07  2.5.2a Merged in changes from V4 to fix predeal; Shuffle, dealcards_subs.c and globals, etc.
 // 2023/03/07  2.5.3  Fixes to printcompass, and documentation
+// 2023/03/20  2.6.0  Added Library mode, to use Richard Pavlicek's database of 10 Million plus solved deals.
 //
 #ifndef _GNU_SOURCE
   #define _GNU_SOURCE
@@ -29,7 +30,10 @@
 #include "../src/UsageMsg.h"
 #include "../include/dealdebug_subs.h"
 #include "../include/dbgprt_macros.h"
+     void finalize_options ( struct options_st *opts ) ;
+     void setup_runtime    ( struct options_st *opts ) ;
 
+#define FATAL_OPTS_ERR -10
 /* next file for some subs that main uses to setup runtime and debug statements */
 #include "mainsubs.c"
 
@@ -46,41 +50,27 @@ int main (int argc, char **argv) {
     jgmDebug = 1 ; // Assume we want some debug output. User can always set to zero from cmd line ..
 #endif
     extern int yyparse  (void) ;
+
+    /* initialization functions from the file dealinit_subs.c and others. Used only in main so not in protos.h*/
     void  SetResources(  int maxMemoryMB,  int maxThreads); /* for DDS */
+    void init_globals ( struct options_st *opts ) ;
+    void finalize_options ( struct options_st *opt_ptr) ;
+    void init_runtime(struct options_st *opts) ;
+    void init_cards() ;
+
+
     /* opts collects all cmd line parms in one place. Vars from previous versions of Dealer kept also so some duplication */
     struct options_st *opts ;
     struct param_st   *scr_varp ; /* pointer to script variables struct */
-    int i ;
+
     int keephand ;
 
-    scr_varp = &parm ;  /* parm is a global scr_varp is a pointer to script variable*/
-    memset( &parm, 0 , sizeof(parm) ) ;   /* filling with zeros should both terminate the 'strings' and set len to 0 */
+    struct timeval tvstart, tvstop;
+    gettimeofday (&tvstart, (void *) 0); /* Start clock before setup done. Is this fair? */
 
+    scr_varp = &parm ;        /* parm is a global scr_varp is a pointer to script variable*/
     opts = &options ;         /* struct should have been init to all zeroes or null strings in dealglobals.c */
-
-    /* The non opt versions of the above will have been compile time init in dealglobals.c */
-    /* None of the following are set in the input file and so should be replaced by the options.xxxx variable */
-    errflg = 0;
-    progressmeter = 0;
-    swapping = 0;
-    swapindex = 0;
-    verbose = 1;
-    quiet = 0 ;
-    uppercase = 0 ;
-    input_file = '\0' ;
-    /* set these next 3 so that yyparse/flex will fill them in if reqd */
-    maxdealer = -1;
-    maxvuln = -1;
-    dds_dealnum = -1;
-
-    /* These globals cannot be a compile time init, since the user may re-direct stdin and stdout when calling dealer */
-  fexp = stdout ; // FILE *fexp Will be opened by getopts if there is a -X option
-  fcsv = stdout ; // FILE *fcsv Will be opened by getopts if there is a -C option
-
-  struct timeval tvstart, tvstop;
-  gettimeofday (&tvstart, (void *) 0);
-
-  initdistr ();    /* create the 4D distribution array for use by the shape statement */
+    init_globals(opts) ;      /* give globals not set at compile time sane values before we start */
 
  /* process cmd line options. Save them for later after parsing done */
  /* Note that get_options returns immediately after it has found a -V or -h switch
@@ -88,14 +78,17 @@ int main (int argc, char **argv) {
   * the said switch. e.g. dealerv2 -D3 -T "Test Run" -M2 -C w:/tmp/MyDataFile.csv -0 12 - 1 14 -V
   * This will show the options struct contents and the script vars before the version info and exiting.
   */
-  get_options( argc, argv, opts) ;
+
+  /* get options from cmd line before anything else in case we just want help or Version */
+  /* Also can detect errors such as missing files before we do a bunch of un-necessary work */
+  errflg = get_options( argc, argv, opts) ;
 
    #ifdef JGMDBG
-        if(jgmDebug > 0 ) {  fprintf(stderr, "JGMDBG DEFINED= %d in main version %s \n",JGMDBG, VERSION ); }
+        JGMDPRT(1, "JGMDBG DEFINED= %d in main version %s \n",JGMDBG, VERSION );
         #ifdef YYDEBUG
-             if(jgmDebug > 0 ) {  fprintf(stderr, "YYDEBUG DEFINED yydebug== %d BISON DBG Active.  \n",yydebug ); }
+            JGMDPRT(1, "YYDEBUG DEFINED yydebug== %d BISON DBG Active.  \n",yydebug );
         #else
-            if(jgmDebug > 0 ) {  fprintf(stderr, "YYDEBUG NOT Defined.  BISON DBG IN_Active.  \n" ); }
+            JGMDPRT(1, "YYDEBUG NOT Defined.  BISON DBG IN_Active.  \n" );
         #endif
     #endif
 
@@ -108,6 +101,10 @@ int main (int argc, char **argv) {
   if (3 == options.options_error || 4 == options.options_error  ) { /* Print Version Info(3) or Help/Usage(4) and exit */
       return 0 ;
   }
+  if (errflg <= FATAL_OPTS_ERR ) {
+     fprintf(stderr, "FATAL Error In GetOpts[%d]. Ending Program \n",errflg );
+     exit (-1) ;
+   }
 
   if (argc - optind > 2 || errflg) {
     fprintf (stderr, "Usage: %s %s\n", argv[0], UsageMessage );
@@ -117,12 +114,10 @@ int main (int argc, char **argv) {
     perror (argv[optind]);
     exit (-1);
   }
-  newpack(fullpack);   /* fill fullpack with cards in order from North SA downto West C2 */
-  memset(stacked_pack, NO_CARD, 52) ;  /* stacked pack used for preDeals */
-  memset(curdeal, NO_CARD, 52 ) ;
-  stacked_size = 0 ;
-  memcpy(small_pack, fullpack, 52 ) ;  /* Shuffle works from small_pack not fullpack */
-  small_size = 52 ;
+
+  /* init the stuff that yyparse or flex code might need */
+  initdistr ();    /* create the 4D distribution array for use by the shape statement */
+  init_cards();    /* setup full pack and NO_CARD in the stacked_pack and small_pack */
 
   /*
    * build the list of conditions to evaluate and the list of actions to do
@@ -131,9 +126,6 @@ int main (int argc, char **argv) {
   JGMDPRT(3, "Calling yyparse \n");
 
   yyparse ();
-
-   /* V4.5 ensure the two tables are in sync yyparse may have changed one but not the other*/
-   for (i=0 ; i< 13 ; i++ ) { points[i] = tblPointcount[idxHcp][i] ; }
 
 #ifdef JGMDBG   /* print several results from the parsing phase */
   if (jgmDebug >= 3) {
@@ -158,96 +150,52 @@ int main (int argc, char **argv) {
 #endif
 
 
-  /* ----------------- Parsing of User Specs done. Decision Tree built. Action list built. -------------------*/
-  /* Now initialize the rest of the program, taking into account the command line parms
-   * Some of which may over ride the input file
-   */
+  /* ----------- Parsing of User Specs done. Decision Tree built. Action list built. cmd_line opts saved ---------*/
 
-  initprogram(opts);  /* here we will over-ride yyparse if reqd from cmd line and do other stuff. */
-
-    /*
-     * Initialize the Deck with predealt cards from the stacked_pack, and leftover cards from small_pack
-     * Wait till now because program opts may over-ride the parser
-     */
-  setup_deal();
-
-   /*
-   * Using glibc standard lib routines rand48 and srand48.
-   * If no seed provided, use function init_rand48 which uses kernel as seed source
-   */
-  if (jgmDebug >= 3 ) { JGMDPRT(3,"Initializing RNG. Seed_provided=%ld, seed=%ld\n",seed_provided,seed); }
-  if (!seed_provided) {
-    seed = SRANDOM(0) ; /* use init_rand48() to init the RNG with a seed that the kernel provides */
-  }
-  else {
-    seed = SRANDOM(seed) ; /* use init_rand48() to init the RNG with the users seed */
-  }
-  JGMDPRT(3,"RNG initialized with Seed val=%ld\n",seed );
-   /* If user has set TABLEMODE (-M 2) but neglected to set Threads (-R n), then we use the TblModeDefault value */
-  if ( (opts->dds_mode == 2 ) && (opts->nThreads < 2) ) {
-     opts->nThreads = TblModeThreads ;
-     nThreads = TblModeThreads ;
-     opts->maxRamMB = 160 * TblModeThreads ;
-     MaxRamMB = opts->maxRamMB ;
-  } /* else dds_mode is 1 OR user has spec'd both Mode and Threads values */
-
-  SetResources(opts->maxRamMB, opts->nThreads) ; /* 160MB/Thread max; 9,12,16 all equal and 25% faster than 6 Threads for Mode2*/
-  if (maxgenerate == 0) maxgenerate = 10000000;
-  if (maxproduce == 0)  maxproduce = ((actionlist == &defaultaction) || will_print) ? 40 : maxgenerate;
-  JGMDPRT(2, "Maxgenerate=%d, Maxproduce=%d, DDS Threads=%d, UserServerReqd=%d\n",
-               maxgenerate, maxproduce, opts->nThreads, userserver_reqd );
-   /*
-    * Start the user server if there was a usereval statement in the input file
-    */
-    if (userserver_reqd != 0 )  {
-       userserver_pid = setup_userserver( server_path ) ;
-       if (userserver_pid == -1 ) {
-          perror(" Creating the server process returns failed PID. Aborting... ");
-          assert(0) ;
-       }
-       JGMDPRT(3,"UserServer daemon started with pid=%d\n",userserver_pid);
-    } /* user server daemon started */
-
-  /* Walk the action list initializing any actions that need it */
-  setup_action();
-
- if (srvDebug > 0 ) {
-      // sleep(1) ;
-      usleep(5000); /* 5 msec Give the child time to tell us his logfile/errmsg file name. before we start our own output */
-      printf("\f") ; /* issue a form feed to start the Dealer output */
-      fsync(1);  /* clear out stdout before starting real info */
- }
-
- /* Initialize the seat fields in handstat array for later use by the Server */
- for (i=0 ; i < 4 ; i++ ) { hs[i].hs_seat = i ; }
+     finalize_options ( opts ) ;   /* resolve diffs between yyparse and cmd line. alloc runtime RAM. set RNG and DDS parms. start server etc. */
+     init_runtime     ( opts ) ;
 
  /* ----------- Begin the Main Loop ------------*/
-  JGMDPRT(4,"^^^^^^ Begin Main Loop ^^^^^^\n") ;
+  JGMDPRT(2,"^^^^^^ Begin Main Loop ^^^^^^ libMode=%d wrap_cnt=%d\n",opts->rplib_mode, wrap_cnt) ;
 
  if (progressmeter) { fprintf (stderr, "Calculating...  0%% complete\r"); }// \r CR not \n since want same line ..
+
  for (ngen = 1, nprod = 0; ngen <= maxgenerate && nprod < maxproduce; ngen++) { /* start ngen at 1; simplifies counting */
-      treedepth = 0;
-      JGMDPRT(8,"In Main Generating Hands: ngen=%d Calling deal_cards\n",ngen );
-      deal_cards(curdeal) ; /* NEW 2023-01-06 -- Shuffle, Swap, or Predeal then Shuffle as required */
-      #ifdef JGMDBG
-        if (jgmDebug >= 9) {  sr_deal_show(curdeal); }
-        if (jgmDebug >= 8 ) {
+      if (opts->rplib_mode == 0 ) { /* normal deal random hands mode */
+         JGMDPRT(8,"In Main Generating Hands: ngen=%d Calling deal_cards\n",ngen );
+         deal_cards(curdeal) ; /* NEW 2023-01-06 -- Shuffle, Swap, or Predeal then Shuffle as required */
+      }
+      else { /* RP lib mode */
+         /* get a deal from the RP database. Format as if it were 'dealt' by this program then continue as usual */
+         get_rpdeal(opts, curdeal) ; /*sets curdeal and also the dds_res_bin 20 results struct */
+         JGMDPRT(8,"get_rpdeal returned to main. ngen=%d \n",ngen );
+         if (wrap_cnt >= 2 ) {
+         /* we are on our second pass thru the library file.
+          * There is no point so show err message and quit
+          */
+            fprintf(stderr, " All records in Library file scanned. Cannot produce %d hands. Ending Early. \n",opts->max_produce );
+            break ;
+         }
+      } /* end else RP lib mode */
+   #ifdef JGMDBG
+      if (jgmDebug >= 9) {  sr_deal_show(curdeal); }
+      if (jgmDebug >= 8 ) {
             struct handstat *hsp = hs;
             JGMDPRT(8, " Calling Analyze for ngen=%d \n", ngen);
             JGMDPRT(8, "hs_size=%lx, handstat[0]=>%p, handstat[1]=>%p,handstat[2]=>%p, handstat[3]=>%p\n",
                sizeof(struct handstat), (void *)hsp, (void *)(hsp+1), (void *)(hsp+2), (void *)(hsp+3) );
-            }
-      #endif
+         }
+   #endif
 
-      analyze (curdeal, hs);  // Collect and save all info that will be needed by eval_tree() aka interesting() */
+      analyze (curdeal, hs);  // Collect and save all info that will be needed by eval_tree() aka interesting() and server */
 
       JGMDPRT(7, " Calling Interesting for ngen=%d ", ngen);
 
-      keephand = interesting() ;  /* will showtree if in DBG mode */
+      keephand = interesting() ;
       JGMDPRT(7, " Interesting aka evaltree Returns %d\n", keephand);
-      showtree = 0 ;              /*in debug mode only need to show the tree once; its the same for all hands */
+      // showtree = 0 ;      /* no longer done here. done right after yyparse */
       if (keephand) {             /* evaltree returns TRUE for the condition user specified */
-                        JGMDPRT(9,"Interesting returns true Calling Action() now.");
+          JGMDPRT(9,"Interesting returns true Calling Action() now.");
           action();                        /* Do action list */
           nprod++;
           if (progressmeter) {
@@ -268,18 +216,24 @@ int main (int argc, char **argv) {
   if (progressmeter) { fprintf (stderr, "                                      \r"); }
   gettimeofday (&tvstop, (void *) 0);
 
-  cleanup_action();                /* This will do all the end of run actions such as: Average, Frequency, Frequency2D */
+  cleanup_action();         /* This will do all the end of run actions such as: printcompass,Average, Frequency, Frequency2D */
 
   if (verbose) {
     if (strlen(title) > 0 ) { printf("\n%s\n",title); }
     printf ("Generated %d hands\n", ngen);
     printf ("Produced  %d hands\n", nprod);
-    printf ("Initial random seed %lu\n", seed);
+    if (0 == opts->rplib_mode )  {                    /* normal run. Not reading from Library file */
+       printf ("Initial random seed %lu\n", seed);
+    }
+    else {
+       printf ("Library file records read %d, Wrap-arounds=%d\n", rp_cnt, wrap_cnt);
+       printf ("Library file starting seed %lu\n", opts->rplib_seed);
+    }
     printf ("Time needed %8.3f sec%s",
              (tvstop.tv_sec + tvstop.tv_usec / 1000000.0 -
              (tvstart.tv_sec + tvstart.tv_usec / 1000000.0)), crlf);
     if (jgmDebug >= 2 ) { /* print some additional info for user even if JGMDBG Code not included */
-      fprintf(stdout, "Tot Calls to DDS =%6d, DDS Solve  Calls=%6d\n", dbg_dds_res_calls,  dbg_dds_lib_calls );
+      fprintf(stdout, "Tot Calls to DDS =%6d, DDS Solve  Calls=%6d DDS_Par Calls=%d\n", dbg_dds_res_calls,  dbg_dds_lib_calls, dbg_parscore_calls );
       fprintf(stdout, "Tot Calls to GIB =%6d, GIB Solve  Calls=%6d\n", dbg_dd_calls, dbg_tdd_calls );
       fprintf(stdout, "Tot Calls to OPC =%6d, OPC Calc   Calls=%6d\n", dbg_opc_calls, dbg_opc_cmd_calls );
       fprintf(stdout, "Tot Ask Query    =%6d, UserServer Calls=%6d\n", dbg_userserver_askquery, dbg_userserver_extcalls );

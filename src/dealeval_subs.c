@@ -84,134 +84,6 @@ int hascard (deal d, int player, card thiscard) {
   return (hs[player].Has_card[CARD_SUIT(thiscard)][CARD_RANK(thiscard)] );
 }
 
-void predeal_cmdparms(int compass, char *holding) { // preDeal[n]
-        char suit, ch;
-        size_t holding_len ;
-        int  l  ;
-        int cnt = 0 ;
-        holding_len = strlen(holding) ;
-
-#ifdef JGMDBG
-          if(jgmDebug >= 4 ) {
-             fprintf(stderr, "Predeal_cmdparms:: Compass=%d, holding=[%s]\n", compass, holding) ;
-          }
-#endif
-        suit = ' ';
-        for (l = 0 ; l < holding_len; l++ ) {
-            ch = *(holding + l) ;
-
-            if (ch == 'C' || ch == 'D' || ch == 'H' || ch == 'S' ) { suit = ch ; }
-            else if (isCard(ch) >= 0 ) { predeal(compass, make_card(ch, suit)  );  cnt++ ;}
-            /* if not a suit or  card skip it; probably a comma or other suit separator */
-        }
-   #ifdef JGMDBG
-          if(jgmDebug >= 4 ) {
-             fprintf(stderr, "Predeal_cmdparms:: Holding len=%ld, cards predealt = %d\n", holding_len, cnt ) ;
-          }
-   #endif
-
-} /* end predeal_cmdparms() */
-
-/* Over-ride what was in input file with what was entered on the cmd line via switches */
-void initprogram ( struct options_st *opt_ptr) {
- /* this function primarily allows user to override what is in the input file.
-  * also does some rudimentary consistency checking
-  */
-  int i;
-  void ZeroCache( DDSRES_k *Results) ;
-
-    /* if the use_side flag is set, we need to set the use_compass flags for both seats regardless of what the parser did*/
-    if (use_side[0] == 1 ) {use_compass[0] = 1; use_compass[2]= 1;  } /* NS */
-    if (use_side[1] == 1 ) {use_compass[1] = 1; use_compass[3]= 1;  } /* EW */
-    if (opt_ptr->opc_opener != '\0' ) { /* cmd line entry (if any) has highest priority*/
-        Opener = opt_ptr->opener;       /* Get opts function will have set both */
-        opc_opener = opt_ptr->opc_opener ;
-    }
-    else {  /* Keep opts struct in sync with the default or anything that Flex has set */
-         opt_ptr->opener = Opener ;
-         opt_ptr->opc_opener = seat_id[Opener] ;
-         opc_opener = opt_ptr->opc_opener;
-    }
-     /* need to check the title stuff here, since yyparse() may have set it also */
-    if( opt_ptr->title_len > 0 ) {
-       title_len = opt_ptr->title_len  ;
-       strncpy( title, opt_ptr->title, MAXTITLESIZE - 1 );
-    }
-    JGMDPRT(4,"NewTitle=[%s], NewTitleLen=[%ld]\nCmdlineTitle=[%s],CmdLineTitleLen=[%ld]\n",
-                  title, title_len, opt_ptr->title, opt_ptr->title_len ) ;
-
-     /* need to check the seed stuff here, since yyparse() may have set it also */
-    if( opt_ptr->seed_provided > 0 ) {  /* getopts will set this to 1 if there is a -s switch on cmd line */
-       seed_provided = opt_ptr->seed_provided  ;
-       seed = opt_ptr->seed;
-    }
-    JGMDPRT(4, "New Seed[%ld],Cmdline seed[%ld]\n", seed, opt_ptr->seed ) ;
-
-    /* Next we allow user to over-ride any predeal statements in the input file via cmd line switches */
-    /* Undo any predealing yyparse has done */
-     if (opt_ptr->preDeal_len[0] > 0 || opt_ptr->preDeal_len[1] > 0 ||
-         opt_ptr->preDeal_len[2] > 0 || opt_ptr->preDeal_len[3] > 0 )  {
-        JGMDPRT(4, "Setting up predeal from the cmdline \n");
-        /* Reset everything relating to deal initialization to reverse whatever yyparse might have done */
-        newpack(fullpack) ;
-        memcpy(small_pack, fullpack, 52) ;
-        memset(stacked_pack, NO_CARD, 52 ) ;
-        stacked_size = 0 ;
-        small_size = 52 ;
-        memset(curdeal, NO_CARD, 52 ) ;
-        for (i =0 ; i < 4 ; i++ ) {
-           if (opt_ptr->preDeal_len[i] > 0 ) {
-              JGMDPRT(4, "Calling Predeal hand = %c [%s] \n", "NESW"[i], opt_ptr->preDeal[i] );
-              predeal_cmdparms(i, opt_ptr->preDeal[i] ) ;
-           }
-        }
-      } /* end if checking the lengths for predeal */
-      #ifdef JGMDBG
-         if (jgmDebug >=4 ) {
-            fprintf(stderr, "init_program.244:: Predeal check, stacked_size=%d FullPack, StackedPack, curdeal\n",stacked_size);
-            sr_deal_show(fullpack);
-            sr_deal_show(stacked_pack);
-            sr_deal_show(curdeal) ;
-         }
-      #endif
-
-    /* These next ones are never set in the Input file */
-    /* These next two are set by main before calling getopts, but may have been overridden */
-    if ( par_vuln != -1 ) { /* user has said he will be doing Par calcs */
-        if (dds_mode != DDS_TABLE_MODE ) {
-           dds_mode = DDS_TABLE_MODE ;
-        } /* Must do full TableCalc to get par scores */
-    }
-
-    ZeroCache(&dds_res_bin) ; /* dds_res_bin is a global struct holding tricks for 20 combos of leader and strain */
-    JGMDPRT(4, "Done initprogram.260 dds_mode=%d, Dbg_Verbosity=%d, vers=%s\n", dds_mode, jgmDebug, VERSION ) ;
-} /* end init program */
-
-/* Various handshapes can be asked for. For every shape the user is
-   interested in a number is generated. In every distribution that fits that
-   shape the corresponding bit is set in the distrbitmaps 4-dimensional array.
-   This makes looking up a shape a small constant cost.
-*/
-void initdistr () {
-  int ***p4, **p3, *p2;
-  int clubs, diamonds, hearts;
-
-  /* Allocate the four dimensional pointer array. calloc will set it to zero. */
-
-  for (clubs = 0; clubs <= 13; clubs++) {
-    p4 = (int ***) mycalloc ((unsigned) 14 - clubs, sizeof (*p4));
-    distrbitmaps[clubs] = p4;
-    for (diamonds = 0; diamonds <= 13 - clubs; diamonds++) {
-      p3 = (int **) mycalloc ((unsigned) 14 - clubs - diamonds, sizeof (*p3));
-      p4[diamonds] = p3;
-      for (hearts = 0; hearts <= 13 - clubs - diamonds; hearts++) {
-        p2 = (int *) mycalloc ((unsigned) 14 - clubs - diamonds - hearts, sizeof (*p2));
-        p3[hearts] = p2;
-      }
-    }
-  }
-} /* end initdistr */
-
 // The 'tops' functions are related to the new modern ltc that calculates in half-losers by JGM
 void dbgtops(int topcards[NSUITS][3]) {
   int s;
@@ -1064,7 +936,7 @@ int get_opc_vals (struct opc_Vals_st *opcRes, char *cmd_buff ) {
                         &opcRes->DOP[0], &opcRes->DOP[1], &opcRes->DOP[2], &opcRes->DOP[3], &opcRes->DOP[4], &opcRes->DOP_long );
     opcRes->fields += fscanf(fp, " %5f %5f", &opcRes->QL_suit, &opcRes->QL_nt );
 
-        DBGLOC("DOP fscanf Calls return fields=%d\n",opcRes->fields);
+        JGMDPRT(8,"DOP fscanf Calls return fields=%d\n",opcRes->fields);
  #ifdef JGMDBG
     if (jgmDebug >= 8 ) {
         int i ;

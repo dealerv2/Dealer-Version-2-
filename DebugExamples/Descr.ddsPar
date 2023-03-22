@@ -1,7 +1,0 @@
-generate   10000
-produce    200
-#title " Checking DDS Par Timing 200 Hands One Call to Lib"
-#condition dummy
-
-action
-    average "Par NS = " par(NS)

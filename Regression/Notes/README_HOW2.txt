@@ -27,4 +27,16 @@ test_dealer.pl : This script will loop over all the files that begin with Descr.
       The user is expected to change the name of the program that is being run, to call upon either the known to be good version of dealerv2
       or the version under test.
 
+dealerv2_chk.pl: This looks to be the same as test_dealer.pl
+
+convert.pl: Reformat the output of the distribution test into a nice table.
+
+fmt_distribution.pl: same as convert.pl
+
+cmp_output.pl: compare the Output.* files to the Refer.* files without redoing all the tests.
+
+chk_refer.bash: a bash script to compare the Output.* to the Refer.* files. 
+		The Refer files can be in a different directory. It also counts the number of files where there was a difference.
+
+
 

@@ -1,0 +1,13 @@
+seed 53 
+generate   10000
+produce    8
+title " Checking Losers and Controls  "
+ctlsN  = controls(north)
+ctlsEH = control(east, hearts)
+loserW = losers(west)
+loserSC= loser(south, clubs)
+
+condition ctlsN < 4 and ctlsEH != 2 and loserW < 8 and loserSC == 1
+
+action  printes("Ctls N=",ctlsN," Ctls E(H)=", ctlsEH, " Loser S(C)=",loserSC," losers W=",loserW, \n),
+        printall

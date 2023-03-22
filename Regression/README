@@ -1,0 +1,12 @@
+This is the directory Regression 
+
+The Dealer Input files (suffix .dli) in this directory all have a seed cmd in them; 
+the seed number is typically a prime.
+The primes can be got from the ./Code/files_mod.pl
+The Makefile will run scripts in the Code sub-directory to:
+a) create files with suffix .out in the Output sub-directory by running dealerv2 on the .dli file
+b) create files with suffix .ref in the Refer  sub-directory by running production version of dealerv2 on the .dli file
+c) check the .out files vs the .ref files for differences. 
+
+---------
+

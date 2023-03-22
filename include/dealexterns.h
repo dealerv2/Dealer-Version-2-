@@ -18,6 +18,7 @@
 
     /* cmd line parameter variables  some used by yyparse */
  extern struct options_st options ; /* defined and init in globals.c */
+ extern struct options_st *p_opts ;
  extern int     lino ;              /* incremented in yylex() when comments etc found. Not any more ?*/
  extern int     nprod,maxproduce;
  extern int     ngen,maxgenerate;
@@ -43,7 +44,18 @@
  extern size_t  csv_trixbuff_len ;
  extern FILE   *fexp ;
  extern FILE   *fcsv ;
- extern int errflg ;
+
+ extern FILE   *rp_file ;
+ extern char    rplib_default[64] ;
+ extern int     rplib_mode ;
+ extern int     rplib_blk_sz ;
+ extern int     rplib_recs;
+ extern int     rplib_max_seed ;
+ extern int     rp_cnt ;
+ extern int     wrap_cnt ;
+ extern int     rp_recnum;
+
+ extern int     errflg ;
   /* used by yyparse in its action clauses or directly by Flex*/
  extern int     maxdealer;        /* Flex */
  extern int     maxvuln;          /* Flex */
