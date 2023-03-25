@@ -1,5 +1,5 @@
 #ifndef DDS_DLL_H
-#define DDDSDLL_H
+#define DDS_DLL_H
 /* File DDS_DLL_H  --
  * This file includes the minimum amount of the DDS dll.h file. Nothing from the Dealer side of the house
  */
