@@ -79,8 +79,8 @@ int    rplib_max_seed=MAX_RP_SEED ;
 char server_dir[SERVER_PATH_SIZE+1]  = "/home/greg19/Programming/Bridge_SW/JGMDealer/deal_v5/UserEval";
 //char server_dir[SERVER_PATH_SIZE+1]  = "/usr/local/bin/DealerV2/UserEval"; // The user's current directory
 char server_pgm[64]   = "DealerServer"; /* In the current directory. or user sets path name via -U switch */
-// char server_path[SERVER_PATH_SIZE+1] = "/usr/local/bin/DealerV2/UserEval/DealerServer";
-char server_path[SERVER_PATH_SIZE+1]  = "/home/greg19/Programming/Bridge_SW/JGMDealer/deal_v5/UserEval/DealerServer";
+char server_path[SERVER_PATH_SIZE+1] = "/usr/local/bin/DealerV2/UserEval/DealerServer";
+
 pid_t userserver_pid = 0 ;
 
 int dbg_dds_lib_calls = 0;

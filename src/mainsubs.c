@@ -343,7 +343,7 @@ int get_options (int argc, char *argv[], struct options_st *opts) {
          }
          strncpy(opts->userpgm, optarg, SERVER_PATH_SIZE ) ;
          strncpy(server_path,   optarg, SERVER_PATH_SIZE  ) ;
-         server_path[SERVER_PATH_SIZE+1] = '\0' ; /* server_path is SERVER_PATH_SIZE+1 byte array */
+         server_path[SERVER_PATH_SIZE] = '\0' ; /* server_path is SERVER_PATH_SIZE+1 byte array */
          break ;
 
       /* Next ten options set the scripting variables stored in the global struct 'parm' */
