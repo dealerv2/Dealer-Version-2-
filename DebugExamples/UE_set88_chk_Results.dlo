@@ -1,0 +1,76 @@
+Server Logfile Name=/tmp/DealerServer_IrC7ms.log Check Here for Error Messages and Debugging output
+
+../src/mainsubs.c:42 No Seed Provided. DONE Initializing RNG init_rand48, 8289, 46835, 44073, 189295163023457
+../src/dealerv2.c:159 ^^^^^^ Begin Main Loop ^^^^^^ libMode=1 wrap_cnt=0
+Calculating...  0% complete
+ n KQ54.7.AKT86.Q95 s A962.A93.Q97.743 ,'Tricks South[C,D,H,S,NT]=',6,8,3,9,9
+ 'HLDF=>',29,23,29,23,27,27,26,28,25,26,26,28,3000,' NT=>',25,23,26,23,26,25,25,28,25,26,24,26,2500,0
+ n AJ764.K5.J732.Q3 s Q853.QJT4.AT.A82 ,'Tricks South[C,D,H,S,NT]=',5,7,7,9,9
+ 'HLDF=>',29,21,26,25,25,28,25,23,26,25,29,28,3050,' NT=>',25,21,25,23,24,25,24,22,25,24,25,25,2750,0
+ n A83.A4.QJ75.AT65 s QJ975.QT2.964.KJ ,'Tricks South[C,D,H,S,NT]=',9,9,7,10,9
+ 'HLDF=>',27,21,26,24,25,27,24,22,25,24,26,27,2800,' NT=>',24,21,25,23,25,25,24,22,25,24,25,26,2700,0
+ n A53.T76.AJT6.J98 s KQT982.KQ42.95.A ,'Tricks South[C,D,H,S,NT]=',6,8,9,11,9
+ 'HLDF=>',32,27,27,26,30,29,29,30,28,29,32,30,2950,' NT=>',27,27,27,23,27,26,26,28,28,29,25,27,2550,0
+ n AQ7654.QJ87.A.J9 s J2.AK92.T642.Q65 ,'Tricks South[C,D,H,S,NT]=',5,5,10,10,6
+ 'HLDF=>',31,23,29,22,26,30,26,27,26,24,27,27,3400,' NT=>',22,23,25,22,24,26,24,26,26,24,22,23,2600,0
+ n 9753.KJ2.KJ.K653 s KQJT.AQ5.9864.J4 ,'Tricks South[C,D,H,S,NT]=',5,7,6,9,5
+ 'HLDF=>',26,22,26,22,24,26,23,22,26,25,24,24,2950,' NT=>',24,22,24,22,23,24,22,22,26,25,22,22,2550,0
+ n KJ962.AT7.AQT.A6 s 753.Q963.2.KJ752 ,'Tricks South[C,D,H,S,NT]=',10,8,10,10,10
+ 'HLDF=>',30,26,30,24,28,29,28,28,26,26,28,28,2800,' NT=>',27,26,28,23,26,26,26,27,26,26,26,25,2400,0
+ n KT6.Q95.KJ.KT963 s AJ8432.63.Q.AJ85 ,'Tricks South[C,D,H,S,NT]=',10,4,4,10,8
+ 'HLDF=>',34,26,28,25,29,29,28,28,27,26,29,28,3400,' NT=>',26,26,27,21,26,25,25,27,26,25,22,25,2900,0
+ n KQ32.K6.AQT84.K9 s AT95.QT52.J5.842 ,'Tricks South[C,D,H,S,NT]=',7,9,8,10,7
+ 'HLDF=>',29,22,28,23,26,28,25,26,26,26,26,26,3250,' NT=>',25,22,26,23,25,25,24,26,26,26,23,23,2850,0
+ n JT95.A9.94.AQ987 s A862.QT.AQJ872.4 ,'Tricks South[C,D,H,S,NT]=',8,10,7,11,9
+ 'HLDF=>',34,29,32,24,30,32,29,32,27,28,28,29,3250,' NT=>',24,29,28,23,27,27,26,30,27,28,24,24,2550,0
+ n AJT3.AKQT.4.QJ43 s Q874.J643.A83.82 ,'Tricks South[C,D,H,S,NT]=',7,6,11,10,9
+ 'HLDF=>',32,25,30,25,26,27,26,27,26,26,28,28,3450,' NT=>',26,25,26,24,24,24,24,26,26,26,25,25,2750,0
+ n QJ752.AK9.A.6542 s AK83.QJ7654.86.T ,'Tricks South[C,D,H,S,NT]=',5,3,12,12,9
+ 'HLDF=>',36,30,30,26,31,32,31,33,28,29,32,32,4050,' NT=>',24,30,27,24,27,27,27,29,25,26,25,26,3050,0
+ n AK97.64.9765.AQJ s JT84.5.AQ84.KT82 ,'Tricks South[C,D,H,S,NT]=',9,10,5,10,6
+ 'HLDF=>',29,23,30,26,26,27,26,29,26,27,28,29,3200,' NT=>',24,23,26,24,24,24,24,28,26,27,24,25,2700,0
+ n AK8765.76.JT7.76 s J4.AK9852.A42.A9 ,'Tricks South[C,D,H,S,NT]=',4,5,9,8,6
+ 'HLDF=>',32,29,29,26,32,30,29,30,26,28,29,29,3100,' NT=>',27,29,29,23,30,28,27,30,26,28,24,27,3000,0
+ n AT3.AJ942.Q92.A2 s QJ642.T65.A4.Q83 ,'Tricks South[C,D,H,S,NT]=',5,4,9,9,7
+ 'HLDF=>',29,23,27,25,28,28,27,23,26,25,27,27,2900,' NT=>',26,23,26,24,27,26,26,23,26,25,26,26,2800,0
+ n AK642.983.JT.A64 s JT3.AKJ.864.QJ52 ,'Tricks South[C,D,H,S,NT]=',7,4,5,7,6
+ 'HLDF=>',25,21,25,24,25,26,24,23,24,25,24,26,2700,' NT=>',23,21,25,22,25,25,24,23,24,25,24,25,2700,0
+ n Q7652.T2.AK.KT85 s AK3.QJ.QT83.9432 ,'Tricks South[C,D,H,S,NT]=',9,8,5,9,6
+ 'HLDF=>',29,22,26,24,24,27,25,23,24,23,27,27,3050,' NT=>',24,22,25,23,23,24,24,23,24,23,24,25,2650,0
+ n AK983.84.9832.Q4 s QJ4.KT9.AKQT4.T7 ,'Tricks South[C,D,H,S,NT]=',4,9,5,9,5
+ 'HLDF=>',30,28,28,24,25,29,25,28,26,26,28,27,3550,' NT=>',26,28,27,23,25,26,25,27,25,25,25,24,3350,0
+ n AKJT8.A4.KQ84.72 s Q63.QJT3.63.QT94 ,'Tricks South[C,D,H,S,NT]=',7,7,6,9,8
+ 'HLDF=>',31,27,28,25,26,28,26,26,26,27,28,27,3200,' NT=>',27,27,27,23,25,25,25,26,26,27,24,25,3000,0
+ n AJ983.A52.6.A983 s K7654.93.AQ854.Q ,'Tricks South[C,D,H,S,NT]=',5,7,5,11,8
+ 'HLDF=>',34,27,34,25,31,32,30,36,29,30,30,31,3100,' NT=>',23,27,28,22,27,27,26,31,23,24,23,25,2250,0
+HCP     : Mean=   24.0000, Std Dev=    0.0000, Var=    0.0000, Sample Size=20 
+Bergen  : Mean=   30.4000, Std Dev=    2.8172, Var=    7.9368, Sample Size=20 
+Bissel  : Mean=   24.7500, Std Dev=    2.9890, Var=    8.9342, Sample Size=20 
+DKP     : Mean=   28.4000, Std Dev=    2.2337, Var=    4.9895, Sample Size=20 
+Goren   : Mean=   24.4000, Std Dev=    1.2312, Var=    1.5158, Sample Size=20 
+JGM1    : Mean=   27.2000, Std Dev=    2.5047, Var=    6.2737, Sample Size=20 
+Kaplan  : Mean=   28.5500, Std Dev=    1.8771, Var=    3.5237, Sample Size=20 
+Karpin  : Mean=   26.6000, Std Dev=    2.1861, Var=    4.7789, Sample Size=20 
+KnR     : Mean=   27.2000, Std Dev=    3.8607, Var=   14.9053, Sample Size=20 
+Larsson : Mean=   26.1500, Std Dev=    1.2258, Var=    1.5026, Sample Size=20 
+Morse   : Mean=   26.2500, Std Dev=    1.8317, Var=    3.3553, Sample Size=20 
+PAV     : Mean=   27.8000, Std Dev=    2.1176, Var=    4.4842, Sample Size=20 
+SHEINW  : Mean=   27.9000, Std Dev=    1.8035, Var=    3.2526, Sample Size=20 
+OPC HLDF: Mean=   31.3500, Std Dev=    3.0310, Var=    9.1868, Sample Size=20 
+OPC NT  : Mean=   27.0500, Std Dev=    2.5231, Var=    6.3658, Sample Size=20 
+4STrix  : Mean=    9.6500, Std Dev=    1.1367, Var=    1.2921, Sample Size=20 
+Make 4Sp: Mean=   55.0000, Std Dev=   51.0418, Var= 2605.2632, Sample Size=20 
+
+UE_Set88_chk.dli Test 
+Generated 1549 hands
+Produced  20 hands
+Library file records read 1549, Wrap-arounds=0
+Library file starting seed 0
+Time needed    1.140 sec
+Tot Calls to DDS =    60, DDS Solve  Calls=     0 DDS_Par Calls=0
+Tot Calls to GIB =     0, GIB Solve  Calls=     0
+Tot Calls to OPC =    80, OPC Calc   Calls=    20
+Tot Ask Query    =   740, UserServer Calls=    20
+Server 270015 Ended with status=0 
+exited $? status=0
+

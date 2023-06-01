@@ -113,10 +113,10 @@ sub cccc    {
       # This is Jeff's original code. but =~ /[QJ]/ will match EITHER honor so to get the bonus BOTH must be missing.
       # JGM thinks the code should say =~ /QJ/ (assuming that the cards are given in order in the hand )
       if    (($len[$i] == 7) && !($_[$i] =~ /QJ/))  { $plen +=  7;} # +1 for 7 card suit missing Either Q or J .
-      if    (($len[$i] == 8) && !($_[$i] =~ /Q/))     { $plen += 16;} #8 card suit missing Q gets Q*8
-      elsif (($len[$i] == 8) && !($_[$i] =~ /J/))  { $plen +=  8;} #8 card suit missing J gets J*8 only if Q missing.
-      if    (($len[$i] >  8) && !($_[$i] =~ /Q/))      { $plen +=  2 * $len[$i];} # longer suits can get extra for
-      if    (($len[$i] >  8) && !($_[$i] =~ /J/))      { $plen +=    $len[$i];}   # either or both missing 0,1,2 or 3.
+      if    (($len[$i] == 8) && !($_[$i] =~ /Q/))   { $plen += 16;} #8 card suit missing Q gets Q*8
+      elsif (($len[$i] == 8) && !($_[$i] =~ /J/))   { $plen +=  8;} #8 card suit missing J gets J*8 only if Q missing.
+      if    (($len[$i] >  8) && !($_[$i] =~ /Q/))   { $plen +=  2 * $len[$i];} # longer suits can get extra for
+      if    (($len[$i] >  8) && !($_[$i] =~ /J/))   { $plen +=  $len[$i];}   # either or both missing 0,1,2 or 3.
       printf( "suit[%d] Missing QJ plen=%.2f [dbg=%d] \n", $i, $plen, $dbg ) if $dbg >= 3;
    } #end Suit Quality AKQJ for loop
 

@@ -7,6 +7,13 @@
 #include "../include/mmap_template.h"
 void zero_globals ( void ) {
    size_t sz ;
+   side_nt_pts = 0;
+   side_hldf_pts = 0 ;
+   memset(&UEv , 0 , sizeof(UEv)  ) ;
+   memset(&trump, 0, sizeof(trump)) ;
+   sz = sizeof(struct misfit_st) * 4 ;
+   memset(&misfit, 0, sz );
+   misfit_cnt = 0 ;
    for (int h = 0 ; h < 2 ; h++ ) {
       hcp[h] = 0 ;
       hcp_adj[h] = 0 ;
@@ -24,20 +31,19 @@ void zero_globals ( void ) {
       seat_nt_pts[h] = 0 ;
       fhcp[h] = 0.0;
       fhcp_adj[h] = 0.0 ;
-
+      for (int s=0 ; s<4 ; s++ ) {
+         fhcp_suit[h][s]=0.0; fhcp_adj_suit[h][s]=0.0;
+         hf_pts_suit[h][s]=0; syn_pts_suit[h][s]=0; lpts_suit[h][s]=0; dpts_suit[h][s]=0 ;
+      }
   } /* end for h=0 or 1 */
-   side_nt_pts = 0;
-   side_hldf_pts = 0 ;
-   memset(&UEv , 0 , sizeof(UEv)  ) ;
-   memset(&trump, 0, sizeof(trump)) ;
-   sz = sizeof(struct misfit_st) * 4 ;
-   memset(&misfit, 0, sz );
+
   return ;
 } /* end zero globals */
 
 void prolog ( int side ) {  /* Server mainline has filled the ptrs struct of type mmap_ptrs_st  */
    gen_num = ptrs.dldata->curr_gen ;
    prod_num = ptrs.dldata->curr_prod;
+   gbl_side = side ;
    zero_globals() ;
 
    if (SIDE_NS == side ) {
@@ -58,7 +64,6 @@ void prolog ( int side ) {  /* Server mainline has filled the ptrs struct of typ
       compass[1] = 'W';
       p_uservals = ptrs.ewres ;
    }
-   return ;
 }
 int arr_min(int arr[], size_t nelem ) {  /* really like to return both the min value and the index that points there. */
    int min = arr[0] ;
@@ -66,6 +71,25 @@ int arr_min(int arr[], size_t nelem ) {  /* really like to return both the min v
       if (arr[i] < min ) {min = arr[i] ; }
    }
    return min ;
+}
+int asc_cmpxy( const void *x, const void *y) {
+   const int *px, *py ;
+   px = x ;
+   py = y;
+ /* this next bit results in an Ascending sort. to Get descending reverse the < and > symbols, or change 1 to -1 and -1 to 1 */
+   if      ( (*px) > (*py) ) { return  1  ; }
+   else if ( (*px) < (*py) ) { return -1 ; }
+   return 0 ;
+}
+
+int desc_cmpxy( const void *x, const void *y) {
+   const int *px, *py ;
+   px = x ;
+   py = y;
+ /* this next bit results in an Descending sort. to Get descending reverse the < and > symbols, or change 1 to -1 and -1 to 1 */
+   if      ( (*px) > (*py) ) { return -1  ; }
+   else if ( (*px) < (*py) ) { return  1 ; }
+   return 0 ;
 }
 
 struct trump_fit_st trump_fit_chk( HANDSTAT_k *phs[] ) {
@@ -142,7 +166,7 @@ struct trump_fit_st trump_fit_chk( HANDSTAT_k *phs[] ) {
          // Vondracek effect choose fit with the least hcp.
          hcp_new = phs[0]->hs_points[s] + phs[1]->hs_points[s] ;
          hcp_old = phs[0]->hs_points[fit_suit] + phs[1]->hs_points[fit_suit] ;
-         if ( hcp_new < hcp_old ) { /* choose the weaker of the two suits all else being equal. Vondracek effect */
+         if ( hcp_new < hcp_old ) { /* New suit is weaker than old suit; choose it.  Vondracek effect */
             fit_suit = s ;
             fit_rank=new_rank;
             fit_diff=new_diff;
@@ -150,26 +174,27 @@ struct trump_fit_st trump_fit_chk( HANDSTAT_k *phs[] ) {
             continue ;
         }
         /* Two fit suits essentiall same rank, len, balance, but old one is weaker (and therefore chosen) than new one.*/
-      }    /* end for checking all suits */
+    }   /* end for checking all suits */
     if (fit_suit >= 0 ) {
          JGMDPRT(7,"FitCheck Done! Fit or SemiFit Found in suit=%c, rank=%c fit_len=%d fit_diff=%d Setting Up Trump struct\n",
                "CDHS"[fit_suit], "mM"[fit_rank], fit_len, fit_diff );
 
-         trump.tsuit = fit_suit ;
+         trump.tsuit = fit_suit ; /* if there is no fit .tsuit should be -1 */
 
          trump.tlen[0] = phs[0]->hs_length[fit_suit] ;
          trump.tlen[1] = phs[1]->hs_length[fit_suit] ;
-         trump.ss_len[0] = arr_min(phs[0]->hs_length, 4) ;
+         trump.ss_len[0] = arr_min(phs[0]->hs_length, 4) ; /* for those cases where we count only the shortest suit for dummy pts*/
          trump.ss_len[1] = arr_min(phs[1]->hs_length, 4) ;
          trump.fit_len = fit_len ;
         JGMDPRT(8,"Trump Fit Check; Trump Struct filled. fit_suit=%d ss_len[0]=%d, ss_len[1]=%d, tlen[0]=%d, tlen[1]=%d,Fit_len=%d\n",
             trump.tsuit, trump.ss_len[0], trump.ss_len[1], trump.tlen[0], trump.tlen[1], trump.fit_len );
+
          /* Set Declaring hand. The longer trumps are the Declarer. If same length, the stronger hand is Declarer */
          if      (phs[0]->hs_length[fit_suit] > phs[1]->hs_length[fit_suit] ) {
-            trump.decl    = seat[0] ;
-            trump.dummy   = seat[1] ;
-            p_dc = compass[0];
-            p_du = compass[1];
+            trump.decl   = seat[0] ; /* integers COMPASS_NORTH(0) or COMPASS_EAST(1) */
+            trump.dummy  = seat[1] ; /* integers COMPASS_SOUTH(2) or COMPASS_WEST(3) */
+            p_dc = compass[0];         /* letters N or E */
+            p_du = compass[1];         /* S or W */
          }
          else if (phs[1]->hs_length[fit_suit] > phs[0]->hs_length[fit_suit] ) {
             trump.decl  = seat[1] ;
@@ -177,6 +202,7 @@ struct trump_fit_st trump_fit_chk( HANDSTAT_k *phs[] ) {
             p_dc = compass[1];
             p_du = compass[0];
          }
+          /* both trump suits same length -- e.g 4=4 or 5=5 so check which hand is stronger */
          else if (phs[0]->hs_totalpoints >  phs[1]->hs_totalpoints ) {
             trump.decl  = seat[0] ;
             trump.dummy = seat[1] ;
@@ -190,7 +216,7 @@ struct trump_fit_st trump_fit_chk( HANDSTAT_k *phs[] ) {
             p_du = compass[0];
          }
          JGMDPRT(7,"TrumpFit Check done; fitsuit=%d, trump.decl=%c, trump.dummy=%c\n",trump.tsuit, p_dc, p_du );
-   }
+   } /* end fit suit > 0 :: line 151 or so */
    else {
          JGMDPRT(7,"FitCheck Done! No 8+ fit or 5-2 semi fit found; trump.tsuit = %d \n",trump.tsuit);
          trump.fit_len = -1 ; /* a no-op to prevent complaints about an empty else clause */
@@ -250,7 +276,7 @@ struct misfit_st misfit_chk(HANDSTAT_k *phs[], int s ) {   /* Assume Void or Sti
 /* 6 most likely results and optionally several components results for possible debugging */
 void SaveUserVals(struct UserEvals_st UEv , USER_VALUES_k *p_ures ) {
    int j, n ;
-   JGMDPRT(7, "SavingUserVals: @UserRes= %p, NT:%d,%d,%d  HLDF:%d,%d,%d Number of Misc=%d\n", (void *)p_uservals,
+   JGMDPRT(9, "SavingUserVals: @UserRes= %p, NT:%d,%d,%d  HLDF:%d,%d,%d Number of Misc=%d\n", (void *)p_uservals,
          UEv.nt_pts_side,UEv.nt_pts_seat[0],UEv.nt_pts_seat[1],
          UEv.hldf_pts_side,UEv.hldf_pts_seat[0],UEv.hldf_pts_seat[1], UEv.misc_count );
 
@@ -263,6 +289,7 @@ void SaveUserVals(struct UserEvals_st UEv , USER_VALUES_k *p_ures ) {
    n = 6 ;
    for (j = 0 ; j < UEv.misc_count ; j++, n++ ) {  /* copy over the misc fields if any */
       p_ures->u.res[n] = UEv.misc_pts[j] ;
+      JGMDPRT(9,"Saving Result %d from misc_count %d value=%d\n",n,j, p_ures->u.res[n] );
    }
    return ;
 }
@@ -326,14 +353,11 @@ void show_hands_pbn( int mask, deal d ) {
   }
   /* pbnbuff formatted now print it out */
   *pbn_ptr++ = '\n'; *pbn_ptr='\0';
-  fprintf(stderr, "%s",pbn_buff ) ; /* no newline at this point. */
+  fprintf(stderr, "%s",pbn_buff ) ;
 
 } /* end show_hands_pbn */
 
-
-
-
-inline void swap(int* xp, int* yp) {
+void swap(int* xp, int* yp) {
    int temp = *xp;
    *xp = *yp;
    *yp = temp;
@@ -365,19 +389,30 @@ void sortDeal52(deal dl ) {
     }
 } /* end sortDeal */
 
-// maybe not used -- selection sort to get suit numbers in order of short suit to long; e.g. 3=4=5=1 -> 3,0,1,2
-void selectionSort(int arr[], int n, int idx_list[]) {
-   int i, j, min_idx;
-   for (i = 0; i < n - 1; i++) {
-   min_idx = i;
-      for (j = i + 1; j < n; j++) {
-         if (arr[j] < arr[min_idx]) { min_idx = j; }
-      }
-      // Swap the found minimum element with the first element, and swap the indices also
-      swap(&arr[min_idx], &arr[i]);
-      swap(&idx_list[min_idx], &idx_list[i] ) ;
-   } /* end for i */
-} /* end selection sort */
+// Insertion sort to get suit numbers in order of long suit to short; e.g. 3=4=5=1(CDHS) -> H,D,C,S= 2,1,0,3
+/* Descending Insertion Sort -- Note insertion is slightly faster than selection */
+void insertionSort(int size, int arr_val[], int idx_list[] ) {
+    int key,key_idx, j, step;
+   /* See also sortHand52 for the code that sorts the cards in each hand.
+    * We use this code primarily to sort the suit lengths.
+    * arr_val[] contains the suit lengths(the values), and idx_list contains the suit ids (the names)
+    * so for a 5=1=3=4 hand the arr_val=4,3,1,5 and the idx_list=0,1,2,3 (C, D, H, S)
+    * after the sort arr_val=5,4,3,1 and the idx_list=3,0,1,2 (S,C,D,H)
+    * but it will sort arrays of any length
+    */
+  for (step = 1; step < size; step++) {
+    key = arr_val[step];
+    key_idx = idx_list[step];
+    j = step - 1;
+    while (key > arr_val[j] && j >= 0) {
+      arr_val[j+1] = arr_val[j];
+      idx_list[j+1] = idx_list[j];
+      --j;
+    }
+    arr_val[j+1] = key;
+    idx_list[j+1]= key_idx;
+  } /* end for step */
+} /* end insertionSort */
 
 float_t quick_tricks(HANDSTAT_k *phs ) {
    int s ;
@@ -391,18 +426,18 @@ float_t quick_tricks(HANDSTAT_k *phs ) {
       // else if (1 == phs->hs_length[s] && (16 == w1 ) ) { qt += 0.5 ; continue; } /* PAV says count 0.5 for stiff King */
       else if ( 2 <=  phs->hs_length[s] ) {
          switch ( w2 ) {                  /* top two cards only */
-         case 48:             /* AK */
+         case 96:             /* AK 64 + 32 */
                   qt += 2.0 ; break ;
-         case 40 :            /* AQ */
+         case 80 :            /* AQ 64 + 16 */
                   qt += 1.5 ; break ;
-         case 36 :            /* AJ */
-         case 34 :            /* AT */
-         case 33 :            /* Ax */
-         case 24 :            /* KQ */
+         case 72 :            /* AJ 64 +  8 */
+         case 68 :            /* AT 64 +  4 */
+         case 65 :            /* Ax 64 +  1 */
+         case 48 :            /* KQ 32 + 16 */
                    qt += 1.0 ; break ;
-         case 20 :            /* KJ */
-         case 18 :            /* KT */
-         case 17 :            /* Kx */
+         case 40 :            /* KJ 32 +  8 */
+         case 36 :            /* KT 32 +  4 */
+         case 33 :            /* Kx 32 +  1 */
                    qt += 0.5 ; break ;
          default : break ;
          } /* end switch */
@@ -477,6 +512,47 @@ void dump_curdeal( void ) { /* ouput deal in easy to read, verbose fmt Uses the 
   fprintf(stderr, "----------------dump curr deal done ----------------\n");
   fsync(2) ;
 } /* end dump curr deal */
+float_t QuickTricks_suit(HANDSTAT_k *phs , int s ) {
+      int s_len, w1, w2 ;
+      s_len = phs->hs_length[s] ;
+      w1 = phs->topcards[s][0] ;          /* Highest card might be just 1 for a spot */
+      w2 = phs->topcards[s][1] + w1 ;     /* Top two cards; might be just 2 for two spots */
+      if ( 0 == s_len ) {return 0.0 ;  }
+      if ( 1 == s_len ) {
+         switch ( w1 ) {
+            case 64 : return 1.0 ; /* stiff A */
+            case 32 : return 0.0 ; /* stiff K = 0.5 ??? */
+            default : return 0.0 ;
+         }
+      } /* end len == 1 */
+      else if (2 <= s_len ) {
+         switch ( w2 ) {
+            case 96 : return 2.0 ;  /* AK */
+            case 80 : return 1.5 ;  /* AQ */
+            case 72 : return 1.0 ;  /* AJ */
+            case 68 : return 1.0 ;  /* AT */
+            case 65 : return 1.0 ;  /* Ax */
+            case 48 : return 1.0 ;  /* KQ */
+            case 40 : return 0.5 ;  /* KJ */
+            case 36 : return 0.5 ;  /* KT */
+            case 33 : return 0.5 ;  /* Kx */
+            default : return 0.0 ;
+         }
+      } /* end 2<= len */
+      return 0.0 ; /* NOT REACHED */
+}
+float_t QuickTricks(HANDSTAT_k *phs ) {
+   int s ;
+   int w1, w2 ;
+   float_t qtrix = 0.0;
+   int s_len ;
+   for (s=CLUBS ; s<=SPADES; s++ ) {
+      qtrix += QuickTricks_suit( phs, s ) ;
+      JGMDPRT(8,"QuickTricks: suit=%d, slen=%d, w1=%d, w2=%d, RunningTotQT=%g\n",
+                                    s, s_len, w1, w2, qtrix ) ;
+   } /* end for each suit */
+   return qtrix ;
+} /* end QuickTricks */
 
 /* Honor combinations, and length => playing tricks Used when Pre-Empting at 3+ level*/
 float_t PAV_playing_tricks (HANDSTAT_k *phs ) {
@@ -492,58 +568,60 @@ float_t PAV_playing_tricks (HANDSTAT_k *phs ) {
       if ( 0 == s_len ) { continue ; }
       if ( 1 == s_len ) {
          switch ( w1 ) {
-            case 32 : ptrix += 1.0 ; continue ; /* stiff A */
-            case 16 : ptrix += 0.5 ; continue ; /* stiff K */
+            case 64 : ptrix += 1.0 ; continue ; /* stiff A */
+            case 32 : ptrix += 0.5 ; continue ; /* stiff K */
             default : continue ;
          }
       } /* end len == 1 */
       else if (2 == s_len ) {
          switch ( w2 ) {
-            case 48 : ptrix += 2.0 ; continue ; /* AK */
-            case 40 : ptrix += 1.5 ; continue ; /* AQ */
-            case 36 : ptrix += 1.5 ; continue ; /* AJ */
-            case 34 : ptrix += 1.0 ; continue ; /* AT */
-            case 33 : ptrix += 1.0 ; continue ; /* Ax */
-            case 24 : ptrix += 1.0 ; continue ; /* KQ */
-            case 20 : ptrix += 0.5 ; continue ; /* KJ */
-            case 18 : ptrix += 0.5 ; continue ; /* KT */
-            case 17 : ptrix += 0.5 ; continue ; /* Kx */
-            case 12 : ptrix += 0.5 ; continue ; /* QJ */
-            case 10 : ptrix += 0.5 ; continue ; /* QT */
-            case  9 : ptrix += 0.5 ; continue ; /* Qx */
+            case 96 : ptrix += 2.0 ; continue ; /* AK */
+            case 80 : ptrix += 1.5 ; continue ; /* AQ */
+            case 72 : ptrix += 1.5 ; continue ; /* AJ */
+            case 68 : ptrix += 1.0 ; continue ; /* AT */
+            case 65 : ptrix += 1.0 ; continue ; /* Ax */
+            case 48 : ptrix += 1.0 ; continue ; /* KQ */
+            case 40 : ptrix += 0.5 ; continue ; /* KJ */
+            case 36 : ptrix += 0.5 ; continue ; /* KT */
+            case 33 : ptrix += 0.5 ; continue ; /* Kx */
+            case 24 : ptrix += 0.5 ; continue ; /* QJ */
+            case 20 : ptrix += 0.5 ; continue ; /* QT */
+            case 17 : ptrix += 0.5 ; continue ; /* Qx */
             default : continue ;
          }
       } /* end len == 2 */
       else { /* len >= 3 */
          switch ( w3 ) {
-            case 56 : ptrix += 3.0 ; break ;    /* AKQ */
-            case 52 : ptrix += 2.5 ; break ;    /* AKJ */
-            case 50 : ptrix += 2.0 ; break ;    /* AKT */
-            case 49 : ptrix += 2.0 ; break ;    /* AKx */
-            case 44 : ptrix += 2.5 ; break ;    /* AQJ */
-            case 42 : ptrix += 2.0 ; break ;    /* AQT */
-            case 41 : ptrix += 1.5 ; break ;    /* AQx */
-            case 38 : ptrix += 1.5 ; break ;    /* AJT */
-            case 37 : ptrix += 1.5 ; break ;    /* AJx */
-            case 35 : ptrix += 1.0 ; break ;    /* ATx */
-            case 34 : ptrix += 1.0 ; break ;    /* Axx */
-            case 28 : ptrix += 2.0 ; break ;    /* KQJ */
-            case 26 : ptrix += 1.5 ; break ;    /* KQT */
-            case 25 : ptrix += 1.0 ; break ;    /* KQx */
-            case 22 : ptrix += 1.5 ; break ;    /* KJT */
-            case 21 : ptrix += 1.0 ; break ;    /* KJx */
-            case 19 : ptrix += 0.5 ; break ;    /* KTx */
-            case 18 : ptrix += 0.5 ; break ;    /* Kxx */
-            case 14 : ptrix += 1.0 ; break ;    /* QJT */
-            case 13 : ptrix += 1.0 ; break ;    /* QJx */
-            case 11 : ptrix += 0.5 ; break ;    /* QTx */
-            case 10 : ptrix += 0.5 ; break ;    /* Qxx */
-            case  7 : ptrix += 0.5 ; break ;    /* JTx */
+            case 112 : ptrix += 3.0 ; break ;    /* AKQ */
+            case 104 : ptrix += 2.5 ; break ;    /* AKJ */
+            case 100 : ptrix += 2.0 ; break ;    /* AKT */
+            case  97 : ptrix += 2.0 ; break ;    /* AKx */
+            case  88 : ptrix += 2.5 ; break ;    /* AQJ */
+            case  84 : ptrix += 2.0 ; break ;    /* AQT */
+            case  81 : ptrix += 1.5 ; break ;    /* AQx */
+            case  76 : ptrix += 1.5 ; break ;    /* AJT */
+            case  73 : ptrix += 1.5 ; break ;    /* AJx */
+            case  69 : ptrix += 1.0 ; break ;    /* ATx */
+            case  66 : ptrix += 1.0 ; break ;    /* Axx */
+            case  56 : ptrix += 2.0 ; break ;    /* KQJ */
+            case  52 : ptrix += 1.5 ; break ;    /* KQT */
+            case  49 : ptrix += 1.0 ; break ;    /* KQx */
+            case  44 : ptrix += 1.5 ; break ;    /* KJT */
+            case  41 : ptrix += 1.0 ; break ;    /* KJx */
+            case  37 : ptrix += 0.5 ; break ;    /* KTx */
+            case  34 : ptrix += 0.5 ; break ;    /* Kxx */
+            case  28 : ptrix += 1.0 ; break ;    /* QJT */
+            case  25 : ptrix += 1.0 ; break ;    /* QJx */
+            case  21 : ptrix += 0.5 ; break ;    /* QTx */
+            case  18 : ptrix += 0.5 ; break ;    /* Qxx */
+            case  13 : ptrix += 0.5 ; break ;    /* JTx */
             default : break ;
          } /* end switch ( w3 ) */
          /* Now add playing tricks for extra length */
          if (s_len > 3 ) { ptrix += s_len - 3 ; } /* extra playing trick for each card over 3 */
       } /* end else len >= 3 */
+      JGMDPRT(8,"PAV_PlayingTricks: suit=%d, slen=%d, w1=%d, w2=%d, w3=%d, RunningTotPtrix=%g\n",
+                                    s, s_len, w1, w2, w3, ptrix ) ;
    } /* end for each suit */
 
    return ptrix ;
@@ -595,4 +673,222 @@ int NT_slam_ok (HANDSTAT_k *phs[2] ) {
    if ( first_ctls == 3 && sec_ctls == 0 ) { return NOT_OK ; }
    return OK ; /* 3 suits with at least first round control, and 4th suit with second round control */
 } /* end NT_slam_ok */
+
+
+/*
+ * Short suit evaluation routines. For stiff Honors, and Honors dblton. Each metric is slightly different.
+ * and Short suit methods such as PAV, Goren, and Sheinwold, have different valuations in suit and NT.
+ */
+/* given the weight of the short suit(s) return the index into the ss_Values array */
+/* The indexes returned 0 .. 21 could be replaced by the ss_xx names from the ss_enum_ek definition */
+int ss_index(int weight) {
+         switch ( weight  ) {                  /* Weight is for top TWO slots only, NOT top 3*/
+         case 192 : return 0  ; // A(64) + Void(128) ie. stiff Ace
+         case 160 : return 1  ; // K(32) + Void(128) ie. stiff King
+         case 144 : return 2  ; // Q(16) + Void(128) ie. stiff Queen
+         case 136 : return 3  ; // J(8)  + Void(128) ie. stiff Jack
+         case 132 : return 4  ; // T(4)  + Void(128) ie. stiff T
+         case 129 : return 5  ; // x(1)  + Void(128) ie. stiff x
+         case  96 : return 6  ; /* AK */
+         case  80 : return 7  ; /* AQ */
+         case  72 : return 8  ; /* AJ */
+         case  68 : return 9  ; /* AT */
+         case  65 : return 10 ; /* Ax */
+         case  48 : return 11 ; /* KQ */
+         case  40 : return 12 ; /* KJ */
+         case  36 : return 13 ; /* KT */
+         case  33 : return 14 ; /* Kx */
+         case  24 : return 15 ; /* QJ */
+         case  20 : return 16 ; /* QT */
+         case  17 : return 17 ; /* Qx */
+         case  12 : return 18 ; /* JT */
+         case   9 : return 19 ; /* Jx */
+         case   5 : return 20 ; /* Tx */
+         case   2 : return 21 ; /* xx */
+         /* Now stiffs with no void included in the weight alternate mode of access using weight of top slot only. */
+         case 64 : return 0 ;  /* Stiff A */
+         case 32 : return 1 ;  /* Stiff K */
+         case 16 : return 2 ;  /* Stiff Q */
+         case  8 : return 3 ;  /* stiff J */
+         case  4 : return 4 ;  /* stiff T */
+         case  1 : return 5 ;  /* stiff x */
+         default : fprintf(stderr, "Cant happen. Invalid weight in ss_index. %s:%d \n",__FILE__, __LINE__ );
+                   assert(0) ;
+         } /* end switch */
+         /* NOT REACHED */
+   return -1 ;
+} /* end ss_index */
+/* This function might be useful in a more general case */
+int get_ss_weight(HANDSTAT_k *p_hs, int suit ) {
+   int weight ;
+   weight = p_hs->topcards[suit][0] + p_hs->topcards[suit][1] ; /* combined bit mask of top card + void, or two top cards */
+   return weight ;
+}
+/*
+ * Return the points value of the short suit.
+ * metric is the eval flavor e.g. BERG, PAV, BISSEL etc.
+ * suit is Clubs Diams, etc, strain is NT(0) or suit(1) contract
+ */
+float_t get_ss_value(int metric, HANDSTAT_k *p_hs, int suit ) {
+   extern float_t ss_NT_vals[metricEND][ss_END] ;
+   float_t ss_value ;
+   int weight = p_hs->topcards[suit][0] + p_hs->topcards[suit][1] ;
+   int ss_idx = ss_index(weight) ;  /* handles both Stiff Honors and Honors doubleton */
+   ss_value = ss_NT_vals[metric][ss_idx] ;
+     JGMDPRT(8,"Short Suit NT_Value for Metric=%d, Suit=%d, Weight=%d, SS_index=%d, = %g \n",
+               metric,suit,weight,ss_idx,ss_value );
+   return ss_value ;
+}
+
+int SetDeclarer( HANDSTAT_k *phs[], int suit ) {
+
+   /* In NT the stronger hand is always declarer */
+   if(suit > SPADES || suit < 0 ) {  /* NT just the stronger hand is declarer */
+      if (phs[0]->hs_totalpoints >= phs[1]->hs_totalpoints ) { return 0 ; }
+      return 1 ;
+   }
+
+   assert( ( CLUBS <= suit && suit <= SPADES ) );
+   /* The hand with the longer trumps is the Declarer -- per Pavlicek */
+   if (phs[0]->hs_length[suit] > phs[1]->hs_length[suit] )         { return 0 ; }
+   else if ((phs[1]->hs_length[suit] > phs[0]->hs_length[suit] ) ) { return 1 ; }
+   /* The trump lengths are equal Check who is stronger. If Equal assume hand zero N or E */
+   if (phs[0]->hs_totalpoints >= phs[1]->hs_totalpoints ) { return 0 ; }
+   return 1 ;
+} /* end SetDeclarer */
+
+int SetTrumps(HANDSTAT_k *phs[], TRUMP_SUIT_k *trumps ) { /* return the recommended trump suit */
+
+   /* check if there is an 8+ fit;
+    * if yes choose suit of longest fit;
+    * if two fits same len choose the Major;
+    * if both fits are same rank, then choose the more symmetrical fit (i.e. 4=4 instead of 5=3, or 5=4 instead of 6=3
+    * if both fits are the same rank, and same symmetry then choose the one with the FEWER total hcp.(Vondracek effect)
+    *
+    */
+    /* this code might be easier if we a) calculated fit_len in each suit and sorted them. TBD */
+#define ISMAJOR(s) ( (s) >= HEARTS  ) ? 1 : 0
+#define ISMINOR(s) ( (s) <= DIAMONDS) ? 1 : 0
+#define WEAKER(x,y) ( (x) < (y) ) ? (x) : (y)
+    int s ;
+    int fit_suit = -1  ;         /* no fit if fit_suit = -1 */
+    int fit_rank = -1  ;
+    int fit_len  = -1  ;
+    int fit_diff = 13 ;         /* max possible */
+    int new_rank =  0  ;
+    int new_diff ;
+    int new_flen  ;
+    int hcp_new, hcp_old ;       /* choose the WEAKER trump suit; Vondracek effect */
+    trumps->t_suit = -1 ;           /* set to -1 if no fit */
+    trumps->t_fitlen = -1 ;
+    trumps->t_len[0] = 0 ; trumps->t_len[1] = 0 ;
+    JGMDPRT(7,"Doing SetTrumps" );
+    for (s = CLUBS ; s<= SPADES ; s++ ) {                         /* C 'continue' jumps back to the s++ statement */
+        new_flen = phs[0]->hs_length[s] + phs[1]->hs_length[s] ;
+        if (new_flen < 7 || new_flen < fit_len ) { continue ; } /* ignore fits worse than current one or < 7 */
+        /* Check for semi fit; a semi fit must be 5-2 or 2-5.  Moysian 4-3 or 6-1 dont count */
+        if  (new_flen == 7 && phs[0]->hs_length[s] != 5 && phs[0]->hs_length[s] != 2 )  { continue ; } /* No semi-fit*/
+        /*
+         * There is at least one 8+ fit or a 5-2 semi fit.
+         */
+        if (new_flen > fit_len ) { /* the new fit is longer choose it */
+           fit_len = new_flen ;
+           fit_suit = s ;
+           fit_diff = abs( phs[0]->hs_length[s] - phs[1]->hs_length[s] );
+           fit_rank = ISMAJOR(s) ;  /* 1=Yes, 0 = No */
+            JGMDPRT(8,"Found New Fit;New suit=[%d:%c], Major=%c, fit_len=%d fit_diff=%d len[0]=%d, len[1]=%d\n",
+              s, "CDHS"[s], "NY"[fit_rank], fit_len, fit_diff,  phs[0]->hs_length[s], phs[1]->hs_length[s] );
+            continue ;
+        }
+
+        /* two fits same length  Choose between them; Major over minor else more balanced, else weaker trump suit*/
+        new_diff = abs( phs[0]->hs_length[s] - phs[1]->hs_length[s] ) ;
+        new_rank = ISMAJOR(s) ;
+        JGMDPRT(8,"Two fits Len=%d OldSuit[%c] is %c fit_diff=%d NewSuit[%c] is %c new_diff=%d\n", fit_len,
+            "CDHS"[fit_suit],"mM"[fit_rank],fit_diff,"CDHS"[s],"mM"[new_rank], new_diff );
+        if  ( new_rank > fit_rank ) { /* Major over minor? choose it */
+               fit_suit = s ;
+               fit_rank=new_rank;
+               fit_diff=new_diff;
+               fit_len = new_flen;
+               continue ;
+         }
+         /* since suits tested in order C,D,H,S it should never happen that the new_rank is LESS than the old one.*/
+         else if ( new_rank < fit_rank ) { continue ; } /* New fit is minor; old fit was major; ignore new one.*/
+
+         // the two longest so far are same rank -- choose the more balanced;
+         if ( new_diff < fit_diff ) { // the new suit is more balanced choose it
+               fit_suit = s ;
+               fit_rank = new_rank;
+               fit_diff = new_diff;
+               fit_len  = new_flen;
+               continue ;
+         }
+         else if ( new_diff > fit_diff ) { continue ; } /* new fit is less balanced; ignore it */
+         // same length fit, same rank, same balance 3=5 & 5=3 or both 4=4 etc.
+         // Vondracek effect choose fit with the least hcp.
+         hcp_new = phs[0]->hs_points[s] + phs[1]->hs_points[s] ;
+         hcp_old = phs[0]->hs_points[fit_suit] + phs[1]->hs_points[fit_suit] ;
+         if ( hcp_new < hcp_old ) { /* New suit is weaker than old suit; choose it.  Vondracek effect */
+            fit_suit = s ;
+            fit_rank=new_rank;
+            fit_diff=new_diff;
+            fit_len = new_flen;
+            continue ;
+        }
+        /* Two fit suits essentially same rank, len, balance, but old one is weaker (and therefore chosen) than new one.*/
+    }   /* end for checking all suits */
+    if (fit_suit >= 0 ) {
+         JGMDPRT(7,"SetTrumps Done! Fit or SemiFit Found in suit=%c, rank=%c fit_len=%d fit_diff=%d Setting Up Trump struct\n",
+               "CDHS"[fit_suit], "mM"[fit_rank], fit_len, fit_diff );
+         trumps->t_suit   = fit_suit;
+         trumps->t_rank   = fit_rank;
+         trumps->t_fitlen = fit_len ;
+         trumps->t_len[0] = phs[0]->hs_length[fit_suit] ;
+         trumps->t_len[1] = phs[1]->hs_length[fit_suit] ;
+    }
+    return fit_suit ;
+ } /* end SetTrumps */
+
+int Fill_side_fitstat( HANDSTAT_k *phs[] , SIDE_FIT_k *sf ) { /* fill a struct with the details of the side's fits */
+   int slen_sorted[2][4] ;
+   int sids_sorted[2][4] = {{0,1,2,3} , {0,1,2,3} };
+   int fitlen[4] ;
+
+   // int h, s, h_pard;
+   // HANDSTAT_k *p_hs, *phs_dummy, *phs_decl, *phs_pard ;
+   int trump_suit, decl_h;
+   TRUMP_SUIT_k trumps, *p_trumps;
+   p_trumps = &trumps;
+
+   memcpy(&slen_sorted[0], phs[0]->hs_length, 4*sizeof(int) ) ;
+   insertionSort(4,slen_sorted[0], sids_sorted[0]) ;
+   memcpy(&slen_sorted[1], phs[1]->hs_length, 4*sizeof(int) ) ;
+   insertionSort(4,slen_sorted[1], sids_sorted[1]) ;
+
+   for (int s=CLUBS; s<=SPADES; s++ ) {
+      fitlen[s] = phs[0]->hs_length[s] + phs[0]->hs_length[s] ;
+   }
+
+
+   trump_suit = SetTrumps(phs, p_trumps  ) ;
+   decl_h   = SetDeclarer(phs, trump_suit) ;     /* if trump_suit < 0 Decl set as for NT contract */
+
+   sf->t_suit = trump_suit ;
+   sf->t_fitlen= trumps.t_fitlen;
+   sf->t_len[0]= trumps.t_len[0];
+   sf->t_len[1]= trumps.t_len[1];
+   sf->decl_h = decl_h;
+   sf->dummy_h= !decl_h;
+   sf->side = gbl_side ;
+   sf->decl_seat = seat[ decl_h];
+   sf->dummy_seat= seat[!decl_h];
+
+   memcpy(sf->fitlen, fitlen, sizeof(fitlen) ) ;                        // 1D array copy
+   memcpy(sf->sorted_sids, sids_sorted, sizeof(sids_sorted) ) ;         // 2D array copy
+   memcpy(sf->sorted_slen, slen_sorted, sizeof(slen_sorted) ) ;
+
+   return 1 ;
+}
+
 

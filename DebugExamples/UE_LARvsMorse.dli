@@ -1,0 +1,30 @@
+generate   100000
+produce    1
+seed 11393  // a prime number >10000 -- these seeds are put into the top 32 bits of the 48bit seed.
+#seed 23
+#      0      1       2     3     4      5       6      7    8    9    10   11    12    13   14       -1
+#  { BERG=0, BISSEL, DKP, GOREN, JGM1, KAPLAN, KARPIN, KnR, LAR, MORSE, PAV, R22, SHEIN, ZAR, UNKN, Quit=-1} ;
+
+title "NS Morse(BumWrap) vs LAR(4-3-2-1)  "
+#predeal north SQ3,HAQ97,DKQT72,C85  -- 14 + 13 = 27 for both NT and spades, both Morse and LAR
+#predeal south SAKJ9864,HK,D4,CT742
+predeal north SAKQ84,HK2,DQJ82,CJT
+predeal south SJT32,HQJT9,D5,CKQ64
+
+action printrpt( NS), 
+		 printrpt("Larsson NT=",  usereval(8,NS,0),usereval(8,NS,1), usereval(8,NS,2), 
+					 " Larsson Sp=", usereval(8,NS,3),usereval(8,NS,4), usereval(8,NS,5)), 
+		 printrpt(" N_Dbg:HCPadj,Lpt,sBody,Syn=",usereval(8,NS,6), usereval(8,NS,7), usereval(8,NS,8), usereval(8,NS,9),
+						"Dfit=",usereval(8,NS,10)),
+		 printrpt(" S_Dbg:HCPadj,Lpt,sBody,Syn=",usereval(9,NS,11),usereval(9,NS,12),usereval(9,NS,13),usereval(9,NS,14),
+						"Dfit=",usereval(9,NS,15)),
+
+		 printrpt(" Morse NT=", usereval(9,NS,0),usereval(9,NS,1), usereval(9,NS,2), 
+					 " Morse Sp=", usereval(9,NS,3),usereval(9,NS,4), usereval(9,NS,5)), 
+		 printrpt(" N_Dbg:HCPadj,Lpt,sBody,Syn=",usereval(9,NS,6), usereval(9,NS,7), usereval(9,NS,8), usereval(9,NS,9),
+						"Dfit=",usereval(9,NS,10)),
+		 printrpt(" S_Dbg:HCPadj,Lpt,sBody,Syn=",usereval(9,NS,11),usereval(9,NS,12),usereval(9,NS,13),usereval(9,NS,14),
+						"Dfit=",usereval(9,NS,15)),
+
+
+

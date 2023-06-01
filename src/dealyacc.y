@@ -10,6 +10,7 @@
   // :JGM:  2022-09-11  -- Fixed up altcount, pointcount, and defcount processing. Can now do any mix of ints and dotnums in list
   // :JGM:  2022-10-24  -- Removed defcount; added bktfreq and bktfreq2d
   // :JGM:  2022-11-07  -- Added USEREVAL and newquery.
+  // :JGM:  2023-03-31  -- Added NOTRUMP to the USEREVAL keyword
 
 %code top {
     /* Entries here will not be put to the dealyacc.tab.h file, but will go to the dealyacc.tab.c file */
@@ -365,7 +366,7 @@ expr
         | TRICKS '(' compass ',' SUIT ')'
                 { $$ = newtree(TRT_TRICKS, NIL, NIL, $3, $5); }
         | TRICKS '(' compass ',' NOTRUMPS ')'
-                { $$ = newtree(TRT_TRICKS, NIL, NIL, $3, 4); }
+                { $$ = newtree(TRT_TRICKS, NIL, NIL, $3, SUIT_NT); }
         | SCORE '(' VULN ',' CONTRACT ',' expr ')'
                 { $$ = newtree(TRT_SCORE, $7, NIL, $3, $5); } // TRT_SCORE will have to decode the contract
         | IMPS '(' expr ')'
@@ -414,12 +415,12 @@ expr
        | OPC '(' side ',' SUIT ')'
                 { $$ = newtree(TRT_OPCSIDE, NIL, NIL, $3,  $5);  } // opc pts if strain is the trump suit.
        | OPC '(' side ',' NOTRUMPS ')'
-                { $$ = newtree(TRT_OPCSIDE, NIL, NIL, $3,  4);  } // 'strain' = 4 means Notrump
+                { $$ = newtree(TRT_OPCSIDE, NIL, NIL, $3,  SUIT_NT);  }
 
        | DDS '(' compass ',' SUIT ')'
                 { $$ = newtree(TRT_DDS, NIL, NIL, $3, $5); ;}
        | DDS '(' compass ',' NOTRUMPS ')'
-                { $$ = newtree(TRT_DDS, NIL, NIL, $3,  4); }
+                { $$ = newtree(TRT_DDS, NIL, NIL, $3,  SUIT_NT); }
        | PAR '(' side ')'
                 { $$ = newtree(TRT_PAR, NIL, NIL, $3,  0);  /* PAR needs all 20 results. Forces mode=2. */ }
       // PAR ( side , both|none|NS|EW ) will need to resurrect the VULNERABLE token that is now just a flex action.

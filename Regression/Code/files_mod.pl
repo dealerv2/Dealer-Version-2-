@@ -1,4 +1,6 @@
  #!/usr/bin/perl -w
+ # Modify the dealer input files to a) have a seed statement in them, and b) have the seed appear in the filename.
+ # The seeds are chosen from the following list of prime numbers.
 @files = <Descr.*>;
 my @primes = qw(
 2  3  5  7  11  13  17  19  23  29  31  37  41  43  47  53  59  61  67  71  73  79  83  89  97
@@ -12,7 +14,7 @@ my @primes = qw(
    809  811  821  823  827  829  839  853  857  859  863  877  881  883  887
    907  911  919  929  937  941  947  953  967  971  977  983  991  997
 ) ;
-$snum = 1 ;  # skip seed 2
+$snum = 1 ;  # skip seed=2
 foreach $file (@files) {
    $seed = $primes[$snum++] ;
    $ofile = $file . "_s" . $seed . ".dli" ;
@@ -22,7 +24,7 @@ foreach $file (@files) {
   open OFILE, ">$ofile";
   print OFILE "seed $seed \n";
    while (<IFILE>) {
-     if( m/seed/) {
+     if( m/seed/) {           # if file previously had  a seed statement, skip it.
         # print "skipping $file:  $_ \n";
         next ;
       }

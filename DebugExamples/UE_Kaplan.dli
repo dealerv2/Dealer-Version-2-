@@ -1,0 +1,36 @@
+generate   10000
+produce    1
+seed 17
+#      0      1       2     3     4      5       6      7    8    9    10   11    12    13   14       -1
+#  { BERG=0, BISSEL, DKP, GOREN, JGM1, KAPLAN, KARPIN, KnR, LAR, MORSE, PAV, R22, SHEIN, ZAR, UNKN, Quit=-1} ;
+
+title "UE_Kaplan.dli -- All Kaplan Hand Evaluation in NT and Suit  "
+# 5 is the query-id that asks for Kaplan hand evaluation. Hpts, Lpts, DFpts x 2, Hfpts Fairly simple. 
+# Kaplan Evaluation(5) 
+
+# For Kaplan pt 1.  Hf check; Lpts Check; Decl & Dummy Df Check for stiffs;
+#predeal north SQ,HK5432,DAKQ432,CJ
+#predeal south SAKT54,H876,D5,C6543
+#predeal east  SJ932,HJ,DT,CAKT9872
+#predeal west  S876,HAQT9,DJ9876,CQ 
+
+
+# For Kaplan part 2 Check no Hf vs 3 card suit; check Df for dbltons and void.
+#predeal north SQ,HKJ,DQJ5432,CKQ65
+#predeal south S432,HQT532,DK98,CJT 
+#predeal east SAKT98,HA987,DA7,CA4
+#predeal west SJ765,H64,DT6,C98732
+# 3rd test longer suits, and 4333 shape deduction also T when only 2 higher missing.
+#                    Total            North              South
+action printrpt(NS),
+       printrpt("NS_NT=",  usereval(5,NS,0),usereval(5,NS,1), usereval(5,NS,2),
+                "NS_Suit=",usereval(5,NS,3),usereval(5,NS,4), usereval(5,NS,5)),
+       printrpt("N_dbg-hcpAdj,Lpts,HfPts,Dfit",usereval(5,NS,6), usereval(5,NS,7), usereval(5,NS,8), usereval(5,NS,9),
+				   "S_dbg-hcpAdj,Lpts,HfPts,Dfit",usereval(5,NS,10),usereval(5,NS,11),usereval(5,NS,12),usereval(5,NS,13)),
+printrpt(EW),
+		printrpt("EW_NT=",  usereval(5,EW,0),usereval(5,EW,1), usereval(5,EW,2),
+               "EW_Suit=",usereval(5,EW,3),usereval(5,EW,4), usereval(5,EW,5)),
+		printrpt("E_dbg-hcpAdj,Lpts,HfPts,Dfit",usereval(5,EW,6), usereval(5,EW,7), usereval(5,EW,8 ),usereval(5,EW,9),
+		         "W_dbg-hcpAdj,Lpts,HfPts,Dfit",usereval(5,EW,10),usereval(5,EW,11),usereval(5,EW,12),usereval(5,EW,13))
+
+		

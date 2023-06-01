@@ -1,4 +1,4 @@
-# File Descr.bigshape by JGM
+# File ScriptFD.dls by JGM
 title " Scripting Inside and Outside of Francois Shapes  "
 
 generate 2000
@@ -8,8 +8,8 @@ action
     printoneline
 
 condition
- (shape{$1, $2:d>c or h>s} or shape{$1 , $3 } ) && $0($1) <= $5
-/* you can run the above for example with :: dealerv2 -0 pt9 -1 west -2 '(55xx)' -3 '5+M[35]dxx -5 20 Descr.ScriptFD */
+ (shape{$1, $2:d>c or h>s} or  shape{$1 , $3 } ) &&  $0($1) <= $5
+/* you can run the above for example with :: dealerv2 -0 pt9 -1 west -2 '(55xx)' -3 '5+M[35]dxx -5 20 ScriptFD.dls */
 /* and get hands that look like this: */
   /*
   n AQ.QJ9754.T.QJT2 e 87.AK3.AQ5432.93 s JT65.T862.6.K654 w K9432..KJ987.A87

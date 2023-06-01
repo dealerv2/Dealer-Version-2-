@@ -1,5 +1,5 @@
 /* File dealcard_subs.c
- * Code related to dealing and shuffling the cards. Pulled out of dealeval_subs when dealing re-organized
+ * Code related to dealing and shuffling the cards. Pulled from dealeval_subs when dealing re-organized
  * Date        Version  Author   Comment
  * 2023/01/06     1.0   JGM   Sorting deal to facilitate DDS functions broke the Predeal logic of previous code. Major rewrite needed
  */

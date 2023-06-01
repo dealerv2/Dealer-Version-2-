@@ -1,0 +1,18 @@
+generate   100000
+produce    20
+seed 11393  // a prime number >10000 -- these seeds are put into the top 32 bits of the 48bit seed.
+#seed 23
+title "NS      KnR    CCCC    Morse    LAR   "
+# 88 is the query-id that asks for testing all metrics implemented
+#condition ( (hcp(north) + hcp(south) >= 21 ) && (spades(north) + spades(south))>=9  )
+condition (spades(north) + spades(south))>=8  && dds(south,spades)==10
+# Tag Numbers 0=Berg,1=CPU*,2=DKP,3=GOR*,4=JGM,5=Kaplan*,6=Karpin,7=KnR,8=LAR,9=Morse,10=Pav,* and 11/up not implemented yet
+action printrpt( NS, usereval(88,NS,7) , (cccc(north)+cccc(south))/100, usereval(88,NS,9),  usereval(88,NS,8 ) ),
+
+   average "HCP   " (hcp(north) + hcp(south) ),
+   average "Berg  " usereval(88,NS,0), average "DKP   " usereval(88,NS,2),average "JGM   " usereval(88,NS,4),
+   average "Karpin" usereval(88,NS,6), average "KnR   " usereval(88,NS,7), average "CCCC  " (cccc(north)+cccc(south))/100,
+   average "LAR   " usereval(88,NS,8),
+   average "Morse " usereval(88,NS,9), average "Pav   " usereval(88,NS,10),
+   average "4STrix" dds(south,spades),
+   evalcontract(NS, z3S, nv)

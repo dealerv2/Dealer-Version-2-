@@ -1,0 +1,18 @@
+generate   10000
+produce    1
+seed 11393
+#      0      1       2     3     4      5       6      7    8    9    10   11    12    13   14       -1
+#  { BERG=0, BISSEL, DKP, GOREN, JGM1, KAPLAN, KARPIN, KnR, LAR, MORSE, PAV, R22, SHEIN, ZAR, UNKN, Quit=-1} ;
+
+title "Scripted UE_metric_dbg.dli "
+# Call with dealdbg -D5.8 UE_metric_dbg.dli -0 <m>' where $0 is the metric number 0 .. 13 (Bergen .. Zar )
+condition ( hcp(north)>=10 && spades(north)>=5 && hcp(south)>=10 &&spades(south)>=3 )
+
+#                    NT Total        NT North       NT South 				HLDF Tot          HLDF North           HLDF South 
+action
+  printrpt( NS, usereval($0,NS,0), usereval($0,NS,1), usereval($0,NS,2), usereval($0,NS,3), usereval($0,NS,4), usereval($0,NS,5),
+   "DebugVals[6-11]=",usereval($0,NS,6), usereval($0,NS,7), usereval($0,NS,8), usereval($0,NS,9),usereval($0,NS,10),usereval($0,NS,11)),
+
+#                    NT Total        NT East            NT West 				HLDF Tot          HLDF East           HLDF South
+  printrpt (EW, usereval($0,EW,0), usereval($0,EW,1), usereval($0,EW,2), usereval($0,EW,3), usereval($0,EW,4), usereval($0,EW,5), 
+   "DebugVals[6-11]=",usereval($0,EW,6), usereval($0,EW,7), usereval($0,EW,8), usereval($0,EW,9), usereval($0,EW,10), usereval($0,EW,11))

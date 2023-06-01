@@ -5,6 +5,8 @@ seed 29
 dealer west
 vulnerable EW
 title "Testing UE version of KnR"
+#      0      1       2     3     4      5       6      7    8    9    10   11    12    13   14       -1
+#  { BERG=0, BISSEL, DKP, GOREN, JGM1, KAPLAN, KARPIN, KnR, LAR, MORSE, PAV, R22, SHEIN, ZAR, UNKN, Quit=-1} ;
 
 #predeal north SAJT432,HKT92,D32,C2 -- the hand from the BW text
 #predeal south SKQ,HA43,DJT4,CK6543 -- made up hand to test KQ tight and JTx
@@ -23,6 +25,13 @@ action  printrpt (deal) ,
 #printrpt (north,"=",cccc(north), "    ", south,"=",cccc(south) ),
 #printrpt("Q_N:",quality(north,spade),quality(north,heart), "Q_S:",
 #quality(south,spade),quality(south,heart),quality(south,diamond), quality(south,club) ),
-printrpt(usereval(7,NS,0),usereval(7,NS,1),usereval(7,NS,2),usereval(7,NS,3),usereval(7,NS,4), usereval(7,NS,5),"::",
-         usereval(7,NS,6),usereval(7,NS,7),usereval(7,NS,8),usereval(7,NS,9),usereval(7,NS,10),usereval(7,NS,11) )
+printrpt("KnR_NT=",  usereval(7,NS,0), usereval(7,NS,1),usereval(7,NS,2),
+         "KnR_Suit=",usereval(7,NS,3), usereval(7,NS,4),usereval(7,NS,5),
+			"KnRx100=", usereval(7,NS,6), usereval(7,NS,7),usereval(7,NS,8)),
+printrpt("H0_dbg=",  usereval(7,NS,9), usereval(7,NS,10),usereval(7,NS,11),usereval(7,NS,12),usereval(7,NS,13),
+							usereval(7,NS,14),usereval(7,NS,15),usereval(7,NS,16)),
+printrpt("H1_dbg=",  usereval(7,NS,17),usereval(7,NS,18),usereval(7,NS,19),usereval(7,NS,20),usereval(7,NS,21),
+							usereval(7,NS,22),usereval(7,NS,23),usereval(7,NS,24)),
+
+         
 

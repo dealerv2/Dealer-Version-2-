@@ -32,25 +32,31 @@ extern enum metric_ek metric ;  /* BERG=0,CPU,DKP,GOREN,JGM1,KAPLAN,KARPIN,KnR,L
 // Global vars used in most User metric and factor calculation functions.
 
 /* prolog stuff; uses vars setup by the Server Infrastructure */
+extern int gbl_side;
 extern int seat[2] ;                /* Server is called with a side; these are the two seats related to that side. */
 extern HANDSTAT_k *phs[2] ;         /* pointers to two related HS structs; N/S or E/W */
 extern char compass[2];             /* seat names for debug statements */
 extern USER_VALUES_k *p_uservals  ;
 
 /* results stuff */
+extern SIDE_FIT_k fitstat ;
 extern struct FitPoints_st TFpts ;
 extern struct trump_fit_st trump ;
 extern struct misfit_st misfit[4] ;  /* 4 possible misfits, one in each suit */
 extern struct UserEvals_st UEv   ;  /* room for 64 integers */
 
+extern float ss_vals[metricEND][2][ss_END] ;
+
+
 // Temp vars used by most routines.
 extern int h_dummy , h_decl ;
+extern int misfit_cnt ;
 extern int side_nt_pts, seat_nt_pts[2], side_hldf_pts, seat_hdlf_pts[2] ; /* these are the most likely results wanted */
 extern int hcp[2], hcp_adj[2], dpts[2], lpts[2], dfit_pts[2], syn_pts[2], hf_pts[2], Fn_pts[2], hand_adj[2], body_pts[2];
-extern int freak[2][4], pav_body[2] ;
-extern float_t fhcp[2], fhcp_adj[2], suit_qual[2][4]; /* Some calcs will be done in float; cast to int or int*100 at the end*/
-extern int suits_by_len[4] ;  /* these will be shuffled so that suits_by_len[0] is the shortest e.g. Diam, [3]=longest e.g. hearts */
-
+extern int freak[2][4];
+extern int dpts_suit[2][4], lpts_suit[2][4], syn_pts_suit[2][4], hf_pts_suit[2][4] ;
+ /* Some calcs will be done in float; cast to int or int*100 at the end*/
+extern float_t fhcp[2], fhcp_adj[2], fhcp_suit[2][4], fhcp_adj_suit[2][4], suit_qual[2][4];
 
 extern int set88[20] ;
 

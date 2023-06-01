@@ -262,7 +262,7 @@ void finalize_options ( struct options_st *opt_ptr) {
                rpdd_pos = seek_rpdd_pos(rp_file, 0) ;
             }
        }
-       JGMDPRT(2,"finalize_options Seeking to RP_Record # %d \n",myseed * rplib_blk_sz + 1 );
+       JGMDPRT(2,"finalize_options Seeking to RP_Record # %u \n",myseed * rplib_blk_sz + 1 );
 
        if (opt_ptr->max_generate > lib_recs ) {
           fprintf(stderr, "dealinit.c::Finalize Options::ERR maxgenerate too big. Library does not contain %d records. Setting to %d \n",
@@ -325,7 +325,7 @@ void init_runtime(struct options_st *opts) {
           perror(" Creating the server process returns failed PID. Aborting... ");
           assert(0) ;
        }
-       JGMDPRT(3,"UserServer daemon started with pid=%d\n",userserver_pid);
+       JGMDPRT(3,"UserServer daemon started with pid=%d \nfrom path=[%s]\n",userserver_pid,server_path);
     } /* user server daemon started */
 
    if (srvDebug > 0 ) {

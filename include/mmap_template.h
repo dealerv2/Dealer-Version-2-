@@ -53,7 +53,7 @@ typedef struct query_type_st {  /* this is  not the input data just a descriptio
 typedef struct deal_data_st {
    int curr_gen, curr_prod ;
    HANDSTAT_k hs[4];             /* includes Has_cards[][] */
-   deal52_k curdeal ;
+   DEAL52_k curdeal ;
    SIDESTAT_k ss[2];             /* values per side; mostly opc currently; fut dummy suppt pts etc. */
 
    /* future might add dds tricks here, or perhaps cccc, etc. */

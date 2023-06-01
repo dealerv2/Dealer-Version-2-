@@ -70,11 +70,8 @@ void pointcount (int rank, int value) { /* set the value for an entry in the tbl
   else {
     tblPointcount[alt_tbl_idx][rank] = value;
   } /* end if else countindex */
-#ifdef JGMDBG
-  if (jgmDebug >= 3 ) {
-      JGMDPRT(3,"In pointcount:: Setting TBL# %d Rank=%d to Value=%d -> %d\n", alt_tbl_idx, rank, value, tblPointcount[alt_tbl_idx][rank] );
-  }
-#endif
+
+   JGMDPRT(3,"Parse pointcount:: Setting TBL# %d Rank=%d to Value=%d -> %d\n", alt_tbl_idx, rank, value, tblPointcount[alt_tbl_idx][rank] );
 }  /* end set point count pointcount */
 
 

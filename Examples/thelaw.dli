@@ -1,0 +1,9 @@
+# Test of "the law" - shows how many tricks can be taken double-dummy when
+# NS have 4=4 spades and EW have 5=4 hearts. If "the law" applies, the total should
+# be 17.
+produce 1000
+condition
+  shape(south, 4xxx) and shape(north, 4xxx) and shape(west, x4xx) and shape(east, x5xx)
+action
+  frequency "NS Spades(Down) vs EW Hearts(Accross)" (dds(north, spades), 5, 12, dds(east, hearts), 5, 12),
+  frequency "Total Tricks NS 8 Spades, EW 9 Hearts" ( (dds(north, spades) + dds(east, hearts)), 12,22)

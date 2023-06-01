@@ -33,7 +33,8 @@ N9tot=pt9(north)
 NLoserD = loser(north, diamonds) 
 NLoserTot =loser(north)
 
-action  printes(" hcpN=",hcpN," hcpClubN=",hcpClubN," QueenN=",QueenN," TenN=",TenN," NHtop5=",NHtop5," C13N/pt9=",C13N," CtlSN=",ctlSN, \n),
-		printes(" N9C:D:H:S:T=",N9C,": ",N9D, ": ",N9H, ": ",N9S, ": ",N9tot, \n),
+action  printes(" hcpN=",hcpN," hcpClubN=",hcpClubN," QueenN=",QueenN," TenN=",TenN," NHtop5=",NHtop5," C13N/pt9=",C13N,
+					 " Ctl_SpN=",ctlSN, " TotCtls_North=",controls(north) , \n),
+		printes(" N_Pt9 C:D:H:S:Tot=",N9C,": ",N9D, ": ",N9H, ": ",N9S, ": ",N9tot, \n),
 		printes("LosersN:D:tot",  NLoserD ,": ", NLoserTot, \n), 
         printall

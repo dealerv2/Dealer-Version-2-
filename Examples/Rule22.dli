@@ -1,0 +1,69 @@
+generate 2000
+produce 10
+seed 13
+title " Enhanced Rule of 22 i.e. Rule of 20 + 2"
+# If LS (length of longest suit) + L2 (length of 2nd longest suit) + hcp(LS) + hcp(L2) >= 20 && QuickTricks >=2
+# you have satisfied rule of 22, and can open.
+# Enhancement: if HCP + Length is less than 20, then add to the HCP any outside Aces, and any doubleton Kings.
+# Now if the total comes to 20 and you have 2+ QuickTricks you can open.
+# Note that regardless of your HCP + Len total you still need 2 QT; otherwise you are playing "Rule of 20" not "Rule of 22"
+
+# I am not sure how to do this in dealerv2 without using usereval. How do you find the hcp of the longest or 2nd longest suit?
+# I can find the length of these suits (but not their names ... )
+
+
+# To find the maximum of 4 Values you can do: (Note this returns the value, but not the name of the longest suit)
+ls =(  ( spades(west) >= hearts(west) ? spades(west) : hearts(west) ) >=    // if The len of longest Major >=
+       ( (diamond(west) >= clubs(west))  ? diamond(west) : clubs(west)) ) ? //    The len of the longest Minor
+       ( spades(west) >= hearts(west) ? spades(west) : hearts(west) ) :       // set ls to the len of longest Major
+       ( (diamond(west) >= clubs(west) ) ? diamond(west) : clubs(west) )      // else set ls to len of longest Minor
+
+# To find the minimum of 4 Values you can do: (Note this returns the value, but not the name of the shortest suit)
+ss = (  ( spades(west) <= hearts(west) ? spades(west) : hearts(west) ) <=    // if The len of shortest Major <=
+       ( (diamond(west) <= clubs(west))  ? diamond(west) : clubs(west)) ) ?  //    The len of the shortest Minor
+       ( spades(west) <= hearts(west) ? spades(west) : hearts(west) ) :      // set ss to the len of shortest Major
+       ( (diamond(west) <= clubs(west) ) ? diamond(west) : clubs(west) )     // else set ss to len of shortest Minor
+
+# But it might be more clear to have intermediate variables
+SMaj = (spades(west)  <= hearts(west)) ? spades(west)  : hearts(west)
+LMaj = (spades(west)  >= hearts(west)) ? spades(west)  : hearts(west)
+SMin = (diamond(west) <= clubs(west) ) ? diamond(west) : clubs(west)
+LMin = (diamond(west) >= clubs(west) ) ? diamond(west) : clubs(west)
+
+SS   = (SMaj <= SMin ) ? SMaj : SMin
+LS   = (LMaj >= LMin ) ? LMaj : LMin
+
+# find length of second longest suit, (but not the suit name)
+MLS =( ( hearts(west) ) >=    // if spades is the longest suit, then MLS is the value of the next longest suit.
+       ( (diamond(west) >= clubs(west))  ? diamond(west) : clubs(west)) ) ?
+       ( hearts(west) ) :
+       ( (diamond(west) >= clubs(west) ) ? diamond(west) : clubs(west) )
+MLH =( ( spades(west) ) >=   // if hearts is the longest suit, then MLH is the value of the next longest suit.
+       ( (diamond(west) >= clubs(west))  ? diamond(west) : clubs(west)) ) ?
+       ( spades(west) ) :
+       ( (diamond(west) >= clubs(west) ) ? diamond(west) : clubs(west) )
+
+MLD =( (  clubs(west) ) >=  // if diamonds is the longest suit, then MLD is the value of the next longest suit.
+       ( (spades(west)  >= hearts(west)) ? spades(west)  : hearts(west))) ?
+       ( clubs(west)  ) :
+       ( (spades(west)  >= hearts(west)) ? spades(west)  : hearts(west))
+
+MLC =( (  diamond(west) ) >=  // if clubs is the longest suit, then MLC is the value of the next longest suit.
+       ( (spades(west)  >= hearts(west)) ? spades(west)  : hearts(west))) ?
+       ( diamonds(west)  ) :
+       ( (spades(west)  >= hearts(west)) ? spades(west)  : hearts(west))
+
+# Now we figure out which of MLS, MLH, MLD, or MLC to use.
+L2S =  (spades(west)  == LS ) ? MLS : 0      // if spades is the longest suit, then L2S is the next longest else L2S is 0
+L2D =  (diamond(west) == LS ) ? MLD : 0
+L2H =  (hearts(west)  == LS ) ? MLH : 0
+L2C =  (clubs(west)   == LS ) ? MLC : -1
+
+# We now find the Maximum of the 4 values L2S, L2H, L2D, L2C -- using temporary variables
+L2Maj = (L2S >= L2H) ? L2S : L2H
+L2Min = (L2D >= L2C) ? L2D : L2C
+L2 = (L2Maj > L2Min) ? L2Maj : L2Min
+
+
+action
+    printrpt (west ,  "SS=",SS,ss , " LS=", LS,ls , " L2=", L2, " MLC=", MLC, " MLD=",MLD," MLH=",MLH," MLS=",MLS ),

@@ -1,0 +1,32 @@
+generate   10000
+produce    1
+seed 17
+#      0      1       2     3     4      5       6      7    8    9    10   11    12    13   14       -1
+#  { BERG=0, BISSEL, DKP, GOREN, JGM1, KAPLAN, KARPIN, KnR, LAR, MORSE, PAV, R22, SHEIN, ZAR, UNKN, Quit=-1} ;
+
+title "Descr.UE_Goren -- Goren Hand Evaluation in NT and Suit  "
+
+# usereval(3, ....) calls the Goren evaluation function;
+#
+predeal south SQJ,HA,DQJ654,CA765
+
+predeal north S2,HQJ,DKT9873,CKJT9
+
+# 2nd test J and T missing 3 tops and shape deduction for 4432, 4441
+#predeal north SA432,HK432,DQJ32,CK
+#predeal south SJT87,HQT87,DAT8,C87
+# 3rd test longer suits, and 4333 shape deduction also T when only 2 higher missing.
+#predeal north SA9876432,HK5432
+#predeal south SKJT,HQ876,DQJT,CAJT
+
+action
+   printrpt(NS,"Goren_NT_tot",usereval(3,NS,0),"North",usereval(3,NS,1), "South",usereval(3,NS,2),
+               "HLDF_tot",usereval(3,NS,3),"North",usereval(3,NS,4), "South",usereval(3,NS,5)),
+            
+   printrpt("North:hcp_adj ", usereval(3,NS,6), "Body ",usereval(3,NS,7),
+				"N:dpts,Dfpts,FNPts=", usereval(3,NS,8),usereval(3,NS,9),usereval(3,NS,10),
+				"N:Hf,Hand_adj=",usereval(3,NS,11),usereval(3,NS,12)),
+   printrpt("S:hcp_adj ", usereval(3,NS,13), "Body=",usereval(3,NS,14),
+            "S:dpts,DFpts,FNpts=", usereval(3,NS,15),usereval(3,NS,16),usereval(3,NS,17),
+            "Hf_pts, HandAdj=",usereval(3,NS,18),usereval(3,NS,19))
+    

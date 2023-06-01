@@ -1,0 +1,11 @@
+# File Descr.LongestSuit by JGM
+title " North - Hearts Longest Suit example   "
+
+generate 2000
+produce 10
+seed 13
+action
+    printoneline
+
+condition
+ shape{north, x4+xx:h>c,h>d,h>=s}

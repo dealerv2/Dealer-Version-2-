@@ -72,15 +72,16 @@ int    rplib_blk_sz = RP_BLOCKSIZE ; /* will be adjusted based on DB file size *
 int    rplib_recs   = MAX_RPDD_RECS; /* will be calculated at run time */
 int    rplib_max_seed=MAX_RP_SEED ;
 
-/* -U Path name for the UserEval binary. Default is UserServer in the current directory. Can be set by -U cmd line parm
+/* -U Path name for the UserEval binary. Default is 'DealerServer' in the current directory. Can be set by -U cmd line parm
  * -U Must be full pathname. ../src/MyUserPgm will NOT work.
  * Instead: /usr/local/bin/DealerV2/UserEval/DealerServer  or /home/MyUser/MyDir/MySubDir/MyUserPgm
  */
-char server_dir[SERVER_PATH_SIZE+1]  = "/home/greg19/Programming/Bridge_SW/JGMDealer/deal_v5/UserEval";
-//char server_dir[SERVER_PATH_SIZE+1]  = "/usr/local/bin/DealerV2/UserEval"; // The user's current directory
-char server_pgm[64]   = "DealerServer"; /* In the current directory. or user sets path name via -U switch */
-char server_path[SERVER_PATH_SIZE+1] = "/usr/local/bin/DealerV2/UserEval/DealerServer";
+ char server_pgm[64]   = "DealerServer"; /* In the current directory. or user sets path name via -U switch */
 
+// char server_dir[SERVER_PATH_SIZE+1]  = "/usr/local/bin/DealerV2/UserEval";              // The system wide install location
+// char server_path[SERVER_PATH_SIZE+1] = "/usr/local/bin/DealerV2/UserEval/DealerServer"; // The system wide install location
+char server_dir[SERVER_PATH_SIZE+1]  = "/home/greg19/Programming/Bridge_SW/JGMDealer/deal_v5/UserEval";
+char server_path[SERVER_PATH_SIZE+1]  = "/home/greg19/Programming/Bridge_SW/JGMDealer/deal_v5/UserEval/DealerServer";
 pid_t userserver_pid = 0 ;
 
 int dbg_dds_lib_calls = 0;
@@ -174,13 +175,12 @@ int use_side[2] = {0,0};     /* opc and usereval use this. will also cause relat
 
 struct contract_st contract;     /* level, strain, dbled, Vul, coded, string*/
 
-/* from deuce to Ace  -- (weight of a void is 64) */
-/*                      2, 3, 4, 5, 6, 7, 8, 9, T, J, Q,  K,  A     */
-int ltc_weights[13] = { 1, 1, 1, 1, 1, 1, 1, 1, 2, 4, 8, 16, 32 }; /* may be superceded by CardAttr_RO  below */
-int points[13]      = { 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 2,  3,  4 }; /* Goren HCP values */
+/* from deuce to Ace  -- (weight of a void is 128) allows stiffs and dblton honors to all have unique value.*/
+/*                      2, 3, 4, 5, 6, 7, 8, 9, T, J, Q,   K,  A   */
+int ltc_weights[13] = { 1, 1, 1, 1, 1, 1, 1, 1, 4, 8, 16, 32, 64 }; /* may be superceded by CardAttr_RO  below Void=128 */
+int points[13]      = { 0, 0, 0, 0, 0, 0, 0, 0, 0, 1,  2,  3,  4 }; /* Goren HCP values */
 /* the pointcount array itself */
-int alt_tbl_idx = -1 ;       /* Global var set by Yacc file code to track which altcount is being modified */
-int pointcount_index;        /* global var set by Yacc file code to track which rank is being modified */
+
 int tblPointcount [idxEnd][13] = {
     /* tables tens to c13 MUST be in this order to make sense to the user.
      * Put HCP at very end since it has its own routines to handle it.
@@ -201,11 +201,14 @@ int tblPointcount [idxEnd][13] = {
 } ; /* End tblPointCount */
 
 int CardAttr_RO [idxEndRO][13] = { /* Values Not changeable by user via altcount or pointcount cmd */
-    /* 2  3  4  5  6  7  8  9  T  J  Q  K    A */
-    {  0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1,   2},  /* controls idxControls = 0 */
-    {  1, 1, 1, 1, 1, 1, 1, 1, 2, 4, 8, 16, 32},  /* ltc weights. Will ID WHICH of the top cards we have. */
-    {  0, 0, 0, 0, 0, 0, 0, 0, 0, 2, 5, 9,  13},  /* Kleinman Pts Need to add 1 synergy pt to a suit with A or K and 1 other*/
+    /* 2  3  4  5  6  7  8  9  T   J   Q   K   A */
+    {  0, 0, 0, 0, 0, 0, 0, 0, 0,  0,  0,  1,  2},  /* controls idxControls = 0 */
+    {  1, 1, 1, 1, 1, 1, 1, 1, 4,  8, 16, 32, 64},  /* ltc weights. idxLTCwts.  Will ID WHICH of the top cards we have. */
+    {  0, 0, 0, 0, 0, 0, 0, 0, 0,  2,  5,  9, 13},  /* Kleinman Pts idxKleinman Need to add 1 synergy pt to a suit with A or K and 1 other*/
+    {  0, 0, 0, 0, 0, 0, 0, 0, 25,75,150,300,450},  /* BumWrap Points x 100 idxBumWrap */
 } ; /* End CardAttr_RO */
+int alt_tbl_idx = -1 ;       /* Global var set by Yacc file code to track which altcount is being modified */
+int pointcount_index;        /* Global var set by Yacc file code to track which rank is being modified */
 
 /* JGM Debugging and learning about Dealer use of Trees */
 struct treeptr_st tree_ptrs[100] ;      /* JGM?+ an array to store pointers for tracing and debugging. */

@@ -1,0 +1,58 @@
+generate   10000
+produce    1
+seed 17
+#      0      1       2     3     4      5       6      7    8    9    10   11    12    13   14       -1
+#  { BERG=0, BISSEL, DKP, GOREN, JGM1, KAPLAN, KARPIN, KnR, LAR, MORSE, PAV, R22, SHEIN, ZAR, UNKN, Quit=-1} ;
+
+#title "Descr.UE_Goren -- Goren Hand Evaluation in NT and Suit  "
+
+# usereval(3, ....) calls the Goren evaluation function;
+#
+
+# Set 1
+#predeal north SKJT987,HK,DAK98,C32
+#predeal south SQ432,H9876,DQ432,C4
+#predeal east  SA65,HAJT5,D5,CAK765
+#predeal west    HQ432,DJT76,CQJT98
+
+#set 2
+#predeal north S832,HK54,DAK432,CJ3
+#predeal south SAKT54,HA3,DQJ5,C654
+#predeal east  SJ9,HJ762,DT,CAKT987
+#predeal west  SQ76,HQT98,D9876,CQ2  
+
+
+# Set 3. Some Dfit, Some Hf
+#predeal north SQ,HK5432,DAKQ432,CJ
+#predeal south SAKT54,H876,D5,C6543
+#redeal east  SJ932,HJ,DT,CAKT9872
+#predeal west  S876,HAQT9,DJ9876,CQ  
+
+# Set 4. Misfit deals. No Fn, or Df 
+predeal north S2,H5432,DAKQ432,CK2
+predeal south SAKT54,H876,D5,C6543
+predeal east  SQJ93,HJ,DT,CAQJT987
+predeal west  S876,HAKQT9,DJ9876   
+
+title "Start UE_Goren2.dli set 4"
+#                    Total            North              South
+action 
+	printrpt(NS),
+   printrpt("NS_NT=  ", usereval(3,NS,0),usereval(3,NS,1), usereval(3,NS,2),
+            " NS_Suit=",usereval(3,NS,3),usereval(3,NS,4), usereval(3,NS,5)),
+
+	printrpt("N_dbg-hcpAdj,Body=",usereval(3,NS,6), usereval(3,NS,7 ),
+		" N suit-Dpts,Df,Fn,Hf,SQ=",usereval(3,NS,8 ),usereval(3,NS,9 ),usereval(3,NS,10),usereval(3,NS,11),usereval(3,NS,12)),
+
+	printrpt("S_dbg-hcpAdj,Body=",usereval(3,NS,13),usereval(3,NS,14), 
+		" S suit-Dpts,Df,Fn,Hf,SQ=",usereval(3,NS,15),usereval(3,NS,16),usereval(3,NS,17),usereval(3,NS,18),usereval(3,NS,19)),
+
+	printrpt(EW),
+   printrpt("EW_NT=  ", usereval(3,EW,0),usereval(3,EW,1), usereval(3,EW,2),
+            " EW_Suit=",usereval(3,EW,3),usereval(3,EW,4), usereval(3,EW,5)),
+
+	printrpt("E_dbg-hcpAdj,Body=",usereval(3,EW,6), usereval(3,EW,7 ),
+		" E suit-Dpts,Df,Fn,Hf,SQ=",usereval(3,EW,8 ),usereval(3,EW,9 ),usereval(3,EW,10),usereval(3,EW,11),usereval(3,EW,12)),
+
+	printrpt("W_dbg-hcpAdj,Body=",usereval(3,EW,13),usereval(3,EW,14), 
+		" W suit-Dpts,Df,Fn,Hf,SQ=",usereval(3,EW,15),usereval(3,EW,16),usereval(3,EW,17),usereval(3,EW,18),usereval(3,EW,19)),

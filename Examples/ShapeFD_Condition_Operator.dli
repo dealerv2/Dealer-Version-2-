@@ -1,0 +1,12 @@
+# File ShapeFD_Condition_Operator by JGM
+title " North Complex Condition Operator  [Length:1034, patterns: 146] "
+
+generate 2000
+produce 10
+seed 13
+action
+    print(north)
+
+# 3 AND clauses and 2 OR clauses
+condition
+ shape{north, x4+xx:h>=c,h>=d,h>=s or d==s or c==s}

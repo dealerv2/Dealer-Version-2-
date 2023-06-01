@@ -1,0 +1,50 @@
+generate   10000
+produce    1
+seed 17
+#      0      1       2     3     4      5       6      7    8    9    10   11    12    13   14       -1
+#  { BERG=0, BISSEL, DKP, GOREN, JGM1, KAPLAN, KARPIN, KnR, LAR, MORSE, PAV, R22, SHEIN, ZAR, UNKN, Quit=-1} ;
+
+title "UE_PavGoren.dli -- All Pavlicek Hand Evaluation in NT and Suit  "
+# 10 is the query-id that asks for Pavlicek hand evaluation, 3 is for Goren
+# The external code was written to return the various results in 0 .. 5
+
+#  Pavlicek Evaluation(10) and Goren Evaluation(3)
+
+# For Pavlicek
+#predeal north SQ5,HKJ,DQJ432,CKQ65
+#predeal south S432,HQT32,DK98,CJT9 
+# Testing Misfits
+predeal north S2,H5432,DAKQ432,CK2
+predeal south SAKT54,H876,D5,C6543
+predeal east  SQJ93,HJ,DT,CAQJT987
+predeal west  S876,HAKQT9,DJ9876   
+
+# For Goren
+#predeal east SAKT98,HA987,DA7,CA4
+#predeal west SJ76,H654,DT65,C8732
+
+# Pavlicek Stuff NS
+#                    Total            North              South
+action printrpt(NS),
+	printrpt(
+      "NS_NT=",usereval(10,NS,0),usereval(10,NS,1), usereval(10,NS,2),
+      "NS_Suit=",usereval(10,NS,3),usereval(10,NS,4), usereval(10,NS,5)),
+	printrpt(
+		"N_dbg-hcpAdj,Body=",usereval(10,NS,6) ,usereval(10,NS,7), usereval(10,NS,8 ),
+		" Dpts,Df,Fn,H-adj=",     usereval(10,NS,9), usereval(10,NS,10),usereval(10,NS,11), usereval(10,NS,12)),
+	printrpt(
+		"S_dbg-hcpAdj,Body=",usereval(10,NS,13),usereval(10,NS,14),usereval(10,NS,15),
+		" Dpts,Df,Fn,H-adj=",usereval(10,NS,16),usereval(10,NS,17),usereval(10,NS,18),usereval(10,NS,19)),
+
+# Goren Stuff EW
+	printrpt(EW),	
+	printrpt(
+		"E_dbg-hcpAdj,Body=",       usereval(10,NS,6) ,usereval(10,NS,7), 
+		" Dpts,Df,Fn,Hf,Hand-adj=", usereval(10,NS,8 ),usereval(10,NS,9), usereval(10,NS,10),usereval(10,NS,11), usereval(10,NS,12)),
+	printrpt(
+		"W_dbg-hcpAdj,Body=",       usereval(10,NS,13),usereval(10,NS,14),
+		" Dpts,Df,Fn,Hf,Hand-adj=", usereval(10,NS,15),usereval(10,NS,16),usereval(10,NS,17),usereval(10,NS,18),usereval(10,NS,19)),
+ printrpt("NS-PAV HLDF",usereval(10,NS,6),"EW-Goren HDLF",usereval(3,EW,6) )
+
+
+		

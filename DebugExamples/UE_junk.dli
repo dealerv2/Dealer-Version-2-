@@ -1,0 +1,24 @@
+generate   10000
+produce    1
+seed 17
+title "Berg 26 pts with 10fit  "
+# 10 is the query-id that asks for Pavlicek hand evaluation.
+# The external code was written to return the various results in 0 .. 5
+
+#  Berg
+predeal north S982,HQT6,DQ943,CQ53 
+predeal south SAKQJT63,H7,DT7,CT86 
+
+#                               Total            North              South
+action 
+	printrpt(NS),
+   printrpt("NS_NT=  ", usereval(0,NS,0),usereval(0,NS,1), usereval(0,NS,2),
+            " NS_Suit=",usereval(0,NS,3),usereval(0,NS,4), usereval(0,NS,5)),
+
+	printrpt("N_dbg-hcpAdj,Lpts,Body,SynPts=",usereval(0,NS,6), usereval(0,NS,7 ),usereval(0,NS,8 ),usereval(0,NS,9 ),
+		" N suit-Dpts,Df,FN,Hf,SQ=",usereval(0,NS,10),usereval(0,NS,11),usereval(0,NS,12),usereval(0,NS,13),usereval(0,NS,14)),
+
+	printrpt("S_dbg-hcpAdj,Lpts,Body,SynPts=",usereval(0,NS,15),usereval(0,NS,16),usereval(0,NS,17),usereval(0,NS,18),
+		" S suit-Dpts,Df,FN,Hf,SQ=",usereval(0,NS,19),usereval(0,NS,20),usereval(0,NS,21),usereval(0,NS,22),usereval(0,NS,23)),
+
+	

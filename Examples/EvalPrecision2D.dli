@@ -1,0 +1,15 @@
+generate   1000000
+produce    5000
+seed 17
+title " Precision 2D Opener "
+predeal north SQJ72,HK6,DQJ8,CT975
+condition ( shape(south, 4414 + 4315 + 3415 + 4405) && 11 <= hcp(south) && hcp(south) <= 15 )
+
+
+
+action	
+#			printns,
+         evalcontract ( NS , z2S, vul),
+		   evalcontract ( NS , z3C, vul)
+
+

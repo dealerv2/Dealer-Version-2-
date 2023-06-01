@@ -171,7 +171,7 @@ pid_t setup_userserver( char *pathname ) {
    /* if we return here we are in Dealer, not in the server */
    if(jgmDebug >=3 ) {  DBGLOC("Create server returns pid= %d \n", server_pid) ; }
    return (server_pid) ;
-}  /* end setup userserver -- line 107 */
+}  /* end setup userserver -- line 112 */
 
 int cleanup_userserver(pid_t server_pid  ) {
    int exitstatus ;
@@ -435,7 +435,7 @@ void true_ask_query(int qtag, int side, int qcoded, query_type_k *pqt ) {
        * This memcpy will not be done if the results are being retrieved from the cache, nor will it be done
        * on every deal, depending on how the user has written the Dealer Input file.
       */
-      memcpy(p_dldata->curdeal, curdeal, sizeof(deal52_k) ) ;
+      memcpy(p_dldata->curdeal, curdeal, sizeof(DEAL52_k) ) ;
       memcpy(p_dldata->hs, hs, sizeof(HANDSTAT_k)*4 );
       memcpy(p_dldata->ss, ss, sizeof(SIDESTAT_k)*2 );
       p_dldata->curr_gen = ngen ;        /* for debugging */

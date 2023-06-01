@@ -23,7 +23,9 @@ predeal south SK4,H8765,D8,CK87654
 /*---------------- Testing now --------------------*/
 
 #
-action  printrpt (deal) ,
-printrpt(usereval(7,NS,0),usereval(7,NS,1),usereval(7,NS,2),usereval(7,NS,3),"C4_NS",cccc(north)+cccc(south) )
+action  printrpt (NS, "C4_NS",cccc(north)+cccc(south)) ,
+printrpt("KnR_NT=",  usereval(7,NS,0), usereval(7,NS,1),usereval(7,NS,2),
+         "KnR_Suit=",usereval(7,NS,3), usereval(7,NS,4),usereval(7,NS,5),
+			"KnRx100=", usereval(7,NS,6), usereval(7,NS,7),usereval(7,NS,8)),
 
 

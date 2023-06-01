@@ -88,8 +88,6 @@
  extern int predeal_compass;            /* global var for predeal communication */
  extern struct contract_st contract;
  extern struct param_st parm ;         /* for script parameters $0 thru $9 */
- extern char server_path[256];        /* Complete UserEval pgm full path name, or pgm name in current dir */
- extern pid_t userserver_pid ;
  extern int  userserver_reqd ;          /* set by Flex if usereval statement seen in input file */
 
  extern struct tree    defaulttree ;
@@ -126,6 +124,9 @@ extern int opc_pgmlen ;
 extern struct opc_Vals_st opcRes ;
 extern char export_buff[64] ;
 
+#ifndef POINTCOUNT_H
+  #include "pointcount.h"
+#endif
  extern int     points[13] ;            /* Goren (or other) HCP values A=4, K=3 etc. */
  extern int     ltc_weights[13] ;       /* Weight that allows coding the top cards in a suit. A=32, K=16, Q=8, J=4, T=2 x=1*/
  /* the pointcount array of various point count arrays. Needs the file pointcount.h to be included with this file.*/
@@ -141,8 +142,9 @@ extern char export_buff[64] ;
 /* Global Vars to launch DealerServer daemon */
 extern char server_dir[] ;    /* Path to the distro version */
 extern char server_pgm[] ;    /* Default DealerServer in the current directory. or user sets path name via -U switch */
-extern char server_path[];    /* path set by the -U switch. Should begin with a SLASH not a DOT */
-pid_t userserver_pid  ;
+extern char server_path[];    /* Default, or path set by the -U switch. Should begin with a SLASH not a DOT */
+extern pid_t userserver_pid ;
+
 
  /* some debugging stuff */
 extern int      treelev;                /* the level we are at in the decision tree */

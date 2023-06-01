@@ -1,0 +1,28 @@
+# Simulate a How often will Opener be 4=5=(xx) when Resp is xxxx=xx=(yz) with 6-8 hcp.
+generate 10000000
+produce 1
+seed 901
+
+# predeal from the command line for detailed testing Note No spaces in the Holding string
+# Ex: ./dealerv2 UEZar_cmdPredeal.dli -W SA82,HT4,DQT9765,CA6 -E SK764,HAJ6532,D3,CKQ  -T "Page 83 "
+# Ex:	./dealerv2 UEZar_cmdPredeal.dli -W SAK87,HJ7654,DK9,CAJ -E SJ6,HA982,DQ8754,C86  -T "Page 84 Ex. 2"
+
+# Ex: ./dealerv2 UEZar_cmdPredeal.dli -W SAT87432,HKQ87,DT9   -E SKJ6,HA6,DAK43,CJT54
+#     Result:  e KJ6.A6.AK43.JT54 w AT87432.KQ87.T9. ,62,32,30,72,35,37,0,6,10,0,0,3,18,0,0,3,0,0,1,6
+
+
+# ZarBasic is metric 12, ZarFull is metric 13; ZarFull calls ZarBasic; 
+action
+		   printrpt("Top5 West=[", top5(west, spades), top5(west,hearts),top5(west,diamonds),top5(west,clubs),"] Top5 East=[",
+											top5(east, spades), top5(east,hearts),top5(east,diamonds),top5(east,clubs),"]"),
+#ZarFull ZarBasic(0 .. 13 but 3,4,5 modified) + Fn, Hf, Dfit, x 2
+printrpt (EW,  usereval(13,EW,0), usereval(13,EW,1), usereval(13,EW,2), usereval(13,EW,3), usereval(13,EW,4),
+               usereval(13,EW,5), usereval(13,EW,6), usereval(13,EW,7), usereval(13,EW,8), usereval(13,EW,9),
+               usereval(13,EW,10),usereval(13,EW,11),usereval(13,EW,12),usereval(13,EW,13),usereval(13,EW,14),
+ 					usereval(13,EW,15),usereval(13,EW,16),usereval(13,EW,17),usereval(13,EW,18),usereval(13,EW,19)),
+# ZarBasic
+printrpt (EW,  usereval(12,EW,0), usereval(12,EW,1), usereval(12,EW,2), usereval(12,EW,3), usereval(12,EW,4),
+               usereval(12,EW,5), usereval(12,EW,6), usereval(12,EW,7), usereval(12,EW,8), usereval(12,EW,9),
+               usereval(12,EW,10),usereval(12,EW,11),usereval(12,EW,12),usereval(12,EW,13))
+
+

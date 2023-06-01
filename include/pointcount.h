@@ -24,6 +24,7 @@ enum idxCardAttrRO {
       idxControls = 0,
       idxLTCwts,
       idxKleinman,
+      idxBumWrap,
       idxEndRO
 } ;
 /* the pointcount array itself */

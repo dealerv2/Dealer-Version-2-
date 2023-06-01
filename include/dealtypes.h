@@ -26,7 +26,7 @@ typedef int numx100_k ; /* Not used at present. Future may allow for different e
  */
 typedef unsigned char BYTE_k ;
 typedef char     card52_k ;                  /* not used anywhere */
-typedef card52_k deal52_k[52] ;
+typedef card52_k DEAL52_k[52] ;
 /* The legacy Dealer definitions. Too embedded in code to be changed at this point. TODO list */
 /* 2022-10-18. Removed unsigned Since JGM changed the macros to shift 4 from shift 6,
  * unsigned causes warnings and requires casting to avoid them

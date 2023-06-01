@@ -72,7 +72,7 @@ int hasKard (deal d, int player, card thiscard){
 } /* end hasKard */
 
 
-/* JGM redo to use the Has_card[s][r] array in handstat keep same prototype even tho deal not needed anymore */
+/* JGM redo to use the Has_card[s][r] array in handstat keep same prototype even tho deal parm not needed anymore */
 int hascard (deal d, int player, card thiscard) {
    #ifdef JGMDBG
     if (jgmDebug >= 7 ) {
@@ -108,7 +108,6 @@ void upd_topcards(struct handstat *hs, int suit,int  rank) {
   assert(rank<13);
   weight = CardAttr_RO[idxLTCwts][rank];
 
-
  JGMDPRT(9,  "debug: upd_topcards:: suit=%i  rank=%i  weight=%i  \n", suit, rank, weight);
 
   if      (hs->topcards[suit][0] == LTC_VOID_WEIGHT) {hs->topcards[suit][0] = weight;}
@@ -139,63 +138,63 @@ int countltc( struct handstat *hs) {
    JGMDPRT(9,  "debug: countltc:: SUIT=%i, hs->topcards=%i  %i  %i Tot Weight=%d\n",
                s, hs->topcards[s][0], hs->topcards[s][1], hs->topcards[s][2], ltc_weight);
     switch (ltc_weight) {  /* we count losers x 100 to avoid decimal places */
-    case 56:   /* AKQ */
-    case 112:  /* AK- */
-    case 160:  /* A-- */
-    case 192:  /* --- */
-        {ltc_suit= 0; losers_suit= 0 ; break;}  /* 0 losers for AKQ(56), AK-, A--, --- */
-    case 44:  /* AQJ */
-    case 52:  /* AKJ */
-    case 104: /* AQ- */
-    case 144: /* K-- */
+    case 384:  /* ---  3x128         */
+    case 320:  /* A--  64 + 2x128    */
+    case 224:  /* AK-  64 + 32 + 128 */
+    case 112:  /* AKQ  64 + 32 + 16  */
+        {ltc_suit= 0; losers_suit= 0 ; break;}  /* 0 losers for AKQ(112), AK-, A--, --- */
+    case 288:  /* K-- 32 + 2x128    */
+    case 208:  /* AQ- 64 + 16 + 128 */
+    case 104:  /* AKJ 64 + 32 + 8   */
+    case  88:  /* AQJ 64 + 16 + 8   */
         {ltc_suit= 50;  losers_suit = 1 ; break;} /* 0.5 half a loser for combos like AQJ, AQ-*/
-    case 25:  /* KQx */
-    case 26:  /* KQT */
-    case 28:  /* KQJ */
-    case 41:  /* AQx */
-    case 42:  /* AQT */
-    case 49:  /* AKx */
-    case 50:  /* AKT */
-    case 81:  /* Kx- */
-    case 82:  /* KT- */
-    case 84:  /* KJ- */
-    case 88:  /* KQ- */
-    case 97:  /* Ax- */
-    case 98:  /* AT- */
-    case 100: /* AJ- */
-    case 129: /* x-- */
-    case 130: /* T-- */
-    case 132: /* J-- */
-    case 136: /* Q-- */
+    case  49:  /* KQx 32 + 16 + 1 */
+    case  52:  /* KQT 32 + 16 + 4 */
+    case  56:  /* KQJ 32 + 16 + 8 */
+    case  81:  /* AQx 64 + 16 + 1 */
+    case  84:  /* AQT 64 + 16 + 4 */
+    case  97:  /* AKx 64 + 32 + 1 */
+    case 100:  /* AKT 64 + 32 + 4 */
+    case 161:  /* Kx- 32 + 1 + 128*/
+    case 164:  /* KT- 32 + 4 + 128*/
+    case 168:  /* KJ- 32 + 8 + 128*/
+    case 176:  /* KQ- 32 +16 + 128*/
+    case 193:  /* Ax- 64 + 1 + 128*/
+    case 196:  /* AT- 64 + 4 + 128*/
+    case 200:  /* AJ- 64 + 8 + 128*/
+    case 257:  /* x--   1 + 256 */
+    case 260:  /* T--   4 + 256 */
+    case 264:  /* J--   8 + 256 */
+    case 272:  /* Q--  16 + 256 */
         {ltc_suit = 100; losers_suit = 1; break;} /* one loser */
-    case 22:  /* KJT */
-    case 38:  /* AJT */
+    case  44:  /* KJT 32  + 8 + 4 */
+    case  76:  /* AJT 64  + 8 + 4 */
         {ltc_suit = 150; losers_suit = 2; break;} /* 1.5 losers for KJT and AJT */
-    case 13:  /* QJx */
-    case 14:  /* QJT */
-    case 18:  /* Kxx */
-    case 19:  /* KTx */
-    case 21:  /* KJx */
-    case 34:  /* Axx */
-    case 35:  /* ATx */
-    case 37:  /* AJx */
-    case 66:  /* xx- */
-    case 67:  /* Tx- */
-    case 69:  /* Jx- */
-    case 70:  /* JT- */
-    case 73:  /* Qx- */
-    case 74:  /* QT- */
-    case 76:  /* QJ- */
+    case  25:  /* QJx 16  + 8 + 1 */
+    case  28:  /* QJT 16  + 8 + 4 */
+    case  34:  /* Kxx 32  + 1 + 1 */
+    case  37:  /* KTx 32  + 4 + 1 */
+    case  41:  /* KJx 32  + 8 + 1 */
+    case  66:  /* Axx 64  + 1 + 1 */
+    case  69:  /* ATx 64  + 4 + 1 */
+    case  73:  /* AJx 64  + 8 + 1 */
+    case 130:  /* xx-  1  + 1 + 128*/
+    case 133:  /* Tx-  4  + 1 + 128*/
+    case 137:  /* Jx-  8  + 1 + 128*/
+    case 140:  /* JT-  8  + 4 + 128*/
+    case 145:  /* Qx- 16  + 1 + 128*/
+    case 148:  /* QT- 16  + 4 + 128*/
+    case 152:  /* QJ- 16  + 8 + 128*/
         {ltc_suit = 200; losers_suit = 2; break;}  /* Two losers */
-    case 10:  /* Qxx */
-    case 11:  /* QTx */
+    case  18:  /* Qxx 16  + 1 + 1 */
+    case  21:  /* QTx 16  + 4 + 1 */
         {ltc_suit = 250; losers_suit = 2; break;}  /* 2.5 losers for Qxx or QTx */
-    case 3:  /* xxx */
-    case 4:  /* Txx */
-    case 6:  /* Jxx */
-    case 7:  /* JTx */
+    case   3:  /* xxx  1  + 1 + 1 */
+    case   6:  /* Txx  4  + 1 + 1 */
+    case  10:  /* Jxx  8  + 1 + 1 */
+    case  13:  /* JTx  8  + 4 + 1 */
         {ltc_suit = 300; losers_suit = 3; break;} /* 3 losers */
-      default:  { fprintf(stderr, "ERROR! suit:[%d] invalid weight[%d]\n", s, ltc_weight);
+      default:  { fprintf(stderr, "%s.%d : ERROR! suit:[%d] invalid weight[%d]\n", __FILE__,__LINE__,s, ltc_weight);
                   dbgtops(hs->topcards);
                    assert(0);
               break;  }
@@ -303,36 +302,27 @@ void analyze (deal d, struct handstat *hsbase) {
       s = C_SUIT (curcard);
       r = C_RANK (curcard);
 
-     JGMDPRT(9,"Player=%c, curr Card=%c %c \n", seat_id[player],strain_id[s],card_id[r] );
+     JGMDPRT(8,"Player=%c, curr Card=%c %c \n", seat_id[player],strain_id[s],card_id[r] );
       hs->hs_length[s]++;
       hs->hs_points[s]    += points[r];  /* JGM hcp in this suit */
       hs->hs_totalpoints  += points[r];  /* JGM total hcp in the hand */
       hs->hs_control[s]   += CardAttr_RO[idxControls][r]; /* JGM Add */
       hs->hs_totalcontrol += CardAttr_RO[idxControls][r];
-      upd_topcards(hs, s, r) ; /* update the top cards array  used for modern ltc*/
-#ifdef JGMDBG
-      if (jgmDebug >= 9 ) {
-             fprintf(stderr, "JGM-HCP[s=%d,r=%d] incr=%d, SuitTot=%d, HandTot=%d\n",
+      upd_topcards(hs, s, r) ; /* update the top cards array with weights  used for modern ltc, short honors etc.*/
+      JGMDPRT(9,"Suit=%d,rank=%d SuitPts=%d, TotPts=%d, suitControls=%d, TotControls=%d \n",
+                  s,r,hs->hs_points[s],hs->hs_totalpoints,hs->hs_control[s], hs->hs_totalcontrol ) ;
+      JGMDPRT(9, "JGM-HCP[s=%d,r=%d] incr=%d, SuitTot=%d, HandTot=%d\n",
                           s,r,points[r], hs->hs_points[s], hs->hs_totalpoints );
-             fprintf(stderr, "JGM-CTL[s=%d,r=%d] incr=%d, Suit_CTLS=%d, HandCTLS=%d\n",
+      JGMDPRT(9, "JGM-CTL[s=%d,r=%d] incr=%d, Suit_CTLS=%d, HandCTLS=%d\n",
                           s,r, CardAttr_RO[idxControls][r],hs->hs_control[s],hs->hs_totalcontrol);
-      }
-      if (jgmDebug >= 9 ) {
-             fprintf(stderr, "PntCntType   Incr    Tot\n");
-      }
-#endif
+
+      JGMDPRT(9,  "PntCntType   Incr    Tot\n");
       for (t = 0; t < idxEnd; ++t) { /* begin filling the alternate (point)count arrays 0 .. 9 & idxHCP*/
         hs->hs_counts[t][s]   += tblPointcount[t][r]; /* tblPointcount init at compile time. see dealglobals.c */
         hs->hs_totalcounts[t] += tblPointcount[t][r]; /* add to total and to suit at same time. Keep in sync */
-#ifdef JGMDBG
-        if (jgmDebug >= 9 ) {
-             fprintf(stderr,"%d, %d %d \n", t, tblPointcount[t][r], hs->hs_counts[t][s]);
-        }
-#endif
-      } /* end for t line 468 */
-#ifdef JGMDBG
-     if (jgmDebug >= 9 ) {fprintf(stderr,  "\n");} // finish off the debug printout for the array
-#endif
+        JGMDPRT(9, "%d, %d %d \n", t, tblPointcount[t][r], hs->hs_counts[t][s]);
+      } /* end for t < idxEND */
+      JGMDPRT(9,   "\n");    // finish off the debug printout for the array
     }  /* end for curr card line 445*/
     /* finished the card by card totals All cards in hand accounted for handstat almost complete */
 

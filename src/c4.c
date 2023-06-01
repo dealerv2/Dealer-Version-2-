@@ -131,7 +131,7 @@ int eval_cccc (int seat) {
     else { QualityPoints = 0 ; }
     eval += QualityPoints;
 
-    JGMDPRT(7,"Qual=%d,  New suitEval=%d \n", QualityPoints ,eval ) ;
+    JGMDPRT(8,"Qual=%d,  New suitEval=%d \n", QualityPoints ,eval ) ;
 
     switch (Length) {
        case 0 : ShapePoints = 300 ; Shorts++; break ;
@@ -141,7 +141,7 @@ int eval_cccc (int seat) {
     }
     eval += ShapePoints ;  /* the total points for this suit so far */
     toteval += eval ;      /* total points for the hand so far */
-    JGMDPRT(3,"This suit ShapePoints =%d,  New suitEval=%d NewHand Total=%d \n", ShapePoints ,eval, toteval ) ;
+    JGMDPRT(8,"This suit ShapePoints =%d,  New suitEval=%d NewHand Total=%d \n", ShapePoints ,eval, toteval ) ;
   }      /* end for (suit;...) */
 
          /* All Dbltons given +100; deduct the 1st one  */ /* Leave no other shortness test out for this vers. more std. */
@@ -183,21 +183,21 @@ int suit_quality (int seat, int suit) {
   if (HasKing) {
       qhcp += 300;
       HigherHonors++;
-      JGMDPRT(3,"Quality ::King qhcp=%d HighHonors=%d\n", qhcp,HigherHonors) ;
+      JGMDPRT(8,"Quality ::King qhcp=%d HighHonors=%d\n", qhcp,HigherHonors) ;
    }
 
   /*QUEEN*/
   if (HasQueen) {
       qhcp += 200;
       HigherHonors++;
-      JGMDPRT(3,"Quality ::Queen qhcp=%d HighHonors=%d\n", qhcp,HigherHonors) ;
+      JGMDPRT(8,"Quality ::Queen qhcp=%d HighHonors=%d\n", qhcp,HigherHonors) ;
    }
 
   /*JACK*/
   if (HasJack) {
       qhcp += 100;
       HigherHonors++;
-      JGMDPRT(3,"Quality ::Jack qhcp=%d HighHonors=%d\n", qhcp,HigherHonors) ;
+      JGMDPRT(8,"Quality ::Jack qhcp=%d HighHonors=%d\n", qhcp,HigherHonors) ;
    }
    /* Ten */
      if (HasTen) {      /* All Tens count for at least 0.5; some tens count more see later */

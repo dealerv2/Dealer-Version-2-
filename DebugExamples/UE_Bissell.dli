@@ -1,0 +1,26 @@
+generate   10000
+produce    10
+seed 17
+title "UE_Bissel  "
+#      0      1       2     3     4      5       6      7    8    9    10   11    12    13   14       -1
+#  { BERG=0, BISSEL, DKP, GOREN, JGM1, KAPLAN, KARPIN, KnR, LAR, MORSE, PAV, R22, SHEIN, ZAR, UNKN, Quit=-1} ;
+
+# 2023/03/31 Printing Bissell
+#
+# usereval(1, ....) calls the Bissell evaluation function;
+# First test Honors, Length and max in a suit
+#predeal north SAK,HAJ,DAKQJ,CAKQJT
+#predeal south SQJ,HKQ,D8765,C87654
+# 2nd test J and T missing 3 tops and shape deduction for 4432, 4441
+#predeal north SA432,HK432,DQJ32,CK
+#predeal south SJT87,HQT87,DAT8,C87
+# 3rd test longer suits, and 4333 shape deduction also T when only 2 higher missing.
+#predeal north SA9876432,HK5432
+#predeal south SKJT,HQ876,DQJT,CAJT
+
+action
+   printrpt(NS,"Biss_Tot",usereval(1,NS,0),"BissNorth",usereval(1,NS,1), "BissSouth",usereval(1,NS,2),
+            "Biss_N:SuitsTot=", usereval(1,NS,6), usereval(1,NS,7),usereval(1,NS,8), usereval(1,NS,9),
+            "Biss_S:SuitsTot=", usereval(1,NS,10),usereval(1,NS,11),usereval(1,NS,12),usereval(1,NS,13),
+            "HandShapeAdj N=", usereval(1,NS,14),"S=",usereval(1,NS,15)
+    )

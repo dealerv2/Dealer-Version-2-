@@ -88,7 +88,7 @@ int main (int argc, char **argv) {
         #ifdef YYDEBUG
             JGMDPRT(1, "YYDEBUG DEFINED yydebug== %d BISON DBG Active.  \n",yydebug );
         #else
-            JGMDPRT(1, "YYDEBUG NOT Defined.  BISON DBG IN_Active.  \n" );
+            JGMDPRT(1, "YYDEBUG NOT Defined.  BISON DBG NOT Active.  \n" );
         #endif
     #endif
 

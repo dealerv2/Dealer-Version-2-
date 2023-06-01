@@ -1,6 +1,10 @@
 /* File UserEval_types.h  -- Types and Typedefs
  *  Version  Date          Comment
  *    0.5    2022-12-02    First
+ *    1.0    2023-03-24    Production
+ *    1.1    2023-03-27    Replaced 'CPU' with 'BISSEL' (bissell)
+ *    1.2    2023-?? ??    Coded Goren
+ *    1.5    2023-05-24    Coded all metrics including ZarBasic and ZarFull. Dropped Rule22.
  */
 #ifndef USEREVAL_TYPES_H
 #define USEREVAL_TYPES_H
@@ -8,18 +12,21 @@
    #include "../include/mmap_template.h"        /* Will also include dealtypes.h */
 #endif
 /* may need to invent another set of these, for custom mods.
- * cant insert stuff in the middle now because adj_short_honors table is tied to these. New ones may use CPU, GOREN etc. Not in alpha order
- * The Query tags in alpha order: The adj_hcp arrays use these values to lookup adjustments. ~ means not coded yet.
- *                     0     1~    2     3~    4      5~      6      7    8    9     10   11~    12~   13~  14    20      88      89~          -1 */
-enum metric_ek    { BERG=0, CPU,  DKP, GOREN, JGM1, KAPLAN, KARPIN, KnR, LAR, MORSE, PAV, R22, SHEINW, ZAR, END, EXCP=20, SET=88, NTSET=89, Quit=-1} ;
+ * cant insert stuff in the middle now because New Features in DealerV2 and Pavlicek's Library of solved Dealsadj_short_honors table is tied to these. New ones may use CPU, GOREN etc. Not in alpha order
+ * The Query tags in alpha order: The adj_hcp arrays use these values to lookup adjustments.
+ *                     0        1       2     3     4      5       6      7    8    9     10     11       12      13      14        20          21    */
+enum metric_ek    { BERGEN=0, BISSEL,  DKP, GOREN, JGM1, KAPLAN, KARPIN, KnR, LAR, MORSE, PAV, SHEINW,  ZARBAS, ZARFULL, metricEND, MixJGM=20, MixMOR,
+// possibly add metrics in the 50 - 79 range to implement different hand factors like quicktricks, or quicklosers, or shortest suit etc.
+                    SET=88, TSTALL=99, Quit=-1} ;
 enum card_rank_ek { Two_rk=0, Three_rk, Four_rk, Five_rk, Six_rk, Seven_rk, Eight_rk, Nine_rk, Ten_rk, Jack_rk, Queen_rk, King_rk, Ace_rk,spot_rk=-1 };
 enum pt_count_ek  { Tens=0, Jacks, Queens, Kings, Aces, Top2, Top3, Top4, Top5, C13, HCP, none=-1 } ;  /* for altcount[count][suit]  */
-
+enum ss_type_ek { ss_A, ss_K, ss_Q, ss_J, ss_T, ss_x, ss_AK, ss_AQ, ss_AJ, ss_AT, ss_Ax,
+                  ss_KQ, ss_KJ, ss_KT, ss_Kx, ss_QJ, ss_QT, ss_Qx, ss_JT, ss_Jx, ss_Tx, ss_xx, ss_END, ss_xxx=-1 } ;
 struct FitPoints_st {
    int df_val[2];
    int fn_val[2] ;
 } ;
-struct KnR_points_st { /* The values will be x100 so we can use ints */
+struct KnR_points_st {  /* The values will be x100 so we can use ints */
    int knr_honor_pts ;  /* A=3, K=2, Q=1? etc. */
    int knr_short_pts;   /* Each Void=3, Each Stiff=2, Each Dblton except the first = 1 etc. */
    int knr_qual_pts ;   /* (Suitlen/10) * Suithcp. Suit HCP are different from Honor pts */
@@ -28,9 +35,24 @@ struct KnR_points_st { /* The values will be x100 so we can use ints */
    int knr_dfit ;       /* Dummy pts: +50% or +100% of shortness pts with an 8fit or a 9 fit. Per the text */
    int knr_Fn_pts ;     /* Declarer pts: +25%, 50%, 100% of the shortness pts for 8, 9, or longer fits. Per the text */
    int knr_misfit_adj;  /* Deduction of shortness pts if a misfit; assume short pts vs Parner's 5+ suit */
-   int knr_body_val;    /* Pavlicek Rounding Factor sum(3*Tens + 2*Nines + Eights */
+   int knr_body_val;    /* Pavlicek Rounding Factor sum(3*Tens + 2*Nines + Eights) */
    int knr_rounded_pts; /* the x100 pts brought into the 0 - 40 pt range using Pav rounding method */
 } ;
+/* Struct to collect several details re fit(s) one place */
+typedef struct side_fitstat_st {
+   int t_suit ;
+   int t_fitlen;
+   int t_len[2];  /* by hand index: 0=N or E, 1=S or W */
+   int decl_h;   /* 0 or 1 */
+   int dummy_h;
+   int side ;     /* 0 = NS 1 = EW */
+   int decl_seat; /* Compass Number 0=North, 3=West */
+   int dummy_seat;
+   int sorted_slen[2][4];  /* suit lengths in desc order longest first */
+   int sorted_sids[2][4];  /* the suit_ids in desc order of length e.g. 4=1=5=3 would give D,S,C,H i.e. 1,3,0,2 */
+   int fitlen[4] ;
+// add more fields so collect everything in one place?
+} SIDE_FIT_k ;
 
 typedef struct trump_fit_st {
    int dummy ;    // The compass North, East, South, West for Dummy
@@ -40,6 +62,13 @@ typedef struct trump_fit_st {
    int fit_len  ;  /* Longest fit; if = 7 promises a 5-2 Not 4-3 or 6-1 If no fit should be -1 */
    int ss_len[2];  /* ShortSuit len for hand[0] and hand[1]; Not by Decl or Dummy */
 } TRUMP_FIT_k ;
+
+typedef struct trump_suit_st { /* relevant characteristics of trump suit */
+   int t_suit  ;
+   int t_len[2];
+   int t_fitlen;
+   int t_rank  ;
+} TRUMP_SUIT_k ;
 
 /* Misfit, Waste, and No Waste struct.
  * there will be an array of four of these, one per suit -- we use this struct to calc misfit pts, and waste/nowaste pts

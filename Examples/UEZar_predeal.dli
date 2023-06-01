@@ -1,0 +1,27 @@
+# Using User Eval to derive Zar Points. 
+# Basic Zar: (HCP + CTLS + (A+B) + (A-D) + adjustments for HCP, and honors in 2/3 suits (Each hand independent of the other)
+# Full Zar : Basic plus Hf points + Fn Pts + Ruffing Power (aka Dfit) points
+
+generate 10000000
+produce 1
+
+predeal 
+	west SAK87,HJ7654,DK9,CAJ 
+   east SJ6,HA982,DQ8754,C86 
+
+
+# ZarBasic is metric 12, ZarFull is metric 13; ZarFull calls ZarBasic; 
+action
+		   printrpt("Top5 West=[", top5(west, spades), top5(west,hearts),top5(west,diamonds),top5(west,clubs),"] Top5 East=[",
+											top5(east, spades), top5(east,hearts),top5(east,diamonds),top5(east,clubs),"]"),
+#ZarFull ZarBasic(0 .. 13 but 3,4,5 modified) + Fn, Hf, Dfit, x 2
+printrpt (EW,  usereval(13,EW,0), usereval(13,EW,1), usereval(13,EW,2), usereval(13,EW,3), usereval(13,EW,4),
+               usereval(13,EW,5), usereval(13,EW,6), usereval(13,EW,7), usereval(13,EW,8), usereval(13,EW,9),
+               usereval(13,EW,10),usereval(13,EW,11),usereval(13,EW,12),usereval(13,EW,13),usereval(13,EW,14),
+ 					usereval(13,EW,15),usereval(13,EW,16),usereval(13,EW,17),usereval(13,EW,18),usereval(13,EW,19)),
+# ZarBasic
+printrpt (EW,  usereval(12,EW,0), usereval(12,EW,1), usereval(12,EW,2), usereval(12,EW,3), usereval(12,EW,4),
+               usereval(12,EW,5), usereval(12,EW,6), usereval(12,EW,7), usereval(12,EW,8), usereval(12,EW,9),
+               usereval(12,EW,10),usereval(12,EW,11),usereval(12,EW,12),usereval(12,EW,13))
+
+

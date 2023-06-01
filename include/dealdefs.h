@@ -6,6 +6,7 @@
    * 2022/11/15 2.5.0    JGM     Added UserEval client / server functionality.
    * 2023/01/07 -- Merged in changes from V4 to fix predeal; dealcards_subs.c and globals, etc.
    * 2023/01/26 2.5.5    JGM     Changed Version to reflect modified EvalContract and working UserEval
+   * 2023/05/29 2.5.8    JGM     More UserEval integration; used qsort in some cases.
    */
 
   /* Make the header file guard .. */
@@ -14,11 +15,11 @@
 #ifndef _GNU_SOURCE
   #define _GNU_SOURCE
 #endif
-#define BUILD_DATE "2023/03/21"
+#define BUILD_DATE "2023/05/29"
 #ifndef JGMDBG
-  #define VERSION "2.5.6"
+  #define VERSION "2.5.8"
 #else
-  #define VERSION "102.5.6"
+  #define VERSION "102.5.8"
 #endif
 
 #ifndef UNUSED
@@ -33,9 +34,12 @@
 #ifndef TRUNCZ
  #define TRUNCZ(x) ((x)<0?0:(x))
 #endif
+#define MIN(x,y)    ( (x) < (y) ) ? (x) : (y)
+#define MAX(x,y)    ( (x) > (y) ) ? (x) : (y)
+#define SWAP(x,y) { (x) ^= (y) ; (y) ^= (x) ; (x) ^= (y) ; }
 
 /* this next one added because Linux has a BRIDGE utility that refers to ethernet cards */
-/* will have to make sure there is an ln /usr/games/gibcli to /usr/games/bridge */
+/* will have to make sure there is an ln /usr/games/gibcli to /usr/games/bridge which is the real name of the GIB binary*/
 #define DD_PGM "/usr/games/gibcli"
 #define OPC_PGM "/usr/local/bin/DOP/dop"
 #define FDP_PGM "/usr/local/bin/DealerV2/fdp"
@@ -69,7 +73,7 @@ enum suit_ek {CLUBS=0, DIAMONDS, HEARTS, SPADES, nosuit=-1 } ;
 
 #define MAXTITLE        255
 #define MAXTITLESIZE    256
-#define LTC_VOID_WEIGHT 64
+#define LTC_VOID_WEIGHT 128
 #define SUIT_CLUB       0
 #define SUIT_DIAMOND    1
 #define SUIT_HEART      2

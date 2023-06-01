@@ -1,0 +1,24 @@
+generate   10000
+produce    10
+seed 17
+title "Descr.UE_Larsson in NT and Suit "
+#      0       1      2     3     4      5       6      7    8    9     10   11    12    13   14       -1
+#  { BERG=0, BISSEL, DKP, GOREN, JGM1, KAPLAN, KARPIN, KnR, LAR, MORSE, PAV, R22, SHEIN, ZAR, UNKN, Quit=-1} ;
+
+# 2023/04/15 Printing all the Larsson results
+#            
+# usereval(8, ....) calls the Larsson evaluation function;
+
+
+action
+# Morse NS all the details --
+       printrpt ( NS ),
+       printrpt ( "NS_NT=", usereval(0,NS,0),  usereval(0,NS,1), usereval(0,NS,2),
+        				"NS_DF=", usereval(0,NS,3),  usereval(0,NS,4), usereval(0,NS,5)),
+       printrpt ( "H0_NT=", usereval(0,NS,6),  usereval(0,NS,7), usereval(0,NS,8), usereval(0,NS,9), 
+						"H0_DF=", usereval(0,NS,10), usereval(0,NS,11),usereval(0,NS,12),usereval(0,NS,13)),
+       printrpt ( "H1_NT=", usereval(0,NS,14), usereval(0,NS,15),usereval(0,NS,16),usereval(0,NS,17),
+						"H1_DF=", usereval(0,NS,18), usereval(0,NS,19),usereval(0,NS,20),usereval(0,NS,21)),
+
+                  
+

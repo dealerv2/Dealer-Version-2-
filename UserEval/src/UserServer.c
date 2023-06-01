@@ -9,6 +9,9 @@
  *    0.9.6  2023-01-13    Refactor Trump Fit into Do_Trump_fit. DKP, jgm1, jgm0, mixed calc, etc. working
  *    0.9.7  2023-01-26    KnR with Fit working.
  *    1.0.0  2023-02-17    Most relevant metrics working. Set88 working. Prep for first github upload
+ *    1.0.1  2023-03-31    Set88 modified to return both HLDF and NT pts. More Metrics. Bissell,....
+ *    1.0.5  2023-04-10    Coded Sheinwold, Goren; more debugging.
+ *    1.5    2023-05-26    Coded all metrics including ZarBasic and ZarFull. Dropped Rule22.
  */
 #ifndef _GNU_SOURCE
   #define _GNU_SOURCE
@@ -25,8 +28,8 @@
  *
  */
 #define SERVER_NAME "DealerServer"
-#define SERVER_VERSION "1.0.0"
-#define SERVER_BUILD_DATE "2023/02/17"
+#define SERVER_VERSION "1.5.0"
+#define SERVER_BUILD_DATE "2023/05/26"
 #define SERVER_AUTHOR "JGM"
 int jgmDebug = 1 ;  /* value will be passed in from Dealer if Debugging wanted */
 #include "../include/std_hdrs_all.h"
@@ -58,24 +61,30 @@ int user_reply( int tag, int ures[64], struct reply_type_st *prt, struct query_t
 int userfunc( struct query_type_st *p_q_type, struct reply_type_st *p_r_type, DEALDATA_k *p_dldat,
                USER_VALUES_k *p_nsdat,USER_VALUES_k *p_ewdat, MMAP_TEMPLATE_k *mm_ptr) ;
 int bergen_reply(   USER_VALUES_k *pr, struct reply_type_st *prt, DEALDATA_k *pq,  struct query_type_st *pqt);
-int cpu_reply(      USER_VALUES_k *pr, struct reply_type_st *prt, DEALDATA_k *pq,  struct query_type_st *pqt);
+int bissell_reply(  USER_VALUES_k *pr, struct reply_type_st *prt, DEALDATA_k *pq,  struct query_type_st *pqt);
 int dkp_reply(      USER_VALUES_k *pr, struct reply_type_st *prt, DEALDATA_k *pq,  struct query_type_st *pqt);
 int goren_reply(    USER_VALUES_k *pr, struct reply_type_st *prt, DEALDATA_k *pq,  struct query_type_st *pqt);
 int hcp_reply(      USER_VALUES_k *pr, struct reply_type_st *prt, DEALDATA_k *pq,  struct query_type_st *pqt);
 int jgm1_reply(     USER_VALUES_k *pr, struct reply_type_st *prt, DEALDATA_k *pq,  struct query_type_st *pqt);
+int kaplan_reply(   USER_VALUES_k *pr, struct reply_type_st *prt, DEALDATA_k *pq,  struct query_type_st *pqt);
 int karpin_reply(   USER_VALUES_k *pr, struct reply_type_st *prt, DEALDATA_k *pq,  struct query_type_st *pqt);
 int knr_reply(      USER_VALUES_k *pr, struct reply_type_st *prt, DEALDATA_k *pq,  struct query_type_st *pqt);
 int larsson_reply(  USER_VALUES_k *pr, struct reply_type_st *prt, DEALDATA_k *pq,  struct query_type_st *pqt);
 int morse_reply(    USER_VALUES_k *pr, struct reply_type_st *prt, DEALDATA_k *pq,  struct query_type_st *pqt);
 int pav_reply(      USER_VALUES_k *pr, struct reply_type_st *prt, DEALDATA_k *pq,  struct query_type_st *pqt);
+int sheinw_reply(   USER_VALUES_k *pr, struct reply_type_st *prt, DEALDATA_k *pq,  struct query_type_st *pqt);
+int zarbasic_reply( USER_VALUES_k *pr, struct reply_type_st *prt, DEALDATA_k *pq,  struct query_type_st *pqt);
+int zarfull_reply(  USER_VALUES_k *pr, struct reply_type_st *prt, DEALDATA_k *pq,  struct query_type_st *pqt);
 int unk_reply(      USER_VALUES_k *pr, struct reply_type_st *prt, DEALDATA_k *pq,  struct query_type_st *pqt);
-int mixed_reply(    USER_VALUES_k *pr, struct reply_type_st *prt, DEALDATA_k *pq,  struct query_type_st *pqt);
+int mixed_JGM1reply(USER_VALUES_k *pr, struct reply_type_st *prt, DEALDATA_k *pq,  struct query_type_st *pqt);
+int mixed_LARreply( USER_VALUES_k *pr, struct reply_type_st *prt, DEALDATA_k *pq,  struct query_type_st *pqt);
 int test_reply(     USER_VALUES_k *pr, struct reply_type_st *prt, DEALDATA_k *pq,  struct query_type_st *pqt);
 int set88_reply(    USER_VALUES_k *pr, struct reply_type_st *prt, DEALDATA_k *pq,  struct query_type_st *pqt);
 /*
- * Future: kaplan_reply (for a 1960's HCP method with length -- more standard than karpin) and
- *         sheinwold_reply (for a 1960's HCP method with shortness )
- *         rule22_reply for a Bergen method with Rule22 instead of CPU, or HCP.
+ * Future:
+ *  single factors not full metrics; things like QuickTricks, longest/shortes suit, slamControls, Woolsey pts. etc.
+ * that are hard to do using std DealerV2 syntax
+ * Remote possibility to convert OPC pts to a UserEval metric and so avoid external Perl program.
  */
 
 // Error and Debug functions -- see also Serverdebug_subs.c
@@ -190,7 +199,6 @@ int main(int argc, char *argv[] ) {
 int userfunc( struct query_type_st *pqt, struct reply_type_st *prt, DEALDATA_k *p_dldat,
                USER_VALUES_k *p_nsdat,USER_VALUES_k *p_ewdat, MMAP_TEMPLATE_k *mm_ptr)
 {
-
     USER_VALUES_k *res_ptr;
     if (pqt->query_side == 0 ) { res_ptr = p_nsdat ; }
     else                       { res_ptr = p_ewdat ; }
@@ -199,24 +207,26 @@ int userfunc( struct query_type_st *pqt, struct reply_type_st *prt, DEALDATA_k *
 
     prt->reply_tag = pqt->query_tag ;  // setup a default. May be over-ridden by code in switch
     strcpy( prt->reply_descr ,  "Normal Server Return" );
-    /*
-     * The Query tags in alpha order: although we cant use alphas in the Descr file yet...
-     *   0     1    2     3     4      5       6      7    8    9     10   11    12     13    14     15   ??    -1
-     *  BERG, CPU, DKP, GOREN, JGM1, KAPLAN, KARPIN, KnR, LAR, MORSE, PAV, R22, SHEINW, ZAR, UNKN,              Quit
-     */
+/*
+ * The Query tags in alpha order: The adj_hcp arrays use these values to lookup adjustments.
+ *                     0        1       2     3     4      5      6       7    8    9     10     11       12      13      14        20          21
+                    BERGEN=0, BISSEL,  DKP, GOREN, JGM1, KAPLAN, KARPIN, KnR, LAR, MORSE, PAV, SHEINW,  ZARBAS, ZARFULL, metricEND, MixJGM=20, MixMOR,
+// possibly add metrics in the 50 - 79 range to implement different hand factors like quicktricks, or quicklosers, or shortest suit etc.
+                    SET=88, SYNTST=99, Quit=-1} ;
+*/
     switch (pqt->query_tag) {
       case 'B':
-      case  BERG:    bergen_reply(  res_ptr, prt, p_dldat, pqt);  break ; /* Bergen   */
-      case 'C':
-      case  CPU :    cpu_reply(     res_ptr, prt, p_dldat, pqt);  break ; /* Bergen with Fractions (Bum-Rap)   */
+      case  BERGEN:  bergen_reply(  res_ptr, prt, p_dldat, pqt);  break ; /* Bergen   */
+      case 'b':
+      case  BISSEL:  bissell_reply( res_ptr, prt, p_dldat, pqt);  break ; /* Bissel from Bridge Encyclopedia and Pavlicek */
       case 'D':
-      case  DKP :    dkp_reply(     res_ptr, prt, p_dldat, pqt); break ; /* D Kleinman      */
+      case  DKP :    dkp_reply(     res_ptr, prt, p_dldat, pqt); break ; /* D Kleinman LJP from NoTrump Zone */
       case 'G':
       case  GOREN :  goren_reply(   res_ptr, prt, p_dldat, pqt);  break ; /* Goren shortness pts    */
       case 'J':
-      case JGM1:     jgm1_reply(    res_ptr, prt, p_dldat, pqt);  break ; /* JGM1     */
+      case JGM1:     jgm1_reply(    res_ptr, prt, p_dldat, pqt);  break ; /* JGM1  Karpin with BumWrap points  */
       case 'E': /* for Edgar */
-      case KAPLAN :                     break ; /* TBD */
+      case KAPLAN :  kaplan_reply(  res_ptr, prt, p_dldat, pqt);  break ; /* Kaplan -- length from 1960's book */
       case 'K':
       case KARPIN :  karpin_reply(  res_ptr, prt, p_dldat, pqt);  break ; /* Karpin - length from Pavlicek     */
       case 'k':
@@ -224,13 +234,21 @@ int userfunc( struct query_type_st *pqt, struct reply_type_st *prt, DEALDATA_k *
       case 'L':
       case LAR :     larsson_reply( res_ptr, prt, p_dldat, pqt);  break ; /* Larsson  */
       case 'M':
-      case MORSE:    morse_reply(    res_ptr, prt, p_dldat, pqt);  break ; /* OPC with JGM tweaks     */
+      case MORSE:    morse_reply(   res_ptr, prt, p_dldat, pqt);  break ; /* Larsson with BumWrap and Dfit mods   */
       case 'P':
       case PAV :     pav_reply(     res_ptr, prt, p_dldat, pqt);  break ; /* PAV -- from  Website. Like Goren minor mods */
-      /* Future Case 'R' for Rule22, 'Z' for Zar pts, maybe if ever. etc. */
-      case 20:     mixed_reply(     res_ptr, prt, p_dldat, pqt);  break ; /* jgm1 and larsson     */
-      case 21:     test_reply(      res_ptr, prt, p_dldat, pqt);  break ; /* syntax. change 21 to 88 later */
+      case 'S':
+      case SHEINW :  sheinw_reply(  res_ptr, prt, p_dldat, pqt);  break ; /* Sheinwold from book. Short suits. */
+      case 'z':
+      case ZARBAS :  zarbasic_reply(res_ptr, prt, p_dldat, pqt);  break ; /* Basic Zar pts from the 2005 PDF download */
+      case 'Z':
+      case ZARFULL:  zarfull_reply(  res_ptr, prt, p_dldat, pqt);  break ; /* Basic Zar plus HF, FN, HCP in 2/3 suits etc */
+
+      case 20:    mixed_JGM1reply(  res_ptr, prt, p_dldat, pqt);  break ; /* jgm1 and karpin     */
+      case 21:    mixed_LARreply(   res_ptr, prt, p_dldat, pqt);  break ; /* morse and larsson   */
+
       case 88:     set88_reply(     res_ptr, prt, p_dldat, pqt);  break ; /* do all the metrics for which there is code */
+      case 99:     test_reply(      res_ptr, prt, p_dldat, pqt);  break ; /* fill the slots with coded values to test syntax  */
       case 'Q':
       case Quit:
             server_eoj(mm_ptr, PageSize) ; /* Dealer is finished. Cleanup our stuff  */
@@ -276,10 +294,11 @@ void calc_ptrs (  char *p_mm, struct mmap_ptrs_st *p_pst, struct mmap_off_st *p_
 }
 
 /*
- * Call these next two with: if(jgmDebug >= n ) { show_query( ... ) ; }
+ * Call with: if(jgmDebug >= n ) { show_mmap_ptrs( ... ) ; }
  */
 
 void show_mmap_ptrs(MMAP_TEMPLATE_k *p_mm, struct mmap_ptrs_st *ptrs, struct mmap_off_st *offs ) {
+   fprintf(stderr, "%s.%d show_mmap_ptrs\n",__FILE__,__LINE__ ) ;
 
    fprintf(stderr," Server Base Pointer: %p \n", (void *)p_mm    ) ;
    fprintf(stderr," \theader_ptr  = %p\n", (void *)ptrs->header  ) ;
@@ -316,15 +335,12 @@ void show_mmap_ptrs(MMAP_TEMPLATE_k *p_mm, struct mmap_ptrs_st *ptrs, struct mma
    fprintf(stderr,"Size of HANDSTAT_k     %zd, 0x%0lx\n", sizeof(HANDSTAT_k), sizeof(HANDSTAT_k));
  } /* end jgmDebug>=8 */
    return ;
-}
+} /* end show_mmap_ptrs */
 
 /*
  * mmap the fd that our parent has passed us.
  */
 char *link_mmap(int fd) {
-/*
- * mmap the file FD our parent has passed us.
- */
       size_t len;
       char *mm_ptr ;
 
@@ -366,7 +382,6 @@ void server_eoj(char *mm_ptr, size_t PageSize) {
   }
    sem_post(p_rsem) ; /* in case the client is still waiting */
    eoj_mutex() ;  /* tell kernel we finished with semaphores */
-
    return ;
 }
 
@@ -374,34 +389,33 @@ int bergen_reply( USER_VALUES_k *pr, struct reply_type_st *prt, DEALDATA_k *pdl_
    int num_res = 0;
    strcpy(prt->reply_descr, "Bergen" ) ;
    prt->reply_tag = pqt->query_tag ;
-   num_res = bergen_calc( pqt->query_side )  ; /* bergen_calc will calc pointers for himself; not using the pr arg */
+   num_res = bergen_calc( pqt->query_side )  ; /* all the xxxx_calc functions call prolog which sets up the ptrs and other stuff */
    JGMDPRT(6,"=====Bergen_calc returns %d fields calculated, res[0]=%d, res[3]=%d\n",num_res, pr->u.res[0],pr->u.res[3]) ;
    return (num_res) ;
 }
-int cpu_reply( USER_VALUES_k *pr, struct reply_type_st *prt, DEALDATA_k *pdl_dat, struct query_type_st *pqt) {
-   strcpy(prt->reply_descr, "BumWrap" ) ;
+int bissell_reply( USER_VALUES_k *pr, struct reply_type_st *prt, DEALDATA_k *pdl_dat, struct query_type_st *pqt) {
+   int num_res = 0 ;
+   strcpy(prt->reply_descr, "Bissell" ) ;
    prt->reply_tag = pqt->query_tag ;
-   for (int i = 0 ; i < 4 ; i++ ) {
-      pr->u.res[i] = 0 - pdl_dat->hs[0].hs_points[i] ;
-   }
- return (0) ;
+   num_res = bissell_calc( pqt->query_side )  ; /* all the xxxx_calc functions call prolog which sets up the ptrs and other stuff */
+   JGMDPRT(6,"=====Bissell_calc returns %d fields calculated, res[0]=%d, res[3]=%d\n",num_res, pr->u.res[0],pr->u.res[3]) ;
+   return (num_res) ;
 }
 int dkp_reply( USER_VALUES_k *pr, struct reply_type_st *prt, DEALDATA_k *pdl_dat,  struct query_type_st *pqt) {
    strcpy(prt->reply_descr, "Kleinman" ) ;
    int num_res = 0;
    prt->reply_tag = pqt->query_tag ;
-   num_res = dkp_calc( pqt->query_side )  ; /* bergen_calc will calc pointers for himself; not using the pr arg */
+   num_res = dkp_calc( pqt->query_side )  ; /* all the xxxx_calc functions call prolog which sets up the ptrs and other stuff */
    JGMDPRT(6,"=====DKP_calc returns %d fields calculated, res[0]=%d, res[3]=%d\n",num_res, pr->u.res[0],pr->u.res[3]) ;
    return (num_res) ;
 }
-
 int goren_reply( USER_VALUES_k *pr, struct reply_type_st *prt, DEALDATA_k *pdl_dat,  struct query_type_st *pqt) {
    strcpy(prt->reply_descr, "Goren" ) ;
+   int num_res = 0;
    prt->reply_tag = pqt->query_tag ;
-   for (int i = 0 ; i < 4 ; i++ ) {
-      pr->u.res[i] = 0 - pdl_dat->hs[0].hs_points[i] ;
-   }
-    return (0) ;
+   num_res = goren_calc( pqt->query_side )  ; /* all the xxxx_calc functions call prolog which sets up the ptrs and other stuff */
+   JGMDPRT(6,"=====Goren_calc returns %d fields calculated, res[0]=%d, res[3]=%d\n",num_res, pr->u.res[0],pr->u.res[3]) ;
+   return (num_res) ;
 }
 int hcp_reply( USER_VALUES_k *pr, struct reply_type_st *prt, DEALDATA_k *pdl_dat,  struct query_type_st *pqt) {
    strcpy(prt->reply_descr, "Work_HCP_only" ) ;
@@ -409,16 +423,24 @@ int hcp_reply( USER_VALUES_k *pr, struct reply_type_st *prt, DEALDATA_k *pdl_dat
    for (int i = 0 ; i < 4 ; i++ ) {
       pr->u.res[i] = 0 - pdl_dat->hs[0].hs_points[i] ;
    }
- return (0) ;
+   return (0) ;
 }
 int jgm1_reply( USER_VALUES_k *pr, struct reply_type_st *prt, DEALDATA_k *pdl_dat,  struct query_type_st *pqt) {
    int num_res =0 ;
-   strcpy(prt->reply_descr, "Morse" ) ;
+   strcpy(prt->reply_descr, "JGM1" ) ;
     prt->reply_tag = pqt->query_tag ;
     // fprintf(stderr, "**** Calling jgm1_calc with pqt->query_side=%d \n",pqt->query_side );
    num_res = jgm1_calc( pqt->query_side ) ;
    JGMDPRT(6,"jgm1_calc returns %d fields calculated\n",num_res) ;
- return (0) ;
+   return (0) ;
+}
+int kaplan_reply( USER_VALUES_k *pr, struct reply_type_st *prt, DEALDATA_k *pdl_dat,  struct query_type_st *pqt) {
+   int num_res = 0 ;
+   strcpy(prt->reply_descr, "Kaplan" ) ;
+   prt->reply_tag = pqt->query_tag ;
+   num_res = kaplan_calc( pqt->query_side) ;
+   JGMDPRT(6,"kaplan_calc returns %d fields calculated\n",num_res) ;
+   return (0) ;
 }
 int karpin_reply( USER_VALUES_k *pr, struct reply_type_st *prt, DEALDATA_k *pdl_dat,  struct query_type_st *pqt) {
    int num_res = 0 ;
@@ -426,7 +448,7 @@ int karpin_reply( USER_VALUES_k *pr, struct reply_type_st *prt, DEALDATA_k *pdl_
    prt->reply_tag = pqt->query_tag ;
    num_res = karpin_calc( pqt->query_side) ;
    JGMDPRT(6,"karpin_calc returns %d fields calculated\n",num_res) ;
- return (0) ;
+   return (0) ;
 }
 int knr_reply( USER_VALUES_k *pr, struct reply_type_st *prt, DEALDATA_k *pdl_dat,  struct query_type_st *pqt) {
    int num_res = 0 ;
@@ -435,8 +457,7 @@ int knr_reply( USER_VALUES_k *pr, struct reply_type_st *prt, DEALDATA_k *pdl_dat
    JGMDPRT(3,"KnR_reply Calling knr_calc\n") ;
    num_res = knr_calc( pqt->query_side) ;
    JGMDPRT(6,"knr_calc returns %d fields calculated\n",num_res) ;
-
- return (num_res) ;
+   return (num_res) ;
 }
 int larsson_reply( USER_VALUES_k *pr, struct reply_type_st *prt, DEALDATA_k *pdl_dat,  struct query_type_st *pqt) {
    int num_res = 0 ;
@@ -444,18 +465,16 @@ int larsson_reply( USER_VALUES_k *pr, struct reply_type_st *prt, DEALDATA_k *pdl
    prt->reply_tag = pqt->query_tag ;
    num_res = lar_calc( pqt->query_side) ;
    JGMDPRT(6,"lar_calc returns %d fields calculated\n",num_res) ;
-
-    return (num_res) ;
+   return (num_res) ;
 }
 int morse_reply( USER_VALUES_k *pr, struct reply_type_st *prt, DEALDATA_k *pdl_dat,  struct query_type_st *pqt) {
    int num_res = -1 ;
-   strcpy(prt->reply_descr, "Morse Undef" ) ;
+   strcpy(prt->reply_descr, "Morse" ) ;
     prt->reply_tag = pqt->query_tag ;
    num_res = morse_calc( pqt->query_side) ;
    JGMDPRT(6,"morse_calc returns %d fields calculated\n",num_res) ;
- return (num_res) ;
+   return (num_res) ;
 }
-
 int pav_reply( USER_VALUES_k *pr, struct reply_type_st *prt, DEALDATA_k *pdl_dat,  struct query_type_st *pqt) {
    int num_res = -1 ;
    strcpy(prt->reply_descr, "Pavlicek" ) ;
@@ -464,7 +483,30 @@ int pav_reply( USER_VALUES_k *pr, struct reply_type_st *prt, DEALDATA_k *pdl_dat
    JGMDPRT(6,"pav_calc returns %d fields calculated\n",num_res) ;
    return (num_res) ;
 } /* end pav_reply */
-
+int sheinw_reply( USER_VALUES_k *pr, struct reply_type_st *prt, DEALDATA_k *pdl_dat,  struct query_type_st *pqt) {
+   strcpy(prt->reply_descr, "Sheinwold" ) ;
+   int num_res = 0;
+   prt->reply_tag = pqt->query_tag ;
+   num_res = sheinw_calc( pqt->query_side )  ; /* all the xxxx_calc functions call prolog which sets up the ptrs and other stuff */
+   JGMDPRT(6,"=====sheinw_calc returns %d fields calculated, res[0]=%d, res[3]=%d\n",num_res, pr->u.res[0],pr->u.res[3]) ;
+   return (num_res) ;
+} /* end sheinw_reply */
+int zarbasic_reply( USER_VALUES_k *pr, struct reply_type_st *prt, DEALDATA_k *pdl_dat,  struct query_type_st *pqt) {
+   strcpy(prt->reply_descr, "Zar Basic" ) ;
+   int num_res = 0;
+   prt->reply_tag = pqt->query_tag ;
+   num_res = zarbasic_calc( pqt->query_side )  ; /* all the xxxx_calc functions call prolog which sets up the ptrs and other stuff */
+   JGMDPRT(6,"=====zarbasic_calc returns %d fields calculated, res[0]=%d, res[3]=%d\n",num_res, pr->u.res[0],pr->u.res[3]) ;
+   return (num_res) ;
+} /* end zarbasic_reply */
+int zarfull_reply( USER_VALUES_k *pr, struct reply_type_st *prt, DEALDATA_k *pdl_dat,  struct query_type_st *pqt) {
+   strcpy(prt->reply_descr, "Zar Full" ) ;
+   int num_res = 0;
+   prt->reply_tag = pqt->query_tag ;
+   num_res = zarfull_calc( pqt->query_side )  ; /* all the xxxx_calc functions call prolog which sets up the ptrs and other stuff */
+   JGMDPRT(6,"=====zarfull_calc returns %d fields calculated, res[0]=%d, res[3]=%d\n",num_res, pr->u.res[0],pr->u.res[3]) ;
+   return (num_res) ;
+} /* end zarfull_reply */
 int set88_reply( USER_VALUES_k *pr, struct reply_type_st *prt, DEALDATA_k *pdl_dat,  struct query_type_st *pqt) {
    int num_res = -1 ;
    strcpy(prt->reply_descr, "Set88 Query" ) ;
@@ -482,16 +524,24 @@ int unk_reply( USER_VALUES_k *pr, struct reply_type_st *prt, DEALDATA_k *pdl_dat
    }
  return (0) ;
 }
-int mixed_reply( USER_VALUES_k *pr, struct reply_type_st *prt, DEALDATA_k *pdl_dat,  struct query_type_st *pqt) {
+int mixed_JGM1reply( USER_VALUES_k *pr, struct reply_type_st *prt, DEALDATA_k *pdl_dat,  struct query_type_st *pqt) {
    int num_res =0 ;
-   strcpy(prt->reply_descr, "MIX Test_4321 vs Test_CPU" ) ;
+   strcpy(prt->reply_descr, "MIX Test Karpin(Milton) vs JGM(BumWrap)" ) ;
     prt->reply_tag = pqt->query_tag ;
-    // fprintf(stderr, "**** Calling mixed_calc with pqt->query_side=%d \n",pqt->query_side );
-   num_res = mixed_calc( pqt->query_side ) ;
-   JGMDPRT(6,"mixed_calc returns %d fields calculated\n",num_res) ;
+    // fprintf(stderr, "**** Calling mixed_JGM1calc with pqt->query_side=%d \n",pqt->query_side );
+   num_res = mixed_JGM1calc( pqt->query_side ) ;
+   JGMDPRT(6,"mixed_JGM1calc returns %d fields calculated\n",num_res) ;
  return (0) ;
 }
-
+int mixed_LARreply( USER_VALUES_k *pr, struct reply_type_st *prt, DEALDATA_k *pdl_dat,  struct query_type_st *pqt) {
+   int num_res =0 ;
+   strcpy(prt->reply_descr, "MIX Test Karpin(Milton) vs JGM(BumWrap)" ) ;
+    prt->reply_tag = pqt->query_tag ;
+    // fprintf(stderr, "**** Calling mixed_LARcalc with pqt->query_side=%d \n",pqt->query_side );
+   num_res = mixed_LARcalc( pqt->query_side ) ;
+   JGMDPRT(6,"mixed_LARcalc returns %d fields calculated\n",num_res) ;
+ return (0) ;
+}
 int test_reply(     USER_VALUES_k *pr, struct reply_type_st *prt, DEALDATA_k *pq,  struct query_type_st *pqt) {
    int num_res =0 ;
    strcpy(prt->reply_descr, "Testing Reply" ) ;

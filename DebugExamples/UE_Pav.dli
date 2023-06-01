@@ -7,7 +7,13 @@ title "Descr.UE_Pav -- All Pavlicek Hand Evaluation in NT and Suit  "
 
 #  Pavlicek Evaluation
 
-#                    Total            North              South
-action printrpt(NS,
-        "NS_NT=",usereval(10,NS,0),usereval(10,NS,1), usereval(10,NS,2),
-      "NS_Suit=",usereval(10,NS,3),usereval(10,NS,4), usereval(10,NS,5))
+#                               Total            North              South
+action
+#  Pavlicek NS all the details --
+       printrpt ( NS ),
+       printrpt ( "NS_NT=", usereval(0,NS,0),  usereval(0,NS,1), usereval(0,NS,2),
+        				"NS_DF=", usereval(0,NS,3),  usereval(0,NS,4), usereval(0,NS,5)),
+       printrpt ( "H0_NT=", usereval(0,NS,6),  usereval(0,NS,7), usereval(0,NS,8), 
+						"H0_DF=", usereval(0,NS,9),  usereval(0,NS,10),usereval(0,NS,11),usereval(0,NS,12)),
+       printrpt ( "H1_NT=", usereval(0,NS,13), usereval(0,NS,14),usereval(0,NS,15),
+						"H1_DF=", usereval(0,NS,16), usereval(0,NS,17),usereval(0,NS,18), usereval(0,NS,19))

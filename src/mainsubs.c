@@ -39,7 +39,7 @@ long int init_rand48( long int seed ) {
     assert( numbytes == 6 ) ;
     seed48(su.sss) ;   /* ignore seed48 return value of pointer to internal buffer */
     u_seed48 = (long int)su.sss[0] + (long int)su.sss[1]*two16 + (long int)su.sss[2]*two32;
-    JGMDPRT(2,"No Seed Provided. DONE Initializing RNG init_rand48, %d, %d, %d, %ld\n",
+    JGMDPRT(3,"No Seed Provided. DONE Initializing RNG init_rand48, %d, %d, %d, %ld\n",
                 su.sss[0], su.sss[1], su.sss[2], u_seed48);
     return u_seed48;
 } /* end init_rand48 */
@@ -122,9 +122,8 @@ int str_UC(char *dst, char *src , int maxn) {
    return p ;
 }
 int srv_dbg (char *opt_D ) {
-   int dot = '.';
    char *dot_pos;
-   if ( (dot_pos = strchr(opt_D, dot )) ) {
+   if ( (dot_pos = strchr(opt_D, '.' )) || (dot_pos = strchr(opt_D, ':' )) ) {
       return ( atoi( (dot_pos +1 ) ) );
    }
    return 0 ;

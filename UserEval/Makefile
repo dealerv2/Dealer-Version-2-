@@ -16,6 +16,7 @@ CXXFLAGS = -std=gnu++17 -mtune=corei7 -flto -fopenmp -pthread  -I../include
 # LDFLAGS =  -lm --verbose -t
 LDFLAGS = -lm
 
+# The dest dir is the current dir. But the Prod, Debug, and Parent dirs all have symlinks to the executable in this dir
 DESTDIR = .
 # This next program name is hardwired into the dealer code. But can be over-ridden with the -U switch on dealer cmd line.
 PROGRAM  = DealerServer

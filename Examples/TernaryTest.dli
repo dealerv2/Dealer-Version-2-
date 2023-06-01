@@ -4,7 +4,7 @@ seed 13
 title " Checking how to nest ternary tests "
 # In C and Perl you can nest the ternary almost indefinitely as in
 # Answ = ( cond1 ) ? Var1 :
-#         ( cond2 ) ? Var2 :
+#        ( cond2 ) ? Var2 :
 #         ....
 #         ( condn ) ? Varn : DefaultVar
 # In Dealer Even this simple statement gives the wrong result
@@ -19,10 +19,10 @@ ls =(  ( spades(west) >= hearts(west) ? spades(west) : hearts(west) ) >=    // i
        ( (diamond(west) >= clubs(west) ) ? diamond(west) : clubs(west) )      // else set ls to len of longest Minor
 
 # To find the minimum of 4 Values you can do: (Note this returns the value, but not the name of the shortest suit)
-ss = (  ( spades(west) <= hearts(west) ? spades(west) : hearts(west) ) <=    // if The len of shortes Major <=
-       ( (diamond(west) <= clubs(west))  ? diamond(west) : clubs(west)) ) ? //    The len of the shortest Minor
-       ( spades(west) <= hearts(west) ? spades(west) : hearts(west) ) :       // set ss to the len of shortest Major
-       ( (diamond(west) <= clubs(west) ) ? diamond(west) : clubs(west) )      // else set ss to len of shortest Minor
+ss = (  ( spades(west) <= hearts(west) ? spades(west) : hearts(west) ) <=    // if The len of shortest Major <=
+       ( (diamond(west) <= clubs(west))  ? diamond(west) : clubs(west)) ) ?  //    The len of the shortest Minor
+       ( spades(west) <= hearts(west) ? spades(west) : hearts(west) ) :      // set ss to the len of shortest Major
+       ( (diamond(west) <= clubs(west) ) ? diamond(west) : clubs(west) )     // else set ss to len of shortest Minor
 
 # But it might be more clear to have intermediate variables
 SMaj = (spades(west)  <= hearts(west)) ? spades(west)  : hearts(west)

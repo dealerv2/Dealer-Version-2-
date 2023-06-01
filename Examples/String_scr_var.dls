@@ -1,0 +1,12 @@
+generate 100000
+produce 1000
+
+# a rare example of how to get a cmd line script parm in as a string (Note the two sets of quotes)
+# run this file with: ../dealerv2 STRscr.dli -2 '"Controls West > 15 hcp"'
+
+title " A quoted string as a script variable. Rare use case"
+condition hcp(west) > 15
+action
+printoneline,
+average $2 controls(west)
+
