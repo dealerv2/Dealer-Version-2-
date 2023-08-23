@@ -1,3 +1,0 @@
-On Mint 21.1; Preparing to build with gcc11 
-More testing regarding logging in to GitHub on Mint21
-
