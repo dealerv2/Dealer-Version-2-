@@ -7,6 +7,8 @@
    * 2023/01/07 -- Merged in changes from V4 to fix predeal; dealcards_subs.c and globals, etc.
    * 2023/01/26 2.5.5    JGM     Changed Version to reflect modified EvalContract and working UserEval
    * 2023/05/29 2.5.8    JGM     More UserEval integration; used qsort in some cases.
+   * 2023/08/04 3.0.0    JGM     New version number for new GCC compiler version incompatible with old. Minor title fix
+   * 2023/08/04 3.0.2	 JGM 	 Redo rplib_fix. Create rp_err_check etc.   
    */
 
   /* Make the header file guard .. */
@@ -15,11 +17,11 @@
 #ifndef _GNU_SOURCE
   #define _GNU_SOURCE
 #endif
-#define BUILD_DATE "2023/05/29"
+#define BUILD_DATE "2023/08/23"
 #ifndef JGMDBG
-  #define VERSION "2.5.8"
+  #define VERSION "3.0.4"
 #else
-  #define VERSION "102.5.8"
+  #define VERSION "103.0.4"
 #endif
 
 #ifndef UNUSED
@@ -34,6 +36,7 @@
 #ifndef TRUNCZ
  #define TRUNCZ(x) ((x)<0?0:(x))
 #endif
+#define ARRAY_SIZE(arr) (sizeof( (arr) ) / sizeof( (arr)[0] )
 #define MIN(x,y)    ( (x) < (y) ) ? (x) : (y)
 #define MAX(x,y)    ( (x) > (y) ) ? (x) : (y)
 #define SWAP(x,y) { (x) ^= (y) ; (y) ^= (x) ; (x) ^= (y) ; }
