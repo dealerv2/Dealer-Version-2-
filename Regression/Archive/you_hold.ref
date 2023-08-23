@@ -1,0 +1,159 @@
+                  [This is the problem from the User Guide -- inherited from Dealer V1]
+   1. North              East                South               West 
+     6                   K 8 3               A Q 5 4 2           J T 9 7 
+     9 4                 T 6 5 3             K J 8 7             A Q 2 
+     A Q T 9 7 6 4       J 8                 3 2                 K 5 
+     Q 9 6               8 4 3 2             A K                 J T 7 5 
+
+   2. North              East                South               West 
+     K J                 9 8 7 6 3           A Q 5 4 2           T 
+     A 4 3               9 5                 K J 8 7             Q T 6 2 
+     K T 9 8 7 6 4       5                   3 2                 A Q J 
+     9                   J T 8 6 4           A K                 Q 7 5 3 2 
+
+   3. North              East                South               West 
+     6                   9 8 7 3             A Q 5 4 2           K J T 
+     A 3                 T 9 6 2             K J 8 7             Q 5 4 
+     K J 9 8 7 6 5       4                   3 2                 A Q T 
+     J 9 8               Q 6 4 3             A K                 T 7 5 2 
+
+   4. North              East                South               West 
+     T 8                 K 3                 A Q 5 4 2           J 9 7 6 
+     T 5                 9 6 4 2             K J 8 7             A Q 3 
+     K Q J T 5 4         9 8 6               3 2                 A 7 
+     Q 9 5               T 8 4 2             A K                 J 7 6 3 
+
+   5. North              East                South               West 
+     9 8                 K J 6 3             A Q 5 4 2           T 7 
+     A 4                 T 9 6 5 3           K J 8 7             Q 2 
+     K T 7 6 5 4         9                   3 2                 A Q J 8 
+     J 9 2               T 6 3               A K                 Q 8 7 5 4 
+
+   6. North              East                South               West 
+     8 3                 T 7 6               A Q 5 4 2           K J 9 
+     Q 4                 T 9 6 3             K J 8 7             A 5 2 
+     Q 9 8 6 5 4         A J T 7             3 2                 K 
+     Q 5 2               J 8                 A K                 T 9 7 6 4 3 
+
+   7. North              East                South               West 
+     J T 3               6                   A Q 5 4 2           K 9 8 7 
+     T                   Q 5 4 2             K J 8 7             A 9 6 3 
+     A K 9 6 5 4         J 8 7               3 2                 Q T 
+     J 7 2               T 9 8 6 4           A K                 Q 5 3 
+
+   8. North              East                South               West 
+     T 7                 8 6 3               A Q 5 4 2           K J 9 
+     Q T                 9 5 3               K J 8 7             A 6 4 2 
+     A 9 8 7 6 5         Q T                 3 2                 K J 4 
+     Q J 7               T 9 6 5 4           A K                 8 3 2 
+
+   9. North              East                South               West 
+     K J 3               8 7 6               A Q 5 4 2           T 9 
+     5 4 2               A 9 3               K J 8 7             Q T 6 
+     Q J T 9 7 4         6                   3 2                 A K 8 5 
+     4                   J T 8 5 3 2         A K                 Q 9 7 6 
+
+  10. North              East                South               West 
+     J                   T 8 7 6 3           A Q 5 4 2           K 9 
+     T 9                 Q 6 4 2             K J 8 7             A 5 3 
+     A K T 9 8 5 4       J 6                 3 2                 Q 7 
+     9 8 2               7 3                 A K                 Q J T 6 5 4 
+
+                  [This is the problem from the User Guide -- inherited from Dealer V1]
+  11. North              East                South               West 
+     K T 9               J 8 6 3             A Q 5 4 2           7 
+     4                   9 6 5 3             K J 8 7             A Q T 2 
+     A J T 6 5 4         Q 7                 3 2                 K 9 8 
+     8 5 3               6 4 2               A K                 Q J T 9 7 
+
+  12. North              East                South               West 
+     J T 8               K 7 6 3             A Q 5 4 2           9 
+     Q                   T 6 4 3 2           K J 8 7             A 9 5 
+     K J T 9 8 6 4       5                   3 2                 A Q 7 
+     8 5                 7 6 4               A K                 Q J T 9 3 2 
+
+  13. North              East                South               West 
+     3                   T 9 8 7 6           A Q 5 4 2           K J 
+     9 5 4               T 3                 K J 8 7             A Q 6 2 
+     A K Q J 9 8         7 6                 3 2                 T 5 4 
+     T 9 4               J 7 5 2             A K                 Q 8 6 3 
+
+  14. North              East                South               West 
+     6                   J T 9               A Q 5 4 2           K 8 7 3 
+     6 4 3               Q 9 5 2             K J 8 7             A T 
+     K J T 8 7 6 5       Q 9                 3 2                 A 4 
+     Q 3                 7 6 4 2             A K                 J T 9 8 5 
+
+  15. North              East                South               West 
+     T 3                 9 6                 A Q 5 4 2           K J 8 7 
+     A 5 3               Q 9 6 2             K J 8 7             T 4 
+     Q J T 9 8 5         K 7 4               3 2                 A 6 
+     9 8                 T 7 6 4             A K                 Q J 5 3 2 
+
+  16. North              East                South               West 
+     T 6                 K J 8 3             A Q 5 4 2           9 7 
+     Q 2                 T 4 3               K J 8 7             A 9 6 5 
+     A T 9 8 6 5 4       Q                   3 2                 K J 7 
+     7 2                 T 8 5 4 3           A K                 Q J 9 6 
+
+  17. North              East                South               West 
+     K 8 3               T 9 6               A Q 5 4 2           J 7 
+     3                   Q 5 4 2             K J 8 7             A T 9 6 
+     Q J T 7 6 4         9 5                 3 2                 A K 8 
+     T 7 2               Q J 9 4             A K                 8 6 5 3 
+
+  18. North              East                South               West 
+     8 6 3               J 9 7               A Q 5 4 2           K T 
+     4                   Q T 9 6 5           K J 8 7             A 3 2 
+     K Q 9 8 6 5         J T 7               3 2                 A 4 
+     J 7 4               9 8                 A K                 Q T 6 5 3 2 
+
+  19. North              East                South               West 
+     9                   J 8 7 3             A Q 5 4 2           K T 6 
+     6 4 3               T 5                 K J 8 7             A Q 9 2 
+     A K T 9 8 5         7 6 4               3 2                 Q J 
+     T 8 7               Q 4 3 2             A K                 J 9 6 5 
+
+  20. North              East                South               West 
+     T 9                 J 8 7 6 3           A Q 5 4 2           K 
+     9 4                 Q T 6               K J 8 7             A 5 3 2 
+     A K 8 7 5 4         9                   3 2                 Q J T 6 
+     9 4 3               T 8 7 2             A K                 Q J 6 5 
+
+                  [This is the problem from the User Guide -- inherited from Dealer V1]
+  21. North              East                South               West 
+     T 9 8               7 3                 A Q 5 4 2           K J 6 
+     5 3                 T 9 6 4             K J 8 7             A Q 2 
+     A Q J 9 8 7         K 6 5               3 2                 T 4 
+     8 5                 Q T 9 2             A K                 J 7 6 4 3 
+
+  22. North              East                South               West 
+     K T 6               3                   A Q 5 4 2           J 9 8 7 
+     5                   A T 9 6 3 2         K J 8 7             Q 4 
+     A J T 9 7 6 5       8                   3 2                 K Q 4 
+     9 8                 6 5 4 3 2           A K                 Q J T 7 
+
+  23. North              East                South               West 
+     K 6 3               J 9 8               A Q 5 4 2           T 7 
+     9                   Q 6 4 3 2           K J 8 7             A T 5 
+     A T 9 8 7 5         J                   3 2                 K Q 6 4 
+     J 9 3               T 8 5 2             A K                 Q 7 6 4 
+
+  24. North              East                South               West 
+     9 8                 J T 7 3             A Q 5 4 2           K 6 
+     A Q                 T 5 2               K J 8 7             9 6 4 3 
+     K J T 7 6 4         9 5                 3 2                 A Q 8 
+     9 7 4               T 8 6 5             A K                 Q J 3 2 
+
+  25. North              East                South               West 
+     8 6                 9 7                 A Q 5 4 2           K J T 3 
+     Q                   T 9 5 3             K J 8 7             A 6 4 2 
+     Q J T 9 8 7 4       A 5                 3 2                 K 6 
+     Q 8 7               J T 5 4 3           A K                 9 6 2 
+
+
+This is the problem from the User Guide -- inherited from Dealer V1
+Generated 9119 hands
+Produced  25 hands
+Initial random seed 45
+Time needed    0.024 sec

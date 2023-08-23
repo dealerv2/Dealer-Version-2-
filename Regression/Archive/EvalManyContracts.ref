@@ -1,0 +1,25 @@
+Contract  2Nx V by  NS Average Result =    54.10, Success pct=   39.00, Fail pct=   61.00 
+Contract 3Sxx   by  NS Average Result =  -514.40, Success pct=   26.00, Fail pct=   74.00 
+Contract  3D  V by  NS Average Result =  -160.80, Success pct=   32.00, Fail pct=   68.00 
+Contract  3Hx   by  EW Average Result =  -675.60, Success pct=    8.00, Fail pct=   92.00 
+Par NS      = : Mean=  182.9000, Std Dev=  252.1716, Var=63590.4949, Sample Size=100 
+ScoreNS_2NTx= : Mean=   54.1000, Std Dev=  641.9763, Var=412133.5253, Sample Size=100 
+ScoreNS_1NT = : Mean=   36.0000, Std Dev=  131.5103, Var=17294.9495, Sample Size=100 
+Frequency HCP Vs Tricks:
+        Low      5      6      7      8      9     10     11   High    Sum
+Low       0      0      0      0      0      0      0      0      0      0
+  20      0      0      0      0      0      0      0      0      0      0
+  21      3      2      8     15      5      4      0      0      0     37
+  22      0      1      7      6      7      1      1      0      0     23
+  23      2      0      3      5      4      2      1      0      0     17
+  24      0      2      2      5      7      4      3      0      0     23
+  25      0      0      0      0      0      0      0      0      0      0
+High      0      0      0      0      0      0      0      0      0      0
+Sum       5      5     20     31     23     11      5      0      0    100
+
+
+ Eval Contract, Par, Freq2D, Tricks, Score NS 21-24hcp
+Generated 393 hands
+Produced  100 hands
+Initial random seed 21
+Time needed   13.098 sec

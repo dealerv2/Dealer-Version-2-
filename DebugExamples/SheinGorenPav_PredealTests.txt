@@ -1,0 +1,143 @@
+ShortSuitMetricTest -- Apr 19 2023
+
+---------------- UE_Sheinwold.dli set 1.-----------------------
+ n KJT987.K.AK98.32 s Q432.9876.Q432.4 
+ 'NS_NT=  ',21,16,5,' NS_Suit=',27,19,8
+ 'N_dbg-hcpAdj,Body,Hf,Fn=',-1,0,0,3,' N suit-Dpts,Df,QT=',3,0,250
+ 'S_dbg-hcpAdj,Body,Hf,Fn=',0,-1,2,0,' S suit-Dpts,Df,QT=',2,3,0
+ e A65.AJT5.5.AK765 w .Q432.JT76.QJT98 
+ 'EW_NT=  ',25,18,7,' EW_Suit=',32,20,12
+ 'E_dbg-hcpAdj,Body,Hf,Fn=',0,1,0,1,' E suit-Dpts,Df,QT=',2,0,400
+ 'W_dbg-hcpAdj,Body,Hf,Fn=',-1,-1,2,0,' W suit-Dpts,Df,QT=',3,5,0
+---------------- UE_Sheinwold.dli set 2.-----------------------
+ n 832.K54.AK432.J3 s AKT54.A3.QJ5.654 
+ 'NS_NT=  ',25,10,15,' NS_Suit=',26,10,16
+ 'N_dbg-hcpAdj,Body,Hf,Fn=',-1,0,0,0,' N suit-Dpts,Df,QT=',1,0,250
+ 'S_dbg-hcpAdj,Body,Hf,Fn=',0,0,0,1,' S suit-Dpts,Df,QT=',1,0,300
+ e J9.J762.T.AKT987 w Q76.QT98.9876.Q2 
+ 'EW_NT=  ',15,8,7,' EW_Suit=',19,11,8
+ 'E_dbg-hcpAdj,Body,Hf,Fn=',-1,0,0,0,' E suit-Dpts,Df,QT=',3,0,200
+ 'W_dbg-hcpAdj,Body,Hf,Fn=',-2,-1,3,0,' W suit-Dpts,Df,QT=',1,1,0
+---------------- UE_Sheinwold.dli set 3.-----------------------
+ n Q.K5432.AKQ432.J s AKT54.876.5.6543 
+ 'NS_NT=  ',21,14,7,' NS_Suit=',27,18,9
+ 'N_dbg-hcpAdj,Body,Hf,Fn=',-2,0,0,1,' N suit-Dpts,Df,QT=',4,0,250
+ 'S_dbg-hcpAdj,Body,Hf,Fn=',0,0,0,0,' S suit-Dpts,Df,QT=',2,2,200
+ e J932.J.T.AKT9872 w 876.AQT9.J9876.Q 
+ 'EW_NT=  ',22,13,9,' EW_Suit=',26,17,9
+ 'E_dbg-hcpAdj,Body,Hf,Fn=',-2,0,0,5,' E suit-Dpts,Df,QT=',4,0,200
+ 'W_dbg-hcpAdj,Body,Hf,Fn=',-2,0,1,0,' W suit-Dpts,Df,QT=',2,0,150
+---------------- UE_Sheinwold.dli set 4.-----------------------
+ n 2.5432.AKQ432.K2 s AKT54.876.5.6543 
+ 'NS_NT=  ',19,12,7,' NS_Suit=',24,15,9
+ 'N_dbg-hcpAdj,Body,Hf,Fn=',0,0,0,0,' N suit-Dpts,Df,QT=',3,0,250
+ 'S_dbg-hcpAdj,Body,Hf,Fn=',0,0,0,0,' S suit-Dpts,Df,QT=',2,0,200
+ e QJ93.J.T.AQJT987 w 876.AKQT9.J9876. 
+ 'EW_NT=  ',20,10,10,' EW_Suit=',27,14,13
+ 'E_dbg-hcpAdj,Body,Hf,Fn=',-1,0,0,0,' E suit-Dpts,Df,QT=',4,0,150
+ 'W_dbg-hcpAdj,Body,Hf,Fn=',-1,0,0,0,' W suit-Dpts,Df,QT=',3,0,200
+=============================================================================
+---------------- UE_Goren2.dli set 1.-----------------------
+ n KJT987.K.AK98.32 s Q432.9876.Q432.4 
+ 'NS_NT=  ',15,12,3,' NS_Suit=',25,18,7
+ 'N_dbg-hcpAdj,Body=',-2,0,' N suit-Dpts,Df,Fn,Hf,SQ=',3,0,3,0,0
+ 'S_dbg-hcpAdj,Body=',0,-1,' S suit-Dpts,Df,Fn,Hf,SQ=',2,1,0,1,0
+ e A65.AJT5.5.AK765 w .Q432.JT76.QJT98 
+ 'EW_NT=  ',21,16,5,' EW_Suit=',30,19,11
+ 'E_dbg-hcpAdj,Body=',0,0,' E suit-Dpts,Df,Fn,Hf,SQ=',2,0,1,0,0
+ 'W_dbg-hcpAdj,Body=',0,-1,' W suit-Dpts,Df,Fn,Hf,SQ=',3,2,0,1,0
+---------------- UE_Goren2.dli set 2.-----------------------
+ n 832.K54.AK432.J3 s AKT54.A3.QJ5.654 
+ 'NS_NT=  ',24,10,14,' NS_Suit=',27,11,16
+ 'N_dbg-hcpAdj,Body=',-1,0,' N suit-Dpts,Df,Fn,Hf,SQ=',1,0,0,0,0
+ 'S_dbg-hcpAdj,Body=',0,0,' S suit-Dpts,Df,Fn,Hf,SQ=',1,0,1,0,0
+ e J9.J762.T.AKT987 w Q76.QT98.9876.Q2 
+ 'EW_NT=  ',12,8,4,' EW_Suit=',17,11,6
+ 'E_dbg-hcpAdj,Body=',-1,0,' E suit-Dpts,Df,Fn,Hf,SQ=',3,0,0,0,0
+ 'W_dbg-hcpAdj,Body=',-1,-1,' W suit-Dpts,Df,Fn,Hf,SQ=',1,0,0,1,0
+---------------- UE_Goren2.dli set 3.-----------------------
+ n Q.K5432.AKQ432.J s AKT54.876.5.6543 
+ 'NS_NT=  ',19,12,7,' NS_Suit=',26,17,9
+ 'N_dbg-hcpAdj,Body=',-3,0,' N suit-Dpts,Df,Fn,Hf,SQ=',4,0,1,0,0
+ 'S_dbg-hcpAdj,Body=',0,0,' S suit-Dpts,Df,Fn,Hf,SQ=',2,0,0,0,0
+ e J932.J.T.AKT9872 w 876.AQT9.J9876.Q 
+ 'EW_NT=  ',15,8,7,' EW_Suit=',27,17,10
+ 'E_dbg-hcpAdj,Body=',-1,0,' E suit-Dpts,Df,Fn,Hf,SQ=',4,0,5,0,0
+ 'W_dbg-hcpAdj,Body=',-2,0,' W suit-Dpts,Df,Fn,Hf,SQ=',2,0,0,1,0,0
+---------------- UE_Goren2.dli set 4.-----------------------
+ n 2.5432.AKQ432.K2 s AKT54.876.5.6543 
+ 'NS_NT=  ',19,12,7,' NS_Suit=',19,12,7
+ 'N_dbg-hcpAdj,Body=',0,0,' N suit-Dpts,Df,Fn,Hf,SQ=',3,0,0,0,0
+ 'S_dbg-hcpAdj,Body=',0,0,' S suit-Dpts,Df,Fn,Hf,SQ=',2,0,0,0,0
+ e QJ93.J.T.AQJT987 w 876.AKQT9.J9876. 
+ 'EW_NT=  ',20,10,10,' EW_Suit=',20,10,10
+ 'E_dbg-hcpAdj,Body=',-1,0,' E suit-Dpts,Df,Fn,Hf,SQ=',4,0,0,0,0
+ 'W_dbg-hcpAdj,Body=',0,0,' W suit-Dpts,Df,Fn,Hf,SQ=',3,0,0,0,0
+=============================================================================
+---------------- UE_PAV2.dli set 1.-----------------------
+ n KJT987.K.AK98.32 s Q432.9876.Q432.4 
+ 'NS_NT=  ',16,12,4,' NS_Suit=',26,19,7
+ 'N_dbg-hcpAdj,Body,NT-Lpts=',-2,0,0,' N suit-Dpts,Df,FN,SQDummy=',3,0,4,0
+ 'S_dbg-hcpAdj,Body,,NT-Lpts=',0,0,0,' S suit-Dpts,Df,FN,SQDummy=',2,1,0,0
+ e A65.AJT5.5.AK765 w .Q432.JT76.QJT98 
+ 'EW_NT=  ',24,17,7,' EW_Suit=',32,21,11
+ 'E_dbg-hcpAdj,Body,NT-Lpts=',0,0,1,' E suit-Dpts,Df,FN,SQDummy=',2,0,2,0
+ 'W_dbg-hcpAdj,Body,,NT-Lpts=',0,1,0,' W suit-Dpts,Df,FN,SQDummy=',3,2,0,0
+---------------- UE_PAV2.dli set 2.-----------------------
+ n 832.K54.AK432.J3 s AKT54.A3.QJ5.654 
+ 'NS_NT=  ',25,11,14,' NS_Suit=',26,11,15
+ 'N_dbg-hcpAdj,Body,NT-Lpts=',-1,1,0,' N suit-Dpts,Df,FN,SQDummy=',1,0,0,0
+ 'S_dbg-hcpAdj,Body,,NT-Lpts=',0,0,0,' S suit-Dpts,Df,FN,SQDummy=',1,0,0,0
+ e J9.J762.T.AKT987 w Q76.QT98.9876.Q2 
+ 'EW_NT=  ',13,8,5,' EW_Suit=',17,11,6
+ 'E_dbg-hcpAdj,Body,NT-Lpts=',-1,0,0,' E suit-Dpts,Df,FN,SQDummy=',3,0,0,0
+ 'W_dbg-hcpAdj,Body,,NT-Lpts=',-1,0,0,' W suit-Dpts,Df,FN,SQDummy=',1,0,0,0
+---------------- UE_PAV2.dli set 3.-----------------------
+ n Q.K5432.AKQ432.J s AKT54.876.5.6543 
+ 'NS_NT=  ',20,12,8,' NS_Suit=',28,19,9
+ 'N_dbg-hcpAdj,Body,NT-Lpts=',-3,0,0,' N suit-Dpts,Df,FN,SQDummy=',4,0,3,0
+ 'S_dbg-hcpAdj,Body,,NT-Lpts=',0,1,0,' S suit-Dpts,Df,FN,SQDummy=',2,0,0,0
+ e J932.J.T.AKT9872 w 876.AQT9.J9876.Q 
+ 'EW_NT=  ',16,9,7,' EW_Suit=',26,17,9
+ 'E_dbg-hcpAdj,Body,NT-Lpts=',-1,1,0,' E suit-Dpts,Df,FN,SQDummy=',4,0,5,0
+ 'W_dbg-hcpAdj,Body,,NT-Lpts=',-2,0,0,' W suit-Dpts,Df,FN,SQDummy=',2,0,0,0
+---------------- UE_PAV2.dli set 4.-----------------------
+ n 2.5432.AKQ432.K2 s AKT54.876.5.6543 
+ 'NS_NT=  ',20,12,8,' NS_Suit=',20,13,7
+ 'N_dbg-hcpAdj,Body,NT-Lpts=',0,0,0,' N suit-Dpts,Df,FN,SQDummy=',3,0,0,0
+ 'S_dbg-hcpAdj,Body,,NT-Lpts=',0,1,0,' S suit-Dpts,Df,FN,SQDummy=',2,0,0,0
+ e QJ93.J.T.AQJT987 w 876.AKQT9.J9876. 
+ 'EW_NT=  ',21,10,11,' EW_Suit=',20,10,10
+ 'E_dbg-hcpAdj,Body,NT-Lpts=',-1,0,0,' E suit-Dpts,Df,FN,SQDummy=',4,0,0,0
+ 'W_dbg-hcpAdj,Body,,NT-Lpts=',0,1,0,' W suit-Dpts,Df,FN,SQDummy=',3,0,0,0
+=============================================================================
+
+---------------- UE_Berg2.dli set 1.-----------------------
+n KJT987.K.AK98.32 s Q432.9876.Q432.4 
+ 'NS_NT=  ',18,14,4,' NS_Suit=',30,21,9
+ 'N_dbg-hcpAdj,Lpts,Body,SynPts=',0,2,0,1,' N suit-Dpts,Df,FN,Hf,SQ=',0,0,5,0,0
+ 'S_dbg-hcpAdj,Lpts,Body,SynPts=',0,0,0,0,' S suit-Dpts,Df,FN,Hf,SQ=',0,3,0,2,0
+ e A65.AJT5.5.AK765 w .Q432.JT76.QJT98 
+ 'EW_NT=  ',25,18,7,' EW_Suit=',37,22,15
+ 'E_dbg-hcpAdj,Lpts,Body,SynPts=',0,1,1,1,' E suit-Dpts,Df,FN,Hf,SQ=',0,3,0,0,0
+ 'W_dbg-hcpAdj,Lpts,Body,SynPts=',0,1,0,1,' W suit-Dpts,Df,FN,Hf,SQ=',0,5,0,2,0
+---------------- UE_Berg2.dli set 2.-----------------------
+ n 832.K54.AK432.J3 s AKT54.A3.QJ5.654 
+ 'NS_NT=  ',27,11,16,' NS_Suit=',30,12,18
+ 'N_dbg-hcpAdj,Lpts,Body,SynPts=',0,1,0,0,' N suit-Dpts,Df,FN,Hf,SQ=',0,1,0,0,0
+ 'S_dbg-hcpAdj,Lpts,Body,SynPts=',0,1,0,1,' S suit-Dpts,Df,FN,Hf,SQ=',0,0,1,1,0
+ e J9.J762.T.AKT987 w Q76.QT98.9876.Q2 
+ 'EW_NT=  ',14,9,5,' EW_Suit=',24,16,8
+ 'E_dbg-hcpAdj,Lpts,Body,SynPts=',0,2,0,1,' E suit-Dpts,Df,FN,Hf,SQ=',0,4,0,1,0
+ 'W_dbg-hcpAdj,Lpts,Body,SynPts=',0,0,0,0,' W suit-Dpts,Df,FN,Hf,SQ=',0,1,0,2,0
+---------------- UE_Berg2.dli set 3.-----------------------
+
+
+
+
+
+
+
+
+
+

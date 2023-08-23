@@ -1,0 +1,15 @@
+# Simulate a How often will Opener be 4=5=(xx) when Resp is xxxx=xx=(yz) with 6-8 hcp.
+generate 10000000
+produce 1000
+
+ condition ( 11 <= hcp(north) and hcp(north) <= 15 and 6 <= hcp(south) and hcp(south) <= 8 
+          and hcp(south, spades) == 0 and hcp(south, hearts ) == 0  
+			 and shape(north,x5xx + x6xx + x7xx ) and shape(south, 42xx )
+  )
+# RevNorth is either 11-15 or 14-15.
+RevNorth = 14 <= hcp(north) && hcp(north) <= 15 and shape(north,45xx + 46xx + 47xx )
+
+action
+	average "Precision 4=5 Majors with 14-15 HCP" RevNorth*100
+
+

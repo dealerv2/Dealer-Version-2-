@@ -1,0 +1,26 @@
+./dealerv2../Examples_dbg/UEZar_cmdPredeal.dli -W SAT87432,HKQ87,DT9 -E SKJ6,HA6,DAK43,CJT54 -T "Page-85"
+Page-85
+ e KJ6.A6.AK43.JT54 w AT87432.KQ87.T9. ,62,32,30,72,35,37,0,6,10,0,0,3,18,0,0,3,0,0,1,6
+ e KJ6.A6.AK43.JT54 w AT87432.KQ87.T9. ,62,32,30,62,32,30,0,6,10,0,0,3,18,0
+
+./dealerv2 ../Examples_dbg/UEZar_cmdPredeal.dli -W SKQ87,HAQ9,DQT85,C42 -E SJT,HJT8754,DA3,CKQ5 -T "Page-86"
+Page-86
+ e JT.JT8754.A3.KQ5 w KQ87.AQ9.QT85.42 ,52,26,26,59,31,28,-1,3,13,0,0,3,10,0,0,4,1,0,2,0
+ e JT.JT8754.A3.KQ5 w KQ87.AQ9.QT85.42 ,52,26,26,52,26,26,-1,3,13,0,0,3,10,0
+
+
+Syn,DblFit,Dbl-DFit (Syn East 11-14 in 2 suits, W=15 in 3 suits; 2nd 8 fit in Diam; Both hands have extra trump and shortness 
+					     ( Hf East has One Hf clubs, West has 1HF in Diam, 2Hf in hearts Only One hand per suit gets Hf pts)
+
+./dealerv2   ../Examples_dbg/UEZar_cmdPredeal.dli -T "Syn,DblFit,DblDfit" -E HQT87543,DAK43,CA6 -W S4,HAJ92,DQT85,CKQ8
+															Syn Pts-------------v--------v       V--------- 2nd 8 Fit (Diam) West
+ e .QJ87543.AKJ3.T6 w 4.AK92.Q985.KQJ7 ,64,33,31,77,40,37,0,3,18,1,0,4,11,1,0,1,6,1,3,2
+ e .QJ87543.AKJ3.T6 w 4.AK92.Q985.KQJ7 ,64,33,31,64,33,31,0,3,18,1,0,4,11,1   * ^-----^---- Extra trump Ruff Power
+																										*     *-- +3Hf West, Heart AK, and Diam Q;  
+																										*-------- +1Hf East Club Ten
+ 
+Checking that 25 Zars + 4 card spade suit upgrades to 26 Zars.
+
+./dealerv2  ../Examples_dbg/UEZar_cmdPredeal.dli -E SA432,HKQJ2,DQ32,C92 -W SKJ65,HA4,DJ54,CQJ43
+ e A432.KQJ2.Q32.92 w KJ65.A4.J54.QJ43 ,52,26,26,56,27,29,0,3,10,1,0,3,10,1,0,1,0,0,1,2
+ e A432.KQJ2.Q32.92 w KJ65.A4.J54.QJ43 ,52,26,26,52,26,26,0,3,10,1,0,3,10,1

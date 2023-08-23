@@ -1,0 +1,48 @@
+Force 5 calls to GIB on every deal Tricks clause at beginning of condition statement
+Generated 396 hands
+Produced 20 hands
+Initial random seed 17
+Time needed  151.705 sec
+Tot Calls to DDS =     0, DDS Solve Calls=     0
+Tot Calls to GIB =  7100, GIB Solve Calls=  1980
+Tot Calls to OPC =     0, OPC Calc  Calls=     0
+---------------------------------------------------------
+Tricks clause at end of condition statement; 5 calls to GIB when needed
+Generated 396 hands
+Produced 20 hands
+Initial random seed 17
+Time needed    8.016 sec
+Tot Calls to DDS =     0, DDS Solve Calls=     0
+Tot Calls to GIB =   402, GIB Solve Calls=   110
+Tot Calls to OPC =     0, OPC Calc  Calls=     0
+--------------------------------------------------------- 
+DDS with tricks clause at start of condition -- Mode 1
+Generated 396 hands
+Produced 20 hands
+Initial random seed 17
+Time needed   46.469 sec
+Tot Calls to DDS =  7100, DDS Solve Calls=   396
+Tot Calls to GIB =     0, GIB Solve Calls=     0
+Tot Calls to OPC =     0, OPC Calc  Calls=     0
+-------------------------------------------------------------
+DDS with tricks clause at start of condition -- Mode 2
+Generated 396 hands
+Produced 20 hands
+Initial random seed 17
+Time needed   46.951 sec
+Tot Calls to DDS =  7100, DDS Solve Calls=   396
+Tot Calls to GIB =     0, GIB Solve Calls=     0
+Tot Calls to OPC =     0, OPC Calc  Calls=     0
+------------------------------------------------------
+
+
+DDS with tricks clause at end of condition -- Mode 1
+Generated 396 hands
+Produced 20 hands
+Initial random seed 17
+Time needed    2.951 sec
+Tot Calls to DDS =   402, DDS Solve Calls=    22
+Tot Calls to GIB =     0, GIB Solve Calls=     0
+Tot Calls to OPC =     0, OPC Calc  Calls=     0
+----------------------------------------------------
+

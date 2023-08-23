@@ -1,0 +1,152 @@
+ 'North Tricks in Spades ',9,',  NS HCP= ',25,n Q983.J8.AQ5.AJ73 s J54.AT3.J42.KQT8 
+n Q983.J8.AQ5.AJ73 e AKT2.Q654.986.64 s J54.AT3.J42.KQT8 w 76.K972.KT73.952 9
+                  [Example of Outputs produced by various actions including printrpt ]
+   1. South              North
+     J 5 4               Q 9 8 3 
+     A T 3               J 8 
+     J 4 2               A Q 5 
+     K Q T 8             A J 7 3 
+
+                  [Example of Outputs produced by various actions including printrpt ]
+   1. North              East                South               West 
+     Q 9 8 3             A K T 2             J 5 4               7 6 
+     J 8                 Q 6 5 4             A T 3               K 9 7 2 
+     A Q 5               9 8 6               J 4 2               K T 7 3 
+     A J 7 3             6 4                 K Q T 8             9 5 2 
+
+ 'North Tricks in Spades ',11,',  NS HCP= ',26,n K42.J962.543.AJ9 s AQT965.KQ.A.Q753 
+n K42.J962.543.AJ9 e 7.AT4.QJT92.K862 s AQT965.KQ.A.Q753 w J83.8753.K876.T4 11
+   2. South              North
+     A Q T 9 6 5         K 4 2 
+     K Q                 J 9 6 2 
+     A                   5 4 3 
+     Q 7 5 3             A J 9 
+
+   2. North              East                South               West 
+     K 4 2               7                   A Q T 9 6 5         J 8 3 
+     J 9 6 2             A T 4               K Q                 8 7 5 3 
+     5 4 3               Q J T 9 2           A                   K 8 7 6 
+     A J 9               K 8 6 2             Q 7 5 3             T 4 
+
+ 'North Tricks in Spades ',6,',  NS HCP= ',25,n K53.A42.AQT64.63 s AQ.T65.J832.AJ85 
+n K53.A42.AQT64.63 e JT976.QJ97.K.Q97 s AQ.T65.J832.AJ85 w 842.K83.975.KT42 6
+   3. South              North
+     A Q                 K 5 3 
+     T 6 5               A 4 2 
+     J 8 3 2             A Q T 6 4 
+     A J 8 5             6 3 
+
+   3. North              East                South               West 
+     K 5 3               J T 9 7 6           A Q                 8 4 2 
+     A 4 2               Q J 9 7             T 6 5               K 8 3 
+     A Q T 6 4           K                   J 8 3 2             9 7 5 
+     6 3                 Q 9 7               A J 8 5             K T 4 2 
+
+ 'North Tricks in Spades ',11,',  NS HCP= ',27,n K876.J2.AJT.J754 s AJ92.AK5.Q92.KT3 
+n K876.J2.AJT.J754 e T.T98763.653.982 s AJ92.AK5.Q92.KT3 w Q543.Q4.K874.AQ6 11
+   4. South              North
+     A J 9 2             K 8 7 6 
+     A K 5               J 2 
+     Q 9 2               A J T 
+     K T 3               J 7 5 4 
+
+   4. North              East                South               West 
+     K 8 7 6             T                   A J 9 2             Q 5 4 3 
+     J 2                 T 9 8 7 6 3         A K 5               Q 4 
+     A J T               6 5 3               Q 9 2               K 8 7 4 
+     J 7 5 4             9 8 2               K T 3               A Q 6 
+
+ 'North Tricks in Spades ',9,',  NS HCP= ',27,n Q72.7432.J3.KT97 s A96.AT9.AK96.AQ6 
+n Q72.7432.J3.KT97 e 843.Q86.7542.854 s A96.AT9.AK96.AQ6 w KJT5.KJ5.QT8.J32 9
+   5. South              North
+     A 9 6               Q 7 2 
+     A T 9               7 4 3 2 
+     A K 9 6             J 3 
+     A Q 6               K T 9 7 
+
+   5. North              East                South               West 
+     Q 7 2               8 4 3               A 9 6               K J T 5 
+     7 4 3 2             Q 8 6               A T 9               K J 5 
+     J 3                 7 5 4 2             A K 9 6             Q T 8 
+     K T 9 7             8 5 4               A Q 6               J 3 2 
+
+ 'North Tricks in Spades ',13,',  NS HCP= ',32,n KJ62.KJ5.A42.KQ2 s AQ98..KQ973.A976 
+n KJ62.KJ5.A42.KQ2 e T75.A93.865.T854 s AQ98..KQ973.A976 w 43.QT87642.JT.J3 13
+   6. South              North
+     A Q 9 8             K J 6 2 
+     -                   K J 5 
+     K Q 9 7 3           A 4 2 
+     A 9 7 6             K Q 2 
+
+   6. North              East                South               West 
+     K J 6 2             T 7 5               A Q 9 8             4 3 
+     K J 5               A 9 3               -                   Q T 8 7 6 4 2 
+     A 4 2               8 6 5               K Q 9 7 3           J T 
+     K Q 2               T 8 5 4             A 9 7 6             J 3 
+
+ 'North Tricks in Spades ',9,',  NS HCP= ',31,n AK8.KJ97.AJ9.AQ7 s Q642.T82.KT7.KJ2 
+n AK8.KJ97.AJ9.AQ7 e 3.AQ643.Q86542.9 s Q642.T82.KT7.KJ2 w JT975.5.3.T86543 9
+   7. South              North
+     Q 6 4 2             A K 8 
+     T 8 2               K J 9 7 
+     K T 7               A J 9 
+     K J 2               A Q 7 
+
+   7. North              East                South               West 
+     A K 8               3                   Q 6 4 2             J T 9 7 5 
+     K J 9 7             A Q 6 4 3           T 8 2               5 
+     A J 9               Q 8 6 5 4 2         K T 7               3 
+     A Q 7               9                   K J 2               T 8 6 5 4 3 
+
+ 'North Tricks in Spades ',6,',  NS HCP= ',25,n 632.QT8.A9753.AT s Q4.AK64.6.KQJ653 
+n 632.QT8.A9753.AT e J975.972.QT8.942 s Q4.AK64.6.KQJ653 w AKT8.J53.KJ42.87 6
+   8. South              North
+     Q 4                 6 3 2 
+     A K 6 4             Q T 8 
+     6                   A 9 7 5 3 
+     K Q J 6 5 3         A T 
+
+   8. North              East                South               West 
+     6 3 2               J 9 7 5             Q 4                 A K T 8 
+     Q T 8               9 7 2               A K 6 4             J 5 3 
+     A 9 7 5 3           Q T 8               6                   K J 4 2 
+     A T                 9 4 2               K Q J 6 5 3         8 7 
+
+Example of Outputs produced by various actions including printrpt 
+
+East hands:
+
+   1.                  2.                  3.                  4.               
+J 9 7 5             J 9 7 5             J 9 7 5             J 9 7 5 
+9 7 2               9 7 2               9 7 2               9 7 2 
+Q T 8               Q T 8               Q T 8               Q T 8 
+9 4 2               9 4 2               9 4 2               9 4 2 
+
+   5.                  6.                  7.                  8.               
+J 9 7 5             J 9 7 5             J 9 7 5             J 9 7 5 
+9 7 2               9 7 2               9 7 2               9 7 2 
+Q T 8               Q T 8               Q T 8               Q T 8 
+9 4 2               9 4 2               9 4 2               9 4 2 
+
+Example of Outputs produced by various actions including printrpt 
+
+West hands:
+
+   1.                  2.                  3.                  4.               
+A K T 8             A K T 8             A K T 8             A K T 8 
+J 5 3               J 5 3               J 5 3               J 5 3 
+K J 4 2             K J 4 2             K J 4 2             K J 4 2 
+8 7                 8 7                 8 7                 8 7 
+
+   5.                  6.                  7.                  8.               
+A K T 8             A K T 8             A K T 8             A K T 8 
+J 5 3               J 5 3               J 5 3               J 5 3 
+K J 4 2             K J 4 2             K J 4 2             K J 4 2 
+8 7                 8 7                 8 7                 8 7 
+
+
+Example of Outputs produced by various actions including printrpt 
+Generated 66 hands
+Produced  8 hands
+Initial random seed 42
+Time needed    0.239 sec

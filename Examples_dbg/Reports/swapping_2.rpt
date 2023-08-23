@@ -1,0 +1,80 @@
+                  [Swapping test. Try with -x2 and -x3 ]
+   1. North              East                South               West 
+     A 9 6 3             4                   K J 8 5             Q T 7 2 
+     -                   Q J T 5 2           A 7 3               K 9 8 6 4 
+     8 5 4 3 2           A T 9 7 6           K Q                 J 
+     A Q T 4             J 5                 K 9 7 6             8 3 2 
+
+   2. North              East                South               West 
+     A 9 6 3             Q T 7 2             K J 8 5             4 
+     -                   K 9 8 6 4           A 7 3               Q J T 5 2 
+     8 5 4 3 2           J                   K Q                 A T 9 7 6 
+     A Q T 4             8 3 2               K 9 7 6             J 5 
+
+   3. North              East                South               West 
+     K Q T 7 6 5         J                   A 8 4               9 3 2 
+     T 8 7 2             K Q J 6 3           9                   A 5 4 
+     T                   Q J 5 3             K 9 8 6 4 2         A 7 
+     T 2                 J 8 4               9 6 3               A K Q 7 5 
+
+   4. North              East                South               West 
+     K Q T 7 6 5         9 3 2               A 8 4               J 
+     T 8 7 2             A 5 4               9                   K Q J 6 3 
+     T                   A 7                 K 9 8 6 4 2         Q J 5 3 
+     T 2                 A K Q 7 5           9 6 3               J 8 4 
+
+   5. North              East                South               West 
+     T                   K 9 5 2             Q 4                 A J 8 7 6 3 
+     A K T 5 4           9 8                 Q J 7 2             6 3 
+     Q 5 4               A 9 8 6 3           K J 2               T 7 
+     Q J T 5             8 2                 9 6 4 3             A K 7 
+
+   6. North              East                South               West 
+     T                   A J 8 7 6 3         Q 4                 K 9 5 2 
+     A K T 5 4           6 3                 Q J 7 2             9 8 
+     Q 5 4               T 7                 K J 2               A 9 8 6 3 
+     Q J T 5             A K 7               9 6 4 3             8 2 
+
+   7. North              East                South               West 
+     J 7 4 2             A T 9 3             K                   Q 8 6 5 
+     A Q T 3 2           J 7 6               K 9 4               8 5 
+     A J 9 4             T 3 2               K Q 6 5             8 7 
+     -                   8 3 2               Q J T 9 6           A K 7 5 4 
+
+   8. North              East                South               West 
+     J 7 4 2             Q 8 6 5             K                   A T 9 3 
+     A Q T 3 2           8 5                 K 9 4               J 7 6 
+     A J 9 4             8 7                 K Q 6 5             T 3 2 
+     -                   A K 7 5 4           Q J T 9 6           8 3 2 
+
+   9. North              East                South               West 
+     A J 3 2             Q 5                 K 7 6 4             T 9 8 
+     5 3 2               K Q 4               T 8 7               A J 9 6 
+     K Q                 9 7 4               A 6 3               J T 8 5 2 
+     Q 7 5 4             A J 9 3 2           K T 6               8 
+
+  10. North              East                South               West 
+     A J 3 2             T 9 8               K 7 6 4             Q 5 
+     5 3 2               A J 9 6             T 8 7               K Q 4 
+     K Q                 J T 8 5 2           A 6 3               9 7 4 
+     Q 7 5 4             8                   K T 6               A J 9 3 2 
+
+                  [Swapping test. Try with -x2 and -x3 ]
+  11. North              East                South               West 
+     J 6 4               Q 9 7 3 2           K T                 A 8 5 
+     9 8 6               A T 3               K Q 7               J 5 4 2 
+     T 9 7               A 8 5 2             J 6 3               K Q 4 
+     Q 9 7 5             K                   A T 8 6 4           J 3 2 
+
+  12. North              East                South               West 
+     J 6 4               A 8 5               K T                 Q 9 7 3 2 
+     9 8 6               J 5 4 2             K Q 7               A T 3 
+     T 9 7               K Q 4               J 6 3               A 8 5 2 
+     Q 9 7 5             J 3 2               A T 8 6 4           K 
+
+
+Swapping test. Try with -x2 and -x3 
+Generated 13 hands
+Produced 12 hands
+Initial random seed 113
+Time needed    0.029 sec

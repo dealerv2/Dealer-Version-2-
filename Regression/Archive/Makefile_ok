@@ -1,0 +1,32 @@
+# 2023/03/20 Slight Mods by JGM to use dealerv2, bash, seeds in the Descr.* files 
+#
+# Makefile to process all Descr.* files with dealer and write the output
+# to Output.*.  make test executes the test, make clean cleans up.
+# Edit the line DEALER to call upon the test version or the production version.
+#
+
+DEALER = ../dealerv2
+#DEALER = dealerv2
+SHELL=/usr/bin/bash
+
+OUTPUT = $(wildcard Output.*)
+
+test: examples distribution
+
+distribution:
+	${DEALER}  Descr.chk_distribution | ./fmt_distribution.pl >Output.chk_distribution
+	if [[ -e Refer.chk_distribution ]];then diff Output.chk_distribution Refer.chk_distribution
+
+examples:
+	./dealerv2_chk.pl
+
+refer:
+	-for f in ${OUTPUT}; do \
+		echo $$f; \
+		f1=`echo $$f | sed s/Output/Refer/` ; \
+		echo $$f1; \
+		/bin/cp $$f $$f1; \
+	done
+
+clean:
+	-rm -fv ${OUTPUT}

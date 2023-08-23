@@ -1,0 +1,68 @@
+#balanced hand 4 card major
+Parsing shape: shape{north, 4M(3+3+2+)}
+Result:95= shape(north,2434 + 2443 + 3424 + 3433 + 3442 + 4234 + 4243 + 4324 + 4333 + 4342 + 4423 + 4432)
+#At least 5/5 in the Blacks
+Parsing shape: shape{north, 5+xx5+}
+Result:81= shape(north,5008 + 5xx5 + 5xx6 + 5xx7 + 6007 + 6xx5 + 6xx6 + 7006 + 7xx5 + 8005)
+#at most 2 spades
+Parsing shape: shape{north, 2-xxx}
+Result:32= shape(north,0xxx + 1xxx + 2xxx)
+# 3 to 5 hearts and 1 or 3 clubs
+Parsing shape: shape{north, x[3-5]x[13]}
+Result:53= shape(north,x3x1 + x3x3 + x4x1 + x4x3 + x5x1 + x5x3)
+# 0,1,3,4,5,6 or 8 spades
+Parsing shape: shape{north, [013-68]xxx}
+Result:60= shape(north,0xxx + 1xxx + 3xxx + 4xxx + 5xxx + 6xxx + 8xxx)
+# Any permutation of 4432 shape
+Parsing shape: shape{north, (4432)}
+Result:23= shape(north,any 4432)
+# 5 spades and any 431 in the other 3 suits
+Parsing shape: shape{north, 5s(431)}
+Result:53= shape(north,5134 + 5143 + 5314 + 5341 + 5413 + 5431)
+# At least 4 clubs, at least 3 diams and no short Major
+Parsing shape: shape{north, 4+c3+d(2+2+)}
+Result:81= shape(north,2236 + 2245 + 2254 + 2335 + 2344 + 2434 + 3235 + 3244 + 3334 + 4234)
+# A least 5 card Major, at least 3 clubs, and  3=1 or 1=3 in the other two
+Parsing shape: shape{north, 5+M3+c(31)}
+Result:67= shape(north,1534 + 1633 + 3514 + 3613 + 5134 + 5314 + 6133 + 6313)
+# A 5 card Major and a 5 card minor
+Parsing shape: shape{north, 5M5m(xx)}
+Result:39= shape(north,5x5x + 5xx5 + x55x + x5x5)
+# Conditional Operator: at least 4 Sp, at least 4 He and Diam Longer than Clubs, and exactly 10 in H&S
+Parsing shape: shape{north, 4+s4+h(xx):d>c,h+s==10}
+Result:53= shape(north,4621 + 4630 + 5521 + 5530 + 6421 + 6430)
+# A balanced hand
+Parsing shape: shape{north, (3+3+3+2+) }
+Result:44= shape(north,any 4333 + any 4432 + any 5332)
+# this next one expands to 886 chars and 249 words. 5+ Hearts and H longer(>) than S and H >= Diam
+Parsing shape: shape{north, x5+xx:h>s,h>=d }
+Result:886= shape(north,0508 + 0517 + 0526 + 0535 + 0544 + 0553 + 0607 + 0616 + 0625 + 0634 + 0643 + 0652 + 0661 + 0706 + 0715 + 0724 + 0733 + 0742 + 0751 + 0760 + 0805 + 0814 + 0823 + 0832 + 0841 + 0850 + 0904 + 0913 + 0922 + 0931 + 0940 + 1507 + 1516 + 1525 + 1534 + 1543 + 1552 + 1606 + 1615 + 1624 + 1633 + 1642 + 1651 + 1660 + 1705 + 1714 + 1723 + 1732 + 1741 + 1750 + 1804 + 1813 + 1822 + 1831 + 1840 + 1903 + 1912 + 1921 + 1930 + 2506 + 2515 + 2524 + 2533 + 2542 + 2551 + 2605 + 2614 + 2623 + 2632 + 2641 + 2650 + 2704 + 2713 + 2722 + 2731 + 2740 + 2803 + 2812 + 2821 + 2830 + 2902 + 2911 + 2920 + 3505 + 3514 + 3523 + 3532 + 3541 + 3550 + 3604 + 3613 + 3622 + 3631 + 3640 + 3703 + 3712 + 3721 + 3730 + 3802 + 3811 + 3820 + 3901 + 3910 + 4504 + 4513 + 4522 + 4531 + 4540 + 4603 + 4612 + 4621 + 4630 + 4702 + 4711 + 4720 + 4801 + 4810 + 4900 + 5602 + 5611 + 5620 + 5701 + 5710 + 5800 + 6700)
+# this one, which FD says is a French 1H opening does not expand at all. Should be fewer terms. Bug?
+# shape{north, x5+xx:h>s,h>=d,h>=c }
+#limiting the minors does not help. this next one does not work either
+#shape{north, x5+6-6-:h>s,h>=d,h>=c }
+# possible NT opening; 5m & 4H is OK. 5m & 4S is not.
+Parsing shape: shape{north, 5m(332) + 5m2s(42)} )
+Result:83= shape(north,2335 + 2353 + 3235 + 3253 + 3325 + 3352 + 2245 + 2254 + 2425 + 2452) )
+
+# A precision 1D opener, no 5cM, no 6c Club suit.
+shape{north,4-s4-h5-cx}
+#Result is 1061 characters incl spaces and + signs and 150 separate distributions
+#shape(north,0085 + 0094 + 00x0 + 00x1 + 00x2 + 00x3 + 0175 + 0184 + 0193 + 01x0 + 01x1 +
+#            01x2 + 0265 + 0274 + 0283 + 0292 + 02x0 + 02x1 + 0355 + 0364 + 0373 + 0382 +
+#            0391 + 03x0 + 0445 + 0454 + 0463 + 0472 + 0481 + 0490 + 1075 + 1084 + 1093 +
+#            10x0 + 10x1 + 10x2 + 1165 + 1174 + 1183 + 1192 + 11x0 + 11x1 + 1255 + 1264 +
+#            1273 + 1282 + 1291 + 12x0 + 1345 + 1354 + 1363 + 1372 + 1381 + 1390 + 1435 +
+#            1444 + 1453 + 1462 + 1471 + 1480 + 2065 + 2074 + 2083 + 2092 + 20x0 + 20x1 +
+#            2155 + 2164 + 2173 + 2182 + 2191 + 21x0 + 2245 + 2254 + 2263 + 2272 + 2281 +
+#            2290 + 2335 + 2344 + 2353 + 2362 + 2371 + 2380 + 2425 + 2434 + 2443 + 2452 +
+#            2461 + 2470 + 3055 + 3064 + 3073 + 3082 + 3091 + 30x0 + 3145 + 3154 + 3163 +
+#            3172 + 3181 + 3190 + 3235 + 3244 + 3253 + 3262 + 3271 + 3280 + 3325 + 3334 +
+#            3343 + 3352 + 3361 + 3370 + 3415 + 3424 + 3433 + 3442 + 3451 + 3460 + 4045 +
+#            4054 + 4063 + 4072 + 4081 + 4090 + 4135 + 4144 + 4153 + 4162 + 4171 + 4180 +
+#            4225 + 4234 + 4243 + 4252 + 4261 + 4270 + 4315 + 4324 + 4333 + 4342 + 4351 +
+#            4360 + 4405 + 4414 + 4423 + 4432 + 4441 + 4450)
+shape{west, (5+xxx):h+s>=9 or c>6,d<3}
+# The new Length Champion
+# Parsing:: shape{west, (5+xxx):h+s>=9 or c>6,d<3}
+# [Length:1235, patterns: 175]

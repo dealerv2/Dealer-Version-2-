@@ -1,0 +1,8 @@
+king drops: Mean=    0.5726, Std Dev=    0.4947, Var=    0.2447, Sample Size=110825 
+finesse: Mean=    0.7474, Std Dev=    0.4345, Var=    0.1888, Sample Size=110825 
+
+Play Decision Descr.6c
+Generated 1000000 hands
+Produced  110825 hands
+Initial random seed 3
+Time needed    1.253 sec

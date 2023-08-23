@@ -1,0 +1,23 @@
+Run No. 1 --N +3 for 6 Trumps in spades +,-2 Stiff K  S +1Lpt for Dummy 5 card suit in NT, +3 for 6 Trumps in spades
+				GOR EW -1 for No Aces, no Lpts for Dummy, KJ worth 5 total, QJ worth 3, Ax worth 5, 
+
+ n A96543.9543.A6.K s KT87.QT872.2.872 ,'NS_NT=',15,9,6,'NS_Suit=',24,16,8,'N_dbg-hcpAdj,Lpts,Body,',-2,0,0,'S_dbg-hcpAdj,Lpts,Body,',0,1,0,'Nsuit-Dpts,Df,Fn,H-adj',3,0,4,0,'Ssuit-Dpts,Df,Fn,H-adj',2,1,0,0
+ e QJ.A6.QJT54.AT65 w 2.KJ.K9873.QJ943 ,'EW_NT=',22,13,9,'EW_Suit=',30,16,14,'E_dbg-hcpAdj,Body,',-2,0,'W_dbg-hcpAdj,Body,',0,-1,'Esuit-Dpts,Df,Fn,Hf,H-adj',3,0,3,0,0,'Wsuit-Dpts,Df,Fn,Hf,H-adj',2,1,0,1,0
+
+
+Run No. 2 -- PAV N: +1 for 2A+2T,  S +1Lpt for Dummy 5 card suit in NT,
+ n QJ.A6.QJT54.AT65 s 2.KJ.K9873.QJ943 ,'NS_NT=',24,14,10,'NS_Suit=',31,18,13,'N_dbg-hcpAdj,Lpts,Body,',-1,0,1,'S_dbg-hcpAdj,Lpts,Body,',-1,1,0,'Nsuit-Dpts,Df,Fn,H-adj',2,0,2,0,'Ssuit-Dpts,Df,Fn,H-adj',3,1,0,0
+ e A96543.9543.A6.K w KT87.QT872.2.872 ,'EW_NT=',13,9,4,'EW_Suit=',23,15,8,'E_dbg-hcpAdj,Body,',-1,0,'W_dbg-hcpAdj,Body,',0,-1,'Esuit-Dpts,Df,Fn,Hf,H-adj',2,0,1,0,0,'Wsuit-Dpts,Df,Fn,Hf,H-adj',3,1,0,1,0
+
+
+Run No. 3
+ n Q.AJ.JT542.AKT65 s J.KQ.K9873.QJ943 ,'NS_NT=',25,14,11,'NS_Suit=',34,20,14,'N_dbg-hcpAdj,Lpts,Body,',-2,0,1,'S_dbg-hcpAdj,Lpts,Body,',-2,1,0,'Nsuit-Dpts,Df,Fn,H-adj',3,0,3,0,'Ssuit-Dpts,Df,Fn,H-adj',3,1,0,0
+ e A965432.T987.A6. w KT87.65432.Q.872 ,'EW_NT=',10,8,2,'EW_Suit=',23,17,6,'E_dbg-hcpAdj,Body,',-2,0,'W_dbg-hcpAdj,Body,',0,-1,'Esuit-Dpts,Df,Fn,Hf,H-adj',3,0,1,0,0,'Wsuit-Dpts,Df,Fn,Hf,H-adj',3,1,0,1,0
+
+Run No. 4 -- Checking 4333 and 4 Aces
+
+ n Q5.KJ.QJ432.KQ65 s 432.QT32.K98.JT9 ,'NS_NT=',18,12,6,'NS_Suit=',20,15,5,'N_dbg-hcpAdj,Lpts,Body,',-2,0,0,'S_dbg-hcpAdj,Lpts,Body,',0,0,0,'Nsuit-Dpts,Df,Fn,H-adj',2,0,1,0,'Ssuit-Dpts,Df,Fn,H-adj',0,0,0,-1
+ e AKT98.A987.A7.A4 w J76.654.T65.8732 ,'EW_NT=',19,20,-1,'EW_Suit=',22,23,-1,'E_dbg-hcpAdj,Body,',0,1,'W_dbg-hcpAdj,Body,',0,-1,'Esuit-Dpts,Df,Fn,Hf,H-adj',2,0,1,0,0,'Wsuit-Dpts,Df,Fn,Hf,H-adj',0,0,0,1,-1
+ 'NS-PAV HLDF',-2,'EW-Goren HDLF',0
+
+

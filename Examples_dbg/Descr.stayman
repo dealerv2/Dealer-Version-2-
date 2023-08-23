@@ -1,0 +1,24 @@
+generate 1000000
+
+east_notrump = shape(east, any 4333 + any 4432 + any 5332) and
+			hcp(east) >= 15 and hcp(east) <= 17
+west_stayman = shape(west, 3451 + 4351) and hcp(west) <= 7
+
+east_2d = shape(east, xxxx - 4xxx - x4xx - 5xxx - x5xx)
+east_2h = shape(east, x4xx)
+east_2s = shape(east, 4xxx - x4xx)
+east_2n = shape(east, 5xxx + x5xx)
+
+d = diamonds(east)+diamonds(west)
+h = hearts(east)+hearts(west)
+s = spades(east)+spades(west)
+
+found_d_fit = east_2d and d>=8
+found_h_fit = east_2h and h>=8
+found_s_fit = east_2s and s>=8
+found_M_fit = east_2n and (h>=9 or s>=9)
+
+condition east_notrump and west_stayman
+
+action
+	average "fit" found_d_fit or found_h_fit or found_s_fit or found_M_fit

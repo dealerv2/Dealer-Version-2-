@@ -1,0 +1,39 @@
+# This file generated from the Descr.GIB input file
+#-------------------------------------------------------------------------
+Nhcp=16,Shcp=11 || 10::10,7,9,8,10
+n AQ8.QJT9.AKT8.64 e K62.532.QJ9764.8 s T5.K64.53.AKJT75 w J9743.A87.2.Q932 
+---
+Nhcp=15,Shcp=8 || 12::5,12,5,12,7
+n AK95.97.KQT9.KT9 e 76.K543.653.AJ54 s JT843..AJ742.Q62 w Q2.AQJT862.8.873 
+---
+Nhcp=18,Shcp=5 || 8::5,7,7,4,8
+n K842.Q63.AQ.AK75 e T6.A2.KJT632.J84 s Q73.J987.98.Q932 w AJ95.KT54.754.T6 
+---
+Nhcp=17,Shcp=9 || 11::8,5,10,9,11
+n 65.AK9.AKT43.K73 e Q874.8542.QJ97.6 s A3.Q763.65.QJT98 w KJT92.JT.82.A542 
+---
+Nhcp=18,Shcp=10 || 12::12,8,12,8,6
+n J942.K9.AKT7.AKT e 8.3.QJ98532.J742 s A3.AQT8764.64.63 w KQT765.J52..Q985 
+---
+Nhcp=17,Shcp=2 || 8::5,5,5,6,8
+n Q4.KT85.AQ7.AQ74 e AJ8.AJ43.K863.83 s 9532.92.J42.JT95 w KT76.Q76.T95.K62 
+---
+Nhcp=15,Shcp=5 || 8::6,8,6,7,4
+n Q6.AT9.AJ953.AT3 e T5.Q82.62.KQJ986 s AJ9842.764.T4.75 w K73.KJ53.KQ87.42 
+---
+Nhcp=17,Shcp=8 || 11::8,11,9,10,6
+n K6.AT985.AQJ.KT2 e A9.J62.7653.AQ83 s QJ8743.Q3.K984.5 w T52.K74.T2.J9764 
+---
+Frequency North 1NT Opener Tricks:
+    5	       0
+    6	       0
+    7	       0
+    8	       3
+    9	       0
+   10	       1
+   11	       2
+High	       2
+Generated 101 hands
+Produced 8 hands
+Initial random seed 1636940629
+Time needed    3.798 sec

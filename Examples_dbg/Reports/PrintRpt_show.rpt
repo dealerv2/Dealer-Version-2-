@@ -1,0 +1,26 @@
+ 'The Whole Deal: ',n J53.Q62.AJ.K8763 e 96.JT74.KT6.JT54 s KQT2.A9853.85.Q2 w A874.K.Q97432.A9 
+ 'The NS Side hands only: ',n J53.Q62.AJ.K8763 s KQT2.A9853.85.Q2 
+ 'A single compass direction and an expression: ',w A874.K.Q97432.A9 ,13
+ 'A pair of hands for NS, a string, and some trix ',n J53.Q62.AJ.K8763 s KQT2.A9853.85.Q2 ,'S:',7,4,8,7,6,e 96.JT74.KT6.JT54 w A874.K.Q97432.A9 ,'W:',6,9,5,5,7
+ 'The Whole Deal: ',n T6.7654.J753.J65 e AK75.T83.KT8.KT8 s Q943.AQJ.A42.AQ9 w J82.K92.Q96.7432 
+ 'The NS Side hands only: ',n T6.7654.J753.J65 s Q943.AQJ.A42.AQ9 
+ 'A single compass direction and an expression: ',w J82.K92.Q96.7432 ,6
+ 'A pair of hands for NS, a string, and some trix ',n T6.7654.J753.J65 s Q943.AQJ.A42.AQ9 ,'S:',6,7,8,6,6,e AK75.T83.KT8.KT8 w J82.K92.Q96.7432 ,'W:',6,5,5,6,7
+ 'The Whole Deal: ',n AQ8.98732.K85.85 e 7653.AT.QJ742.94 s KT.KQJ65.A9.AJ76 w J942.4.T63.KQT32 
+ 'The NS Side hands only: ',n AQ8.98732.K85.85 s KT.KQJ65.A9.AJ76 
+ 'A single compass direction and an expression: ',w J942.4.T63.KQT32 ,6
+ 'A pair of hands for NS, a string, and some trix ',n AQ8.98732.K85.85 s KT.KQJ65.A9.AJ76 ,'S:',8,7,11,7,10,e 7653.AT.QJ742.94 w J942.4.T63.KQT32 ,'W:',5,6,2,6,3
+ 'The Whole Deal: ',n T.AKQ953.KJ82.94 e QJ632.4.643.KQJ2 s 8754.JT.AQ5.A765 w AK9.8762.T97.T83 
+ 'The NS Side hands only: ',n T.AKQ953.KJ82.94 s 8754.JT.AQ5.A765 
+ 'A single compass direction and an expression: ',w AK9.8762.T97.T83 ,7
+ 'A pair of hands for NS, a string, and some trix ',n T.AKQ953.KJ82.94 s 8754.JT.AQ5.A765 ,'S:',5,11,11,5,8,e QJ632.4.643.KQJ2 w AK9.8762.T97.T83 ,'W:',7,1,2,8,2
+ 'The Whole Deal: ',n A6.Q8763.7.AQ974 e KQ83.T5.Q42.T832 s J72.AKJ92.K5.KJ5 w T954.4.AJT9863.6 
+ 'The NS Side hands only: ',n A6.Q8763.7.AQ974 s J72.AKJ92.K5.KJ5 
+ 'A single compass direction and an expression: ',w T954.4.AJT9863.6 ,5
+ 'A pair of hands for NS, a string, and some trix ',n A6.Q8763.7.AQ974 s J72.AKJ92.K5.KJ5 ,'S:',11,3,12,3,11,e KQ83.T5.Q42.T832 w T954.4.AJT9863.6 ,'W:',2,10,1,7,2
+
+Showing a few different versions of the printrpt / csvrpt features
+Generated 8 hands
+Produced  5 hands
+Initial random seed 13
+Time needed    0.438 sec

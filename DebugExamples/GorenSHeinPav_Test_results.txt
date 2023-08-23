@@ -1,0 +1,47 @@
+Goren Misc Vals
+      /* The factors that apply to both NT and Suit */
+      UEv.misc_pts[UEv.misc_count++] = roundf(fhcp_adj[0]);
+      UEv.misc_pts[UEv.misc_count++] = body_pts[0];
+      /* Factors that apply to suit contracts only */
+      UEv.misc_pts[UEv.misc_count++] = dpts[0];       /* distribution aka shortness pts before a fit is found */
+      UEv.misc_pts[UEv.misc_count++] = dfit_pts[0];   /* Dummy support pts typically 3-2-1 with 3, 5-3-1 with 4+ */
+      UEv.misc_pts[UEv.misc_count++] = Fn_pts[0];     /* Declarer side suit and extra trump length */
+      UEv.misc_pts[UEv.misc_count++] = hf_pts[0];
+      UEv.misc_pts[UEv.misc_count++] = hand_adj[0];  /* Square and/or No Aces - each; 4 Aces +1*/
+
+
+PAV Misc Vals
+      UEv.misc_pts[UEv.misc_count++] = roundf(fhcp_adj[0]) ;
+      UEv.misc_pts[UEv.misc_count++] = body_pts[0];
+      UEv.misc_pts[UEv.misc_count++] = lpts[0];   /* possibly +1 for 5card suit in NT */
+      /* Factors that apply to suit contracts only */
+      UEv.misc_pts[UEv.misc_count++] = dpts[0] ;
+      UEv.misc_pts[UEv.misc_count++] = dfit_pts[0];   /* Dummy support pts typically 3-2-1 with 3, 5-3-1 with 4+ */
+      UEv.misc_pts[UEv.misc_count++] = Fn_pts[0];     /* Declarer side suit and extra trump length */
+      UEv.misc_pts[UEv.misc_count++] = hand_adj[0];   /* square, aceless dummy with minimal (<9) fit */
+
+Shein Misc Vals
+      /* The factors that apply to both NT and Suit */
+      UEv.misc_pts[UEv.misc_count++] = roundf(fhcp_adj[0]);
+      UEv.misc_pts[UEv.misc_count++] = body_pts[0];
+      UEv.misc_pts[UEv.misc_count++] = hf_pts[0];
+      UEv.misc_pts[UEv.misc_count++] = Fn_pts[0];     /* Declarer side suit and extra trump length */
+      /* Factors that apply to suit contracts only */
+      UEv.misc_pts[UEv.misc_count++] = dpts[0];       /* distribution aka shortness pts before a fit is found */
+      UEv.misc_pts[UEv.misc_count++] = dfit_pts[0];   /* Dummy support pts typically 3-2-1 with 3, 5-3-1 with 4+ */
+      UEv.misc_pts[UEv.misc_count++] = roundf(qtrix[0]*100);
+
+Bergen Misc Vals
+      /* The factors that apply to both NT and Suit */
+      UEv.misc_pts[UEv.misc_count++] = hcp_adj[0];
+      UEv.misc_pts[UEv.misc_count++] = lpts[0];       /* +1 for each card over 5, in all suits. */
+      UEv.misc_pts[UEv.misc_count++] = body_pts[0];   /* adjust-3 values */
+      UEv.misc_pts[UEv.misc_count++] = syn_pts[0];  /* Quality Suit; 3 of top 5 */
+      /* Factors that apply to suit contracts only */
+      UEv.misc_pts[UEv.misc_count++] = dpts[0];       /* distribution aka shortness pts before a fit is found */
+      UEv.misc_pts[UEv.misc_count++] = dfit_pts[0];   /* Dummy support pts typically 3-2-1 with 3, N-3-1 with 4+ */
+      UEv.misc_pts[UEv.misc_count++] = Fn_pts[0];     /* Declarer side suit and extra trump length */
+      UEv.misc_pts[UEv.misc_count++] = hf_pts[0];
+      UEv.misc_pts[UEv.misc_count++] = hand_adj[0];  /* Square hand -- either or both */
+
+
